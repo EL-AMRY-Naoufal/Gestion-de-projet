@@ -25,7 +25,7 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./app
+          path: ./projet-frontend/Projet
           target: /usr/src/app
           ignore:
             - node_modules/
