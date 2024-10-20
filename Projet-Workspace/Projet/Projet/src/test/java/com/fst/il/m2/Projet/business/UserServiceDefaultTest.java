@@ -1,25 +1,21 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.UserRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class UserServiceDefaultTest {
 
     @Mock
@@ -30,7 +26,7 @@ public class UserServiceDefaultTest {
 
     private User mockUser;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
@@ -49,7 +45,7 @@ public class UserServiceDefaultTest {
 
         int isAuthenticated = userService.authenticate(userRequest.getUser().getEmail(), userRequest.getUser().getPassword());
 
-        assertEquals("The user should be authenticated successfully", 1, isAuthenticated);
+        assertEquals(1, isAuthenticated, "The user should be authenticated successfully");
     }
 
     @Test
@@ -61,7 +57,7 @@ public class UserServiceDefaultTest {
 
         int isAuthenticated = userService.authenticate(userRequest.getUser().getEmail(), "wrongPassword");
 
-        assertEquals("Authentication should fail with an incorrect password", 0, isAuthenticated);
+        assertEquals(0, isAuthenticated, "Authentication should fail with an incorrect password");
     }
 
     @Test
@@ -70,6 +66,6 @@ public class UserServiceDefaultTest {
 
         int isAuthenticated = userService.authenticate("nonexistent@example.com", "password123");
 
-        assertEquals("Authentication should fail for a non-existing user", 0, isAuthenticated);
+        assertEquals(0, isAuthenticated, "Authentication should fail for a non-existing user");
     }
 }
