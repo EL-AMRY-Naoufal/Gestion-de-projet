@@ -16,6 +16,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 public class UserServiceDefaultTest {
 
     @Mock
