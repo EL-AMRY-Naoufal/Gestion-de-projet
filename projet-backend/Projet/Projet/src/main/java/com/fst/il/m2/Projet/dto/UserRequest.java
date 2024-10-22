@@ -6,6 +6,9 @@ public class UserRequest {
     private User user;
     private Long responsableId;
 
+    public UserRequest() {
+    }
+
     private UserRequest(Builder builder) {
         this.user = builder.user;
         this.responsableId = builder.responsableId;
