@@ -8,16 +8,21 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class ResponsableDepartementServiceDefaultTest {
 
     @Mock
     private UserRepository userRepository;  // Mocked UserRepository
+
+    @Mock
+    private PasswordSetServiceDefault passwordSetServiceDefault;  // Mocked PasswordSetServiceDefault
 
     @InjectMocks
     private ResponsableDepartementServiceDefault responsableDepartementService;  // Service to test
@@ -32,9 +37,11 @@ class ResponsableDepartementServiceDefaultTest {
 
         // Create mock Responsable (CHEF_DE_DEPARTEMENT)
         mockResponsable = new User("responsable", "password123", "responsable@example.com", Role.CHEF_DE_DEPARTEMENT);
+        mockResponsable.setId(1L); // Set an ID for the mock
 
         // Create mock User
-        mockUser = new User("newUser", "password123", "newUser@example.com", Role.ENSEIGNANT);
+        mockUser = new User("newUser", "password123", "naoufalhary@gmail.com", Role.ENSEIGNANT);
+        mockUser.setId(2L); // Set an ID for the mock
     }
 
     @Test
@@ -43,6 +50,10 @@ class ResponsableDepartementServiceDefaultTest {
         when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
         // Mock repository behavior for saving the user
         when(userRepository.save(mockUser)).thenReturn(mockUser);
+
+        // Mock the behavior of PasswordSetServiceDefault
+        doNothing().when(passwordSetServiceDefault).createPasswordSetTokenForUser(any(User.class), any(String.class));
+        doNothing().when(passwordSetServiceDefault).sendPasswordSetEmail(any(User.class), any(String.class));
 
         // Act: Create user using the service
         User createdUser = responsableDepartementService.createUser(mockUser, mockResponsable.getId());
@@ -58,6 +69,7 @@ class ResponsableDepartementServiceDefaultTest {
     void testCreateUser_Fail_NotResponsable() {
         // Create a mock user with a non-Responsable role
         User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
+        mockNonResponsable.setId(3L); // Set an ID for the mock
 
         // Mock repository behavior for finding the non-Responsable
         when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
@@ -105,7 +117,7 @@ class ResponsableDepartementServiceDefaultTest {
         when(userRepository.findById(mockUser.getId())).thenReturn(Optional.of(mockUser));
         // Mock repository behavior for saving the updated user
         when(userRepository.save(mockUser)).thenReturn(mockUser);
-        System.out.println(mockResponsable.getRole());
+
         // Act: Update user using the service
         User updatedUser = responsableDepartementService.updateUser(mockUser.getId(), mockUser, mockResponsable.getId());
 
@@ -119,6 +131,7 @@ class ResponsableDepartementServiceDefaultTest {
     void testUpdateUser_Fail_NotResponsable() {
         // Create a mock user with a non-Responsable role
         User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
+        mockNonResponsable.setId(3L); // Set an ID for the mock
 
         // Mock repository behavior for finding the non-Responsable
         when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
@@ -149,6 +162,7 @@ class ResponsableDepartementServiceDefaultTest {
     void testDeleteUser_Fail_NotResponsable() {
         // Create a mock user with a non-Responsable role
         User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
+        mockNonResponsable.setId(3L); // Set an ID for the mock
 
         // Mock repository behavior for finding the non-Responsable
         when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
