@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ResponsableDepartementServiceDefault implements ResponsableDepartementService{
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordSetServiceDefault passwordSetServiceDefault;
 
     @Override
     public User createUser(User user, Long responsableId) {
-        System.out.println(responsableId);
-        // Check if the authenticated user is a Responsable de Département
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
@@ -26,8 +27,16 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             throw new RuntimeException("Only Responsable de Département can create users");
         }
 
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+
+        // Generate a token and send email for setting the password
+        String token = UUID.randomUUID().toString();
+        passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
+        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
+
+        return newUser;
     }
+
 
     @Override
     public User getUserById(Long id) {
