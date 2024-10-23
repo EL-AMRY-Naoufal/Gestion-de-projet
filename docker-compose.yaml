@@ -22,6 +22,7 @@ services:
       - "4200:4200"
     networks:
       - app-network
+    command: /bin/sh -c "npm update && ng serve --host 0.0.0.0"
     develop:
       watch:
         - action: sync
@@ -29,6 +30,11 @@ services:
           target: /usr/src/app
           ignore:
             - node_modules/
+        - action: rebuild
+          path: ./projet-frontend/Projet/package.json
+          ignore:
+            - node_modules/
+        
     
   db:
     image: postgres:16.4-bullseye
