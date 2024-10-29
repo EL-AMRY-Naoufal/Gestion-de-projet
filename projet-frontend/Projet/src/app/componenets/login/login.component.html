@@ -1,0 +1,15 @@
+<form #loginForm="ngForm" (ngSubmit)="login(loginForm)" autocomplete="new-password">
+    <h1>Login</h1>
+
+    <div class="form-control">
+        <label for="email">Email</label>
+        <input name="email" ngModel required email id="email" autocomplete="new-password" type="email" />
+    </div>
+
+    <div class="form-control">
+        <label for="password">Password</label>
+        <input name="password" ngModel required id="password" autocomplete="new-password" type="password" />
+    </div>
+
+    <button type="submit" [disabled]="!loginForm.valid">Login</button>
+</form>

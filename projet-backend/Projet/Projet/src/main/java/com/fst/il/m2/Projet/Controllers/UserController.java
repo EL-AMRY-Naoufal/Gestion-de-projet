@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -19,13 +22,16 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<String> authenticate(@RequestBody User user) {
+    public ResponseEntity<HashMap<String, String>> authenticate(@RequestBody User user) {
         System.out.println(user);
+        HashMap<String, String> res = new HashMap<>();
         int result = userService.authenticate(user.getEmail(), user.getPassword());
         if (result == 1) {
-            return new ResponseEntity<>("Authentication successful", HttpStatus.OK);
+            res.put("message", "Authentication successful");
+            return new ResponseEntity<>(res, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Authentication failed", HttpStatus.UNAUTHORIZED);
+            res.put("message", "Authentication failed");
+            return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
         }
     }
 }
