@@ -3,6 +3,7 @@ package com.fst.il.m2.Projet.Controllers;
 import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,11 @@ public class UserController {
         if (result != 1) throw new UnauthorizedException("Authentification failed");
         res.put("message", "Authentication successful");
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/password")
+    public void modifyPassword(@PathVariable Long id, @Valid @RequestBody String password) {
+        this.userService.modifyPassword(id, password);
+        //TODO do it in a secured way?
     }
 }
