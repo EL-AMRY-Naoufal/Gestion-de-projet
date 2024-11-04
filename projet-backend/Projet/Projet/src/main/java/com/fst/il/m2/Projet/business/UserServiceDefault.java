@@ -65,4 +65,10 @@ public class UserServiceDefault implements UserService {
         user.setPassword(password);
         this.userRepository.save(user);
     }
+
+    @Override
+    public Role getUserRole(Long id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + "not found"));
+        return user.getRole();
+    }
 }
