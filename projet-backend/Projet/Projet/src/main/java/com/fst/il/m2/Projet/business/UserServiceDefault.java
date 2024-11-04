@@ -64,5 +64,4 @@ public class UserServiceDefault implements UserService {
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         return optionalUser.orElse(null);
     }
-
 }
