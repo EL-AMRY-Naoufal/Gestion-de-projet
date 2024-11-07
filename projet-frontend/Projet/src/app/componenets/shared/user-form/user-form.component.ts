@@ -6,11 +6,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../types/user.type';
 import { UserCustomValidators } from './user-custom-validators';
+import { MatDialogActions } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [MatFormFieldModule,MatInputModule,MatSelectModule,MatOptionModule,ReactiveFormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, ReactiveFormsModule, MatDialogActions, MatDialogModule, NgIf],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss'
 })
