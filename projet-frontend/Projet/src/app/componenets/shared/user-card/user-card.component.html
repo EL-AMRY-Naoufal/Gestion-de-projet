@@ -1,0 +1,39 @@
+<mat-card class="mat-whiteframe-2dp">
+    <mat-card-title-group>
+      <mat-card-title>
+        <a href="javascript:void(0);">
+          <span>{{ user.username }}</span>
+        </a>
+      </mat-card-title>
+  
+      <!-- Affichage du rôle de l'utilisateur -->
+      <mat-card-subtitle>{{ user.role }}</mat-card-subtitle>
+  
+      <!-- Affichage de l'email de l'utilisateur -->
+      <mat-card-subtitle class="contact-info">
+        <mat-icon svgIcon="icon-mail"></mat-icon>
+        <a
+          href="mailto:{{ user.username }}&lt;{{ user.email }}&gt;"
+          title="Send an email to {{ user.username }}"
+          class="truncate"
+        >{{ user.email }}</a>
+      </mat-card-subtitle>
+  
+    
+    </mat-card-title-group>
+  
+    <mat-card-content>
+        <div>
+        <!-- Lien pour modifier l'utilisateur -->
+        <a mat-button title="Edit" [routerLink]="['/edit', user.id]">
+          <mat-icon svgIcon="icon-edit"></mat-icon>
+        </a>
+  
+        <!-- Bouton pour supprimer l'utilisateur -->
+        <button mat-button title="Delete" (click)="delete(user)">
+          <mat-icon svgIcon="icon-delete"></mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

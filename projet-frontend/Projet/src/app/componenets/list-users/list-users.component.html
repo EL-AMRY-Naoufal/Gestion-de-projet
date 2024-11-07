@@ -1,0 +1,13 @@
+<section [ngSwitch]="view">
+    <section *ngSwitchCase="'card'">
+      <app-user-card [user]="user" (deleteUser)="delete($event)" *ngFor="let user of listUsers"></app-user-card>
+    </section>
+  
+
+  
+  <section class="buttons-fab" *ngIf="dialogStatus === 'inactive'">
+    <button (click)="showDialog()" mat-fab color="accent" class="button-add">
+      <i class="material-icons">add</i>
+    </button>
+ 
+  </section>
