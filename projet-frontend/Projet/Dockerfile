@@ -1,11 +1,18 @@
-FROM node:alpine
+ARG NODE_VERSION=lts
 
-WORKDIR /usr/src/app
+FROM node:${NODE_VERSION}-alpine
 
-COPY . /usr/src/app/
+RUN mkdir -p /usr/app
+COPY . /usr/app/
+WORKDIR /usr/app
+RUN npm config set registry https://registry.npmjs.org/
+RUN npm ci --verbose
+RUN npm run build -- --configuration production
 
-RUN npm install -g @angular/cli
+ENV NODE_ENV="production"
 
-RUN npm install
+RUN npm ci --omit=dev --verbose
+RUN chown -R node:node /usr/app
+USER node
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+CMD npm run serve:ssr:Projet
