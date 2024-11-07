@@ -1,0 +1,49 @@
+package com.fst.il.m2.Projet.Controllers;
+
+import com.fst.il.m2.Projet.business.ResponsableDepartementService;
+import com.fst.il.m2.Projet.dto.UserRequest;
+import com.fst.il.m2.Projet.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@CrossOrigin("*")
+@RequestMapping("/api/users")
+public class ResponsableDepartementController {
+
+    @Autowired
+    private ResponsableDepartementService responsableDepartementService;
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
+        User createdUser = responsableDepartementService.createUser(userRequest.getUser(), userRequest.getResponsableId());
+        return ResponseEntity.ok(createdUser);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = responsableDepartementService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = responsableDepartementService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser(), userRequest.getResponsableId());
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        responsableDepartementService.deleteUser(id, userRequest.getResponsableId());
+        return ResponseEntity.noContent().build();
+    }
+}

@@ -1,0 +1,62 @@
+services:
+  # Service pour le backend Spring Boot
+  backend:
+    build: ./projet-backend/Projet/Projet  # Chemin vers le Dockerfile du backend
+    container_name: backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+
+    networks:
+      - app-network
+  
+  frontend:
+    build: ./projet-frontend/Projet  # Chemin vers le Dockerfile du backend
+    container_name: frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - app-network
+    command: /bin/sh -c "npm update && ng serve --host 0.0.0.0"
+    develop:
+      watch:
+        - action: sync
+          path: ./projet-frontend/Projet
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./projet-frontend/Projet/package.json
+          ignore:
+            - node_modules/
+        
+    
+  db:
+    image: postgres:16.4-bullseye
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: data       # Nom de la base de données
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}        # Utilisateur PostgreSQL
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}    # Mot de passe PostgreSQL
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Volume pour persister les données
+    ports:
+      - "5432:5432"  # Exposer le port 5432 pour accéder à PostgreSQL
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+
+volumes:
+  postgres-data:
