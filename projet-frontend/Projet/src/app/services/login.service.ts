@@ -13,13 +13,16 @@ export class LoginService {
 
   
   login(formData: any): Observable<any> {
-    console.log( formData)
     return this.http.post(this.apiUrl, formData);
   }
 
   handleLoginSuccess(response: any) {
-    console.log('Login successful:', response);
-    this.router.navigate(['/dashboard']);
+    if (response.user.role == "CHEF_DE_DEPARTEMENT")
+    {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['']);
+    }
   }
 
   handleLoginError(error: any) {
