@@ -35,4 +35,8 @@ public class EnseignantService {
         return this.enseignantRepository.save(enseignant);
     }
 
+    public Enseignant getEnseignantById(long id) {
+        return this.enseignantRepository.getReferenceById(id);
+    }
+
 }
