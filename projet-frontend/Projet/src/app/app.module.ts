@@ -21,6 +21,7 @@ import { EnseignantsComponent } from './componenets/enseignants/enseignants.comp
     FormsModule,
     CommonModule,
     HttpClientModule,
+    CommonModule,
   //  ReactiveFormsModule,
     AppRoutingModule
   ],

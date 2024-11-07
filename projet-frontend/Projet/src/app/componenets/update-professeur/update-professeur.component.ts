@@ -7,6 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { UpdateProfesseurService } from '../../services/update-professeur.service';
+import { CategorieEnseignantService } from '../../services/categorie-enseignant.service';
+import { UserService } from '../../services/user.service';
+import { User } from '../../types/user.types';
+import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
 
 @Component({
   selector: 'app-update-professeur',
@@ -20,24 +25,16 @@ import { MatOptionModule } from '@angular/material/core';
     MatSelectModule,
     MatOptionModule,
   ],
+  providers: [UpdateProfesseurService],
   templateUrl: './update-professeur.component.html',
   styleUrl: './update-professeur.component.scss'
 })
 export class UpdateProfesseurComponent {
   defaultHeures = 192; 
-  enseignant = {
-    nombreHeures: this.defaultHeures || 0,
-    profession: '',
-    utilisateur: '',
-    modules: []
-  };
+  categories: string[] = [];
+  enseignant!: EnseignantDto;
 
-  // Liste d'utilisateurs et de modules
-  utilisateurs = [
-    { id: 1, nom: 'Utilisateur 1' },
-    { id: 2, nom: 'Utilisateur 2' },
-    { id: 3, nom: 'Utilisateur 3' },
-  ];
+  utilisateurs: User[] = [];
 
   modules = [
     { id: 'module1', nom: 'Module 1' },
@@ -50,17 +47,40 @@ export class UpdateProfesseurComponent {
   constructor(
     private dialogRef: MatDialogRef<UpdateProfesseurComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private updateProfesseurService: UpdateProfesseurService,  
+    private categorieService: CategorieEnseignantService,
+    private userService: UserService,
   ) {
     if (data) {
       this.isEdit = true; 
       this.enseignant = { ...data }; 
     }
+    this.enseignant = {
+      id: this.data?.id || null,
+      maxHeuresService: this.defaultHeures || 0,
+      categorie: CategorieEnseignant.PROFESSEUR,
+      heuresAssignees: 0
+    };
+  }
+
+  ngOnInit(): void {
+    this.categorieService.getCategories().subscribe(data => {
+      this.categories = data;
+    });
+    this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
+      this.utilisateurs = data;
+    });
   }
   
 
   save() {
-    console.log('Enseignant sauvegardé:', this.enseignant);
-    this.dialogRef.close(this.enseignant); 
+    this.updateProfesseurService.createEnseignant(this.enseignant).subscribe(
+      (response) => {
+       this.dialogRef.close(this.enseignant); 
+      },
+      (error) => {
+      }
+    );
   }
 
   close() {
