@@ -21,7 +21,7 @@
       <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
         Email is <strong>required</strong>
       </mat-error>
-      <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('email')">
+      <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
         Invalid email format
       </mat-error>
     </mat-form-field>
@@ -37,7 +37,7 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- Password -->
+    <!-- Password Field -->
     <mat-form-field class="full-width">
       <input matInput type="password" placeholder="Password" formControlName="password" required />
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
@@ -45,6 +45,23 @@
       </mat-error>
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('minlength')">
         Password is <strong>6 chars min</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('weakPassword')">
+        Password must contain at least one lowercase, one uppercase letter, one number, and one special character
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Confirm Password Field -->
+    <mat-form-field class="full-width">
+      <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword" required />
+      <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
+        Confirmation password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('minlength')">
+        Password is <strong>6 chars min</strong>
+      </mat-error>
+      <mat-error *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.dirty">
+        Passwords do not match
       </mat-error>
     </mat-form-field>
 

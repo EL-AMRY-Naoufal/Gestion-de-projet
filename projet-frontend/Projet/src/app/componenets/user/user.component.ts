@@ -23,31 +23,32 @@ export class UserComponent {
       this._user = {} as User;
       this._isUser = false;
     }
-  
+
     // private property to store user value
     private _user: User;
-  
+
     /**
      * Returns private property _user
      */
     get user(): User {
       return this._user;
     }
-  
+
     // private property to store flag to know if it's a user
     private _isUser: boolean;
-  
+
     /**
      * Returns flag to know if we are on a profile or on HP
      */
     get isUser(): boolean {
       return this._isUser;
     }
-  
+
     /**
      * OnInit implementation
      */
     ngOnInit(): void {
+
       merge(
         this._route.params.pipe(
           filter((params: any) => !!params.id),
@@ -62,7 +63,8 @@ export class UserComponent {
           this._isUser = true;
         },
       });
+
     }
-  
+
 
 }

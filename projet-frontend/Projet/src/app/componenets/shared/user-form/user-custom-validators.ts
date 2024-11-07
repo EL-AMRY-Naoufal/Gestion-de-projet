@@ -11,16 +11,12 @@ export class UserCustomValidators {
      * - at least 6 characters in length
      */
     static strongPassword(control: AbstractControl): ValidationErrors | null {
-        if (!control.value) {
-            return null; // Don't validate if the field is empty
-        }
+      if (!control.value) {
+        return null; // Pas de validation si le champ est vide
+      }
 
-        // Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-
-        const valid = passwordPattern.test(control.value);
-
-        return valid ? null : { weakPassword: true };
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+      return passwordPattern.test(control.value) ? null : { weakPassword: true };
     }
 
     /**
@@ -36,13 +32,14 @@ export class UserCustomValidators {
      * Validator to check if the password matches the confirmed password
      */
     static matchPasswords(control: AbstractControl): ValidationErrors | null {
-        const password = control.get('password');
-        const confirmPassword = control.get('confirmPassword');
+      const password = control.get('password');
+      const confirmPassword = control.get('confirmPassword');
 
-        if (password && confirmPassword && password.value !== confirmPassword.value) {
-            return { passwordMismatch: true };
-        }
-
-        return null;
+      return password && confirmPassword && password.value !== confirmPassword.value
+        ? { passwordMismatch: true }
+        : null;
     }
+
+
+
 }
