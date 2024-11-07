@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fst.il.m2.Projet.enumurators.TypeHeure;
 import jakarta.persistence.*;
 
@@ -28,6 +29,7 @@ public class Module {
     @JoinColumn(name = "formation_id")
     private Formation formation;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "module")
     private List<Affectation> affectations;
 

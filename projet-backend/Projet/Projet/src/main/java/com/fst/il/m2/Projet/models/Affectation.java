@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ public class Affectation {
 
     // Relations
     @ManyToOne
-    @JoinColumn(name = "enseignant_id")
+    @JoinColumn(name = "enseignant_id", nullable = false)
+    @JsonIgnore  
     private Enseignant enseignant;
 
     @ManyToOne

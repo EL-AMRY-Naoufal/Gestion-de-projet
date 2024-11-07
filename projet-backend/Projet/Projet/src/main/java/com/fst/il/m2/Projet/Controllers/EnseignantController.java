@@ -22,10 +22,13 @@ public class EnseignantController {
 
     @GetMapping("/{id}/affectations")
     public ResponseEntity<List<Affectation>> getAffectationsByEnseignantId(@PathVariable Long id) {
+
         List<Affectation> affectations = enseignantService.getAffectationsByEnseignantId(id);
+
         if (affectations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         return new ResponseEntity<>(affectations, HttpStatus.OK);
     }
 }

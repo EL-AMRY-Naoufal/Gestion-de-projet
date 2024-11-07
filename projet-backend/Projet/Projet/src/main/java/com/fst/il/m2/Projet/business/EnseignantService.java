@@ -26,4 +26,9 @@ public class EnseignantService {
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"));
         return enseignant.getAffectations();
     }
+
+
+    public Enseignant getEnseignant() {
+        return enseignantRepository.findAll().get(0);
+    }
 }

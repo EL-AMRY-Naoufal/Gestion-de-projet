@@ -17,8 +17,7 @@ public class Enseignant extends User {
     private int heuresAssignees;
 
     // Relations
-    @OneToMany
-    @JoinColumn(name="Affectation_ID")
+    @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
     public Enseignant() {
@@ -61,6 +60,7 @@ public class Enseignant extends User {
     }
 
     public List<Affectation> getAffectations() {
+
         return affectations;
     }
 
