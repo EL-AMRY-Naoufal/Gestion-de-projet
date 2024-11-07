@@ -35,6 +35,13 @@ public class EnseignantService {
         return this.enseignantRepository.save(enseignant);
     }
 
+    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant ) {
+        Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
+        enseignant.setCategorie(categorieEnseignant);
+        enseignant.setMaxHeuresService(nmaxHeuresService);
+        return this.enseignantRepository.save(enseignant);
+    }
+
     public Enseignant getEnseignantById(long id) {
         return this.enseignantRepository.getReferenceById(id);
     }
