@@ -4,14 +4,15 @@ import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component
 import { Router } from 'express';
 import { UserService } from '../../services/user.service';
 import { filter, map, mergeMap, Observable } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
+import { MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { UserCardComponent } from '../shared/user-card/user-card.component';
+import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [MatDialogModule],
+  imports: [MatDialogModule, UserCardComponent, NgSwitch, NgSwitchCase, NgIf],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss'
 })
@@ -125,7 +126,7 @@ export class ListUsersComponent {
      * Function to navigate to current person
      */
     navigate(id: string | undefined): void {
-      this._router.navigate(['/user', id]);
+      //this._router.navigate(['/user', id]);
     }
   
     /**
