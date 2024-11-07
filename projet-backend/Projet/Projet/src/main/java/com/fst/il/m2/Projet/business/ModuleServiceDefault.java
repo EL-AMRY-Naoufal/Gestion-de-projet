@@ -1,14 +1,13 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.TypeHeure;
-import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.repositories.ModuleRepository;
-import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Optional;
 
+@Service
 public class ModuleServiceDefault implements ModuleService{
 
     @Autowired

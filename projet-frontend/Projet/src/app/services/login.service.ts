@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root' 
+  providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'http://localhost:8080/api/users/authenticate'; 
+  private apiUrl = 'http://localhost:8080/api/users/authenticate';
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  
+
   login(formData: any): Observable<any> {
     console.log( formData)
     return this.http.post(this.apiUrl, formData);
@@ -25,5 +25,9 @@ export class LoginService {
   handleLoginError(error: any) {
     console.error('Login failed:', error);
     alert('Login failed: Invalid email or password');
+  }
+
+  goToResetPasswordPage(): void {
+    this.router.navigate(['/reset-password']);
   }
 }

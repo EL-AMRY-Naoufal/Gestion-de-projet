@@ -8,13 +8,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
+import { ResetPasswordComponent } from './componenets/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    EnseignantsComponent
-    
+    EnseignantsComponent,
+    ResetPasswordComponent
+
   ],
   imports: [
     BrowserModule,

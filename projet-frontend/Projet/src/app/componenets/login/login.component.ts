@@ -10,14 +10,14 @@ import { LoginService } from '../../services/login.service';
   standalone: true,
   templateUrl: "./login.component.html",
   styleUrls: ['./login.component.scss'],
-  imports: [FormsModule] 
+  imports: [FormsModule]
 })
 export class LoginComponent {
 
   constructor(private loginService: LoginService) {}
 
   login(form: any) {
-    const formData = form.value; 
+    const formData = form.value;
     console.log("***************", formData);
 
     this.loginService.login(formData)
@@ -25,6 +25,9 @@ export class LoginComponent {
         response => { console.log("response"); console.log(response); this.loginService.handleLoginSuccess(response)},
         error => { console.log("error"); console.log(error);  this.loginService.handleLoginError(error)}
       );
-  
+  }
+
+  goToResetPasswordPage(): void {
+    this.loginService.goToResetPasswordPage();
   }
 }
