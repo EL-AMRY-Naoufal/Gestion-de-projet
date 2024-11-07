@@ -13,8 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class UserServiceDefaultTest {
@@ -44,10 +44,12 @@ public class UserServiceDefaultTest {
                 .setResponsableId(1L)
                 .build();
 
-        int isAuthenticated = userService.authenticate(userRequest.getUser().getEmail(), userRequest.getUser().getPassword());
+        User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(), userRequest.getUser().getPassword());
 
-        assertEquals(1, isAuthenticated, "The user should be authenticated successfully");
+        assertNotNull(authenticatedUser, "The user should be authenticated successfully");
+        assertEquals(mockUser.getEmail(), authenticatedUser.getEmail(), "The authenticated user email should match the input email");
     }
+
 
     @Test
     public void shouldFailAuthenticationWithInvalidPassword() {
@@ -56,17 +58,18 @@ public class UserServiceDefaultTest {
                 .setResponsableId(1L)
                 .build();
 
-        int isAuthenticated = userService.authenticate(userRequest.getUser().getEmail(), "wrongPassword");
+        User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(), "wrongPassword");
 
-        assertEquals(0, isAuthenticated, "Authentication should fail with an incorrect password");
+        assertNull(authenticatedUser, "Authentication should fail with an incorrect password");
     }
 
     @Test
     public void shouldFailAuthenticationWithNonExistingUser() {
         when(userRepository.findUserByEmail("nonexistent@example.com")).thenReturn(Optional.empty());
 
-        int isAuthenticated = userService.authenticate("nonexistent@example.com", "password123");
+        User authenticatedUser = userService.authenticate("nonexistent@example.com", "password123");
 
-        assertEquals(0, isAuthenticated, "Authentication should fail for a non-existing user");
+        assertNull(authenticatedUser, "Authentication should fail for a non-existing user");
     }
+
 }
