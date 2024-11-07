@@ -19,12 +19,11 @@ export class LoginComponent {
 
   login(form: any) {
     const formData = form.value; 
-    console.log("***************", formData);
 
     this.loginService.login(formData)
       .subscribe(
-        response => { console.log("response"); console.log(response); this.loginService.handleLoginSuccess(response)},
-        error => { console.log("error"); console.log(error);  this.loginService.handleLoginError(error)}
+        response => { this.loginService.handleLoginSuccess(response)},
+        error => { this.loginService.handleLoginError(error)}
       );
   
   }

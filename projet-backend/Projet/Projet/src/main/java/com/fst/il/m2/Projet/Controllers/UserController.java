@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.Controllers;
 
 import com.fst.il.m2.Projet.business.UserService;
+import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,12 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<HashMap<String, String>> authenticate(@RequestBody User user) {
+    public ResponseEntity<AuthResponse> authenticate(@RequestBody User user) {
         System.out.println(user);
-        HashMap<String, String> res = new HashMap<>();
-        int result = userService.authenticate(user.getEmail(), user.getPassword());
+        User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
 
-        if (result != 1) throw new UnauthorizedException("Authentification failed");
-        res.put("message", "Authentication successful");
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        if (authenticatedUser == null ) throw new UnauthorizedException("Authentification failed");
+        AuthResponse response = new AuthResponse("Authentication successful", authenticatedUser);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

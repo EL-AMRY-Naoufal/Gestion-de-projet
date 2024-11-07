@@ -34,15 +34,15 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
-    public int authenticate(String email, String password) {
+    public User authenticate(String email, String password) {
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
             if (user.getPassword().equals(password)) {
-                return 1;
+                return user;
             }
         }
-        return 0;
+        return null;
     }
 }

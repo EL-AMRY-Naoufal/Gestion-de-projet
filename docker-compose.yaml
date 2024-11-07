@@ -22,10 +22,11 @@ services:
     build: ./projet-frontend/Projet  # Chemin vers le Dockerfile du backend
     container_name: frontend
     ports:
-      - "4200:4200"
+      - "4000:4000"
     networks:
       - app-network
-    command: /bin/sh -c "npm update && ng serve --host 0.0.0.0"
+    environment:
+      - NODE_VERSION=22.7.0
     develop:
       watch:
         - action: sync
