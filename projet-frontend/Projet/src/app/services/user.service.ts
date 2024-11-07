@@ -91,9 +91,11 @@ export class UserService {
     * Function to delete one person for current id
     */
    delete(id: number): Observable<number> {
-     return this._http
-       .delete(this._backendURL.oneUser.replace(':id', id))
-       .pipe(map(() => id));
+      return this._http
+      .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
+        body: { responsableId: responsableId },
+      })
+      .pipe(map(() => id));
    }
 
    /**
