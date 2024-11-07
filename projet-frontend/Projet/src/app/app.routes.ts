@@ -7,6 +7,7 @@ import { EnseignantsComponent } from './componenets/enseignants/enseignants.comp
 export const routes: Routes = [{ path: '', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'enseignants', component: EnseignantsComponent },
+  { path: '**', redirectTo: 'dashboard' }
 ];
 
 @NgModule({
