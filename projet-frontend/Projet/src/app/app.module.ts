@@ -20,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 
+import { CommonModule } from '@angular/common';
+import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
 
 @NgModule({
   declarations: [
@@ -30,14 +32,16 @@ import { Router, RouterLink } from '@angular/router';
     UserFormComponent,
     UserComponent,
     ListUsersComponent,
-    
+    EnseignantsComponent
+
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    CommonModule,
     HttpClientModule,
   //  ReactiveFormsModule,
-    AppRoutingModule,
+ //   AppRoutingModule,
     MatFormFieldModule, // Ajoutez ici
     MatInputModule,      // Ajoutez ici
     MatSelectModule,     // Ajoutez ici

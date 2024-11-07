@@ -12,22 +12,22 @@ export class UserService {
    private readonly _backendURL: any;
    // private property to store default person
    private readonly _defaultUser: User;
- 
+
    constructor(private _http: HttpClient) {
      this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
-       role: 'ENSEIGNANT', 
+       role: 'ENSEIGNANT',
        password: 'Ed*lZ%0qiA'
      };
      this._backendURL = {};
- 
+
      // build backend base url
      let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
      if (environment.backend.port) {
        baseUrl += `:${environment.backend.port}`;
      }
- 
+
      // build all backend urls
      // @ts-ignore
      Object.keys(environment.backend.endpoints).forEach(
@@ -36,14 +36,14 @@ export class UserService {
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
    }
- 
+
    /**
     * Returns private property _defaultPerson
     */
    get defaultUser(): User {
      return this._defaultUser;
    }
- 
+
    /**
     * Function to return list of person
     */
@@ -54,7 +54,7 @@ export class UserService {
      );
    }
 
- 
+
    /**
     * Function to return one person for current id
     */
@@ -63,7 +63,7 @@ export class UserService {
        this._backendURL.oneUser.replace(':id', id)
      );
    }
- 
+
    /**
     * Function to create a new person
     */
@@ -74,7 +74,7 @@ export class UserService {
        this._options()
      );
    }
- 
+
    /**
     * Function to update one person
     */
@@ -85,7 +85,7 @@ export class UserService {
        this._options()
      );
    }
- 
+
    /**
     * Function to delete one person for current id
     */
@@ -94,7 +94,7 @@ export class UserService {
        .delete(this._backendURL.oneUser.replace(':id', id))
        .pipe(map(() => id));
    }
- 
+
    /**
     * Function to return request options
     */
@@ -105,4 +105,19 @@ export class UserService {
        ),
      };
    }
+
+/*
+  private apiUrl = 'http://localhost:8080/api/users';
+
+  constructor(private http: HttpClient) { }
+
+   getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  getUserByName(name: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?name=${name}`);
+  }
+
+  */
 }

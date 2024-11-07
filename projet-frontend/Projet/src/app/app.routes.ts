@@ -15,10 +15,20 @@ export const routes: Routes = [
 
   // Route pour les profil d'utilisateur
   { path: 'users', component: ListUsersComponent },
-  
+
   // Route pour afficher un profil d'utilisateur
   { path: 'user/:id', component: UserComponent },
+
+]
+/*
+import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
+
+export const routes: Routes = [{ path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'enseignants', component: EnseignantsComponent },
 ];
+
+*/
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
