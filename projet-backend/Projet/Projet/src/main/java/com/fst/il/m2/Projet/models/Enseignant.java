@@ -15,15 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Enseignant  {
-
+public class Enseignant  extends User{
+    /*
     @Id
     private Long id;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "id")
-    private User user;
+    private User user;*/
 
     @Enumerated(EnumType.STRING)
     private CategorieEnseignant categorie;
