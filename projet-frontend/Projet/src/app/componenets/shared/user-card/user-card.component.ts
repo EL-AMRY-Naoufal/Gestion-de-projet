@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from '../types/user.type';
-import { Router } from 'express';
 import { RouterLink } from '@angular/router';  // Pour utiliser les liens de navigation
 import { MatCardModule } from '@angular/material/card';  // Pour le composant mat-card
 import { MatIconModule } from '@angular/material/icon';  // Pour les icônes
@@ -28,7 +27,7 @@ export class UserCardComponent {
     /**
      * Component constructor
      */
-    constructor(private _router: Router) {
+    constructor() {
       this._user = {} as User;
       this._delete$ = new EventEmitter<User>();
     }

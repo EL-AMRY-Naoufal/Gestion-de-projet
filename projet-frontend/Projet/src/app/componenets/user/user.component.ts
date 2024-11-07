@@ -8,7 +8,7 @@ import { filter, merge, mergeMap, tap } from 'rxjs';
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [UserCardComponent],
+  imports: [ UserCardComponent ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss'
 })
