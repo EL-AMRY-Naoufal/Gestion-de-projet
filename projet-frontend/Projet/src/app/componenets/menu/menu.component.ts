@@ -17,4 +17,7 @@ export class MenuComponent {
   navigateToDashboard() {
     this.router.navigate(['/dashboard']);
   }
+  logout() {
+    this.router.navigate([''])
+  }
 }
