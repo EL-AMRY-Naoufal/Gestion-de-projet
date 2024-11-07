@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Gestion-de-projet
-=======
 # Gestion de projet
 
 ## Installation de l'environnement de dev
@@ -71,5 +68,3 @@ Tout le contenu du serveur backend est contenu dans le repertoire */projet-backe
 ### Frontend (APP)
 
 Tout le contenu du serveur backend est contenu dans le repertoire */projet-frontend*.
-
->>>>>>> origin/master
