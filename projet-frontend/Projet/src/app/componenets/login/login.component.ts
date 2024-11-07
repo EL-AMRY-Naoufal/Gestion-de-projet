@@ -11,20 +11,21 @@ import { LoginService } from '../../services/login.service';
   templateUrl: "./login.component.html",
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [FormsModule] 
+  imports: [FormsModule]
 })
 export class LoginComponent {
 
   constructor(private loginService: LoginService) {}
 
   login(form: any) {
-    const formData = form.value; 
+    const formData = form.value;
+
 
     this.loginService.login(formData)
       .subscribe(
         response => { this.loginService.handleLoginSuccess(response)},
         error => { this.loginService.handleLoginError(error)}
       );
-  
+
   }
 }

@@ -1,3 +1,4 @@
+import { LoginService } from './login.service';
 import { Injectable } from '@angular/core';
 import { User } from '../componenets/shared/types/user.type';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -14,7 +15,7 @@ export class UserService {
    // private property to store default person
    private readonly _defaultUser: User;
 
-   constructor(private _http: HttpClient) {
+   constructor(private _http: HttpClient, private _loginService: LoginService) {
      this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
@@ -93,7 +94,7 @@ export class UserService {
    delete(id: number): Observable<number> {
       return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
-        body: { responsableId: responsableId },
+        body: { responsableId: this._loginService.connectUser },
       })
       .pipe(map(() => id));
    }

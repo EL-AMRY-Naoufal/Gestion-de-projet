@@ -21,6 +21,7 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
+    console.log("wsh"+response.user)
     this._connectUser = response.user;
 
     if (response.user.role == "CHEF_DE_DEPARTEMENT")
