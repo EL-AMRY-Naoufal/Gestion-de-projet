@@ -14,7 +14,7 @@ export class UserService {
    private readonly _backendURL: any;
    // private property to store default person
    private readonly _defaultUser: User;
-   private readonly _responsableId: any;
+   private readonly _responsableId: number = 1;
 
    constructor(private _http: HttpClient, private _loginService: LoginService) {
      this._defaultUser = {
@@ -39,7 +39,7 @@ export class UserService {
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
 
-     const responsableId = this._loginService.connectUser?.id;
+     const responsableId = this._loginService.connectUser;
      if (!responsableId) {
       throw new Error("Responsable is not authenticated or responsableId is missing");
     }
@@ -103,6 +103,7 @@ export class UserService {
     * Function to delete one person for current id
     */
    delete(id: number): Observable<number> {
+
       return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
         body: { responsableId: this._responsableId },

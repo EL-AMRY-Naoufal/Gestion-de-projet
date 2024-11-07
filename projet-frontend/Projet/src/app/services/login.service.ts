@@ -2,7 +2,7 @@ import { User } from './../componenets/shared/types/user.type';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class LoginService {
   private apiUrl = 'http://localhost:8080/api/users/authenticate';
     // private property to store default person
-  private _connectUser: User | undefined;
+  public _connectUser: number = 1;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -21,9 +21,8 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    console.log("wsh"+response.user)
-    this._connectUser = response.user;
 
+    this._connectUser = response.user.id;
     if (response.user.role == "CHEF_DE_DEPARTEMENT")
     {
       this.router.navigate(['/dashboard']);
@@ -40,7 +39,7 @@ export class LoginService {
   /*
   * Returns private property _connectUser
   */
- get connectUser(): User | undefined {
+ get connectUser(): number{
     return this._connectUser;
  }
 
