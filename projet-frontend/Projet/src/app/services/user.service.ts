@@ -8,6 +8,7 @@ import { defaultIfEmpty, filter, map, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
+
    // private property to store all backend URLs
    private readonly _backendURL: any;
    // private property to store default person
@@ -106,6 +107,20 @@ export class UserService {
      };
    }
 
+
+   getUsers(): Observable<any[]> {
+    return this._http.get<any[]>(this._backendURL.allUsers);
+  }
+
+  getUserByName(name: string): Observable<any[]> {
+    return this._http.get<any[]>(`${this._backendURL.allUsers}?name=${name}`);
+  }
+
+
+
+
+
+
 /*
   private apiUrl = 'http://localhost:8080/api/users';
 
@@ -118,6 +133,7 @@ export class UserService {
   getUserByName(name: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?name=${name}`);
   }
+    */
 
-  */
+
 }

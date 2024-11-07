@@ -40,8 +40,8 @@ import { EnseignantsComponent } from './componenets/enseignants/enseignants.comp
     FormsModule,
     CommonModule,
     HttpClientModule,
-  //  ReactiveFormsModule,
- //   AppRoutingModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
     MatFormFieldModule, // Ajoutez ici
     MatInputModule,      // Ajoutez ici
     MatSelectModule,     // Ajoutez ici
