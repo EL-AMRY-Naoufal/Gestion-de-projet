@@ -10,8 +10,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'enseignants', component: EnseignantsComponent },
-  { path: 'reset-password', component: ResetPasswordComponent }
-  //route for my consulte-enseignant component
+  { path: 'reset-password', component: ResetPasswordComponent },
+  //route for my consulte-enseignant componentw
   { path: 'enseignants/affectations', component: AffectationListComponent },
 ];
 
