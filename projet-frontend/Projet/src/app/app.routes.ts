@@ -35,6 +35,7 @@ export const routes: Routes = [{ path: '', component: LoginComponent },
   { path: 'enseignants', component: EnseignantsComponent },
   //route for my consulte-enseignant component
   { path: 'enseignants/affectations', component: AffectationListComponent },
+  { path: '**', component: LoginComponent }
 ];
 
 */
