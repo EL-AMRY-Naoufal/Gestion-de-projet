@@ -9,7 +9,7 @@ export const routes: Routes = [{ path: '', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'enseignants', component: EnseignantsComponent },
   //route for my consulte-enseignant component
-  { path: 'enseignants/:id/affectations', component: AffectationListComponent },
+  { path: 'enseignants/affectations', component: AffectationListComponent },
 ];
 
 @NgModule({
