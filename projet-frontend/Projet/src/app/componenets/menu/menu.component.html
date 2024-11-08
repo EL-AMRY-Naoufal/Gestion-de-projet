@@ -2,9 +2,13 @@
 <div class="sidebar">
     <div class="menu-header">Menu</div>
     <a (click)="navigateToDashboard()">Accueil</a>
-    <a >Formation</a>
-    <a (click)="navigateToTeachers()">Enseignants</a>
-    <a >Affectations</a>
+   
+   
+    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT' || userRole === 'RESPONSABLE_DE_FORMATION'">Formation</a>
+    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT'" (click)="navigateToTeachers()">Enseignants</a>
+    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT' || userRole === 'ENSEIGNANT'  || userRole === 'SECRETARIAT_PEDAGOGIQUE'">Affectations</a>
+    
+    
     <a>Configurations</a>
     <a class="logout" (click)="logout()">Déconnexion</a>
 </div>
