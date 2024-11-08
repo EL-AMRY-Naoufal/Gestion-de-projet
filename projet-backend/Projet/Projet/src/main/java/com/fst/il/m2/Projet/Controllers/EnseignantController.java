@@ -1,4 +1,5 @@
 package com.fst.il.m2.Projet.Controllers;
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.business.EnseignantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class EnseignantController {
     }
 
     @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<Affectation>> getAffectationsByEnseignantId(@PathVariable Long id) {
+    public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
 
-        List<Affectation> affectations = enseignantService.getAffectationsByEnseignantId(id);
+        List<AffectationDTO> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
 
         if (affectations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

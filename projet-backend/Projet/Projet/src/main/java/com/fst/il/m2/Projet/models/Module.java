@@ -29,7 +29,6 @@ public class Module {
     @JoinColumn(name = "formation_id")
     private Formation formation;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "module")
     private List<Affectation> affectations;
 

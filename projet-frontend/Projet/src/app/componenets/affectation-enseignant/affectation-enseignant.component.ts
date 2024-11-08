@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { EnseignantService } from '../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
+import {AffectationType} from "../../Type/Affectation";
+
 @Component({
   selector: 'app-affectation-list',
   standalone: true,
@@ -13,7 +15,7 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class AffectationListComponent implements OnInit {
 
-  affectations: any[] = [];
+  affectations: AffectationType[] = [];
 
   //normalement on doit récupérer l'id de l'enseignant connecté depuis le cookie par exemple ou par une requête HTTP, ou depuis un @input
   enseignantId: number = 3;

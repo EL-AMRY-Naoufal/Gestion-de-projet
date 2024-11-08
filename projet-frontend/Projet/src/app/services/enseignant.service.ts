@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import {AffectationType} from "../Type/Affectation";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class EnseignantService {
   constructor(private http: HttpClient) { }
 
   getAffectationsByEnseignantId(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}/affectations`);
+    return this.http.get<AffectationType>(`${this.apiUrl}/${id}/affectations`);
   }
 
   getUserByName(name: string): Observable<any[]> {

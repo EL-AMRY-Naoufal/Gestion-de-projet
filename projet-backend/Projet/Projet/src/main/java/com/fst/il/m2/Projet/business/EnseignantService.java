@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EnseignantService {
@@ -21,10 +23,23 @@ public class EnseignantService {
         this.affectationRepository = affectationRepository;
     }
 
-    public List<Affectation> getAffectationsByEnseignantId(Long enseignantId) {
+    public List<Affectation> getAffectationsByEnseignantById(Long enseignantId) {
         Enseignant enseignant = enseignantRepository.findById(enseignantId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"));
         return enseignant.getAffectations();
+    }
+
+
+    public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
+        List<Affectation> affectations = getAffectationsByEnseignantById(id);
+        return affectations.stream()
+                .map(affectation -> new AffectationDTO(
+                        affectation.getId(),
+                        affectation.getHeuresAssignees(),
+                        affectation.getDateAffectation(),
+                        affectation.getModule() != null ? affectation.getModule().getNom() : null
+                ))
+                .collect(Collectors.toList());
     }
 
 

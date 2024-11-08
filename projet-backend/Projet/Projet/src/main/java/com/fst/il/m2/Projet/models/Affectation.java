@@ -20,7 +20,6 @@ public class Affectation {
     // Relations
     @ManyToOne
     @JoinColumn(name = "enseignant_id", nullable = false)
-    @JsonIgnore  
     private Enseignant enseignant;
 
     @ManyToOne

@@ -10,7 +10,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let affectation of affectations">
-      <td>{{ affectation.module ? affectation.module.nom : 'Aucun' }}</td>
+      <td>{{ affectation.nomModule}}</td>
       <td>{{ affectation.heuresAssignees }}</td>
       <td>{{ affectation.dateAffectation }}</td>
     </tr>
