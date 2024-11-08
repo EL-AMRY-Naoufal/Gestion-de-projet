@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,10 +28,16 @@ public class UserServiceDefault implements UserService {
         /*
             Comptes de tests
          */
-        userRepository.save(new User("cdd", "cdd", "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT));
-        userRepository.save(new User("rdd", "rdd", "rdd@rdd.fr", Role.RESPONSABLE_DE_FORMATION));
-        userRepository.save(new User("ens", "ens", "ens@ens.fr", Role.ENSEIGNANT));
-        userRepository.save(new User("sec", "sec", "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE));
+        List<User> users = List.of(
+                new User("cdd", "cdd", "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT),
+                new User("rdf", "rdf", "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
+                new User("ens", "ens", "ens@ens.fr", Role.ENSEIGNANT),
+                new User("sec", "sec", "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE)
+        );
+
+        for(User u : users)
+            userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
+
     }
 
     @Override
