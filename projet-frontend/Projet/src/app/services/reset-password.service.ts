@@ -15,5 +15,9 @@ export class ResetPasswordService {
   resetPassword(password: String): Observable<any> {
       console.log(password);
       return this.http.put(this.apiUrl + "/1/" + this.apiUrlKeyword, password); //TODO put user id + hash?
-    }
+  }
+
+  navigateToLogin(): void {
+        this.router.navigate(['/login']);
+  }
 }

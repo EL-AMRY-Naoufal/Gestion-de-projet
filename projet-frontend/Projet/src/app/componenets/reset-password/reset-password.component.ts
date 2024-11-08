@@ -12,13 +12,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './reset-password.component.scss'
 })
 export class ResetPasswordComponent {
-  constructor(private resetPasswordService: ResetPasswordService) {}
+  public passwordChanged : boolean;
+  constructor(private resetPasswordService: ResetPasswordService) {
+      this.passwordChanged = false;
+    }
 
     resetPassword(form: any) {
       const formData = form.value;
+      console.log("passwordChanged : " + this.passwordChanged);
       this.resetPasswordService.resetPassword(formData.password)
         .subscribe(
-          response => { console.log("response"); console.log(response);},
+          response => { console.log("response"); console.log(response); this.passwordChanged = true},
           error => { console.log("error"); console.log(error);}
         );
     }
@@ -27,5 +31,8 @@ export class ResetPasswordComponent {
       const formData = form.value;
       console.log(formData);
       return formData.password == formData.passwordConfirmation;
+    }
+    navigateToLogin() {
+      this.resetPasswordService.navigateToLogin();
     }
 }
