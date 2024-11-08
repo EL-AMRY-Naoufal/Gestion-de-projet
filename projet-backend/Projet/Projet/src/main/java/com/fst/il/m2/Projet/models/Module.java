@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fst.il.m2.Projet.enumurators.TypeHeure;
 import jakarta.persistence.*;
 

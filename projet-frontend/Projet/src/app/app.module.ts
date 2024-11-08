@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app.routes'
-
 import { AppComponent } from './app.component';
 import { LoginComponent } from './componenets/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,13 +18,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
-
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
+import {AffectationListComponent} from "./componenets/affectation-enseignant/affectation-enseignant.component";
 
 @NgModule({
   declarations: [
     AppComponent,
+    AffectationListComponent,
     LoginComponent,
     UserDialogComponent,
     UserCardComponent,
