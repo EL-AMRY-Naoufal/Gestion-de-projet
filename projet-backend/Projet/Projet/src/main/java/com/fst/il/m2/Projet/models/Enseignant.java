@@ -37,9 +37,9 @@ public class Enseignant {
     public Enseignant() {
     }
 
-    public Enseignant(Long id, CategorieEnseignant categorie, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
+    public Enseignant(Long id, Map<CategorieEnseignant, Integer> categorieEnseignant, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
         this.id = id;
-        this.categorie = categorie;
+        this.categorieEnseignant = categorieEnseignant;
         this.maxHeuresService = maxHeuresService;
         this.heuresAssignees = heuresAssignees;
         this.affectations = affectations;
@@ -54,12 +54,12 @@ public class Enseignant {
         this.id = id;
     }
 
-    public CategorieEnseignant getCategorie() {
-        return categorie;
+    public Map<CategorieEnseignant, Integer> getCategorieEnseignant() {
+        return categorieEnseignant;
     }
 
-    public void setCategorie(CategorieEnseignant categorie) {
-        this.categorie = categorie;
+    public void setCategorieEnseignant(Map<CategorieEnseignant, Integer> categorieEnseignant) {
+        this.categorieEnseignant = categorieEnseignant;
     }
 
     public int getMaxHeuresService() {
