@@ -5,6 +5,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Enseignant {
@@ -14,8 +15,11 @@ public class Enseignant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private CategorieEnseignant categorie;
+    @ElementCollection
+    @CollectionTable(name = "categorie_enseignant_map", joinColumns = @JoinColumn(name = "enseignant_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @Column(name = "heures")
+    private Map<CategorieEnseignant, Integer> categorieEnseignant;
 
     private int maxHeuresService;
 
