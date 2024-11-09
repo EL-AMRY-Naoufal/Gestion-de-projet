@@ -7,7 +7,12 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Enseignant extends User {
+public class Enseignant {
+
+    @Id
+    @Column(name="Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private CategorieEnseignant categorie;
@@ -21,19 +26,28 @@ public class Enseignant extends User {
     @JoinColumn(name="Affectation_ID")
     private List<Affectation> affectations;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Enseignant() {
     }
 
-    public Enseignant(String username, String password, String email, Role role) {
-        super(username, password, email, role);
-    }
-
-    public Enseignant(String username, String password, String email, Role role, CategorieEnseignant categorie, int maxHeuresService, int heuresAssignees, List<Affectation> affectations) {
-        super(username, password, email, role);
+    public Enseignant(Long id, CategorieEnseignant categorie, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
+        this.id = id;
         this.categorie = categorie;
         this.maxHeuresService = maxHeuresService;
         this.heuresAssignees = heuresAssignees;
         this.affectations = affectations;
+        this.user = user;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public CategorieEnseignant getCategorie() {
@@ -66,5 +80,17 @@ public class Enseignant extends User {
 
     public void setAffectations(List<Affectation> affectations) {
         this.affectations = affectations;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 }
