@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,12 +37,14 @@ public class UserServiceDefault implements UserService {
             Comptes de tests
          */
 
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         userRepository.save(new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr", Arrays.asList(Role.CHEF_DE_DEPARTEMENT)));
         userRepository.save(new User("rdd", passwordEncoder.encode("rdd"), "rdd@rdd.fr", Arrays.asList(Role.RESPONSABLE_DE_FORMATION)));
         userRepository.save(new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr", Arrays.asList(Role.ENSEIGNANT)));
         userRepository.save(new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr", Arrays.asList(Role.SECRETARIAT_PEDAGOGIQUE)));
+
     }
 
     @Override

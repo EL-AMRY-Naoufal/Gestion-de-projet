@@ -26,8 +26,7 @@ public class Enseignant {
     private int heuresAssignees;
 
     // Relations
-    @OneToMany
-    @JoinColumn(name="Affectation_ID")
+    @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
     @ManyToOne
@@ -79,6 +78,7 @@ public class Enseignant {
     }
 
     public List<Affectation> getAffectations() {
+
         return affectations;
     }
 
