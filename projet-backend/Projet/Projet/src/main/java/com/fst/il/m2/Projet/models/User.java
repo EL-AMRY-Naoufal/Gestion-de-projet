@@ -2,6 +2,9 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -24,26 +27,36 @@ public class User {
 
     private String email;
 
+    @ElementCollection(targetClass = Role.class)
     @Enumerated(EnumType.STRING)
-    @Column(name="Role")
-    private Role role;
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private List<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String password, String email, Role role) {
+    public User(String username, String password, String email, List<Role> roles) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
     }
 
-    public Role getRole() {
-        return role;
+    public User(Long id, String username, String password, String email, List<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public String getEmail() {
@@ -59,7 +72,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password); ;
     }
 
     public String getUsername() {
@@ -78,13 +91,17 @@ public class User {
         this.id = id;
     }
 
+    public boolean hasRole(Role role) {
+        return roles != null && roles.contains(role);
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
+                ", roles=" + roles +
                 '}';
     }
 }
