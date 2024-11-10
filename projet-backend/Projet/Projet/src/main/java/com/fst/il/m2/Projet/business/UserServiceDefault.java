@@ -40,10 +40,10 @@ public class UserServiceDefault implements UserService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
-                new User("cdd", "cdd", "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT),
-                new User("rdf", "rdf", "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
-                new User("ens", "ens", "ens@ens.fr", Role.ENSEIGNANT),
-                new User("sec", "sec", "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE)
+                new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT),
+                new User("rdd", passwordEncoder.encode("rdd"), "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
+                new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr", Role.ENSEIGNANT),
+                new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE)
         );
         for(User u : users)
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
