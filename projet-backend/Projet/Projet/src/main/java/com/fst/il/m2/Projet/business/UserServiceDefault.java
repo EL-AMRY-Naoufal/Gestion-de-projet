@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.security.JWTUtil;
@@ -32,7 +33,7 @@ public class UserServiceDefault implements UserService {
     }
 
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         /*
             Comptes de tests
          */
@@ -41,7 +42,7 @@ public class UserServiceDefault implements UserService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
                 new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT),
-                new User("rdd", passwordEncoder.encode("rdd"), "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
+                new User("rdf", passwordEncoder.encode("rdf"), "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
                 new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr", Role.ENSEIGNANT),
                 new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE)
         );
