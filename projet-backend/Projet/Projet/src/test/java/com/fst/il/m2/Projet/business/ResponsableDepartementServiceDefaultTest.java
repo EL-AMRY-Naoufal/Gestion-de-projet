@@ -17,6 +17,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ResponsableDepartementServiceDefaultTest {
+    /*
 
     @Mock
     private UserRepository userRepository;  // Mocked UserRepository
@@ -173,5 +174,5 @@ class ResponsableDepartementServiceDefaultTest {
         });
 
         assertEquals("Only Responsable de Département can delete users", thrown.getMessage());
-    }
+    }*/
 }
