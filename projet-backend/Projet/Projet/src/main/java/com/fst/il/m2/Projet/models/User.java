@@ -4,6 +4,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -36,19 +37,19 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email, List<Role> roles) {
+    public User(String username, String password, String email, Role... roles) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.roles = roles;
+        this.roles = List.of(roles);
     }
 
-    public User(Long id, String username, String password, String email, List<Role> roles) {
+    public User(Long id, String username, String password, String email, Role... roles) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.roles = roles;
+        this.roles = List.of(roles);
     }
 
     public List<Role> getRoles() {
