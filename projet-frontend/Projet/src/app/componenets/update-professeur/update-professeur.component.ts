@@ -7,11 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { UpdateProfesseurService } from '../../services/update-professeur.service';
 import { CategorieEnseignantService } from '../../services/categorie-enseignant.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../types/user.types';
 import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
+import { EnseignantService } from '../../services/enseignant.service';
 
 @Component({
   selector: 'app-update-professeur',
@@ -25,7 +25,7 @@ import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type'
     MatSelectModule,
     MatOptionModule,
   ],
-  providers: [UpdateProfesseurService],
+  providers: [EnseignantService],
   templateUrl: './update-professeur.component.html',
   styleUrl: './update-professeur.component.scss'
 })
@@ -51,13 +51,13 @@ export class UpdateProfesseurComponent {
   constructor(
     private dialogRef: MatDialogRef<UpdateProfesseurComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private updateProfesseurService: UpdateProfesseurService,
+    private enseignantService: EnseignantService,
     private categorieService: CategorieEnseignantService,
   ) {
     if (data) {
       this.isEdit = true;
       this.userName = data.username;
-      this.updateProfesseurService.getEnseignant(data.id).subscribe({
+      this.enseignantService.getEnseignant(data.id).subscribe({
         next: (enseignant) => {
           console.log(enseignant);
           this.enseignant = enseignant;
@@ -85,7 +85,7 @@ export class UpdateProfesseurComponent {
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    !this.isEdit && this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
+    !this.isEdit && this.enseignantService.getEnseignantsNotInEnseignantTable().subscribe(data => {
       this.utilisateurs = data;
     });
   }
@@ -93,7 +93,7 @@ export class UpdateProfesseurComponent {
 
   save() {
     if (this.isEdit) {
-      this.updateProfesseurService.updateEnseignant(this.enseignant).subscribe(
+      this.enseignantService.updateEnseignant(this.enseignant).subscribe(
         (response) => {
           this.dialogRef.close(this.enseignant);
         },
@@ -101,7 +101,7 @@ export class UpdateProfesseurComponent {
         }
       );
     } else {
-      this.updateProfesseurService.createEnseignant(this.enseignant).subscribe(
+      this.enseignantService.createEnseignant(this.enseignant).subscribe(
         (response) => {
           this.dialogRef.close(this.enseignant);
         },
