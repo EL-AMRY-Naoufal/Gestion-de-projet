@@ -7,7 +7,7 @@ public class UserMapper {
     public static UserGetAllDto userToUserGetAllDto(User user) {
         return UserGetAllDto.builder()
                 .id(user.getId())
-                .role(user.getRole())
+                .roles(user.getRoles())
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .build();

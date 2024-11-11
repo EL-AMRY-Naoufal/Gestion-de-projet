@@ -8,13 +8,15 @@ import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
-import com.fst.il.m2.Projet.repositories.specifications.UserSpecifications;
+import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
+import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,13 +26,8 @@ public class EnseignantService {
     private final EnseignantRepository enseignantRepository;
     private final AffectationRepository affectationRepository;
     private final UserRepository userRepository;
-    private final UserSpecifications userSpecifications;
-
-    @Autowired
-    public EnseignantService(EnseignantRepository enseignantRepository, AffectationRepository affectationRepository) {
-        this.enseignantRepository = enseignantRepository;
-        this.affectationRepository = affectationRepository;
-    }
+    private final UserSpecification userSpecifications;
+    private final EnseignantSpecification enseignantSpecifications;
 
     public List<Affectation> getAffectationsByEnseignantById(Long enseignantId) {
         Enseignant enseignant = enseignantRepository.findById(enseignantId)
@@ -61,31 +58,38 @@ public class EnseignantService {
         return this.userRepository.findAll(spec);
     }
 
-    public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees, CategorieEnseignant categorieEnseignant) {
+    public List<User> getEnseignants(){
+        Specification<User> spec = userSpecifications.withRoleEnseignant();
+        return this.userRepository.findAll(spec);
+    }
+
+    public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees,  CategorieEnseignant categorieEnseignant, int nbHeureCategorie) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        Enseignant enseignant = Enseignant.builder().categorie(categorieEnseignant)
+        Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
+        categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
+        Enseignant enseignant = Enseignant.builder()
+                .categorieEnseignant(categorieHeuresMap)
+                .user(user)
                 .maxHeuresService(nmaxHeuresService).heuresAssignees(heuresAssignees)
                 .build();
-        enseignant.setId(id);
-        enseignant.setRole(user.getRole());
-        enseignant.setUsername(user.getUsername());
-        enseignant.setEmail(user.getEmail());
-        enseignant.setPassword(user.getPassword());
-        this.userRepository.delete(user);
-        return this.userRepository.save(enseignant);
+
+        return this.enseignantRepository.save(enseignant);
     }
 
-    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant ) {
+    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+        Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
+        categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        enseignant.setCategorie(categorieEnseignant);
+        enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
         return this.enseignantRepository.save(enseignant);
     }
 
-    public Enseignant getEnseignantById(long id) {
-        return this.enseignantRepository.getReferenceById(id);
+    public Enseignant getEnseignantById(Long id) {
+        Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
+        return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
     }
 
 }

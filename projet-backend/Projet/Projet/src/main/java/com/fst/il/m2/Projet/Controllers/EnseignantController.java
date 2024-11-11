@@ -22,11 +22,6 @@ public class EnseignantController {
 
     private final EnseignantService enseignantService;
 
-    @Autowired
-    public EnseignantController(EnseignantService enseignantService) {
-        this.enseignantService = enseignantService;
-    }
-
     @GetMapping("/{id}/affectations")
     public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
 
@@ -45,14 +40,21 @@ public class EnseignantController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping()
+    public List<User> getEnseignants(){
+        return enseignantService.getEnseignants();
+    }
+
     @PostMapping()
     public EnseignantDto createEnseignant(@RequestBody EnseignantDto enseignant) {
         return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(enseignant.getId()
-        , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(), enseignant.getCategorie()));
+        , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(),
+                enseignant.getCategorieEnseignant(),
+                enseignant.getNbHeureCategorie()));
     }
 
     @GetMapping("{id}")
-    public EnseignantDto getEnseignantById(@PathVariable long id) {
+    public EnseignantDto getEnseignantById(@PathVariable Long id) {
         return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
     }
 
@@ -62,7 +64,8 @@ public class EnseignantController {
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),
                         enseignant.getMaxHeuresService(),
-                        enseignant.getCategorie()
+                        enseignant.getCategorieEnseignant(),
+                        enseignant.getNbHeureCategorie()
                 )
         );
     }
