@@ -21,4 +21,7 @@ export class UpdateProfesseurService {
   createEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
     return this.http.post<EnseignantDto>(`${this.apiUrl}`, enseignant);
   }
+  getEnseignant(id: number): Observable<EnseignantDto> {
+    return this.http.get<EnseignantDto>(`${this.apiUrl}/${id}`);
+  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ChangeDetectorRef  } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,10 +30,14 @@ import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type'
   styleUrl: './update-professeur.component.scss'
 })
 export class UpdateProfesseurComponent {
-  defaultHeures = 192; 
+  defaultHeures = 192;
   categories: string[] = [];
-  enseignant!: EnseignantDto;
-
+  enseignant: EnseignantDto = {
+    maxHeuresService: -1,
+    categorie: CategorieEnseignant.PROFESSEUR,
+    heuresAssignees: 0
+  };
+  userName: string = '';
   utilisateurs: User[] = [];
 
   modules = [
@@ -42,41 +46,55 @@ export class UpdateProfesseurComponent {
     { id: 'module3', nom: 'Module 3' },
   ];
 
-  isEdit = false; 
+  isEdit = false;
 
   constructor(
     private dialogRef: MatDialogRef<UpdateProfesseurComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private updateProfesseurService: UpdateProfesseurService,  
+    private updateProfesseurService: UpdateProfesseurService,
     private categorieService: CategorieEnseignantService,
-    private userService: UserService,
   ) {
     if (data) {
-      this.isEdit = true; 
-      this.enseignant = { ...data }; 
+      this.isEdit = true;
+      this.userName = data.username;
+      this.updateProfesseurService.getEnseignant(data.id).subscribe({
+        next: (enseignant) => {
+          console.log(enseignant);
+          this.enseignant = enseignant;
+        },
+        error: (error) => {
+          console.error('Error fetching enseignant:', error);
+          this.enseignant = {
+            maxHeuresService: this.defaultHeures,
+            categorie: CategorieEnseignant.PROFESSEUR,
+            heuresAssignees: 0
+        };
+        }
+      });
     }
-    this.enseignant = {
-      id: this.data?.id || null,
-      maxHeuresService: this.defaultHeures || 0,
-      categorie: CategorieEnseignant.PROFESSEUR,
-      heuresAssignees: 0
-    };
+    else{
+      this.enseignant = {
+        maxHeuresService: this.defaultHeures || 0,
+        categorie: CategorieEnseignant.PROFESSEUR,
+        heuresAssignees: 0
+      };
+    }
   }
 
   ngOnInit(): void {
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
+    !this.isEdit && this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
       this.utilisateurs = data;
     });
   }
-  
+
 
   save() {
     this.updateProfesseurService.createEnseignant(this.enseignant).subscribe(
       (response) => {
-       this.dialogRef.close(this.enseignant); 
+        this.dialogRef.close(this.enseignant);
       },
       (error) => {
       }
@@ -84,6 +102,6 @@ export class UpdateProfesseurComponent {
   }
 
   close() {
-    this.dialogRef.close(); 
+    this.dialogRef.close();
   }
 }
