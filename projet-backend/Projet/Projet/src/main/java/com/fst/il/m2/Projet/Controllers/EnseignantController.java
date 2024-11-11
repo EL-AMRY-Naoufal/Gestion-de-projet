@@ -55,4 +55,15 @@ public class EnseignantController {
     public EnseignantDto getEnseignantById(@PathVariable long id) {
         return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
     }
+
+    @PutMapping()
+    public  EnseignantDto updateEnseignant(@RequestBody EnseignantDto enseignant) {
+        return EnseignantMapper.enseignantToEnseignantDto(
+                this.enseignantService.updateEnseignant(
+                        enseignant.getId(),
+                        enseignant.getMaxHeuresService(),
+                        enseignant.getCategorie()
+                )
+        );
+    }
 }

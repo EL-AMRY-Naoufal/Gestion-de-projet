@@ -68,11 +68,11 @@ export class UpdateProfesseurComponent {
             maxHeuresService: this.defaultHeures,
             categorie: CategorieEnseignant.PROFESSEUR,
             heuresAssignees: 0
-        };
+          };
         }
       });
     }
-    else{
+    else {
       this.enseignant = {
         maxHeuresService: this.defaultHeures || 0,
         categorie: CategorieEnseignant.PROFESSEUR,
@@ -92,13 +92,23 @@ export class UpdateProfesseurComponent {
 
 
   save() {
-    this.updateProfesseurService.createEnseignant(this.enseignant).subscribe(
-      (response) => {
-        this.dialogRef.close(this.enseignant);
-      },
-      (error) => {
-      }
-    );
+    if (this.isEdit) {
+      this.updateProfesseurService.updateEnseignant(this.enseignant).subscribe(
+        (response) => {
+          this.dialogRef.close(this.enseignant);
+        },
+        (error) => {
+        }
+      );
+    } else {
+      this.updateProfesseurService.createEnseignant(this.enseignant).subscribe(
+        (response) => {
+          this.dialogRef.close(this.enseignant);
+        },
+        (error) => {
+        }
+      );
+    }
   }
 
   close() {
