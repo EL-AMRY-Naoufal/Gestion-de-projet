@@ -71,4 +71,9 @@ public class EnseignantService {
                 .build();
         return this.enseignantRepository.save(enseignant);
     }
+
+    public Enseignant getEnseignantById(long id) {
+        return this.enseignantRepository.getReferenceById(id);
+    }
+
 }

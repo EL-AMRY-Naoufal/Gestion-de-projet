@@ -50,4 +50,9 @@ public class EnseignantController {
         return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(enseignant.getId()
         , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(), enseignant.getCategorie()));
     }
+
+    @GetMapping("{id}")
+    public EnseignantDto getEnseignantById(@PathVariable long id) {
+        return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
+    }
 }
