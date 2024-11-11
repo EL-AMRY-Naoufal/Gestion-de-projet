@@ -30,12 +30,12 @@ Ces conteneurs sont gérés par docker-compose via le fichier *docker-compose.ya
 Si vous souhaitez lancer tout le projet, utilisez simplement la commande suivante :
 
 ```bash
-docker compose up --watch
+docker compose up
 ```
 
-L'attribut *--watch* permet à l'application de se synchroniser lorsque vous effectuez des modifications
-
 Si vous ne souhaitez lancer que le back-end (base de données incluse), exécutez la commande :
+
+Cette commande lance la compilation du backend et exécute la base de données.
 
 ```bash
 docker compose up db backend
@@ -43,14 +43,24 @@ docker compose up db backend
 
 Et si vous ne souhaitez lancer que le front-end exécuter la commande :
 
+Cette commande exécute *npm install* puis *ng serve*.
+
 ```bash
-docker compose up frontend --watch
+docker compose up frontend
 ```
 
 Pour démonter tous les conteneurs utilisez la commande :
+
 ```bash
 docker compose down
 ```
+
+Si vous avez un problème d'actualisation des données, vous pouvez tenter la commande c-dessous pour rebuild tous les containers.
+
+```bash
+docker compose build
+```
+
 
 Il est recommandé d'utiliser les éditeurs et IDE qui permettent de gérer facilement la contenerisation. Voici quelques articles d'aide à propos de Visual Studio Code et IntelliJ :
 

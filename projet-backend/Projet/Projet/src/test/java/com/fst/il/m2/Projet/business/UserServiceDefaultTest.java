@@ -72,4 +72,5 @@ public class UserServiceDefaultTest {
         assertNull(authenticatedUser, "Authentication should fail for a non-existing user");
     }
 
+
 }
