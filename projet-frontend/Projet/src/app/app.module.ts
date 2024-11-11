@@ -22,6 +22,7 @@ import {AffectationListComponent} from "./componenets/affectation-enseignant/aff
     FormsModule,
     CommonModule,
     HttpClientModule,
+    CommonModule,
   //  ReactiveFormsModule,
     AppRoutingModule
   ],
