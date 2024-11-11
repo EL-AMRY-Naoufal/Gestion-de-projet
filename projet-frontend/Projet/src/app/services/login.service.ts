@@ -18,10 +18,10 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    this.userRole = response.user.role;
+    this.userRole = response.user.roles[0];
 
     if (typeof window !== 'undefined') { 
-      localStorage.setItem('userRole', response.user.role);
+      localStorage.setItem('userRole', response.user.roles[0]);
     }
 
     console.log('user', this.userRole)

@@ -1,6 +1,10 @@
+import { User } from "./user.types";
+
 export interface EnseignantDto {
     id?: number; 
-    categorie: CategorieEnseignant;
+    user?: User;
+    categorieEnseignant: CategorieEnseignant;
+    nbHeureCategorie: number;
     maxHeuresService: number;
     heuresAssignees: number;
 }

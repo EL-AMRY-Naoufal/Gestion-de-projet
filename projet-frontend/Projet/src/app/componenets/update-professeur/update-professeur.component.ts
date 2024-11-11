@@ -34,17 +34,13 @@ export class UpdateProfesseurComponent {
   categories: string[] = [];
   enseignant: EnseignantDto = {
     maxHeuresService: -1,
-    categorie: CategorieEnseignant.PROFESSEUR,
-    heuresAssignees: 0
+    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    heuresAssignees: 0,
+    nbHeureCategorie: 0
   };
+  categoriesEnseignant = Object.values(CategorieEnseignant);
   userName: string = '';
   utilisateurs: User[] = [];
-
-  modules = [
-    { id: 'module1', nom: 'Module 1' },
-    { id: 'module2', nom: 'Module 2' },
-    { id: 'module3', nom: 'Module 3' },
-  ];
 
   isEdit = false;
 
@@ -66,8 +62,9 @@ export class UpdateProfesseurComponent {
           console.error('Error fetching enseignant:', error);
           this.enseignant = {
             maxHeuresService: this.defaultHeures,
-            categorie: CategorieEnseignant.PROFESSEUR,
-            heuresAssignees: 0
+            categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+            heuresAssignees: 0, 
+            nbHeureCategorie: 0
           };
         }
       });
@@ -75,8 +72,9 @@ export class UpdateProfesseurComponent {
     else {
       this.enseignant = {
         maxHeuresService: this.defaultHeures || 0,
-        categorie: CategorieEnseignant.PROFESSEUR,
-        heuresAssignees: 0
+        categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+        heuresAssignees: 0,
+        nbHeureCategorie: 0
       };
     }
   }
