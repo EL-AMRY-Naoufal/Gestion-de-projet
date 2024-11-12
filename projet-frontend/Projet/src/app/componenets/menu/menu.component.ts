@@ -11,9 +11,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-userRole: string = '';
+userRoles: string[] = [];
+
   constructor(private router: Router, private loginService: LoginService) { 
-    this.userRole = this.loginService.getUserRole()
+    this.userRoles = this.loginService.getUserRoles()
  }
 
   navigateToTeachers() {

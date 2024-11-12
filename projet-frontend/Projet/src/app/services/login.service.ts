@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class LoginService {
   private apiUrl = 'http://localhost:8080/api/users/authenticate'; 
 
-  public userRole='';
+  public userRoles = [];
   constructor(private http: HttpClient, private router: Router) {}
 
   
@@ -18,13 +18,13 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    this.userRole = response.user.role;
+    this.userRoles = response.user.roles;
 
     if (typeof window !== 'undefined') { 
-      localStorage.setItem('userRole', response.user.role);
+      localStorage.setItem('userRole', JSON.stringify(this.userRoles));
     }
 
-    console.log('user', this.userRole)
+    console.log('user', this.userRoles)
     this.router.navigate(['/dashboard']);
   }
 
@@ -43,15 +43,15 @@ export class LoginService {
      if (typeof window !== 'undefined') {
       localStorage.removeItem('userRole');
     }
-    this.userRole = '';
+    this.userRoles = [];
     this.router.navigate(['/login']);
   }
 
-  getUserRole(): string {
+  getUserRoles(): string[] {
     if (typeof window !== 'undefined' && localStorage.getItem('userRole')) {
-      return localStorage.getItem('userRole') || '';
+      return JSON.parse(localStorage.getItem('userRole') || '[]');
     }
-    return '';
+    return [];
   }
   
 }
