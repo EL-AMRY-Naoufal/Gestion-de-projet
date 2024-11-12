@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
@@ -54,7 +55,10 @@ public class EnseignantService {
     }
 
     public List<User> getUsersWithRoleEnseignantNotInEnseignant() {
-        Specification<User> spec = userSpecifications.withRoleEnseignantAndNotInEnseignant();
+        //List<User> users = this.userRepository.findUsersByRolesNotLike(Role.ENSEIGNANT);
+        Specification<User> spec = userSpecifications.notInEnseignant();
+        //users.addAll(this.userRepository.findAll(spec));
+        //return users;
         return this.userRepository.findAll(spec);
     }
 
@@ -67,6 +71,9 @@ public class EnseignantService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        List<Role>  roles = user.getRoles();
+        roles.add(Role.ENSEIGNANT);
+        user = this.userRepository.save(user);
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = Enseignant.builder()

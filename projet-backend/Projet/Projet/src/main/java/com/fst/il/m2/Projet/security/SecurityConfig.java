@@ -27,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/enseignants/**").permitAll()
                         .requestMatchers("/api/enseignants").permitAll()
                         .requestMatchers("/api/categories").permitAll()
+                        .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT") // Require role
                         .anyRequest().authenticated()
                 )
