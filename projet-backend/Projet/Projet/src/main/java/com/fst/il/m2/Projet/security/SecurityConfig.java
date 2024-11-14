@@ -23,6 +23,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/authenticate").permitAll() // Open login endpoint
+                        .requestMatchers("/api/enseignants/**").hasAuthority("ENSEIGNANT")
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT") // Require role
                         .anyRequest().authenticated()
                 )
