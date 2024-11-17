@@ -12,7 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.loginService.getAuthToken();
 
-    if (token) {
+    if (token && !req.url.includes('authenticate')) { // Si c'est une requête d'authentification, on ne fourni pas le token
       const cloned = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)
       });
