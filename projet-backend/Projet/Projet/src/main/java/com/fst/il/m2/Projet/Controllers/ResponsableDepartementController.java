@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -32,6 +33,11 @@ public class ResponsableDepartementController {
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = responsableDepartementService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+    @GetMapping("/{username}")
+    public ResponseEntity<Optional<User>> getAllUserByUsername(@PathVariable String username) {
+        Optional<User> users = responsableDepartementService.getUsersByUsername(username);
         return ResponseEntity.ok(users);
     }
 
