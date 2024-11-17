@@ -1,0 +1,7 @@
+.idea
+.vscode
+Projet-Workspace/.idea/compiler.xml
+/Projet-Workspace
+/Projet-Workspace/.idea
+.env
+.DS_Store
