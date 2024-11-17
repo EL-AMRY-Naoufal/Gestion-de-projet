@@ -24,12 +24,11 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(createdUser);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = responsableDepartementService.getUserById(id);
         return ResponseEntity.ok(user);
     }
-
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = responsableDepartementService.getAllUsers();

@@ -10,11 +10,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-   getUsers(): Observable<any[]> {
+  getUsers(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
-
-  getUserByName(name: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}?name=${name}`);
+  searchUsers(username: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${username}`);
   }
 }
