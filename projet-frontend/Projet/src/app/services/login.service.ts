@@ -62,7 +62,7 @@ export class LoginService {
   getAuthToken(): string | null {
     console.log("getAuthToken");
     if (typeof window !== 'undefined' && localStorage.getItem('token')) {
-      return localStorage.getItem('token') ?? '';
+      return localStorage.getItem('token');
     }
     return null;
   }
