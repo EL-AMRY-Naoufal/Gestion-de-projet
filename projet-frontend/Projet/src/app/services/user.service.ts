@@ -138,6 +138,7 @@ export class UserService {
 
 /*
   private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = 'http://localhost:8080/api/responsableDepartement';
 
   constructor(private http: HttpClient) { }
 

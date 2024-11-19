@@ -4,9 +4,9 @@
     <a (click)="navigateToDashboard()">Accueil</a>
    
    
-    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT' || userRole === 'RESPONSABLE_DE_FORMATION'">Formation</a>
-    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT'" (click)="navigateToTeachers()">Enseignants</a>
-    <a *ngIf="userRole === 'CHEF_DE_DEPARTEMENT' || userRole === 'ENSEIGNANT'  || userRole === 'SECRETARIAT_PEDAGOGIQUE'">Affectations</a>
+    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('RESPONSABLE_DE_FORMATION')">Formation</a>
+    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" (click)="navigateToTeachers()">Enseignants</a>
+    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')">Affectations</a>
     
     
     <a>Configurations</a>
