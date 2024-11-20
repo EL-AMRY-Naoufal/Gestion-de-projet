@@ -20,7 +20,7 @@ export class UserService {
      this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
-       role: 'ENSEIGNANT',
+       roles: ['ENSEIGNANT'],
        password: 'Ed*lZ%0qiA'
      };
      this._backendURL = {};

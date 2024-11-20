@@ -6,8 +6,12 @@
         </a>
       </mat-card-title>
 
-      <!-- Affichage du rôle de l'utilisateur -->
-      <mat-card-subtitle>cc {{ user.role }}</mat-card-subtitle>
+       <!-- Affichage des rôles de l'utilisateur -->
+      <mat-card-subtitle>
+        <span *ngFor="let role of user.roles; let last = last">
+          {{ role }}<span *ngIf="!last">, </span>
+        </span>
+      </mat-card-subtitle>
 
       <!-- Affichage de l'email de l'utilisateur -->
       <mat-card-subtitle class="contact-info">

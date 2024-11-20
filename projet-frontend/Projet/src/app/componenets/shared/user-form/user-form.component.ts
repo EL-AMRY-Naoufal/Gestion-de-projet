@@ -102,7 +102,7 @@ export class UserFormComponent {
         id: 123,
         username: '',
         email: '',
-        role: 'ENSEIGNANT', // Valeur par défaut
+        roles: ['ENSEIGNANT'],
         password: ''
       };
       this._isUpdateMode = false;
@@ -148,7 +148,7 @@ export class UserFormComponent {
         Validators.compose([Validators.required, UserCustomValidators.googleEmail])
       ),
       role: new FormControl(
-        '', 
+        '',
         Validators.required
       ),
       // Champ pour le mot de passe avec validation (minimum 6 caractères)

@@ -67,7 +67,13 @@ export class ListUsersComponent {
     ngOnInit(): void {
       this._usersService
         .fetch()
-        .subscribe({ next: (listUsers: User[]) => (this._listUsers = listUsers) });
+        .subscribe({
+          next: (listUsers: User[]) => {
+            this._listUsers = listUsers;
+            //console.log('Fetched users:', this._listUsers); // Log pour vérifier les données reçues
+          },
+          error: (err) => console.error('Error fetching users:', err) // Log pour capturer les erreurs
+        });
     }
 
     /**
