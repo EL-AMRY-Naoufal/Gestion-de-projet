@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 
 export class UserCustomValidators {
     /**
@@ -32,12 +32,15 @@ export class UserCustomValidators {
      * Validator to check if the password matches the confirmed password
      */
     static matchPasswords(control: AbstractControl): ValidationErrors | null {
-      const password = control.get('password');
-      const confirmPassword = control.get('confirmPassword');
+      if (control instanceof FormGroup) {
+        const password = control.get('password');
+        const confirmPassword = control.get('confirmPassword');
 
-      return password && confirmPassword && password.value !== confirmPassword.value
-        ? { passwordMismatch: true }
-        : null;
+        if (password && confirmPassword && password.value !== confirmPassword.value) {
+          return { passwordMismatch: true };
+        }
+      }
+      return null;
     }
 
 

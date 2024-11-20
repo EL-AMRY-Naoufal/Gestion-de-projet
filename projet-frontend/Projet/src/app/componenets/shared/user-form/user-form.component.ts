@@ -151,17 +151,27 @@ export class UserFormComponent {
         '',
         Validators.required
       ),
-      // Champ pour le mot de passe avec validation (minimum 6 caractères)
       password: new FormControl(
         '',
-        Validators.compose([Validators.required, Validators.minLength(6), UserCustomValidators.strongPassword])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(6),
+          UserCustomValidators.strongPassword,
+        ])
       ),
-      // Champ pour le mot de passe avec validation (minimum 6 caractères)
       confirmPassword: new FormControl(
         '',
-        Validators.compose([Validators.required, Validators.minLength(6), UserCustomValidators.matchPasswords])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(6),
+        ])
       ),
+    },
 
-    });
+      UserCustomValidators.matchPasswords,
+
+    );
+
   }
+
 }
