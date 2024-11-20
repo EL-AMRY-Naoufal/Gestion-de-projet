@@ -147,7 +147,7 @@ export class UserFormComponent {
         '',
         Validators.compose([Validators.required, UserCustomValidators.googleEmail])
       ),
-      role: new FormControl(
+      roles: new FormControl(
         '',
         Validators.required
       ),

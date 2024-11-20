@@ -47,7 +47,6 @@ export class UserCardComponent {
     @Input()
     set user(user: User) {
       this._user = user;
-      console.log("cc"+ user.roles);
     }
 
     /**

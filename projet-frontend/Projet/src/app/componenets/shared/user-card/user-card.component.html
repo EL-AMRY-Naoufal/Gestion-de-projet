@@ -9,7 +9,7 @@
        <!-- Affichage des rôles de l'utilisateur -->
       <mat-card-subtitle>
         <span *ngFor="let role of user.roles; let last = last">
-          {{ role }}<span *ngIf="!last">, </span>
+          {{ role }}<span *ngIf="!last"><br> </span>
         </span>
       </mat-card-subtitle>
 
