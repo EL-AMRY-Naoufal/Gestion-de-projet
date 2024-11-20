@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EnseignantService } from '../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
-import {AffectationType} from "../../Type/Affectation";
+import {AffectationType} from "../shared/types/affectation.type";
 
 @Component({
   selector: 'app-affectation-list',
