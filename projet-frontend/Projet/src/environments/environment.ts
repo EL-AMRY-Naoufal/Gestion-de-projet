@@ -9,8 +9,8 @@ export const environment = {
     host: 'localhost',
     port: '8080',
     endpoints: {
-      allUsers: '/api/users',
-      oneUser: '/api/users/:id',
+      allUsers: '/api/responsableDepartement',
+      oneUser: '/api/responsableDepartement/:id',
     },
   },
 };

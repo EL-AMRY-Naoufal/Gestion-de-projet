@@ -39,8 +39,9 @@ export class UserService {
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
 
-     const responsableId = this._loginService.connectUser;
-     if (!responsableId) {
+     this._responsableId = this._loginService.connectUser;
+     console.log("wsh"+this._responsableId)
+     if (!this._responsableId) {
       throw new Error("Responsable is not authenticated or responsableId is missing");
     }
    }
@@ -107,23 +108,36 @@ export class UserService {
       return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
         body: { responsableId: this._responsableId },
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this._loginService.getAuthToken()}`  // Utilisation du token du LoginService
+        })
       })
       .pipe(map(() => id));
    }
 
-   /**
-    * Function to return request options
-    */
-   private _options(headerList: object = {}): any {
-     return {
-       headers: new HttpHeaders(
-         Object.assign({ 'Content-Type': 'application/json' }, headerList)
-       ),
-     };
-   }
+  private _options(headerList: object = {}): any {
+    const token = this._loginService.getAuthToken(); // Récupère le token depuis LoginService
 
+    // Crée un objet pour les en-têtes
+    const headers: { [key: string]: string } = {
+      'Content-Type': 'application/json',
+    };
 
-   getUsers(): Observable<any[]> {
+    // Si le token est disponible, ajoute l'en-tête Authorization
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    // Fusionne les en-têtes supplémentaires (headerList) avec ceux déjà définis
+    return {
+      headers: new HttpHeaders({
+        ...headers, // Ajoute les en-têtes de base
+        ...headerList, // Fusionne les autres en-têtes si nécessaires
+      }),
+    };
+  }
+
+  getUsers(): Observable<any[]> {
     return this._http.get<any[]>(this._backendURL.allUsers);
   }
 
@@ -136,7 +150,19 @@ export class UserService {
 
 
 
+
+
 /*
+
+ getUsers1(): Observable<any[]> {
+    return this._http.get<any[]>(this._backendURL.allUsers);
+  }
+
+  getUserByName1(name: string): Observable<any[]> {
+    return this._http.get<any[]>(`${this._backendURL.allUsers}?name=${name}`);
+  }
+
+
   private apiUrl = 'http://localhost:8080/api/users';
   private apiUrl = 'http://localhost:8080/api/responsableDepartement';
 
