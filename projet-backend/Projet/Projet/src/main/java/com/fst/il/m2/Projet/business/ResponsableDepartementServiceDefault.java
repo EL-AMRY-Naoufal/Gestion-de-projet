@@ -32,9 +32,9 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User newUser = userRepository.save(user);
 
         // Generate a token and send email for setting the password
-        String token = UUID.randomUUID().toString();
+        /*String token = UUID.randomUUID().toString();
         passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
-        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
+        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);*/
 
         return newUser;
     }
