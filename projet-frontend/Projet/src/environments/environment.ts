@@ -11,6 +11,8 @@ export const environment = {
     endpoints: {
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
+      allEnseignants: '/api/enseignants',
+      authenticate :'/api/users/authenticate',
     },
   },
 };

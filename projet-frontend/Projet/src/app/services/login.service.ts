@@ -3,23 +3,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment.prod';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  private apiUrl = 'http://localhost:8080/api/users/authenticate';
+
+  private readonly _backendURL: any;
+
     // private property to store default person
   public _connectUser: number = 1;
 
   public userRoles = [];
   private authToken: string | null = null;
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this._backendURL = {};
+
+
+     // build backend base url
+     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
+     if (environment.backend.port) {
+       baseUrl += `:${environment.backend.port}`;
+     }
+
+     // build all backend urls
+     // @ts-ignore
+     Object.keys(environment.backend.endpoints).forEach(
+       (k) =>
+         // @ts-ignore
+         (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
+     );
+
+  }
 
 
   login(formData: any): Observable<any> {
-    return this.http.post(this.apiUrl, formData);
+    return this.http.post(this._backendURL.authenticate, formData);
   }
 
   handleLoginSuccess(response: any) {
@@ -79,5 +100,5 @@ export class LoginService {
     return null;
   }
 
- 
+
 }

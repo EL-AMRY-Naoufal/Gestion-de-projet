@@ -40,7 +40,6 @@ export class UserService {
      );
 
      this._responsableId = this._loginService.connectUser;
-     console.log("wsh"+this._responsableId)
      if (!this._responsableId) {
       throw new Error("Responsable is not authenticated or responsableId is missing");
     }
@@ -144,38 +143,6 @@ export class UserService {
   getUserByName(name: string): Observable<any[]> {
     return this._http.get<any[]>(`${this._backendURL.allUsers}?name=${name}`);
   }
-
-
-
-
-
-
-
-
-/*
-
- getUsers1(): Observable<any[]> {
-    return this._http.get<any[]>(this._backendURL.allUsers);
-  }
-
-  getUserByName1(name: string): Observable<any[]> {
-    return this._http.get<any[]>(`${this._backendURL.allUsers}?name=${name}`);
-  }
-
-
-  private apiUrl = 'http://localhost:8080/api/users';
-  private apiUrl = 'http://localhost:8080/api/responsableDepartement';
-
-  constructor(private http: HttpClient) { }
-
-   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
-  }
-
-  getUserByName(name: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}?name=${name}`);
-  }
-    */
 
 
 }
