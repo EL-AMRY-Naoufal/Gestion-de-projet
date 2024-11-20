@@ -9,7 +9,7 @@ import { EnseignantsComponent } from './componenets/enseignants/enseignants.comp
 
 export const routes: Routes = [
   // Route par défaut (page d'accueil)
-  { path: 'login', component: LoginComponent },
+  { path: '', component: LoginComponent },
 
   // Route vers le dashboard
   { path: 'dashboard', component: DashboardComponent },
