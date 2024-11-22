@@ -54,12 +54,6 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
-    public Role getUserRole(Long id) {
-        var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + "not found"));
-        return user.getRole();
-    }
-
-    @Override
     public User getUserByEmail(String email) {
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         return optionalUser.orElse(null);
