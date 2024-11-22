@@ -49,28 +49,41 @@
 .search-btn:hover {
     background-color: #0056b3;
 }
-/* Style du bouton "Ajouter un enseignant" */
+
+
 .add-teacher-btn {
     display: inline-flex;
     align-items: center;
-    background-color: #007bff;
+    justify-content: center;
+    background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 20px;
     font-size: 16px;
-    border-radius: 5px;
+    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 15px;
 }
 
 .add-teacher-btn i {
-    margin-right: 8px;
-    font-size: 18px;
+    margin-right: 10px;
+    font-size: 20px;
 }
 
 .add-teacher-btn:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #0056b3, #003e7e);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
 }
+
+.add-teacher-btn:active {
+    transform: translateY(0);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 .search-and-add-container {
     display: flex;
