@@ -23,6 +23,16 @@ public class Enseignant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /* pour utiliser l'id d'user comme l'id d'enseignant 
+    @Id
+    private Long id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+    */
+
     @ElementCollection
     @CollectionTable(name = "categorie_enseignant_map", joinColumns = @JoinColumn(name = "enseignant_id"))
     @MapKeyEnumerated(EnumType.STRING)
@@ -37,7 +47,7 @@ public class Enseignant {
     @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

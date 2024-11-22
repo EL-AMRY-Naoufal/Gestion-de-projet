@@ -1,11 +1,14 @@
 package com.fst.il.m2.Projet.Controllers;
-
-import com.fst.il.m2.Projet.business.EnseignantService;
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
 import com.fst.il.m2.Projet.mapper.EnseignantMapper;
+import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.business.EnseignantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +16,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/enseigants")
+@RequestMapping("/api/enseignants")
 @RequiredArgsConstructor
 public class EnseignantController {
     private final EnseignantService enseignantService;
