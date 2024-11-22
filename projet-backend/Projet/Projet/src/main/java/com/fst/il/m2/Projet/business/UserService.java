@@ -8,4 +8,5 @@ public interface UserService {
     public User authenticate(String email, String password);
     public void modifyPassword(Long id, String password);
     public Role getUserRole(Long id);
+    public User getUserByEmail(String email);
 }
