@@ -61,9 +61,14 @@ public class EnseignantService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         Enseignant enseignant = Enseignant.builder().categorie(categorieEnseignant)
                 .maxHeuresService(nmaxHeuresService).heuresAssignees(heuresAssignees)
-                .user(user)
                 .build();
-        return this.enseignantRepository.save(enseignant);
+        enseignant.setId(id);
+        enseignant.setRole(user.getRole());
+        enseignant.setUsername(user.getUsername());
+        enseignant.setEmail(user.getEmail());
+        enseignant.setPassword(user.getPassword());
+        this.userRepository.delete(user);
+        return this.userRepository.save(enseignant);
     }
 
     public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant ) {
