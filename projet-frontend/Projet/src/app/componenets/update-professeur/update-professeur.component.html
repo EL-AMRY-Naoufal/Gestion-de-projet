@@ -8,38 +8,29 @@
         <form>
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>Utilisateur</mat-label>
-                <mat-select [(ngModel)]="enseignant.utilisateur" required>
+                <mat-select [(ngModel)]="enseignant.id" name="utilisateur" required>
                     <mat-option *ngFor="let utilisateur of utilisateurs" [value]="utilisateur.id">
-                        {{ utilisateur.nom }}
+                        {{ utilisateur.username }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!enseignant.utilisateur">L'utilisateur est requis.</mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Modules à enseigner</mat-label>
-                <mat-select [(ngModel)]="enseignant.modules" [multiple]="true">
-                    <mat-option *ngFor="let module of modules" [value]="module.id">
-                        {{ module.nom }}
-                    </mat-option>
-                </mat-select>
+                <mat-error *ngIf="!enseignant.id">L'utilisateur est requis.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
                 <mat-label>Nombre d'heures</mat-label>
-                <input matInput [(ngModel)]="enseignant.nombreHeures" [value]="defaultHeures" type="number" required />
-                <mat-error *ngIf="!enseignant.nombreHeures">Le nombre d'heures est requis.</mat-error>
+                <input matInput [(ngModel)]="enseignant.maxHeuresService"  name="nombreHeures" [value]="defaultHeures" type="number" required />
+                <mat-error *ngIf="!enseignant.maxHeuresService">Le nombre d'heures est requis.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Profession</mat-label>
-                <mat-select [(ngModel)]="enseignant.profession" required>
-                    <mat-option value="maitre_de_conference">Maître de Conférence</mat-option>
-                    <mat-option value="chercheur">Chercheur</mat-option>
-                    <mat-option value="intervenant">Intervenant</mat-option>
+                <mat-label>Categorie</mat-label>
+                <mat-select [(ngModel)]="enseignant.categorie" name="categorie" required>
+                  <mat-option *ngFor="let category of categories" [value]="category">
+                    {{ category }}
+                  </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!enseignant.profession">La profession est requise.</mat-error>
-            </mat-form-field>
+                <mat-error *ngIf="!enseignant.categorie">La categorie est requise.</mat-error>
+              </mat-form-field>
         </form>
     </div>
     <div mat-dialog-actions>
