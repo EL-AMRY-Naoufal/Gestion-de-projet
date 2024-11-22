@@ -65,4 +65,9 @@ public class UserServiceDefault implements UserService {
         }
         return null;
     }
+
+    @Override
+    public List<User> getAllUsersNotTeachers() {
+        return this.userRepository.findUsersByRolesNotLike(Role.ENSEIGNANT);
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -45,5 +46,10 @@ public class UserController {
 
         AuthResponse response = new AuthResponse("Authentication succeeded", token, authenticatedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public List<User> getAllUsersNotTeachers() {
+        return this.userService.getAllUsersNotTeachers();
     }
 }

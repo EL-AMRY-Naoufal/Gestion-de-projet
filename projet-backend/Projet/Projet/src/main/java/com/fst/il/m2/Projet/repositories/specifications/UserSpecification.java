@@ -36,6 +36,35 @@ public class UserSpecification {
         };
     }
 
+    public Specification<User> notInEnseignant() {
+        return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
+
+            CriteriaQuery<Long> subQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Enseignant> enseignantRoot = subQuery.from(Enseignant.class);
+            subQuery.select(enseignantRoot.get("user").get("id"));
+            List<Long> ids = entityManager.createQuery(subQuery).getResultList();
+
+            return criteriaBuilder.not(root.get("id").in(ids));
+        };
+    }
+
+    public Specification<User> withoutRoleEnseignant() {
+        return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
+            CriteriaQuery<Long> subQuery = criteriaBuilder.createQuery(Long.class);
+            Root<User> userRoot = subQuery.from(User.class);
+            /*subQuery.select(userRoot.get("id"));
+            List<Long> ids = entityManager.createQuery(subQuery).getResultList();*/
+
+            Join<User, Role> roleJoin = userRoot.join("roles");
+            return
+                    criteriaBuilder.notEqual(roleJoin, Role.ENSEIGNANT);
+
+
+        };
+    }
+
     public  Specification<User> withRoleEnseignant() {
         return (root, query, criteriaBuilder) ->{
             query.distinct(true);
