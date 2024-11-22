@@ -79,19 +79,13 @@ export class UpdateProfesseurComponent {
         heuresAssignees: 0
       };
     }
-    this.enseignant = {
-      id: this.data?.id || null,
-      maxHeuresService: this.defaultHeures || 0,
-      categorie: CategorieEnseignant.PROFESSEUR,
-      heuresAssignees: 0
-    };
   }
 
   ngOnInit(): void {
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
+    !this.isEdit && this.updateProfesseurService.getEnseignantsNotInEnseignantTable().subscribe(data => {
       this.utilisateurs = data;
     });
   }
