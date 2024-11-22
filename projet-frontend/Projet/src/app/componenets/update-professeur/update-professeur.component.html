@@ -4,7 +4,8 @@
 <ng-template #formTemplate>
 <div class="form">
     <h1>
-        <mat-icon>person_add</mat-icon>
+        <mat-icon>{{ isEdit ? 'person_edit' : 'person_add' }}</mat-icon>
+
         {{ isEdit ? 'Modifier' : 'Ajouter' }} un Enseignant
     </h1>
 
@@ -33,19 +34,27 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Categorie</mat-label>
-                <mat-select [(ngModel)]="enseignant.categorie" name="categorie" required>
+                <mat-label>Categorie d'Enseignant</mat-label>
+                <mat-select [(ngModel)]="enseignant.categorieEnseignant" name="categorieEnseignant" required>
                     <mat-option *ngFor="let category of categories" [value]="category">
                         {{ category }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!enseignant.categorie">La categorie est requise.</mat-error>
+                <mat-error *ngIf="!enseignant.categorieEnseignant">La categorie est requise.</mat-error>
             </mat-form-field>
+
+            <div *ngIf="enseignant.categorieEnseignant">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Heures pour {{ enseignant.categorieEnseignant }}</mat-label>
+                    <input matInput type="number" [(ngModel)]="enseignant.nbHeureCategorie" name="nbHeureCategorie" required />
+                    <mat-error *ngIf="!enseignant.nbHeureCategorie">Les heures pour cette catégorie sont requises.</mat-error>
+                </mat-form-field>
+            </div>
         </form>
     </div>
     <div mat-dialog-actions>
         <button mat-flat-button (click)="save()">Enregistrer</button>
-        <button mat-flat-button (click)="close()">Fermer</button>
+        <button mat-flat-button class="cancel" (click)="close()">Fermer</button>
     </div>
 </div>
 </ng-template>
