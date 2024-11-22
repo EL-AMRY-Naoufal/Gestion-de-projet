@@ -45,9 +45,8 @@ public class UserController {
         return this.userService.getUserByEmail(email).getId();
     }
 
-    @PutMapping("/{id}/password")
-    public void modifyPassword(@PathVariable Long id, @Valid @RequestBody String password) {
-        this.userService.modifyPassword(id, password);
-        //TODO do it in a secured way?
+    @GetMapping("/user/{email}")
+    public Long getUserIdByEmail(@PathVariable String email) {
+        return this.userService.getUserByEmail(email).getId();
     }
 }
