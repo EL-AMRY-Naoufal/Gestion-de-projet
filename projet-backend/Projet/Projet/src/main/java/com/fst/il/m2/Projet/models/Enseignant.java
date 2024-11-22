@@ -47,22 +47,14 @@ public class Enseignant {
     @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Enseignant() {
-    }
 
-    public Enseignant(Long id, Map<CategorieEnseignant, Integer> categorieEnseignant, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
-        this.id = id;
-        this.categorieEnseignant = categorieEnseignant;
-        this.maxHeuresService = maxHeuresService;
-        this.heuresAssignees = heuresAssignees;
-        this.affectations = affectations;
-        this.user = user;
+    public int getNbHeureCategorie(CategorieEnseignant categorie) {
+        return this.categorieEnseignant.getOrDefault(categorie, 0);
     }
-
     public Long getId() {
         return id;
     }
