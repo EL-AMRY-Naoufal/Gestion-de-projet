@@ -38,6 +38,9 @@ export class EnseignantsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.enseignantService.getEnseignants().subscribe(data => {
+        this.users = data;
+      });
       if (result) {
         console.log('Données reçues du modal:', result);
       }
