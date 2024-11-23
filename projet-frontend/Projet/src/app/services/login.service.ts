@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 export class LoginService {
   private apiUrl = 'http://localhost:8080/api/users/authenticate'; 
 
-  public userRole='';
+  public userRoles = [];
+  private authToken: string | null = null;
   constructor(private http: HttpClient, private router: Router) {}
 
   
@@ -18,13 +19,16 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    this.userRole = response.user.roles[0];
+    console.log(response.token);
+    this.userRoles = response.user.roles;
+    this.authToken = response.token;
 
     if (typeof window !== 'undefined') { 
-      localStorage.setItem('userRole', response.user.roles[0]);
+      localStorage.setItem('userRole', JSON.stringify(this.userRoles));
+      if(this.authToken) localStorage.setItem('token', this.authToken);
     }
 
-    console.log('user', this.userRole)
+    console.log('user', this.userRoles)
     this.router.navigate(['/dashboard']);
   }
 
@@ -36,22 +40,30 @@ export class LoginService {
   isLoggedIn(): boolean {
      if (typeof window === 'undefined') return false; // Server environment
 
-    return !!localStorage.getItem('userRole');
+    return !!localStorage.getItem('userRole') && !!localStorage.getItem('token');
   }
 
   logout() {
      if (typeof window !== 'undefined') {
       localStorage.removeItem('userRole');
+      localStorage.removeItem('token');
     }
-    this.userRole = '';
+    this.userRoles = [];
     this.router.navigate(['/login']);
   }
 
-  getUserRole(): string {
+  getUserRoles(): string[] {
     if (typeof window !== 'undefined' && localStorage.getItem('userRole')) {
-      return localStorage.getItem('userRole') || '';
+      return JSON.parse(localStorage.getItem('userRole') || '[]');
     }
-    return '';
+    return [];
   }
-  
+
+  getAuthToken(): string | null {
+    console.log("getAuthToken");
+    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+      return localStorage.getItem('token');
+    }
+    return null;
+  }
 }

@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/api/enseignants")
 @RequiredArgsConstructor
 public class EnseignantController {
-
     private final EnseignantService enseignantService;
 
     @GetMapping("/{id}/affectations")
@@ -33,28 +32,21 @@ public class EnseignantController {
 
         return new ResponseEntity<>(affectations, HttpStatus.OK);
     }
-
+    
     @GetMapping("/enseignants-non-enregistres")
     public ResponseEntity<List<User>> getEnseignantsNotInEnseignantTable() {
         List<User> users = enseignantService.getUsersWithRoleEnseignantNotInEnseignant();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping()
-    public List<User> getEnseignants(){
-        return enseignantService.getEnseignants();
-    }
-
     @PostMapping()
     public EnseignantDto createEnseignant(@RequestBody EnseignantDto enseignant) {
         return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(enseignant.getId()
-        , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(),
-                enseignant.getCategorieEnseignant(),
-                enseignant.getNbHeureCategorie()));
+        , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(), enseignant.getCategorie()));
     }
 
     @GetMapping("{id}")
-    public EnseignantDto getEnseignantById(@PathVariable Long id) {
+    public EnseignantDto getEnseignantById(@PathVariable long id) {
         return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
     }
 
@@ -64,8 +56,7 @@ public class EnseignantController {
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),
                         enseignant.getMaxHeuresService(),
-                        enseignant.getCategorieEnseignant(),
-                        enseignant.getNbHeureCategorie()
+                        enseignant.getCategorie()
                 )
         );
     }

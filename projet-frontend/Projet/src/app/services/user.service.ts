@@ -8,7 +8,7 @@ import { User } from '../types/user.types';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
+  private apiUrl = 'http://localhost:8080/api/responsableDepartement';
 
   constructor(private http: HttpClient) { }
 

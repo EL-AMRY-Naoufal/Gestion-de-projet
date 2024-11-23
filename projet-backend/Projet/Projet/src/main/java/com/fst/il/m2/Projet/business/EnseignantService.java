@@ -72,9 +72,7 @@ public class EnseignantService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         List<Role>  roles = user.getRoles();
-        if(!roles.contains(Role.ENSEIGNANT)) {
-            roles.add(Role.ENSEIGNANT);
-        }
+        roles.add(Role.ENSEIGNANT);
         user = this.userRepository.save(user);
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
