@@ -1,16 +1,16 @@
 
-<div class="sidebar">
-    <div class="menu-header">Menu</div>
-    <a (click)="navigateToDashboard()">Accueil</a>
+<div class="menu-container">
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('RESPONSABLE_DE_FORMATION')" class="menu-item yellow">
+      Formation
+  </div>
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item blue" (click)="navigateToTeachers()">
+      Enseignants
+  </div>
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')" class="menu-item gray">
+      Affectations
+  </div>
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToUsers()">
+      Utilisateur
+  </div>
 
-
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('RESPONSABLE_DE_FORMATION')">Formation</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" (click)="navigateToTeachers()">Enseignants</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')">Affectations</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" (click)="navigateToUsers()">Utilisateur</a>
-
-
-
-    <a>Configurations</a>
-    <a class="logout" (click)="logout()">Déconnexion</a>
 </div>

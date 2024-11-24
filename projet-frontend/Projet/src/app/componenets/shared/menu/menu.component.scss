@@ -1,43 +1,54 @@
-/* Menu latéral */
-.sidebar {
-    height: 100vh;
-    width: 250px;
-    background-color: #333;
-    color: white;
-    position: fixed;
-    top: 0;
-    left: 2;
-    padding-top: 20px;
+/* Le conteneur pour les carrés centré sur la page */
+.menu-container {
+  display: flex;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
+  justify-content: center; /* Centre les éléments horizontalement */
+
+  min-height: 100vh; /* Prend toute la hauteur de la page */
+  gap: 20px; /* Espace entre chaque carré */
+  padding: 20px;
+  margin-top: 20px;
+  box-sizing: border-box;
 }
 
-.sidebar a {
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 18px;
-    color: white;
-    display: block;
-    border-bottom: 1px solid #444;
+/* Style de chaque carré */
+.menu-item {
+  width: 150px; /* Largeur des carrés */
+  height: 150px; /* Hauteur des carrés */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 10px; /* Coins arrondis */
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.sidebar a:hover {
-    background-color: #575757;
+/* Effet de survol */
+.menu-item:hover {
+  transform: scale(1.05); /* Agrandissement au survol */
 }
 
-.sidebar .menu-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-.sidebar .logout {
-    padding: 10px 15px;
-    text-decoration: none;
-    font-size: 18px;
-    color: white;
-    display: block;
-    background-color: #e74c3c;
-    border-top: 1px solid #444;
+/* Couleurs des carrés */
+.gray {
+  background-color: #ddd;
 }
 
-.sidebar .logout:hover {
-    background-color: #c0392b;
+.yellow {
+  background-color: #f1c40f;
+}
+
+.blue {
+  background-color: #3498db;
+}
+
+/* Déconnexion avec une couleur rouge */
+.logout {
+  background-color: #e74c3c;
+}
+
+.logout:hover {
+  background-color: #c0392b;
 }

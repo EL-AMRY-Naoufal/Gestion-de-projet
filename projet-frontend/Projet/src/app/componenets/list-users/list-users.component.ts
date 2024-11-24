@@ -8,12 +8,14 @@ import { UserCardComponent } from '../shared/user-card/user-card.component';
 import { NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
+import { TopNavbarComponent } from "../shared/top-navbar/top-navbar.component";
 
 
 @Component({
   selector: 'app-list-users',
   standalone: true,
-  imports: [MatDialogModule, UserCardComponent, NgSwitch, NgSwitchCase, NgIf,CommonModule],
+  imports: [MatDialogModule, UserCardComponent, NgSwitch, NgSwitchCase, NgIf, CommonModule, SearchBarComponent, TopNavbarComponent],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss'
 })
