@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from '../../../services/login.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class MenuComponent {
 userRoles: string[] = [];
 
-  constructor(private router: Router, private loginService: LoginService) { 
+  constructor(private router: Router, private loginService: LoginService) {
     this.userRoles = this.loginService.getUserRoles()
  }
 
@@ -26,7 +26,7 @@ userRoles: string[] = [];
   }
 
   logout() {
-   this.loginService.logout(); 
+   this.loginService.logout();
     this.router.navigate(['']);
   }
 }
