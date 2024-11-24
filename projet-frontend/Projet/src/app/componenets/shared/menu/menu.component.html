@@ -9,8 +9,8 @@
   <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')" class="menu-item gray">
       Affectations
   </div>
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToUsers()">
-      Utilisateur
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()">
+      Utilisateurs
   </div>
 
 </div>
