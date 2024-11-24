@@ -16,4 +16,7 @@ export class UserService {
   searchUsers(username: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${username}`);
   }
+   searchUsersByRole(role: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/role/${role}`);
+  }
 }

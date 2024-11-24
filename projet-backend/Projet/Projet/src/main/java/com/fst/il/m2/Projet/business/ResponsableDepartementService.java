@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface ResponsableDepartementService {
     List<User> getAllUsers();
 
     Optional<User> getUsersByUsername(String username);
-
+    Optional<User> getUsersByRole(Role role);
     User updateUser(Long id, User user, Long responsableId);
     void deleteUser(Long id, Long responsableId);
 }

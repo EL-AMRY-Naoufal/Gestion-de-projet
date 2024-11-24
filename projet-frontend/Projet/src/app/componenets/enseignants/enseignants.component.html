@@ -8,9 +8,13 @@
                 <i class="fas fa-search"></i>
             </button>
         </div>
-        <button class="filter">
-            role
-        </button>
+        <div class="role">
+            <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
+                <option value="" disabled selected>Rôle</option>
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+        </div>
+       
         <button class="add-teacher-btn">
             <i class="fas fa-plus"></i> Ajouter un enseignant
         </button>

@@ -15,6 +15,14 @@ import { FormsModule } from '@angular/forms';
 export class EnseignantsComponent  implements OnInit{
   users: any[] = [];
   searchQuery: string = '';
+
+  roles: string[] = [
+    'CHEF_DE_DEPARTEMENT',
+    'RESPONSABLE_DE_FORMATION',
+    'SECRETARIAT_PEDAGOGIQUE',
+    'ENSEIGNANT'
+  ];
+  selectedRole: string = '';
   
   constructor(private userService: UserService) { }
   
@@ -28,12 +36,22 @@ export class EnseignantsComponent  implements OnInit{
     });
   }
   searchTeachers(): void {
-    if (this.searchQuery.trim()) {  // Si le champ de recherche n'est pas vide
+    if (this.searchQuery.trim()) {  
       this.userService.searchUsers(this.searchQuery).subscribe(data => {
-        this.users = data ? [data] : [];  // On met à jour la liste des utilisateurs (si on trouve un utilisateur)
+        this.users = data ? [data] : []; 
       });
     } else {
-      this.getUsers();  // Si le champ est vide, on recharge tous les utilisateurs
+      this.getUsers(); 
     }
   }
+
+  filterByRole() {
+    if (this.selectedRole) {
+      this.userService.searchUsersByRole(this.selectedRole).subscribe(data => {
+          this.users = data ? [data] : [];
+        })
+    } else {
+      this.getUsers;  
+    }
+}
 }

@@ -54,6 +54,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public Optional<User> getUsersByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
+
+    @Override
+    public Optional<User> getUsersByRole(Role role) {
+        return userRepository.findUserByRoles(role);
+    }
     @Override
     public User updateUser(Long id, User user, Long responsableId) {
         // Check if the responsable has the required role

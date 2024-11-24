@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.Controllers;
 
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
+import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,13 @@ public class ResponsableDepartementController {
         Optional<User> users = responsableDepartementService.getUsersByUsername(username);
         return ResponseEntity.ok(users);
     }
+
+    @GetMapping("/role/{role}")
+    public ResponseEntity<Optional<User>> getAllUserByRole(@PathVariable Role role) {
+        Optional<User> users = responsableDepartementService.getUsersByRole(role);
+        return ResponseEntity.ok(users);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
