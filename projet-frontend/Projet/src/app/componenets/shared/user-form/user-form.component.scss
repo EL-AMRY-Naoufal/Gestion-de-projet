@@ -15,3 +15,45 @@ img {
 .mgb15 {
   margin-bottom: 15px;
 }
+
+.mat-error {
+  white-space: normal; /* Permet d'utiliser plusieurs lignes */
+  word-break: break-word; /* Coupe les mots trop longs si nécessaire */
+  max-width: 100%; /* Ajuste la largeur pour éviter de déborder */
+}
+
+.mat-form-field {
+  width: 100%; /* Assure que les champs occupent toute la largeur disponible */
+}
+
+@media (max-width: 600px) {
+  .mat-form-field {
+    font-size: 12px; /* Réduit la taille des champs et messages pour petits écrans */
+  }
+}
+
+/* Ajoute une marge externe autour du formulaire */
+.form-container {
+  margin: 0 24px; /* Marge des côtés pour espacer */
+}
+
+/* Marges entre les champs */
+.mgb20 {
+  margin-bottom: 20px; /* Espace vertical entre les éléments */
+}
+
+/* Style pour les actions en bas */
+.dialog-actions {
+  padding: 16px 24px; /* Espacement à l'intérieur des boutons */
+}
+
+/* Pour s'assurer que les champs occupent toute la largeur */
+mat-form-field.full-width {
+  width: 100%;
+}
+
+/* Ajoute des marges au texte d'erreur pour éviter l'encombrement */
+.mat-error {
+  margin-top: 4px;
+  font-size: 13px;
+}
