@@ -40,22 +40,12 @@ export class ResetPasswordComponent{
               }))
             .subscribe(
               response => {this.passwordChanged = true;}
-            );          
+            );
         }
         else {
           this.passwordIsCorrect = false;
         }
       });
-
-      /*CANT USE FUNCTIONS BASED ON OBSERVABLES BECAUSE OF ASYNC*/
-      // if(this.isEntryCorrect(this.resetForm.value.password, this.resetForm.value.confirmedPassword, this.resetForm.value.email)) {
-      //   this.resetPasswordService.resetPassword(this.resetForm.value.password)
-      //     .subscribe(
-      //       response => { console.log("response"); console.log(response); this.passwordChanged = true},
-      //       error => { console.log("error"); console.log(error);}
-      //   );
-      // }
-    }
 
     navigateToLogin() {
       this.resetPasswordService.navigateToLogin();
@@ -65,15 +55,4 @@ export class ResetPasswordComponent{
       var result = this.resetPasswordService.isPasswordCorrect(password, confirmedPassword);
       return result;
     }
-    /* DOES NOT WORK THIS WAY BECAUSE OF ASYNC */
-    // userEmailExists(email: string): boolean {
-    //   return this.resetPasswordService.userEmailExists(email);
-    // }
-
-    /* DOES NOT WORK THIS WAY BECAUSE OF ASYNC */
-    // isEntryCorrect(password: string, confirmedPassword: string, email: string): boolean {
-    //   this.passwordIsCorrect = this.isPasswordCorrect(password, confirmedPassword);
-    //   this.emailIsCorrect = this.userEmailExists(email);
-    //   return this.passwordIsCorrect && this.emailIsCorrect;
-    // }
 }
