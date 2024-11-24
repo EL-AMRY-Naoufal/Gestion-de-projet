@@ -56,7 +56,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
     @Override
-    public Optional<User> getUsersByRole(Role role) {
+    public List<User> getUsersByRole(Role role) {
         return userRepository.findUserByRoles(role);
     }
     @Override

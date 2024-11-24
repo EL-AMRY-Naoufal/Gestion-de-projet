@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,16 @@ public class ResponsableDepartementController {
     }
 
     @GetMapping("/role/{role}")
-    public ResponseEntity<Optional<User>> getAllUserByRole(@PathVariable Role role) {
-        Optional<User> users = responsableDepartementService.getUsersByRole(role);
+    public ResponseEntity<List<User>> getAllUserByRole(@PathVariable String role) {
+        Role roleEnum;
+        try {
+            roleEnum = Role.valueOf(role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+        List <User> users = responsableDepartementService.getUsersByRole(roleEnum);
         return ResponseEntity.ok(users);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {

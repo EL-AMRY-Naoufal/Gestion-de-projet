@@ -48,10 +48,10 @@ export class EnseignantsComponent  implements OnInit{
   filterByRole() {
     if (this.selectedRole) {
       this.userService.searchUsersByRole(this.selectedRole).subscribe(data => {
-          this.users = data ? [data] : [];
+        this.users = data;
         })
     } else {
-      this.getUsers;  
+      this.getUsers();  
     }
 }
 }

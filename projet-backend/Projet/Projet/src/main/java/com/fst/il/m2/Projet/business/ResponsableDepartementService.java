@@ -12,7 +12,7 @@ public interface ResponsableDepartementService {
     List<User> getAllUsers();
 
     Optional<User> getUsersByUsername(String username);
-    Optional<User> getUsersByRole(Role role);
+    List<User> getUsersByRole(Role role);
     User updateUser(Long id, User user, Long responsableId);
     void deleteUser(Long id, Long responsableId);
 }
