@@ -82,6 +82,12 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             throw new RuntimeException("Only Responsable de Département can delete users");
         }
 
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Responsable not found"));
+        if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+            throw new RuntimeException("On ne peut pas supprimer le responsable de département");
+
+        }
+
         userRepository.deleteById(id);
     }
 }
