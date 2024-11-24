@@ -1,10 +1,18 @@
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
 .login-container {
   display: flex;
   align-items: stretch; /* Étend les enfants pour qu'ils prennent toute la hauteur */
   justify-content: space-between;
-  max-width: 1200px;
-  height: 700px; /* Hauteur fixe pour l'illustration */
-  margin: 100px auto;
+  width: 100%;
+  /* height: 700px; /* Hauteur fixe pour l'illustration */
+  margin: 0 1rem;
   box-shadow: 0 2px 32px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   overflow: hidden;
