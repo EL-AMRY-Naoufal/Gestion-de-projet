@@ -4,8 +4,12 @@
 
 <section [ngSwitch]="view">
   <div [ngSwitch]="view">
-    <div *ngSwitchCase="'card'">
-      <app-user-card [user]="user" (deleteUser)="delete($event)" *ngFor="let user of listUsers"></app-user-card>
+    <div *ngSwitchCase="'card'" class="user-grid">
+      <app-user-card
+        [user]="user"
+        (deleteUser)="delete($event)"
+        *ngFor="let user of listUsers">
+      </app-user-card>
     </div>
   </div>
 
@@ -13,5 +17,5 @@
     <button (click)="showDialog()" mat-fab color="accent" class="button-add">
       <i class="material-icons">add</i>
     </button>
-
   </section>
+</section>

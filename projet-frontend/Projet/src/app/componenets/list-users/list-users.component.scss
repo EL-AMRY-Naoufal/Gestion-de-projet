@@ -5,22 +5,31 @@ section {
   justify-content: center;
 }
 
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Crée 3 colonnes */
+  gap: 16px; /* Espace entre les éléments */
+  padding: 16px;
+  width: 100%; /* Occupe toute la largeur disponible */
+  max-width: 1200px; /* Limite la largeur maximale */
+}
+
 mat-list-item {
-  border: 1px solid rgba(0,0,0,0.1);
-  color: rgba(0,0,0,0.87);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.87);
   background-color: white;
   font-size: 14px;
   margin: 3px 0 3px -12px;
   padding: 0;
   height: 70px;
-  width: 400px;
+  width: 100%; /* Prend la largeur de son parent */
   transition: box-shadow 0.2s;
   cursor: pointer;
 }
 
 mat-list-item:hover {
-  box-shadow: 0 24px 38px 3px rgba(0,0,0,.14),
-  0 9px 46px 8px rgba(0,0,0,.12);
+  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, .14),
+  0 9px 46px 8px rgba(0, 0, 0, .12);
 }
 
 .buttons-fab {
@@ -40,5 +49,14 @@ mat-list-item:hover {
   bottom: 15px;
 }
 
+@media (max-width: 768px) {
+  .user-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes pour les petits écrans */
+  }
+}
 
-
+@media (max-width: 480px) {
+  .user-grid {
+    grid-template-columns: 1fr; /* 1 colonne pour les très petits écrans */
+  }
+}

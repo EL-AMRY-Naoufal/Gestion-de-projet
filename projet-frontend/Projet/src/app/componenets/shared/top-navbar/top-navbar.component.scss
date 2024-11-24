@@ -13,6 +13,7 @@
   left: 0;
   z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box; /* S'assure que le padding n'affecte pas la largeur totale */
 }
 
 .navbar-logo {
@@ -48,6 +49,7 @@
   .navbar {
     flex-direction: column;
     padding: 10px;
+    text-align: center; /* Centre les éléments sur les petits écrans */
   }
 
   .navbar-links {
@@ -55,4 +57,3 @@
     gap: 10px;
   }
 }
-
