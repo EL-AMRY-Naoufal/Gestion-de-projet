@@ -60,3 +60,37 @@ mat-list-item:hover {
     grid-template-columns: 1fr; /* 1 colonne pour les très petits écrans */
   }
 }
+
+
+/* Style pour le bouton fab (floating action button) */
+.buttons-fab {
+  display: block;
+  height: 100px;
+  width: 100px;
+  position: fixed;
+  bottom: 20px; /* Ajustez la position selon vos besoins */
+  right: 20px; /* Ajustez la position selon vos besoins */
+}
+
+.buttons-fab button {
+  background-color: #1e7c34; /* Fond vert */
+  color: #fff; /* Texte blanc */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Pour rendre le bouton rond */
+  font-size: 30px; /* Taille de l'icône */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+  border: none; /* Pas de bordure */
+}
+
+.buttons-fab button:hover {
+  background-color: #0f3f19; /* Fond vert plus foncé au survol */
+}
+
+.buttons-fab button .material-icons {
+  font-size: 30px; /* Taille de l'icône */
+}
