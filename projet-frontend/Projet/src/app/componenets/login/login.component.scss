@@ -11,6 +11,18 @@
   background-color: #f9f9f9;
 }
 
+.login-form h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+  width: 100%; /* Étend le titre à toute la largeur */
+  text-align: center; /* Centre le titre */
+}
+
+
 .login-image {
   flex: 1; /* L'image occupe la moitié de la largeur */
   background-color: #eceff1;
