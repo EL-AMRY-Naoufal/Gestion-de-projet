@@ -25,6 +25,12 @@ userRoles: string[] = [];
     this.router.navigate(['/dashboard']);
   }
 
+
+  navigateToUsers() {
+    this.router.navigate(['/users']);
+  }
+
+
   logout() {
    this.loginService.logout();
     this.router.navigate(['']);
