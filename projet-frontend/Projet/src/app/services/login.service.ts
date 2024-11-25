@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -13,12 +12,9 @@ export class LoginService {
 
   private readonly _backendURL: any;
 
-    // private property to store default person
-  public _connectUser: number = 1;
-
   public userRoles = [];
   private authToken: string | null = null;
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router  ) {
     this._backendURL = {};
 
 
@@ -44,9 +40,11 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    console.log("id " ,response.user.id);
     this.userRoles = response.user.roles;
     this.authToken = response.token;
+
+    //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
+    localStorage.setItem('userId', response.user.id);
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('userRole', JSON.stringify(this.userRoles));
@@ -63,10 +61,10 @@ export class LoginService {
   }
 
   /*
-  * Returns private property _connectUser
+  * Returns private property _connectUserID
   */
- get connectUser(): number{
-    return this._connectUser;
+  connectUser(): number{
+    return parseInt(localStorage.getItem('userId') || '0');
  }
 
 
