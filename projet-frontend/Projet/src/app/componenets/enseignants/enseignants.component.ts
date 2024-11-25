@@ -1,49 +1,55 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MenuComponent } from '../shared/menu/menu.component';
+import { UserService } from '../../services/user.service';
+import { UserCardComponent } from '../card/user-card/user-card.component';
+import { User } from '../shared/types/user.type';
+import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
+import { TopNavbarComponent } from "../shared/top-navbar/top-navbar.component";
+import { EnseignantService } from '../../services/enseignant.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateProfesseurComponent } from '../update-professeur/update-professeur.component';
-import { EnseignantService } from '../../services/enseignant.service';
-import { MenuComponent } from '../menu/menu.component';
-import { UserCardComponent } from '../card/user-card/user-card.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-enseignants',
   standalone: true,
   providers: [EnseignantService],
-  imports: [CommonModule, MenuComponent, UserCardComponent],
+  imports: [CommonModule, MenuComponent, UserCardComponent, SearchBarComponent, TopNavbarComponent],
   templateUrl: './enseignants.component.html',
   styleUrls: ['./enseignants.component.scss']
 })
-export class EnseignantsComponent implements OnInit {
-  users: any[] = [];
 
-  constructor(
+  
+
+  
+export class EnseignantsComponent  implements OnInit{
+ users: any[] = [];
+  constructor(private userService: UserService,  
+    private _usersService: UserService, 
     private enseignantService: EnseignantService,
-    private dialog: MatDialog
-  ) {
-    this.openDialog = this.openDialog.bind(this);
-  }
+    private dialog: MatDialog) {this.openDialog = this.openDialog.bind(this); }
 
   ngOnInit(): void {
     this.enseignantService.getEnseignants().subscribe(data => {
       this.users = data;
-    });
-  }
+    });  }
 
-  openDialog(enseignant?: any) {
-    const dialogRef = this.dialog.open(UpdateProfesseurComponent, {
-      data: enseignant,
-      width: '500px',
-      autoFocus: true
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.enseignantService.getEnseignants().subscribe(data => {
-        this.users = data;
+    openDialog(enseignant?: any) {
+      const dialogRef = this.dialog.open(UpdateProfesseurComponent, {
+        data: enseignant,
+        width: '500px',
+        autoFocus: true
       });
-      if (result) {
-        console.log('Données reçues du modal:', result);
-      }
-    });
-  }
+  
+      dialogRef.afterClosed().subscribe(result => {
+        this.enseignantService.getEnseignants().subscribe(data => {
+          this.users = data;
+        });
+        if (result) {
+          console.log('Données reçues du modal:', result);
+        }
+      });
+    }
+
+
 }

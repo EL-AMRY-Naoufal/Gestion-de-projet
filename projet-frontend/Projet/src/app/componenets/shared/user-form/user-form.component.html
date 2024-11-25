@@ -1,0 +1,71 @@
+<h2 mat-dialog-title *ngIf="isUpdateMode">Update {{ form.get('username')?.value }}</h2>
+<h2 mat-dialog-title *ngIf="!isUpdateMode">Create New User</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate class="form-container">
+
+    <!-- Username -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput placeholder="Username" formControlName="username" required />
+      <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('required')">
+        Username is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('minlength')">
+        Username is <strong>2 chars min</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput placeholder="Email" formControlName="email" required />
+      <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
+        Invalid email format
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Role Selection -->
+    <mat-form-field class="full-width mgb20">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles" multiple>
+        <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
+        <mat-option value="RESPONSABLE_DE_FORMATION">Responsable de formation</mat-option>
+        <mat-option value="SECRETARIAT_PEDAGOGIQUE">Secrétariat pédagogique</mat-option>
+        <mat-option value="ENSEIGNANT">Enseignant</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Password Field -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput type="password" placeholder="Password" formControlName="password" required />
+      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('minlength')">
+        Password is <strong>6 chars min</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('weakPassword')">
+        Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Confirm Password Field -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword" required />
+      <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
+        Confirmation password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.dirty">
+        Passwords do not match
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+  <button mat-button color="primary" type="button" (click)="submit(form.value)" [disabled]="form.invalid">Save</button>
+</mat-dialog-actions>

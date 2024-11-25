@@ -32,9 +32,9 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User newUser = userRepository.save(user);
 
         // Generate a token and send email for setting the password
-        String token = UUID.randomUUID().toString();
+        /*String token = UUID.randomUUID().toString();
         passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
-        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
+        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);*/
 
         return newUser;
     }
@@ -80,6 +80,12 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can delete users");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Responsable not found"));
+        if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+            throw new RuntimeException("On ne peut pas supprimer le responsable de département");
+
         }
 
         userRepository.deleteById(id);
