@@ -8,9 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 @CrossOrigin("*")
 @RestController
@@ -41,6 +40,12 @@ public class UserController {
 
     @GetMapping("/user/{email}")
     public Long getUserIdByEmail(@PathVariable String email) {
-        return this.userService.getUserByEmail(email).getId();
+        User user = this.userService.getUserByEmail(email);
+        if(user == null) {
+            return null;
+        }
+        else {
+            return user.getId();
+        }
     }
 }

@@ -15,21 +15,23 @@ export class ResetPasswordComponent{
   public passwordChanged : boolean;
   public passwordIsCorrect: boolean;
   public emailIsCorrect: boolean;
+
   constructor(private resetPasswordService: ResetPasswordService) {
-      this.passwordChanged = false;
-      this.passwordIsCorrect = true;
-      this.emailIsCorrect = true;
-    }
+    this.passwordChanged = false;
+    this.passwordIsCorrect = true;
+    this.emailIsCorrect = true;
+  }
 
-    @ViewChild('resetForm') public resetForm!: NgForm;
+  @ViewChild('resetForm') public resetForm!: NgForm;
 
-    resetPassword() {
-      this.resetPasswordService.getUserIdByEmail(this.resetForm.value.email).pipe(
-        catchError(() => {
-          this.emailIsCorrect = false;
-          return "";
-        }))
-      .subscribe(response => {
+  resetPassword() {
+    this.resetPasswordService.getUserIdByEmail(this.resetForm.value.email).pipe(
+      catchError(() => {
+        this.emailIsCorrect = false;
+        return "";
+      }))
+    .subscribe(response => {
+      if(response != null) {
         this.emailIsCorrect = true;
         if(this.isPasswordCorrect(this.resetForm.value.password, this.resetForm.value.confirmedPassword)) {
             this.passwordIsCorrect = true;
@@ -45,14 +47,19 @@ export class ResetPasswordComponent{
         else {
           this.passwordIsCorrect = false;
         }
-      });
+      }
+      else {
+        this.emailIsCorrect = false;
+      }
+    });
+  }
 
-    navigateToLogin() {
-      this.resetPasswordService.navigateToLogin();
-    }
+  navigateToLogin() {
+    this.resetPasswordService.navigateToLogin();
+  }
 
-    isPasswordCorrect(password: string, confirmedPassword: string) : boolean {
-      var result = this.resetPasswordService.isPasswordCorrect(password, confirmedPassword);
-      return result;
-    }
+  isPasswordCorrect(password: string, confirmedPassword: string) : boolean {
+    var result = this.resetPasswordService.isPasswordCorrect(password, confirmedPassword);
+    return result;
+  }
 }
