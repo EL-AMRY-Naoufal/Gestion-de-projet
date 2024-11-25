@@ -65,7 +65,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Update user information
         existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
+//        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
         existingUser.setRoles(user.getRoles());
 

@@ -6,7 +6,7 @@
 
     <!-- Username -->
     <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Username" formControlName="username" required />
+      <input matInput placeholder="Username" formControlName="username" required name="username"/>
       <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('required')">
         Username is <strong>required</strong>
       </mat-error>
@@ -17,7 +17,7 @@
 
     <!-- Email -->
     <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Email" formControlName="email" required />
+      <input matInput placeholder="Email" formControlName="email" required name="email"/>
       <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
         Email is <strong>required</strong>
       </mat-error>
@@ -29,7 +29,7 @@
     <!-- Role Selection -->
     <mat-form-field class="full-width mgb20">
       <mat-label>Roles</mat-label>
-      <mat-select formControlName="roles" multiple>
+      <mat-select formControlName="roles" multiple name="roles">
         <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
         <mat-option value="RESPONSABLE_DE_FORMATION">Responsable de formation</mat-option>
         <mat-option value="SECRETARIAT_PEDAGOGIQUE">Secrétariat pédagogique</mat-option>
@@ -38,7 +38,7 @@
     </mat-form-field>
 
     <!-- Password Field -->
-    <mat-form-field class="full-width mgb20">
+    <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
       <input matInput type="password" placeholder="Password" formControlName="password" required />
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
         Password is <strong>required</strong>
@@ -52,7 +52,7 @@
     </mat-form-field>
 
     <!-- Confirm Password Field -->
-    <mat-form-field class="full-width mgb20">
+    <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
       <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword" required />
       <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
         Confirmation password is <strong>required</strong>
