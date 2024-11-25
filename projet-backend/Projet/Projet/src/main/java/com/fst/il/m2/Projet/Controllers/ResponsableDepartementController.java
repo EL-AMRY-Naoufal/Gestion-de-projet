@@ -37,8 +37,8 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
     @GetMapping("/{username}")
-    public ResponseEntity<Optional<User>> getAllUserByUsername(@PathVariable String username) {
-        Optional<User> users = responsableDepartementService.getUsersByUsername(username);
+    public ResponseEntity<List<User>> getAllUserByUsername(@PathVariable String username) {
+        List<User> users = responsableDepartementService.getUsersByUsername(username);
         return ResponseEntity.ok(users);
     }
 

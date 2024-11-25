@@ -11,7 +11,7 @@ public interface ResponsableDepartementService {
     User getUserById(Long id);
     List<User> getAllUsers();
 
-    Optional<User> getUsersByUsername(String username);
+    List<User> getUsersByUsername(String username);
     List<User> getUsersByRole(Role role);
     User updateUser(Long id, User user, Long responsableId);
     void deleteUser(Long id, Long responsableId);

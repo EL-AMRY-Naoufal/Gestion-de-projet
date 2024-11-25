@@ -251,4 +251,29 @@ class ResponsableDepartementServiceDefaultTest {
 
         assertEquals("Only Responsable de Département can delete users", thrown.getMessage());
     }
+<<<<<<< HEAD
+=======
+
+    @Test
+    void testDeleteUser_SelfDelete() {
+        // Mock User with Responsable role (the same user attempting to delete themselves)
+        User mockResponsable = new User("responsable", "password123", "responsable@example.com", Role.CHEF_DE_DEPARTEMENT);
+        mockResponsable.setId(2L); // Set ID for mock user
+
+        // Mock repository behavior for finding the Responsable
+        when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
+
+        // Act and Assert: Attempting to delete oneself should throw an exception
+        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
+            responsableDepartementService.deleteUser(mockResponsable.getId(), mockResponsable.getId());
+        });
+
+        // Verify exception message
+        assertEquals("A user cannot delete themselves", thrown.getMessage());
+
+        // Verify that deleteById is not called
+        verify(userRepository, never()).deleteById(mockResponsable.getId());
+    }
+
+>>>>>>> fda1fbcb351240e569827b037f5251699391b9b7
 }
