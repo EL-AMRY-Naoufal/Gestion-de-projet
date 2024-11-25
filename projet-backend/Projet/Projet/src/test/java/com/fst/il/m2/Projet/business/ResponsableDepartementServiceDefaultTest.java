@@ -84,20 +84,21 @@ class ResponsableDepartementServiceDefaultTest {
         assertEquals("Only Responsable de Département can create users", thrown.getMessage());
     }
 
-
     @Test
     void testGetUsersByUsername_Success() {
         // Arrange
         User mockUser = new User("johndoe", "password123", "johndoe@example.com", Role.ENSEIGNANT);
-        when(userRepository.findUserByUsername("johndoe")).thenReturn(Optional.of(mockUser));
+        List<User> mockUsers = List.of(mockUser); // Adapting to List<User> instead of Optional<User>
+        when(userRepository.findUserByUsername("johndoe")).thenReturn(mockUsers);
 
         // Act
-        Optional<User> result = responsableDepartementService.getUsersByUsername("johndoe");
+        List<User> result = responsableDepartementService.getUsersByUsername("johndoe");
 
         // Assert
-        assertTrue(result.isPresent());
-        assertEquals("johndoe", result.get().getUsername());
-        assertEquals(Role.ENSEIGNANT, result.get().getRoles().get(0));
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("johndoe", result.get(0).getUsername());
+        assertEquals(Role.ENSEIGNANT, result.get(0).getRoles().get(0));
 
         // Verify
         verify(userRepository, times(1)).findUserByUsername("johndoe");
@@ -106,13 +107,14 @@ class ResponsableDepartementServiceDefaultTest {
     @Test
     void testGetUsersByUsername_NotFound() {
         // Arrange
-        when(userRepository.findUserByUsername("unknown")).thenReturn(Optional.empty());
+        when(userRepository.findUserByUsername("unknown")).thenReturn(List.of()); // Return an empty list
 
         // Act
-        Optional<User> result = responsableDepartementService.getUsersByUsername("unknown");
+        List<User> result = responsableDepartementService.getUsersByUsername("unknown");
 
         // Assert
-        assertFalse(result.isPresent());
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
 
         // Verify
         verify(userRepository, times(1)).findUserByUsername("unknown");
@@ -155,9 +157,6 @@ class ResponsableDepartementServiceDefaultTest {
         // Verify
         verify(userRepository, times(1)).findUserByRoles(Role.CHEF_DE_DEPARTEMENT);
     }
-
-
-
 
     @Test
     void testGetUserById_Success() {
@@ -251,8 +250,6 @@ class ResponsableDepartementServiceDefaultTest {
 
         assertEquals("Only Responsable de Département can delete users", thrown.getMessage());
     }
-<<<<<<< HEAD
-=======
 
     @Test
     void testDeleteUser_SelfDelete() {
@@ -275,5 +272,4 @@ class ResponsableDepartementServiceDefaultTest {
         verify(userRepository, never()).deleteById(mockResponsable.getId());
     }
 
->>>>>>> fda1fbcb351240e569827b037f5251699391b9b7
 }
