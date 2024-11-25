@@ -7,6 +7,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.security.JWTUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

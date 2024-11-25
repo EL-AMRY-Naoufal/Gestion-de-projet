@@ -16,12 +16,12 @@ export class LoginService {
     // private property to store default person
   public _connectUser: number = 1;
 
+  private apiUrl = 'http://localhost:8080/api/users/authenticate';
+
   public userRoles = [];
   private authToken: string | null = null;
   constructor(private http: HttpClient, private router: Router) {
     this._backendURL = {};
-
-  private apiUrl = 'http://localhost:8080/api/users/authenticate';
 
      // build backend base url
      let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -36,7 +36,6 @@ export class LoginService {
          // @ts-ignore
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
-
   }
 
 

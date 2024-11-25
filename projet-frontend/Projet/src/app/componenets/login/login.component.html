@@ -17,16 +17,13 @@
       <div class="form-control">
         <label for="password">Mot de passe</label>
         <input name="password" ngModel required id="password" autocomplete="new-password" type="password" />
-    </div>
-
-    <button type="submit" [disabled]="!loginForm.valid">Login</button>
-</form>
-
-<label class="mdp-oublie-label" (click)="goToResetPasswordPage()">Mot de passe oublié?</label>
-
       </div>
 
       <button type="submit" [disabled]="!loginForm.valid">Connexion</button>
+
+      <label class="mdp-oublie-label" (click)="goToResetPasswordPage()">Mot de passe oublié?</label>
     </form>
+
+    
   </div>
 </div>
