@@ -26,18 +26,20 @@ mat-card-subtitle {
 }
 
 mat-card-actions {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 10px;
-.role {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+
+  .role {
     font-size: 14px;
     color: #888;
-}
+  }
 
-@media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .user-card {
-        width: 100%;
-        margin-bottom: 20px;
+      width: 100%;
+      margin-bottom: 20px;
     }
-    
+
+  }
 }
