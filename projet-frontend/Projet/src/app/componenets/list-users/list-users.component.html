@@ -1,0 +1,35 @@
+<app-menu></app-menu>
+<div class="main-content">
+  <div class="search-and-add-container">
+    <div class="search-bar">
+      <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
+      <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
+    </div>
+    <div class="role">
+      <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
+        <option value="" disabled selected>Rôle</option>
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+    <button
+      class="add-teacher-btn"
+      (click)="showDialog()"
+      mat-fab
+      color="accent"
+    >
+      Ajouter un utilisateur
+    </button>
+  </div>
+  <section [ngSwitch]="view">
+    <div [ngSwitch]="view">
+      <div *ngSwitchCase="'card'" class="user-card-container">
+        <app-user-card
+          [user]="user"
+          (deleteUser)="delete($event)"
+          *ngFor="let user of listUsers"
+        >
+        </app-user-card>
+      </div>
+    </div>
+  </section>
+</div>

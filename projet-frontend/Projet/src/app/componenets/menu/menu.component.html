@@ -1,14 +1,11 @@
-
-<div class="sidebar">
-    <div class="menu-header">Menu</div>
-    <a (click)="navigateToDashboard()">Accueil</a>
-   
-   
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('RESPONSABLE_DE_FORMATION')">Formation</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" (click)="navigateToTeachers()">Enseignants</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')">Affectations</a>
-    
-    
-    <a>Configurations</a>
-    <a class="logout" (click)="logout()">Déconnexion</a>
-</div>
+<mat-toolbar color="primary">
+    <span>LOGO</span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>Mon compte</button>
+        <button mat-menu-item (click)=" logout()">Déconnecter</button>
+    </mat-menu>
+</mat-toolbar>
