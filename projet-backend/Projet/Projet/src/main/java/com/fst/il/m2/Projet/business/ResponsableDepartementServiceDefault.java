@@ -1,7 +1,13 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.models.Enseignant;
+import com.fst.il.m2.Projet.models.ResponsableDepartement;
+import com.fst.il.m2.Projet.models.ResponsableFormation;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.repositories.EnseignantRepository;
+import com.fst.il.m2.Projet.repositories.ResponsableDepartementRepository;
+import com.fst.il.m2.Projet.repositories.ResponsableFormationRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +23,14 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private UserRepository userRepository;
     @Autowired
     private PasswordSetServiceDefault passwordSetServiceDefault;
+    @Autowired
+    private EnseignantRepository enseignantRepository;
+    @Autowired
+    private ResponsableDepartementRepository responsableDepartementRepository;
+    @Autowired
+    private ResponsableFormationRepository responsableFormationRepository;
 
-    @Override
+ @Override
     public User createUser(User user, Long responsableId) {
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
@@ -32,9 +44,27 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User newUser = userRepository.save(user);
 
         // Generate a token and send email for setting the password
-        /*String token = UUID.randomUUID().toString();
-        passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
-        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);*/
+        String token = UUID.randomUUID().toString();
+        //passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
+        //passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
+
+        // Save the user in the specific table based on their role
+        System.out.println("holllllllllllllllllllla==========================================>>>>>>>>>>>>>>>>>>>>");
+
+        if (user.getRoles().contains(Role.ENSEIGNANT)) {
+            System.out.println("holllllllllllllllllllla==========================================>>>>>>>>>>>>>>>>>>>>");
+            Enseignant enseignant = new Enseignant();
+            enseignant.setUser(newUser);
+            enseignantRepository.save(enseignant); // Save in Enseignant table
+        } else if (user.getRoles().contains(Role.CHEF_DE_DEPARTEMENT)) {
+            ResponsableDepartement responsableDepartement = new ResponsableDepartement();
+            responsableDepartement.setUser(newUser);
+            responsableDepartementRepository.save(responsableDepartement); // Save in ResponsableDepartement table
+        } else if (user.getRoles().contains(Role.RESPONSABLE_DE_FORMATION)) {
+            ResponsableFormation responsableFormation = new ResponsableFormation();
+            responsableFormation.setUser(newUser);
+            responsableFormationRepository.save(responsableFormation); // Save in ResponsableFormation table
+        }
 
         return newUser;
     }
