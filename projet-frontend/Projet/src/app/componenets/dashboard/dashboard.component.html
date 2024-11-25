@@ -2,7 +2,10 @@
 
 <div class="main-content">
   <div class="frames-container">
-    <mat-card class="frame gray">
+    <mat-card  *ngIf="userRoles.includes('ENSEIGNANT')"
+      class="frame gray"
+      (click)="navigateToAffectations()"
+    >
       <h3>Affectations</h3>
     </mat-card>
     <mat-card
