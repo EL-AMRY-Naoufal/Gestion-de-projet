@@ -12,7 +12,8 @@ export const environment = {
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
-      authenticate :'/api/users/authenticate',
+      authenticate: '/api/users/authenticate',
+      role : '/api/responsableDepartement/role/',
     },
   },
 };
