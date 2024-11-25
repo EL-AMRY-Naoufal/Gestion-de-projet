@@ -25,9 +25,6 @@ export class AffectationListComponent implements OnInit {
   ngOnInit(): void {
 
     this.enseignantId = this.loginService.connectUser() + '';
-
-    console.log("_connectUserID 3 : " + this.enseignantId);
-
     this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
       (data) => {
         this.affectations = data;

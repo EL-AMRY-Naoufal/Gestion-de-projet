@@ -3,7 +3,6 @@ package com.fst.il.m2.Projet.business;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
-import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
@@ -27,10 +26,16 @@ public class EnseignantService {
         this.userRepository = userRepository;
     }
 
-    public List<Affectation> getAffectationsByEnseignantById(Long enseignantId) {
-        User UserRepository = userRepository.findById(enseignantId)
+    public List<Affectation> getAffectationsByEnseignantById(Long userId) {
+
+        // Get the enseignant id from the user id
+        Long enseignantId = enseignantRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Enseignant not found"))
+                .getId();
+
+        Enseignant enseignant = enseignantRepository.findById(enseignantId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"));
-        return enseignantRepository.getAffectations();
+        return enseignant.getAffectations();
     }
 
 

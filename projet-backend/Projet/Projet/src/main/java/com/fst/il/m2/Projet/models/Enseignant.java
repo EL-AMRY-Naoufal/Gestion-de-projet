@@ -97,4 +97,17 @@ public class Enseignant {
     public Long getUserId() {
         return user.getId();
     }
+
+    //to string
+    @Override
+    public String toString() {
+        return "Enseignant{" +
+                "id=" + id +
+                ", categorieEnseignant=" + categorieEnseignant +
+                ", maxHeuresService=" + maxHeuresService +
+                ", heuresAssignees=" + heuresAssignees +
+                ", affectations=" + affectations +
+                ", user=" + user +
+                '}';
+    }
 }
