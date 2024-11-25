@@ -1,0 +1,138 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+.search-icon {
+  size: 10px;
+  background-color: #ffeb3b;
+}
+.search-and-add-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  /* Augmente l'espace sous la barre de recherche */
+}
+.search-and-add-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+i.fas.fa-search.search-icon {
+  width: 40px;
+}
+
+.search-bar {
+  flex: 2;
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}
+
+.search-bar input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  font-size: 14px;
+}
+
+.search-bar input[type="text"]:focus {
+  outline: none;
+}
+
+.role {
+  flex: 1;
+}
+
+.role select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-teacher-btn {
+  flex: 1;
+  background-color: #ffeb3b;
+  color: black;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.add-teacher-btn:hover {
+  background-color: #feeb44;
+}
+
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Crée 3 colonnes */
+  gap: 16px; /* Espace entre les éléments */
+  padding: 16px;
+  width: 100%; /* Occupe toute la largeur disponible */
+  max-width: 1200px; /* Limite la largeur maximale */
+}
+
+mat-list-item {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.87);
+  background-color: white;
+  font-size: 14px;
+  margin: 3px 0 3px -12px;
+  padding: 0;
+  height: 70px;
+  width: 100%; /* Prend la largeur de son parent */
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+}
+
+mat-list-item:hover {
+  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+.buttons-fab {
+  display: block;
+  height: 170px;
+  width: 90px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.buttons-fab button {
+  transition: bottom 0.2s;
+}
+
+.buttons-fab:hover .button-add {
+  bottom: 15px;
+}
+
+.user-card-container {
+  display: flex;
+  /* Permet d'afficher les éléments côte à côte */
+  flex-wrap: wrap;
+  /* Les éléments passent à la ligne suivante si nécessaire */
+  gap: 20px;
+  /* Ajoute un espacement entre les cartes */
+  justify-content: space-between;
+  /* Espace entre les cartes, ajustable selon besoin */
+}
+
+app-user-card {
+  flex: 0 1 calc(25% - 20px);
+  /* Largeur des cartes : 25% de la ligne moins l'espace */
+  box-sizing: border-box;
+  /* Inclut le padding et la bordure dans la largeur */
+}

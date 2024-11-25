@@ -1,0 +1,22 @@
+<div *ngIf="affectations.length > 0; else noAffectations" class="container my-4">
+  <h2 class="text-center  mb-4">Mes Affectations</h2>
+  <table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>Module</th>
+      <th>Heures Assignées</th>
+      <th>Date d'Affectation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let affectation of affectations">
+      <td>{{ affectation.nomModule}}</td>
+      <td>{{ affectation.heuresAssignees }}</td>
+      <td>{{ affectation.dateAffectation }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #noAffectations>
+  <p class="text-center text-muted">Aucune affectation trouvée pour cet enseignant.</p>
+</ng-template>
