@@ -251,8 +251,6 @@ class ResponsableDepartementServiceDefaultTest {
 
         assertEquals("Only Responsable de Département can delete users", thrown.getMessage());
     }
-<<<<<<< HEAD
-=======
 
     @Test
     void testDeleteUser_SelfDelete() {
@@ -275,5 +273,4 @@ class ResponsableDepartementServiceDefaultTest {
         verify(userRepository, never()).deleteById(mockResponsable.getId());
     }
 
->>>>>>> fda1fbcb351240e569827b037f5251699391b9b7
 }
