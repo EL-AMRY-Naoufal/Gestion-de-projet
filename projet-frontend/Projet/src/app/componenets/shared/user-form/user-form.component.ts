@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -6,7 +6,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../types/user.type';
 import { UserCustomValidators } from './user-custom-validators';
-import { MatDialogActions } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, NgIf } from '@angular/common';
 
@@ -32,9 +32,9 @@ export class UserFormComponent {
   /**
    * Component constructor
    */
-  constructor() {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: User) {
     this._model = {} as User;
-    this._isUpdateMode = false;
+    this._isUpdateMode = !!data; 
     this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
@@ -107,7 +107,7 @@ export class UserFormComponent {
       };
       this._isUpdateMode = false;
     }
-
+    
     // update form's values with model
     this._form.patchValue(this._model);
   }
@@ -137,6 +137,31 @@ export class UserFormComponent {
    * Function to build our form
    */
   private _buildForm(): FormGroup {
+    if(this._isUpdateMode){
+      return new FormGroup({
+        id: new FormControl(),
+        username: new FormControl(
+          '',
+          Validators.compose([Validators.required, Validators.minLength(2)])
+        ),
+        email: new FormControl(
+          '',
+          Validators.compose([Validators.required, UserCustomValidators.googleEmail])
+        ),
+        roles: new FormControl(
+          '',
+          Validators.required
+        ),
+        password: new FormControl(
+          '',
+        ),
+        confirmPassword: new FormControl(
+          '',
+        ),
+      },
+      );
+    }
+    else{
     return new FormGroup({
       id: new FormControl(),
       username: new FormControl(
@@ -168,10 +193,10 @@ export class UserFormComponent {
       ),
     },
 
-      UserCustomValidators.matchPasswords,
+    UserCustomValidators.matchPasswords,
 
     );
-
+  } 
   }
 
 }

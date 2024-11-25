@@ -38,7 +38,7 @@
       <button
         mat-button
         title="Delete"
-        *ngIf="!user.roles.includes('CHEF_DE_DEPARTEMENT')"
+        *ngIf="!user.roles?.includes('CHEF_DE_DEPARTEMENT')"
         (click)="delete(user)"
       >
         <!-- <mat-icon svgIcon="icon-delete"></mat-icon>-->

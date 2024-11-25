@@ -1,118 +1,118 @@
 /* Réinitialisation des styles de base */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Corps de la page */
 body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
 }
 
 /* Conteneur principal */
 .container {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* Colonne gauche */
 .left-section {
-    background-color: #ffeb3b;
-    /* Couleur jaune */
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  background-color: #ffeb3b;
+  /* Couleur jaune */
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Colonne droite */
 .right-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
 }
 
 /* Style du formulaire */
 form {
-    width: 400px;
-    padding: 20px;
-    height: 500px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    box-sizing: border-box;
+  width: 400px;
+  padding: 20px;
+  height: 500px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  box-sizing: border-box;
 }
 
 h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-weight: normal;
-    color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: normal;
+  color: #333;
 }
 
 /* Champs de formulaire */
 .form-control {
-    margin-bottom: 100px;
-    text-align: left;
+  margin-bottom: 100px;
+  text-align: left;
 }
 
 label {
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
 }
 
 input {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus {
-    outline: none;
-    border-color: #32b0d0;
-    box-shadow: 0 0 5px rgba(52, 238, 238, 0.5);
+  outline: none;
+  border-color: #32b0d0;
+  box-shadow: 0 0 5px rgba(52, 238, 238, 0.5);
 }
 
 /* Bouton */
 button {
-    background-color: #3CADCA;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
+  background-color: #3cadca;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
 }
 
 button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 button:hover:enabled {
-    background-color: #32b0d0;
+  background-color: #32b0d0;
 }
 
 /* Logo dans la section gauche */
 .logo {
-    max-width: 80%;
-    height: auto;
-    display: block;
+  max-width: 80%;
+  height: auto;
+  display: block;
 }

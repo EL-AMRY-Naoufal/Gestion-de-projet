@@ -5,6 +5,7 @@ import { DashboardComponent } from './componenets/dashboard/dashboard.component'
 import { UserComponent } from './componenets/user/user.component';
 import { ListUsersComponent } from './componenets/list-users/list-users.component';
 import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
+import { UserUpdateComponent } from './user-update/user-update.component';
 
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
 
   // Route pour afficher un profil d'utilisateur
   { path: 'user/:id', component: UserComponent },
+  { path: 'edit/:id', component: UserUpdateComponent },
 
   { path: 'enseignants', component: EnseignantsComponent },
 

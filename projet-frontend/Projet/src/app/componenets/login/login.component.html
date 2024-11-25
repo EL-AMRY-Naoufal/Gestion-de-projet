@@ -4,39 +4,60 @@
     <div class="form-control">
         <label for="email">Email</label>
         <input name="email" ngModel required email id="email" autocomplete="new-password" type="email" />
-    </div>
-
-    <div class="form-control">
-        <label for="password">Password</label>
+      </div>
+  
+      <div class="form-control">
+        <label for="password">Mot de passe</label>
         <input name="password" ngModel required id="password" autocomplete="new-password" type="password" />
     </div>
 
     <button type="submit" [disabled]="!loginForm.valid">Login</button>
 </form>-->
 <div class="container">
-    <!-- Colonne gauche -->
-    <div class="left-section">
-            <img src="https://www.logotheque-vectorielle.fr/wp-content/uploads/2022/10/logo-vectoriel-universite-de-lorraine.jpg" alt="Logo" class="logo" />
+  <!-- Colonne gauche -->
+  <div class="left-section">
+    <img
+      src="https://www.logotheque-vectorielle.fr/wp-content/uploads/2022/10/logo-vectoriel-universite-de-lorraine.jpg"
+      alt="Logo"
+      class="logo"
+    />
+  </div>
 
-    </div>
+  <!-- Colonne droite -->
+  <div class="right-section">
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="login(loginForm)"
+      autocomplete="new-password"
+    >
+      <h1>Connexion</h1>
 
-    <!-- Colonne droite -->
-    <div class="right-section">
-        <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" autocomplete="new-password">
-            <h1>Connexion</h1>
-                      
-            <label for="email">Email</label>
-            <div class="form-control">
-                <input name="email" ngModel required email id="email" autocomplete="new-password" type="email" />
-            </div>
-           
-            <label for="password">Mot de pass</label>
-            <div class="form-control">
-                <input name="password" ngModel required id="password" autocomplete="new-password" type="password" />
-            </div>
-        
-            <button type="submit" [disabled]="!loginForm.valid">Connecter</button>
-        </form>
+      <label for="email">Email</label>
+      <div class="form-control">
+        <input
+          name="email"
+          ngModel
+          required
+          email
+          id="email"
+          autocomplete="new-password"
+          type="email"
+        />
+      </div>
 
-    </div>
+      <label for="password">Mot de pass</label>
+      <div class="form-control">
+        <input
+          name="password"
+          ngModel
+          required
+          id="password"
+          autocomplete="new-password"
+          type="password"
+        />
+      </div>
+
+      <button type="submit" [disabled]="!loginForm.valid">Connecter</button>
+    </form>
+  </div>
 </div>
