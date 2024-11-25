@@ -1,5 +1,5 @@
 .user-card {
-    width: 250px;
+    width: 25%;
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -30,4 +30,12 @@
 .role {
     font-size: 14px;
     color: #888;
+}
+
+@media screen and (max-width: 768px) {
+    .user-card {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
 }

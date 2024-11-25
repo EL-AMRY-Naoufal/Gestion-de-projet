@@ -23,20 +23,21 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.getRole().equals(Role.CHEF_DE_DEPARTEMENT)) {
+        // Check if the responsable has the required role
+        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can create users");
         }
 
+        // Save the new user
         User newUser = userRepository.save(user);
 
         // Generate a token and send email for setting the password
-        String token = UUID.randomUUID().toString();
+        /*String token = UUID.randomUUID().toString();
         passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
-        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
+        passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);*/
 
         return newUser;
     }
-
 
     @Override
     public User getUserById(Long id) {
@@ -51,33 +52,40 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     @Override
     public User updateUser(Long id, User user, Long responsableId) {
-        // Check if the authenticated user is a Responsable de Département
+        // Check if the responsable has the required role
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.getRole().equals(Role.CHEF_DE_DEPARTEMENT)) {
+        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can update users");
         }
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Update user information
         existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
+//        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
-        existingUser.setRole(user.getRole());
+        existingUser.setRoles(user.getRoles());
 
         return userRepository.save(existingUser);
     }
 
     @Override
     public void deleteUser(Long id, Long responsableId) {
-        // Check if the authenticated user is a Responsable de Département
+        // Check if the responsable has the required role
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.getRole().equals(Role.CHEF_DE_DEPARTEMENT)) {
+        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can delete users");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Responsable not found"));
+        if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+            throw new RuntimeException("On ne peut pas supprimer le responsable de département");
+
         }
 
         userRepository.deleteById(id);

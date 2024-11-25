@@ -5,12 +5,21 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
-public class Enseignant extends User {
+public class Enseignant {
 
-    @Enumerated(EnumType.STRING)
-    private CategorieEnseignant categorie;
+    @Id
+    @Column(name="Id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ElementCollection
+    @CollectionTable(name = "categorie_enseignant_map", joinColumns = @JoinColumn(name = "enseignant_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @Column(name = "heures")
+    private Map<CategorieEnseignant, Integer> categorieEnseignant;
 
     private int maxHeuresService;
 
@@ -20,27 +29,36 @@ public class Enseignant extends User {
     @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Enseignant() {
     }
 
-    public Enseignant(String username, String password, String email, Role role) {
-        super(username, password, email, role);
-    }
-
-    public Enseignant(String username, String password, String email, Role role, CategorieEnseignant categorie, int maxHeuresService, int heuresAssignees, List<Affectation> affectations) {
-        super(username, password, email, role);
-        this.categorie = categorie;
+    public Enseignant(Long id, Map<CategorieEnseignant, Integer> categorieEnseignant, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
+        this.id = id;
+        this.categorieEnseignant = categorieEnseignant;
         this.maxHeuresService = maxHeuresService;
         this.heuresAssignees = heuresAssignees;
         this.affectations = affectations;
+        this.user = user;
     }
 
-    public CategorieEnseignant getCategorie() {
-        return categorie;
+    public Long getId() {
+        return id;
     }
 
-    public void setCategorie(CategorieEnseignant categorie) {
-        this.categorie = categorie;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Map<CategorieEnseignant, Integer> getCategorieEnseignant() {
+        return categorieEnseignant;
+    }
+
+    public void setCategorieEnseignant(Map<CategorieEnseignant, Integer> categorieEnseignant) {
+        this.categorieEnseignant = categorieEnseignant;
     }
 
     public int getMaxHeuresService() {
@@ -66,5 +84,17 @@ public class Enseignant extends User {
 
     public void setAffectations(List<Affectation> affectations) {
         this.affectations = affectations;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 }

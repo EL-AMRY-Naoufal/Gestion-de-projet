@@ -14,31 +14,23 @@ services:
       SERVER_PORT: ${SERVER_PORT}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
-
+    volumes:
+      - ./projet-backend/Projet/Projet:/app
     networks:
       - app-network
   
   frontend:
-    build: ./projet-frontend/Projet  # Chemin vers le Dockerfile du backend
+    build: 
+      context: ./projet-frontend/Projet  # Chemin vers le Dockerfile du frontend
+      target: development
     container_name: frontend
     ports:
-      - "4000:4000"
+      - "4200:4200"
     networks:
       - app-network
-    environment:
-      - NODE_VERSION=22.7.0
-    develop:
-      watch:
-        - action: sync
-          path: ./projet-frontend/Projet
-          target: /usr/src/app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: ./projet-frontend/Projet/package.json
-          ignore:
-            - node_modules/
-        
+    volumes:
+      - ./projet-frontend/Projet:/usr/src/app
+      - /usr/src/app/node_modules
     
   db:
     image: postgres:16.4-bullseye
@@ -61,3 +53,4 @@ networks:
 
 volumes:
   postgres-data:
+  

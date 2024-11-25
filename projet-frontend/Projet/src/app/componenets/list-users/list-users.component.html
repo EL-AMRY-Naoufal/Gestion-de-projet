@@ -1,0 +1,21 @@
+<app-top-navbar></app-top-navbar>
+
+<app-search-bar></app-search-bar>
+
+<section [ngSwitch]="view">
+  <div [ngSwitch]="view">
+    <div *ngSwitchCase="'card'" class="user-grid">
+      <app-user-card
+        [user]="user"
+        (deleteUser)="delete($event)"
+        *ngFor="let user of listUsers">
+      </app-user-card>
+    </div>
+  </div>
+
+  <section class="buttons-fab" *ngIf="dialogStatus === 'inactive'">
+    <button (click)="showDialog()" mat-fab color="accent" class="button-add">
+      <i class="material-icons">add</i>
+    </button>
+  </section>
+</section>

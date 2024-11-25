@@ -7,9 +7,10 @@ import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
+
   templateUrl: "./login.component.html",
   styleUrls: ['./login.component.scss'],
+  standalone: true,
   imports: [FormsModule]
 })
 export class LoginComponent {
@@ -18,7 +19,6 @@ export class LoginComponent {
 
   login(form: any) {
     const formData = form.value;
-    console.log("***************", formData);
 
     this.loginService.login(formData)
       .subscribe(

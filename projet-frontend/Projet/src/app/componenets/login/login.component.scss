@@ -1,61 +1,138 @@
-@mixin focus {
-    &:focus {
-        outline-offset: 2px;
-        outline: 2px solid #07c;
-    }
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
 }
 
-form {
-    max-width: 400px;
-    margin: 80px auto;
-    padding: 16px 16px 24px;
-    box-shadow: 0 2px 32px rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
+.login-container {
+  display: flex;
+  align-items: stretch; /* Étend les enfants pour qu'ils prennent toute la hauteur */
+  justify-content: space-between;
+  width: 70%;
+  /* height: 700px; /* Hauteur fixe pour l'illustration */
+  margin: 0 1rem;
+  box-shadow: 0 2px 32px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f9f9f9;
+}
 
-    h1 {
-        margin-top: 0;
-        color: #555;
-        padding-bottom: 4px;
-        border-bottom: 1px solid #ccc;
-    }
+.login-form h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+  width: 100%; /* Étend le titre à toute la largeur */
+  text-align: center; /* Centre le titre */
+}
+
+
+.login-image {
+  flex: 1; /* L'image occupe la moitié de la largeur */
+  background-color: #eceff1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%; /* L'image occupe toute la hauteur */
+  object-fit: cover; /* Ajuste l'image pour remplir l'espace sans déformation */
+}
+
+.login-form {
+  flex: 1;
+  padding: 40px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centre verticalement le formulaire */
+}
+
+.login-form h1 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
 }
 
 .form-control {
-    margin-bottom: 16px;
+  margin-bottom: 20px;
 
-    input,
-    label {
-        display: block;
+  input,
+  label {
+    display: block;
+  }
+
+  label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
+  }
+
+  input {
+    box-sizing: border-box;
+    padding: 10px;
+    height: 40px;
+    border-radius: 4px;
+    width: 100%;
+    border: 2px solid #ddd;
+    background-color: #fafafa;
+    font-size: 1rem;
+
+    &:focus {
+      outline-offset: 2px;
+      outline: 2px solid #07c;
+      border-color: #07c;
     }
-
-    label {
-        font-size: 0.9rem;
-        font-weight: 500;
-        margin-bottom: 4px;
-    }
-
-    input {
-        box-sizing: border-box;
-        padding: 8px;
-        height: 35px;
-        border-radius: 4px;
-        width: 100%;
-        border: 2px solid #ccc;
-        background-color: white;
-
-        @include focus;
-    }
+  }
 }
 
 button {
-    background-color: #000000;
-    color: #fff;
-    padding: 8px 24px;
-    border-radius: 4px;
-    width: 100%;
-    font-size: 1.2rem;
-    @include focus;
+  background-color: #000000;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 }
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column; /* Empile les éléments */
+    height: auto; /* Ajuste la hauteur pour mobile */
+    width: 100%;
+  }
+
+  .login-image {
+    display: none; /* Cacher l'image pour économiser de l'espace */
+  }
+
+  .login-form {
+    padding: 20px;
+    width: 100%;
+  }
+}
+
 
 .mdp-oublie-label {
     display: block;

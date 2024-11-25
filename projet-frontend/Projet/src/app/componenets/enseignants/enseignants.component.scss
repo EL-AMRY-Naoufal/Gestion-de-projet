@@ -1,52 +1,6 @@
-.main-content {
-    margin-left: 250px;
-    padding: 20px;
-}
 
-.user-cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: start;
-}
 
-.search-bar {
-    display: flex;
-    align-items: center;
-    max-width: 400px;
-    margin: 0 auto 20px auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-}
 
-.search-bar input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    font-size: 16px;
-}
-
-.search-bar input[type="text"]:focus {
-    outline: none;
-}
-
-.search-btn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.search-btn i {
-    font-size: 18px;
-}
-
-.search-btn:hover {
-    background-color: #0056b3;
-}
 /* Style du bouton "Ajouter un enseignant" */
 .add-teacher-btn {
     display: inline-flex;

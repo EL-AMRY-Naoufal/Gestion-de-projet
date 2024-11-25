@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,25 +27,30 @@ public class UserServiceDefaultTest {
     private UserServiceDefault userService;
 
     private User mockUser;
+    private User user;
+
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        mockUser = new User("testUser", "password123", "test@example.com", Role.ENSEIGNANT);
+        mockUser = new User("testUser", passwordEncoder.encode("password123"), "test@example.com", Role.ENSEIGNANT);
 
         when(userRepository.findUserByEmail(mockUser.getEmail())).thenReturn(Optional.ofNullable(mockUser));
+
+        user = new User(1L, "testUser", "password123", "test@example.com", Role.ENSEIGNANT);
     }
 
     @Test
     public void shouldAuthenticateWithSuccess() {
 
         UserRequest userRequest = new UserRequest.Builder()
-                .setUser(mockUser)
+                .setUser(user)
                 .setResponsableId(1L)
                 .build();
 
-        User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(), userRequest.getUser().getPassword());
+        User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(),  userRequest.getUser().getPassword());
 
         assertNotNull(authenticatedUser, "The user should be authenticated successfully");
         assertEquals(mockUser.getEmail(), authenticatedUser.getEmail(), "The authenticated user email should match the input email");
@@ -54,7 +60,7 @@ public class UserServiceDefaultTest {
     @Test
     public void shouldFailAuthenticationWithInvalidPassword() {
         UserRequest userRequest = new UserRequest.Builder()
-                .setUser(mockUser)
+                .setUser(user)
                 .setResponsableId(1L)
                 .build();
 
@@ -71,5 +77,6 @@ public class UserServiceDefaultTest {
 
         assertNull(authenticatedUser, "Authentication should fail for a non-existing user");
     }
+
 
 }
