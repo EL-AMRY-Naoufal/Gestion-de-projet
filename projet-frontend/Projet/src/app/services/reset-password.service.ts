@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { response } from 'express';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,21 @@ export class ResetPasswordService {
     return password == confirmedPassword;
   }
 
+  isPasswordStrong(password: string) : boolean {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+    return passwordPattern.test(password);
+  }
+
   getUserIdByEmail(email: String): Observable<any> {
     return this.http.get(this.apiUrl + "/user/" + email);
+  }
+
+  /**
+   * Custom validator to ensure that the email format is correct
+   * (e.g., name.lastname@gmail.com)
+   */
+  static googleEmail(control: AbstractControl): ValidationErrors | null {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailPattern.test(control.value) ? null : { googleEmail: true };
   }
 }
