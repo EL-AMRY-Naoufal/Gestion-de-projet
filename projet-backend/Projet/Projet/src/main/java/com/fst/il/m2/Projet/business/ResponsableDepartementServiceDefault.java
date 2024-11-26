@@ -9,6 +9,7 @@ import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.ResponsableDepartementRepository;
 import com.fst.il.m2.Projet.repositories.ResponsableFormationRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +50,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         //passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
 
         // Save the user in the specific table based on their role
-        System.out.println("holllllllllllllllllllla==========================================>>>>>>>>>>>>>>>>>>>>");
 
         if (user.getRoles().contains(Role.ENSEIGNANT)) {
-            System.out.println("holllllllllllllllllllla==========================================>>>>>>>>>>>>>>>>>>>>");
             Enseignant enseignant = new Enseignant();
             enseignant.setUser(newUser);
             enseignantRepository.save(enseignant); // Save in Enseignant table
@@ -112,6 +111,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id, Long responsableId) {
         // Check if the responsable has the required role
         User responsable = userRepository.findById(responsableId)
@@ -121,12 +121,24 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             throw new RuntimeException("Only Responsable de Département can delete users");
         }
 
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Responsable not found"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("On ne peut pas supprimer le responsable de département");
+        }
+        System.out.println("dddddddd" + user);
 
+        // Check and remove from specific role-based tables
+        if (user.getRoles().contains(Role.ENSEIGNANT)) {
+            enseignantRepository.deleteByUser(user);
+        } else if (user.getRoles().contains(Role.CHEF_DE_DEPARTEMENT)) {
+            responsableDepartementRepository.deleteByUser(user);
+        } else if (user.getRoles().contains(Role.RESPONSABLE_DE_FORMATION)) {
+            responsableFormationRepository.deleteByUser(user);
         }
 
+        // Delete the user from the User table
         userRepository.deleteById(id);
     }
 }
