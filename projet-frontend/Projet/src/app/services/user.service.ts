@@ -68,7 +68,7 @@ export class UserService {
     */
    fetchOne(id: string): Observable<User> {
      return this._http.get<User>(
-       this._backendURL.oneUser.replace(':id', id)
+       this._backendURL.oneUser.replace(':id', `id/${id}`)
      );
    }
 
