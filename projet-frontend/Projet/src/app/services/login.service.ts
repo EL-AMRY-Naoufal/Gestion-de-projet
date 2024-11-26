@@ -44,7 +44,7 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
-    console.log(response.token);
+    console.log("id " ,response.user.id);
     this.userRoles = response.user.roles;
     this.authToken = response.token;
 

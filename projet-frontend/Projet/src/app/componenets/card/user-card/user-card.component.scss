@@ -1,4 +1,16 @@
 .user-card {
+    margin: 15px;
+    padding: 10px;
+    width: 100%;
+    /* Ajuste la largeur */
+    max-width: 300px;
+    /* Taille maximale de la carte */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+    font-size: 16px;
+    font-weight: bold;
     width: 25%;
     background-color: #f9f9f9;
     border-radius: 10px;
@@ -6,36 +18,28 @@
     padding: 20px;
     text-align: center;
 }
-.user-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    background-color: #f1f1f1;
-}
-.user-info {
-    font-family: Arial, sans-serif;
-}
 
-.username {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.email {
+mat-card-subtitle {
     font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
+    color: gray;
+    text-align: center;
 }
 
-.role {
+mat-card-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+
+  .role {
     font-size: 14px;
     color: #888;
-}
+  }
 
-@media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .user-card {
-        width: 100%;
-        margin-bottom: 20px;
+      width: 100%;
+      margin-bottom: 20px;
     }
-    
+
+  }
 }

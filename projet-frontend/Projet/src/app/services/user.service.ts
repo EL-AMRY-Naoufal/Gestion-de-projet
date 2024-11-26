@@ -68,7 +68,7 @@ export class UserService {
     */
    fetchOne(id: string): Observable<User> {
      return this._http.get<User>(
-       this._backendURL.oneUser.replace(':id', id)
+       this._backendURL.oneUser.replace(':id', `id/${id}`)
      );
    }
 
@@ -92,9 +92,13 @@ export class UserService {
     * Function to update one person
     */
    update(id: string, user: User): Observable<any> {
+    const body = {
+      responsableId: this._responsableId,  // Ajoute le responsableId
+      user: user  // Ajoute l'objet user
+    };
      return this._http.put<User>(
        this._backendURL.oneUser.replace(':id', id),
-       user,
+       body,
        this._options()
      );
    }
@@ -140,9 +144,14 @@ export class UserService {
     return this._http.get<any[]>(this._backendURL.allUsers);
   }
 
-  getUserByName(name: string): Observable<any[]> {
-    return this._http.get<any[]>(`${this._backendURL.allUsers}?name=${name}`);
+  searchUsers(username: string): Observable<any[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;
+        console.log("back response " ,url)
+
+    return this._http.get<any[]>(url);
   }
-
-
+  searchUsersByRole(role: string): Observable<any[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}/${role}`;
+    return this._http.get<any[]>(url);
+  }
 }

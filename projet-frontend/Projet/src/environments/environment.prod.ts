@@ -10,6 +10,7 @@ export const environment = {
       allEnseignants: '/api/enseignants',
       authenticate :'/api/users/authenticate',
       categories: '/api/categories',
+      role : '/api/responsableDepartement/role',
 
     },
   },

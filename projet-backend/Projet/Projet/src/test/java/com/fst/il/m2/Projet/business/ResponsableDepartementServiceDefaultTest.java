@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,6 +82,80 @@ class ResponsableDepartementServiceDefaultTest {
         });
 
         assertEquals("Only Responsable de Département can create users", thrown.getMessage());
+    }
+
+    @Test
+    void testGetUsersByUsername_Success() {
+        // Arrange
+        User mockUser = new User("johndoe", "password123", "johndoe@example.com", Role.ENSEIGNANT);
+        List<User> mockUsers = List.of(mockUser); // Adapting to List<User> instead of Optional<User>
+        when(userRepository.findUserByUsername("johndoe")).thenReturn(mockUsers);
+
+        // Act
+        List<User> result = responsableDepartementService.getUsersByUsername("johndoe");
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("johndoe", result.get(0).getUsername());
+        assertEquals(Role.ENSEIGNANT, result.get(0).getRoles().get(0));
+
+        // Verify
+        verify(userRepository, times(1)).findUserByUsername("johndoe");
+    }
+
+    @Test
+    void testGetUsersByUsername_NotFound() {
+        // Arrange
+        when(userRepository.findUserByUsername("unknown")).thenReturn(List.of()); // Return an empty list
+
+        // Act
+        List<User> result = responsableDepartementService.getUsersByUsername("unknown");
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify
+        verify(userRepository, times(1)).findUserByUsername("unknown");
+    }
+
+    @Test
+    void testGetUsersByRole_Success() {
+        // Arrange
+        User user1 = new User("johndoe", "password123", "johndoe@example.com", Role.ENSEIGNANT);
+        User user2 = new User("janedoe", "password456", "janedoe@example.com", Role.ENSEIGNANT);
+        List<User> mockUsers = List.of(user1, user2);
+
+        when(userRepository.findUserByRoles(Role.ENSEIGNANT)).thenReturn(mockUsers);
+
+        // Act
+        List<User> result = responsableDepartementService.getUsersByRole(Role.ENSEIGNANT);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("johndoe", result.get(0).getUsername());
+        assertEquals("janedoe", result.get(1).getUsername());
+
+        // Verify
+        verify(userRepository, times(1)).findUserByRoles(Role.ENSEIGNANT);
+    }
+
+    @Test
+    void testGetUsersByRole_Empty() {
+        // Arrange
+        when(userRepository.findUserByRoles(Role.CHEF_DE_DEPARTEMENT)).thenReturn(List.of());
+
+        // Act
+        List<User> result = responsableDepartementService.getUsersByRole(Role.CHEF_DE_DEPARTEMENT);
+
+        // Assert
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        // Verify
+        verify(userRepository, times(1)).findUserByRoles(Role.CHEF_DE_DEPARTEMENT);
     }
 
     @Test
