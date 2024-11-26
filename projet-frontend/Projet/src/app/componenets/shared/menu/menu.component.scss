@@ -1,59 +1,9 @@
-/* Le conteneur pour les carrés centré sur la page */
-.menu-container {
-  display: flex;
-  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
-  justify-content: center; /* Centre les éléments horizontalement */
-
-  min-height: 100vh; /* Prend toute la hauteur de la page */
-  gap: 20px; /* Espace entre chaque carré */
-  padding: 20px;
-  margin-top: 20px;
-  box-sizing: border-box;
+mat-toolbar {
+  background-color: #000;
+  color: #ffeb3b;
+  padding: 16px;
 }
 
-/* Style de chaque carré */
-.menu-item {
-  width: 250px; /* Largeur des carrés */
-  height: 250px; /* Hauteur des carrés */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 10px; /* Coins arrondis */
-  cursor: pointer;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-/* Effet de survol */
-.menu-item:hover {
-  transform: scale(1.05); /* Agrandissement au survol */
-}
-
-/* Couleurs des carrés */
-.gray {
-  background-color: #ddd;
-}
-
-.yellow {
-  background-color: #fcd436;
-}
-
-.blue {
-  background-color: #3498db;
-}
-
-.vert{
-  background-color: #3d9e7e;
-
-}
-
-/* Déconnexion avec une couleur rouge */
-.logout {
-  background-color: #e74c3c;
-}
-
-.logout:hover {
-  background-color: #c0392b;
+.spacer {
+  flex: 1 1 auto;
 }
