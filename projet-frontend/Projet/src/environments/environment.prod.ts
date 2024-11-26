@@ -9,6 +9,7 @@ export const environment = {
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
       authenticate :'/api/users/authenticate',
+      categories: '/api/categories',
 
     },
   },

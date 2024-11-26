@@ -39,20 +39,20 @@ export class EnseignantService {
   }
   
   getEnseignantsNotInEnseignantTable(): Observable<User[]> {
-    return this.http.get<User[]>(`${this._backendURL}/enseignants-non-enregistres`);
+    return this.http.get<User[]>(`${this._backendURL.allEnseignants}/enseignants-non-enregistres`);
   }
 
   getEnseignants(): Observable<User[]> {
-    return this.http.get<User[]>(`${this._backendURL}`);
+    return this.http.get<User[]>(`${this._backendURL.allEnseignants}`);
   }
 
   createEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
-    return this.http.post<EnseignantDto>(`${this._backendURL}`, enseignant);
+    return this.http.post<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
   updateEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
-    return this.http.put<EnseignantDto>(`${this._backendURL}`, enseignant);
+    return this.http.put<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
   getEnseignant(id: number): Observable<EnseignantDto> {
-    return this.http.get<EnseignantDto>(`${this._backendURL}/${id}`);
+    return this.http.get<EnseignantDto>(`${this._backendURL.allEnseignants}/${id}`);
   }
 }

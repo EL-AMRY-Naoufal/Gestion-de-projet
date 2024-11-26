@@ -10,21 +10,36 @@ import { EnseignantDto } from '../types/enseignant.type';
 })
 export class UpdateProfesseurService {
 
-  private apiUrl = `${environment.apiUrl}/enseigants`;
+  private readonly _backendURL: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this._backendURL = {};
+    // build backend base url
+    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
+    if (environment.backend.port) {
+      baseUrl += `:${environment.backend.port}`;
+    }
+
+    // build all backend urls
+    // @ts-ignore
+    Object.keys(environment.backend.endpoints).forEach(
+      (k) =>
+        // @ts-ignore
+        (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
+    );
+  }
 
   getEnseignantsNotInEnseignantTable(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/enseignants-non-enregistres`);
+    return this.http.get<User[]>(`${this._backendURL.allEnseignants}/enseignants-non-enregistres`);
   }
 
   createEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
-    return this.http.post<EnseignantDto>(`${this.apiUrl}`, enseignant);
+    return this.http.post<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
   updateEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
-    return this.http.put<EnseignantDto>(`${this.apiUrl}`, enseignant);
+    return this.http.put<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
   getEnseignant(id: number): Observable<EnseignantDto> {
-    return this.http.get<EnseignantDto>(`${this.apiUrl}/${id}`);
+    return this.http.get<EnseignantDto>(`${this._backendURL.allEnseignants}/${id}`);
   }
 }

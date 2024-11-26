@@ -8,11 +8,26 @@ import { environment } from '../../environments/environment';
 })
 export class CategorieEnseignantService {
 
-  private apiUrl = `${environment.apiUrl}/categories`;
+  private readonly _backendURL: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this._backendURL = {};
+    // build backend base url
+    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
+    if (environment.backend.port) {
+      baseUrl += `:${environment.backend.port}`;
+    }
+
+    // build all backend urls
+    // @ts-ignore
+    Object.keys(environment.backend.endpoints).forEach(
+      (k) =>
+        // @ts-ignore
+        (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
+    );
+  }
 
   getCategories(): Observable<string[]> {
-    return this.http.get<string[]>(this.apiUrl);
+    return this.http.get<string[]>(this._backendURL.categories);
   }
 }
