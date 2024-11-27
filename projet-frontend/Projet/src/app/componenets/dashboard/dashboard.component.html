@@ -1,11 +1,25 @@
 <app-menu></app-menu>
 
-  
-    <div class="search-bar">
-        <input type="text" placeholder="Rechercher..." id="searchInput">
-        <button class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
-    </div>
-       
-
+<div class="main-content">
+  <div class="frames-container">
+    <mat-card class="frame gray">
+      <h3>Affectations</h3>
+    </mat-card>
+    <mat-card
+      class="frame yellow"
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="navigateToUsers()"
+    >
+      <h3>Utilisateurs</h3>
+    </mat-card>
+    <mat-card
+      class="frame blue"
+      *ngIf="
+        userRoles.includes('CHEF_DE_DEPARTEMENT') ||
+        userRoles.includes('RESPONSABLE_DE_FORMATION')
+      "
+    >
+      <h3>Formations</h3>
+    </mat-card>
+  </div>
+</div>

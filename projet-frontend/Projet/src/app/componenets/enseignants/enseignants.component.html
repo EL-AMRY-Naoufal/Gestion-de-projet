@@ -1,18 +1,19 @@
 <app-menu></app-menu>
-
 <div class="main-content">
-    <div class="search-and-add-container">
+  <div class="search-and-add-container">
     <div class="search-bar">
-        <input type="text" placeholder="Rechercher un enseignant..." id="searchInput">
-        <button class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
+      <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
     </div>
-    <button class="add-teacher-btn">
-        <i class="fas fa-plus"></i> Ajouter un enseignant
-    </button>
+    <div class="role">
+      <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
+        <option value="" disabled selected>role</option>
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
     </div>
-    <div class="user-cards-container">
-        <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
-    </div>
+    <button class="add-teacher-btn">Ajouter un utilisateur</button>
+  </div>
+
+  <div class="user-cards-container">
+    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
+  </div>
 </div>

@@ -2,12 +2,15 @@ package com.fst.il.m2.Projet.Controllers;
 
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
+import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -23,15 +26,31 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(createdUser);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = responsableDepartementService.getUserById(id);
         return ResponseEntity.ok(user);
     }
-
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = responsableDepartementService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+    @GetMapping("/{username}")
+    public ResponseEntity<List<User>> getAllUserByUsername(@PathVariable String username) {
+        List<User> users = responsableDepartementService.getUsersByUsername(username);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<User>> getAllUserByRole(@PathVariable String role) {
+        Role roleEnum;
+        try {
+            roleEnum = Role.valueOf(role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+        List <User> users = responsableDepartementService.getUsersByRole(roleEnum);
         return ResponseEntity.ok(users);
     }
 

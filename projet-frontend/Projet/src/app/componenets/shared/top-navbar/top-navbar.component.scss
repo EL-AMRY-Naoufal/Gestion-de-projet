@@ -1,0 +1,59 @@
+/* Navbar styling */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Positionne le logo et les liens aux extrémités */
+  align-items: center;
+  padding: 10px 30px; /* Padding pour donner de l'espace à gauche et à droite */
+  background-color: #000000; /* Fond noir */
+  color: #f3c00c; /* Texte jaune */
+  font-family: Arial, sans-serif;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box; /* S'assure que le padding n'affecte pas la largeur totale */
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo .logo {
+  height: 40px;
+  width: auto; /* Ajuste la taille du logo */
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px; /* Espacement entre les liens */
+}
+
+.navbar-link {
+  color: #f3c00c; /* Couleur jaune */
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+  color: #ffcc00; /* Couleur jaune plus clair au survol */
+  text-decoration: underline; /* Souligné au survol */
+}
+
+/* Pour les petits écrans (responsive) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 10px;
+    text-align: center; /* Centre les éléments sur les petits écrans */
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
