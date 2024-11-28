@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
+import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 
 @Component({
   selector: 'app-list-users',
@@ -27,7 +28,7 @@ import { MenuComponent } from '../shared/menu/menu.component';
     CommonModule,
     FormsModule,
     MenuComponent,
-  ],
+],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })

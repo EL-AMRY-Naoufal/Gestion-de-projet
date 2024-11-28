@@ -15,7 +15,6 @@
 
     <!-- Affichage de l'email de l'utilisateur -->
     <mat-card-subtitle class="contact-info">
-      <!-- <mat-icon svgIcon="icon-mail"></mat-icon>-->
       <a
         href="mailto:{{ user.username }}&lt;{{ user.email }}&gt;"
         title="Send an email to {{ user.username }}"
@@ -27,23 +26,22 @@
   </mat-card-title-group>
 
   <mat-card-content>
-    <div>
-      <!-- Lien pour modifier l'utilisateur -->
-      <a mat-button title="Edit" [routerLink]="['/edit', user.id]">
-        <!-- <mat-icon svgIcon="icon-edit"></mat-icon>-->
-        Edit
-      </a>
-
-      <!-- Bouton pour supprimer l'utilisateur -->
-      <button
-        mat-button
-        title="Delete"
-        *ngIf="!user.roles?.includes('CHEF_DE_DEPARTEMENT')"
-        (click)="delete(user)"
-      >
-        <!-- <mat-icon svgIcon="icon-delete"></mat-icon>-->
-        Delete
-      </button>
-    </div>
+    <!-- Contenu principal de la carte, qui occupe tout l'espace disponible -->
   </mat-card-content>
+
+  <mat-card-actions>
+    <!-- Lien pour modifier l'utilisateur -->
+    <a mat-button [routerLink]="['/edit', user.id]">
+      Modifier
+    </a>
+
+    <!-- Bouton pour supprimer l'utilisateur -->
+    <button
+      mat-button
+      *ngIf="!user.roles?.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="delete(user)"
+    >
+      Supprimer
+    </button>
+  </mat-card-actions>
 </mat-card>
