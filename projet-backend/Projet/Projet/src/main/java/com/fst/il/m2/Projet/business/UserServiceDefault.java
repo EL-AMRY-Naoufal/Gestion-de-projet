@@ -65,4 +65,17 @@ public class UserServiceDefault implements UserService {
         }
         return null;
     }
+
+    @Override
+    public void modifyPassword(Long id,String password) {
+        var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + "not found"));
+        user.setPassword(password);
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findUserByEmail(email);
+        return optionalUser.orElse(null);
+    }
 }

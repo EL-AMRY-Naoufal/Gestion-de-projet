@@ -20,12 +20,14 @@ export class LoginComponent {
   login(form: any) {
     const formData = form.value;
 
-
     this.loginService.login(formData)
       .subscribe(
         response => { this.loginService.handleLoginSuccess(response)},
         error => { this.loginService.handleLoginError(error)}
       );
+  }
 
+  goToResetPasswordPage(): void {
+    this.loginService.goToResetPasswordPage();
   }
 }

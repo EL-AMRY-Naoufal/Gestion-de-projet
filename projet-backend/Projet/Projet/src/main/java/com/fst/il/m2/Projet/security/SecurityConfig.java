@@ -29,6 +29,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/authenticate").permitAll()
+                        .requestMatchers("/api/users/{id}/password").permitAll() //TODO temporarily
+                        .requestMatchers("/api/users/user/**").permitAll() //TODO temporarily
                         .requestMatchers("/api/enseignants/**").hasAuthority("ENSEIGNANT")
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .anyRequest().authenticated()
