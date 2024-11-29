@@ -16,7 +16,7 @@
   </div>
 
   <!-- Conteneur des utilisateurs -->
-  <section [ngSwitch]="view">
+  <section [ngSwitch]="view" class="card-content">
     <div *ngSwitchCase="'card'" class="user-grid">
       <app-user-card
         [user]="user"
