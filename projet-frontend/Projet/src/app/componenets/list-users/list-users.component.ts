@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
+import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 
 @Component({
   selector: 'app-list-users',
@@ -29,7 +30,7 @@ import { EnseignantService } from '../../services/enseignant.service';
     CommonModule,
     FormsModule,
     MenuComponent,
-  ],
+],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })
