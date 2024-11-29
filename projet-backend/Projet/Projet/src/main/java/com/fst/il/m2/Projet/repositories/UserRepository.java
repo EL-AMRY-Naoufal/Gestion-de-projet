@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r = :role")
     List<User> findUserByRoles(Role role);
+
+    List<User> findUsersByRolesNotLike(Role role);
 }
