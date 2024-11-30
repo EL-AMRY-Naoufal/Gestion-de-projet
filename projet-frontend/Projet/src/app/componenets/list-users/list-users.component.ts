@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
+import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
+import { EnseignantService } from '../../services/enseignant.service';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 
 @Component({
@@ -44,6 +46,13 @@ export class ListUsersComponent {
 
   searchQuery: string = '';
   selectedRole: string = '';
+  _user!: User;
+  enseignantDto: EnseignantDto = {
+    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    nbHeureCategorie: 0,
+    maxHeuresService: 0,
+    heuresAssignees: 0
+  }
   roles: string[] = [
     'CHEF_DE_DEPARTEMENT',
     'RESPONSABLE_DE_FORMATION',
@@ -57,7 +66,8 @@ export class ListUsersComponent {
   constructor(
     private _router: Router,
     private _usersService: UserService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _enseignantService: EnseignantService
   ) {
     this._listUsers = [];
     this._dialogStatus = 'inactive';
@@ -139,13 +149,23 @@ export class ListUsersComponent {
         map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
           delete user?.id;
+          this.enseignantDto.categorieEnseignant = user?.categorieEnseignant as CategorieEnseignant;
+          this.enseignantDto.nbHeureCategorie = user?.nbHeureCategorie as number;
+          this.enseignantDto.maxHeuresService = user?.maxHeuresService as number;
+          delete user?.categorieEnseignant;
+          delete user?.maxHeuresService;
+          delete user?.nbHeureCategorie;
+
 
           return user;
         }),
         mergeMap((user: User | undefined) => this._add(user))
       )
       .subscribe({
-        next: (user: User) => (this._listUsers = this._listUsers.concat(user)),
+        next: (user: User) => { 
+          (this._listUsers = this._listUsers.concat(user)); 
+          if (user.roles.includes('ENSEIGNANT')) { 
+            this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),
       });
@@ -170,6 +190,13 @@ export class ListUsersComponent {
    */
   private _add(user: User | undefined): Observable<User> {
     return this._usersService.create(user as User);
+  }
+
+  private _addTeacher(enseignantDto: EnseignantDto) {
+    console.log("enseignant ", enseignantDto)
+    this._enseignantService.createEnseignant(enseignantDto).subscribe(
+
+    );
   }
 
   searchTeachers(): void {
