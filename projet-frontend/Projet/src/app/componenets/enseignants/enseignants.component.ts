@@ -3,50 +3,57 @@ import { CommonModule } from '@angular/common';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { UserService } from '../../services/user.service';
 import { UserCardComponent } from '../card/user-card/user-card.component';
-import { User } from '../shared/types/user.type';
-import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
-import { EnseignantService } from '../../services/enseignant.service';
-import { MatDialog } from '@angular/material/dialog';
-import { UpdateProfesseurComponent } from '../update-professeur/update-professeur.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-enseignants',
   standalone: true,
-  providers: [EnseignantService],
-  imports: [CommonModule, MenuComponent, UserCardComponent, SearchBarComponent, MenuComponent],
+  imports: [CommonModule, MenuComponent, UserCardComponent, FormsModule],
   templateUrl: './enseignants.component.html',
-  styleUrls: ['./enseignants.component.scss']
+  styleUrl: './enseignants.component.scss',
 })
+export class EnseignantsComponent implements OnInit {
+  users: any[] = [];
+  searchQuery: string = '';
 
-  
+  roles: string[] = [
+    'CHEF_DE_DEPARTEMENT',
+    'RESPONSABLE_DE_FORMATION',
+    'SECRETARIAT_PEDAGOGIQUE',
+    'ENSEIGNANT',
+  ];
+  selectedRole: string = '';
 
-  
-export class EnseignantsComponent  implements OnInit{
- users: any[] = [];
-  constructor(private userService: UserService,  
-    private _usersService: UserService, 
-    private enseignantService: EnseignantService,
-    private dialog: MatDialog) {this.openDialog = this.openDialog.bind(this); }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.enseignantService.getEnseignants().subscribe(data => {
-      this.users = data;
-    });  }
+    this.getUsers();
+  }
 
-    openDialog(enseignant?: any) {
-      const dialogRef = this.dialog.open(UpdateProfesseurComponent, {
-        data: enseignant,
-        width: '500px',
-        autoFocus: true
+  getUsers(): void {
+    this.userService.getUsers().subscribe((data) => {
+      this.users = data;
+    });
+  }
+  searchTeachers(): void {
+    if (this.searchQuery.trim()) {
+      this.userService.searchUsers(this.searchQuery).subscribe((data) => {
+        this.users = data ? [data] : [];
       });
-  
-      dialogRef.afterClosed().subscribe(result => {
-        this.enseignantService.getEnseignants().subscribe(data => {
+    } else {
+      this.getUsers();
+    }
+  }
+
+  filterByRole() {
+    if (this.selectedRole) {
+      this.userService
+        .searchUsersByRole(this.selectedRole)
+        .subscribe((data) => {
           this.users = data;
         });
-        if (result) {
-          console.log('Données reçues du modal:', result);
-        }
-      });
+    } else {
+      this.getUsers();
     }
+  }
 }
