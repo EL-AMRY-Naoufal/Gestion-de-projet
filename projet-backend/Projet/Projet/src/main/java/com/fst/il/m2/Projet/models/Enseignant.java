@@ -3,35 +3,17 @@ package com.fst.il.m2.Projet.models;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class Enseignant {
 
     @Id
     @Column(name="Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    /* pour utiliser l'id d'user comme l'id d'enseignant 
-    @Id
-    private Long id;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
-    private User user;
-    */
 
     @ElementCollection
     @CollectionTable(name = "categorie_enseignant_map", joinColumns = @JoinColumn(name = "enseignant_id"))
@@ -47,14 +29,22 @@ public class Enseignant {
     @OneToMany(mappedBy = "enseignant")
     private List<Affectation> affectations;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
-    public int getNbHeureCategorie(CategorieEnseignant categorie) {
-        return this.categorieEnseignant.getOrDefault(categorie, 0);
+    public Enseignant() {
     }
+
+    public Enseignant(Long id, Map<CategorieEnseignant, Integer> categorieEnseignant, int maxHeuresService, int heuresAssignees, List<Affectation> affectations, User user) {
+        this.id = id;
+        this.categorieEnseignant = categorieEnseignant;
+        this.maxHeuresService = maxHeuresService;
+        this.heuresAssignees = heuresAssignees;
+        this.affectations = affectations;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

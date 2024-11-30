@@ -15,7 +15,6 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -64,11 +63,5 @@ public class UserController {
         else {
             return user.getId();
         }
-
-    }
-    
-    @GetMapping()
-    public List<User> getAllUsersNotTeachers() {
-        return this.userService.getAllUsersNotTeachers();
     }
 }
