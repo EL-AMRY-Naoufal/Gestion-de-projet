@@ -1,13 +1,19 @@
 <app-menu></app-menu>
-<app-search-bar></app-search-bar>
-
-
-<button class="add-teacher-btn" (click)="openDialog()">
-    Ajouter un enseignant
-</button>
-
-    <div class="user-cards-container">
-        <app-user-card *ngFor="let user of users" [user]="user" [openDialog]="openDialog">
-        </app-user-card>
-
+<div class="main-content">
+  <div class="search-and-add-container">
+    <div class="search-bar">
+      <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
     </div>
+    <div class="role">
+      <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
+        <option value="" disabled selected>role</option>
+        <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+    <button class="add-teacher-btn">Ajouter un utilisateur</button>
+  </div>
+
+  <div class="user-cards-container">
+    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
+  </div>
+</div>

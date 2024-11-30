@@ -1,40 +1,44 @@
-
-
-
-/* Style du bouton "Ajouter un enseignant" */
-.add-teacher-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 15px;
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.add-teacher-btn i {
-    margin-right: 10px;
-    font-size: 20px;
+.user-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 
-.add-teacher-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #003e7e);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
+.user-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #ddd;
 }
 
-.add-teacher-btn:active {
-    transform: translateY(0);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+.user-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
 }
 
+.actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+.user-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  /* Augmente l'espace entre les cartes */
+  margin-top: 30px;
+  /* Ajoute un espace entre la barre de recherche et les cartes */
+}
 
 .search-and-add-container {
   display: flex;

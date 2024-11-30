@@ -3,22 +3,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../types/user.type';
 import { UserCustomValidators } from './user-custom-validators';
 import { MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, NgIf } from '@angular/common';
-import { CategorieEnseignant, EnseignantDto } from '../../../types/enseignant.type';
-import { EnseignantService } from '../../../services/enseignant.service';
-import { CategorieEnseignantService } from '../../../services/categorie-enseignant.service';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, ReactiveFormsModule, MatDialogActions, MatDialogModule, NgIf, CommonModule, FormsModule, MatIconModule,
-  ],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, ReactiveFormsModule, MatDialogActions, MatDialogModule, NgIf],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss'
 })
@@ -37,13 +32,9 @@ export class UserFormComponent {
   /**
    * Component constructor
    */
-  constructor(@Inject(MAT_DIALOG_DATA) public data: User,
-    @Inject(MAT_DIALOG_DATA) public dataTeacher: any,
-    private enseignantService: EnseignantService,
-    private categorieService: CategorieEnseignantService
-  ) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: User) {
     this._model = {} as User;
-    this._isUpdateMode = !!data;
+    this._isUpdateMode = !!data; 
     this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
@@ -97,31 +88,7 @@ export class UserFormComponent {
   /**
    * OnInit implementation
    */
-  ngOnInit(): void {
-    this.categorieService.getCategories().subscribe(data => {
-      this.categories = data;
-    });
-    if (this._isUpdateMode && this._model.roles.includes('ENSEIGNANT')) {
-      this.fetchEnseignantDetails(this._model.id!);
-    }
-  }
-
-  private fetchEnseignantDetails(userId: number): void {
-    this.enseignantService.getEnseignant(userId).subscribe({
-      next: (enseignant) => {
-        this.enseignant = enseignant;
-        this._form.patchValue({
-          roles: this._model.roles,
-          categorieEnseignant: enseignant.categorieEnseignant,
-          nbHeureCategorie: enseignant.nbHeureCategorie,
-        });
-      },
-      error: (err) => {
-        console.error('Failed to fetch enseignant details:', err);
-      },
-    });
-  }
-  
+  ngOnInit(): void {}
 
   /**
    * Function to handle component update
@@ -140,15 +107,7 @@ export class UserFormComponent {
       };
       this._isUpdateMode = false;
     }
-    if (this._isUpdateMode && this._model.roles.includes('ENSEIGNANT')) {
-      this.fetchEnseignantDetails(this._model.id!);
-      this._form.patchValue({
-        categorieEnseignant: this.enseignant.categorieEnseignant,
-        nbHeureCategorie: this.enseignant.nbHeureCategorie,
-      });
-    }
     
-
     // update form's values with model
     this._form.patchValue(this._model);
   }
@@ -165,21 +124,45 @@ export class UserFormComponent {
    */
   submit(user: User): void {
     this._submit$.emit(user);
-    if (this._isUpdateMode && this.model.roles.includes('ENSEIGNANT')) {
-      this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
-      this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
-      this.enseignant.maxHeuresService = user.maxHeuresService as number;
-      this.enseignantService.updateEnseignant(this.enseignant).subscribe(
+  }
 
-      );
-    }
+  /**
+   * Function handle isManager checkbox value change
+   */
+  isManagerChecked(checked: boolean): void {
+    this._form.patchValue({ isManager: checked });
   }
 
   /**
    * Function to build our form
    */
   private _buildForm(): FormGroup {
-    const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
+    if(this._isUpdateMode){
+      return new FormGroup({
+        id: new FormControl(),
+        username: new FormControl(
+          '',
+          Validators.compose([Validators.required, Validators.minLength(2)])
+        ),
+        email: new FormControl(
+          '',
+          Validators.compose([Validators.required, UserCustomValidators.googleEmail])
+        ),
+        roles: new FormControl(
+          '',
+          Validators.required
+        ),
+        password: new FormControl(
+          '',
+        ),
+        confirmPassword: new FormControl(
+          '',
+        ),
+      },
+      );
+    }
+    else{
+    return new FormGroup({
       id: new FormControl(),
       username: new FormControl(
         '',
@@ -189,94 +172,31 @@ export class UserFormComponent {
         '',
         Validators.compose([Validators.required, UserCustomValidators.googleEmail])
       ),
-      roles: new FormControl('', Validators.required),
+      roles: new FormControl(
+        '',
+        Validators.required
+      ),
       password: new FormControl(
         '',
-        this._isUpdateMode
-          ? null
-          : Validators.compose([
-              Validators.required,
-              Validators.minLength(6),
-              UserCustomValidators.strongPassword,
-            ])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(6),
+          UserCustomValidators.strongPassword,
+        ])
       ),
       confirmPassword: new FormControl(
         '',
-        this._isUpdateMode
-          ? null
-          : Validators.compose([Validators.required, Validators.minLength(6)])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(6),
+        ])
       ),
-    });
-  
-    if (!this._isUpdateMode) {
-      _formGroup.setValidators(UserCustomValidators.matchPasswords);
-    }
-  
-    const addControl = (
-      name: string,
-      value: any,
-      baseValidators: any[] = [],
-      ...extraValidators: any[]
-    ) => {
-      const allValidators = [...baseValidators, ...extraValidators]; // Combine les validateurs
-      const control = new FormControl(value, Validators.compose(allValidators));
-      _formGroup.addControl(name, control);
-    };
-    
-  
-    const isEnseignant = this.model?.roles?.includes('ENSEIGNANT');
-    addControl(
-      'maxHeuresService',
-      this.enseignant?.maxHeuresService || this.defaultHeures,
-      isEnseignant ? [Validators.required] : [],
-      Validators.min(0),
-    );
-    addControl(
-      'categorieEnseignant',
-      this.enseignant?.categorieEnseignant || '',
-      isEnseignant ? [Validators.required] : []
-    );
-    addControl(
-      'nbHeureCategorie',
-      this.enseignant?.nbHeureCategorie || 0,
-      isEnseignant ? [Validators.required] : [],
-      Validators.min(0),
-    );
-  
-    return _formGroup;
-  }
-  
-  
-  /**
-   * Adds a new control or replaces an existing one in the FormGroup.
-   * 
-   * @param formGroup The FormGroup to modify.
-   * @param controlName The name of the control to add or replace.
-   * @param control The new FormControl instance to set.
-   */
-  private _setOrReplaceControl(
-    formGroup: FormGroup,
-    controlName: string,
-    control: FormControl
-  ): void {
-    if (formGroup.contains(controlName)) {
-      formGroup.setControl(controlName, control); // Replace existing control
-    } else {
-      formGroup.addControl(controlName, control); // Add new control
-    }
-  }
-  
-  
+    },
 
-  defaultHeures = 192;
-  categories: string[] = [];
-  enseignant: EnseignantDto = {
-    maxHeuresService: 192,
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
-    heuresAssignees: 0,
-    nbHeureCategorie: 0
-  };
+    UserCustomValidators.matchPasswords,
 
-  categoriesEnseignant = Object.values(CategorieEnseignant);
+    );
+  } 
+  }
 
 }
