@@ -23,6 +23,4 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     List<User> findUsersByRolesNotLike(Role role);
 
-    @Query("SELECT u FROM User u WHERE u.email = %:email%")
-
 }
