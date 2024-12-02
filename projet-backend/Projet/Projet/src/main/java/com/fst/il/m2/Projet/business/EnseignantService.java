@@ -23,24 +23,29 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class EnseignantService {
 
     private final EnseignantRepository enseignantRepository;
     private final AffectationRepository affectationRepository;
     private final UserRepository userRepository;
     private final UserSpecification userSpecifications;
-    private final EnseignantSpecification enseignantSpecifications
+    private final EnseignantSpecification enseignantSpecifications;
 
     @Autowired
-    public EnseignantService(EnseignantRepository enseignantRepository, AffectationRepository affectationRepository, UserRepository userRepository) {
+    public EnseignantService(EnseignantRepository enseignantRepository,
+                             AffectationRepository affectationRepository,
+                             UserRepository userRepository,
+                             UserSpecification userSpecifications,
+                             EnseignantSpecification enseignantSpecifications) {
         this.enseignantRepository = enseignantRepository;
         this.affectationRepository = affectationRepository;
         this.userRepository = userRepository;
+        this.userSpecifications = userSpecifications;
+        this.enseignantSpecifications = enseignantSpecifications;
     }
 
-    public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
+    public List<Affectation> getAffectationsByEnseignantById(Long userId) {
         // Get the enseignant id from the user id
         Long enseignantId = enseignantRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"))

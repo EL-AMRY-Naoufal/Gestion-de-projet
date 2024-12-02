@@ -48,8 +48,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         String token = UUID.randomUUID().toString();
         //passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
         //passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
-
-        // Save the user in the specific table based on their role
+  ;
 
         if (user.getRoles().contains(Role.ENSEIGNANT)) {
             Enseignant enseignant = new Enseignant();
@@ -127,7 +126,6 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("On ne peut pas supprimer le responsable de département");
         }
-        System.out.println("dddddddd" + user);
 
         // Check and remove from specific role-based tables
         if (user.getRoles().contains(Role.ENSEIGNANT)) {
