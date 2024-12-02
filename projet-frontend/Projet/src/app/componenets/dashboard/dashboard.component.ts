@@ -17,7 +17,6 @@ import { MenuComponent } from '../shared/menu/menu.component';
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    DashboardComponent,
     CommonModule,
     MenuComponent,
     MatSidenavModule,
@@ -57,5 +56,10 @@ export class DashboardComponent {
   logout() {
     this.loginService.logout();
     this.router.navigate(['']);
+  }
+
+
+  navigateToTeachers() {
+    this.router.navigate(['/enseignants']);
   }
 }

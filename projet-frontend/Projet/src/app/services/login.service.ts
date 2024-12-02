@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,6 +41,7 @@ export class LoginService {
   }
 
   handleLoginSuccess(response: any) {
+    console.log("id " ,response.user.id);
     this.userRoles = response.user.roles;
     this.authToken = response.token;
 
@@ -58,6 +60,10 @@ export class LoginService {
   handleLoginError(error: any) {
     console.error('Login failed:', error);
     alert('Login failed: Invalid email or password');
+  }
+
+  goToResetPasswordPage(): void {
+    this.router.navigate(['/reset-password']);
   }
 
   /*

@@ -1,39 +1,41 @@
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+/* Global */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 .main-content {
-  margin-left: 250px;
   padding: 20px;
-  font-family: Arial, sans-serif;
-}
-.search-icon {
-  size: 10px;
-  background-color: #ffeb3b;
-}
-.search-and-add-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  /* Augmente l'espace sous la barre de recherche */
-}
-.search-and-add-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-i.fas.fa-search.search-icon {
-  width: 40px;
+  margin-top: 150px;
 }
 
-.search-bar {
-  flex: 2;
+/* Conteneur de recherche et rôle */
+.search-and-role-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Espacement entre recherche et rôle */
+  margin: 0 auto; /* Centre le conteneur horizontalement */
+  padding: 10px;
+  width: 80%; /* Adapte la largeur à 80% de l'écran */
+  max-width: 1200px; /* Limite la largeur maximale à 1200px */
+  background-color: #f9f9f9; /* Fond clair */
+  border-radius: 8px; /* Coins arrondis */
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+
+/* Barre de recherche */
+.search-bar {
+  display: flex;
+  align-items: center;
   border: 1px solid #ddd;
   border-radius: 5px;
   overflow: hidden;
-  background-color: #f9f9f9;
+  background-color: #fff; /* Fond blanc */
+  flex: 2; /* Plus large que le sélecteur */
 }
 
 .search-bar input[type="text"] {
@@ -47,92 +49,98 @@ i.fas.fa-search.search-icon {
   outline: none;
 }
 
+.search-bar .search-icon {
+  font-size: 16px;
+  color: #555;
+  background-color: #f5f5f5;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Sélecteur de rôle */
 .role {
   flex: 1;
 }
 
 .role select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
-}
-
-.add-teacher-btn {
-  flex: 1;
-  background-color: #ffeb3b;
-  color: black;
-  border: none;
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 5px;
+  background-color: #fff;
   cursor: pointer;
-  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.add-teacher-btn:hover {
-  background-color: #feeb44;
+.role select:hover {
+  background-color: #eef7ff;
 }
 
+.role select:focus {
+  outline: none;
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
+/* Grille d'utilisateurs */
 .user-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Crée 3 colonnes */
-  gap: 16px; /* Espace entre les éléments */
+  grid-template-columns: repeat(auto-fill, 20rem); /* Colonnes dynamiques */
+  gap: 2em; /* Premier paramètre : vertical (row-gap), second : horizontal (column-gap) */
   padding: 16px;
-  width: 100%; /* Occupe toute la largeur disponible */
-  max-width: 1200px; /* Limite la largeur maximale */
+  justify-content: center; /* Centre les cartes dans la grille */
+  margin-top: 1rem;
+
 }
 
-mat-list-item {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  color: rgba(0, 0, 0, 0.87);
-  background-color: white;
-  font-size: 14px;
-  margin: 3px 0 3px -12px;
-  padding: 0;
-  height: 70px;
-  width: 100%; /* Prend la largeur de son parent */
-  transition: box-shadow 0.2s;
-  cursor: pointer;
-}
 
-mat-list-item:hover {
-  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
-    0 9px 46px 8px rgba(0, 0, 0, 0.12);
-}
-
+/* Bouton flottant */
 .buttons-fab {
-  display: block;
-  height: 170px;
-  width: 90px;
   position: fixed;
-  bottom: 0;
-  right: 0;
+  bottom: 20px;
+  right: 20px;
 }
 
 .buttons-fab button {
-  transition: bottom 0.2s;
-}
-
-.buttons-fab:hover .button-add {
-  bottom: 15px;
-}
-
-.user-card-container {
+  background-color: #1e7c34;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
   display: flex;
-  /* Permet d'afficher les éléments côte à côte */
-  flex-wrap: wrap;
-  /* Les éléments passent à la ligne suivante si nécessaire */
-  gap: 20px;
-  /* Ajoute un espacement entre les cartes */
-  justify-content: space-between;
-  /* Espace entre les cartes, ajustable selon besoin */
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-app-user-card {
-  flex: 0 1 calc(25% - 20px);
-  /* Largeur des cartes : 25% de la ligne moins l'espace */
-  box-sizing: border-box;
-  /* Inclut le padding et la bordure dans la largeur */
+.buttons-fab button:hover {
+  background-color: #0f3f19;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-and-role-container {
+    flex-direction: column;
+    gap: 10px;
+    width: 90%; /* Réduit la largeur pour petits écrans */
+  }
+
+  .user-grid {
+    grid-template-columns: repeat(auto-fill, 20rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .user-grid {
+    grid-template-columns: 1fr;
+  }
+
+  app-user-card {
+    padding: 10px;
+  }
 }

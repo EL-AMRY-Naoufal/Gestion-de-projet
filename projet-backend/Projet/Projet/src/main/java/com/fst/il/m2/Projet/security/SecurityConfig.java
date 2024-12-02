@@ -28,9 +28,17 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Ensure CORS is configured
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/authenticate").permitAll()
+                        .requestMatchers("/api/users/{id}/password").permitAll() //TODO temporarily
+                        .requestMatchers("/api/users/user/**").permitAll() //TODO temporarily
                         .requestMatchers("/api/enseignants/**").hasAuthority("ENSEIGNANT")
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/users/authenticate").permitAll() // Open login endpoint
+                        .requestMatchers("/api/enseignants/enseignants-non-enregistres").permitAll()
+                        .requestMatchers("/api/enseignants/**").permitAll()
+                        .requestMatchers("/api/enseignants").permitAll()
+                        .requestMatchers("/api/categories").permitAll()
+                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT") // Require role
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -7,12 +7,15 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.security.JWTUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -45,5 +48,27 @@ public class UserController {
 
         AuthResponse response = new AuthResponse("Authentication succeeded", token, authenticatedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/password")
+    public void modifyPassword(@PathVariable Long id, @Valid @RequestBody String password) {
+        this.userService.modifyPassword(id, password);
+    }
+
+    @GetMapping("/user/{email}")
+    public Long getUserIdByEmail(@PathVariable String email) {
+        User user = this.userService.getUserByEmail(email);
+        if(user == null) {
+            return null;
+        }
+        else {
+            return user.getId();
+        }
+
+    }
+    
+    @GetMapping()
+    public List<User> getAllUsersNotTeachers() {
+        return this.userService.getAllUsersNotTeachers();
     }
 }
