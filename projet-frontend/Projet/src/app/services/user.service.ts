@@ -4,6 +4,7 @@ import { User } from '../componenets/shared/types/user.type';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import { defaultIfEmpty, filter, map, Observable } from 'rxjs';
+import {AffectationType} from "../componenets/shared/types/affectation.type";
 
 @Injectable({
   providedIn: 'root'
@@ -142,6 +143,13 @@ export class UserService {
 
   getUsers(): Observable<any[]> {
     return this._http.get<any[]>(this._backendURL.allUsers);
+  }
+
+  //chemin pour creer une affectation avec un enseignant
+  createAffectation( idModule:string, EnseignantId:string,nombreHeure:string): Observable<AffectationType> {
+
+    //api/responsableDepartement/affectation/{idEnseignant}/{idModule}/{heure}
+    return this._http.post<AffectationType>(`${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,null);
   }
 
   searchUsers(username: string): Observable<any[]> {

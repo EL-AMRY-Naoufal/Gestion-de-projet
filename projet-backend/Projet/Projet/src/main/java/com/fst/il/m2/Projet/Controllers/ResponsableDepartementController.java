@@ -65,4 +65,13 @@ public class ResponsableDepartementController {
         responsableDepartementService.deleteUser(id, userRequest.getResponsableId());
         return ResponseEntity.noContent().build();
     }
+
+
+    //route pour affecter un enseignant à un module en precisant lheure enseignée
+    @PostMapping("/affectation/{idEnseignant}/{idModule}/{heure}")
+    public ResponseEntity<String> affecterEnseignant(@PathVariable Long idEnseignant, @PathVariable Long idModule, @PathVariable int heure) {
+        responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idModule, heure);
+        return ResponseEntity.ok("Enseignant affecté avec succès");
+    }
+
 }

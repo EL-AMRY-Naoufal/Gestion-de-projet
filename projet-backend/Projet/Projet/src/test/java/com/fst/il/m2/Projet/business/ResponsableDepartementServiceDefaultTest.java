@@ -1,7 +1,13 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Enseignant;
+import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.repositories.AffectationRepository;
+import com.fst.il.m2.Projet.repositories.EnseignantRepository;
+import com.fst.il.m2.Projet.repositories.ModuleRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +26,14 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class ResponsableDepartementServiceDefaultTest {
 
+    @Mock
+    private EnseignantRepository enseignantRepository;  // Mocked EnseignantRepository
+
+    @Mock
+    private ModuleRepository moduleRepository;  // Mocked ModuleRepository
+
+    @Mock
+    private AffectationRepository affectationRepository;  // Mocked AffectationRepository
 
     @Mock
     private UserRepository userRepository;  // Mocked UserRepository
@@ -270,6 +285,91 @@ class ResponsableDepartementServiceDefaultTest {
 
         // Verify that deleteById is not called
         verify(userRepository, never()).deleteById(mockResponsable.getId());
+    }
+
+
+    @Test
+    void createAffectation_Success() {
+        // Mock input data
+        Long enseignantId = 1L;
+        Long moduleId = 2L;
+        int heuresAssignees = 10;
+
+        Enseignant enseignant = new Enseignant();
+        enseignant.setId(enseignantId);
+        enseignant.setMaxHeuresService(40);
+        enseignant.setHeuresAssignees(20);
+
+        com.fst.il.m2.Projet.models.Module module = new Module();
+        module.setId(moduleId);
+
+        Affectation affectation = new Affectation();
+        affectation.setId(1L);
+        affectation.setEnseignant(enseignant);
+        affectation.setModule(module);
+        affectation.setHeuresAssignees(heuresAssignees);
+        affectation.setDateAffectation(LocalDate.now());
+
+        // Mock repository behavior
+        when(enseignantRepository.findById(enseignantId)).thenReturn(Optional.of(enseignant));
+        when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
+        when(affectationRepository.save(any(Affectation.class))).thenReturn(affectation);
+
+        // Call the method
+        Affectation result = responsableDepartementService.affecterModuleToEnseignant(enseignantId, moduleId, heuresAssignees);
+
+        // Assertions
+        assertNotNull(result);
+        assertEquals(affectation.getId(), result.getId());
+        assertEquals(enseignant, result.getEnseignant());
+        assertEquals(module, result.getModule());
+        assertEquals(heuresAssignees, result.getHeuresAssignees());
+        assertEquals(LocalDate.now(), result.getDateAffectation());
+
+        // Verify interactions
+        verify(enseignantRepository, times(1)).findById(enseignantId);
+        verify(moduleRepository, times(1)).findById(moduleId);
+        verify(affectationRepository, times(1)).save(any(Affectation.class));
+        verify(enseignantRepository, times(1)).save(enseignant);
+    }
+
+    @Test
+    void createAffectation_ThrowsExceptionWhenEnseignantNotFound() {
+        Long enseignantId = 1L;
+        Long moduleId = 2L;
+        int heuresAssignees = 10;
+
+        when(enseignantRepository.findById(enseignantId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                responsableDepartementService.affecterModuleToEnseignant(enseignantId, moduleId, heuresAssignees)
+        );
+
+        assertEquals("Enseignant not found with id: " + enseignantId, exception.getMessage());
+        verify(enseignantRepository, times(1)).findById(enseignantId);
+        verifyNoInteractions(moduleRepository, affectationRepository);
+    }
+
+    @Test
+    void createAffectation_ThrowsExceptionWhenModuleNotFound() {
+        Long enseignantId = 1L;
+        Long moduleId = 2L;
+        int heuresAssignees = 10;
+
+        Enseignant enseignant = new Enseignant();
+        enseignant.setId(enseignantId);
+
+        when(enseignantRepository.findById(enseignantId)).thenReturn(Optional.of(enseignant));
+        when(moduleRepository.findById(moduleId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                responsableDepartementService.affecterModuleToEnseignant(enseignantId, moduleId, heuresAssignees)
+        );
+
+        assertEquals("Module not found with id: " + moduleId, exception.getMessage());
+        verify(enseignantRepository, times(1)).findById(enseignantId);
+        verify(moduleRepository, times(1)).findById(moduleId);
+        verifyNoInteractions(affectationRepository);
     }
 
 }

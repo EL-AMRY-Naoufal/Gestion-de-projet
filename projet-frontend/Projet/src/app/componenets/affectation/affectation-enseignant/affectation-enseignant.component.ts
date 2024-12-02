@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EnseignantService } from '../../services/enseignant.service';
+import { EnseignantService } from '../../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
-import {AffectationType} from "../shared/types/affectation.type";
-import {LoginService} from "../../services/login.service";
+import {AffectationType} from "../../shared/types/affectation.type";
+import {LoginService} from "../../../services/login.service";
 
 @Component({
   selector: 'app-affectation-list',
