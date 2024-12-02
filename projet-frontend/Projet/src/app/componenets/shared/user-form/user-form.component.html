@@ -1,17 +1,17 @@
-<h2 mat-dialog-title *ngIf="isUpdateMode">Update {{ form.get('username')?.value }}</h2>
-<h2 mat-dialog-title *ngIf="!isUpdateMode">Create New User</h2>
+<h2 mat-dialog-title *ngIf="isUpdateMode">Mettre à jour {{ form.get('username')?.value }}</h2>
+<h2 mat-dialog-title *ngIf="!isUpdateMode">Créer un nouvel utilisateur</h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" novalidate class="form-container">
 
     <!-- Username -->
     <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Username" formControlName="username" required name="username"/>
+      <input matInput placeholder="Nom d'utilisateur" formControlName="username" required name="username"/>
       <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('required')">
-        Username is <strong>required</strong>
+        Le nom d'utilisateur est <strong>obligatoire</strong>
       </mat-error>
       <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('minlength')">
-        Username is <strong>2 chars min</strong>
+        Le nom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
       </mat-error>
     </mat-form-field>
 
@@ -19,16 +19,16 @@
     <mat-form-field class="full-width mgb20">
       <input matInput placeholder="Email" formControlName="email" required name="email"/>
       <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
-        Email is <strong>required</strong>
+        L'email est <strong>obligatoire</strong>
       </mat-error>
       <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
-        Invalid email format
+        Format d'email invalide
       </mat-error>
     </mat-form-field>
 
     <!-- Role Selection -->
     <mat-form-field class="full-width mgb20">
-      <mat-label>Roles</mat-label>
+      <mat-label>Rôles</mat-label>
       <mat-select formControlName="roles" multiple name="roles">
         <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
         <mat-option value="RESPONSABLE_DE_FORMATION">Responsable de formation</mat-option>
@@ -37,28 +37,56 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+      <mat-label>Nombre d'heures</mat-label>
+      <input matInput formControlName="maxHeuresService" name="nombreHeures" type="number"
+          [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
+      <mat-error *ngIf="form.get('nombreHeures')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+      <mat-label>Categorie d'Enseignant</mat-label>
+      <mat-select formControlName="categorieEnseignant" required>
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{ category }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('categorieEnseignant')?.hasError('required')">
+        La catégorie est requise.
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+      <mat-label>Heures pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
+      <input matInput type="number" formControlName="nbHeureCategorie" required />
+      <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">
+        Les heures pour cette catégorie sont requises.
+      </mat-error>
+    </mat-form-field>
+    
+
     <!-- Password Field -->
     <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
-      <input matInput type="password" placeholder="Password" formControlName="password" required />
+      <input matInput type="password" placeholder="Mot de passe" formControlName="password" required />
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
-        Password is <strong>required</strong>
+        Le mot de passe est <strong>obligatoire</strong>
       </mat-error>
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('minlength')">
-        Password is <strong>6 chars min</strong>
+        Le mot de passe doit contenir au <strong>minimum 6 caractères</strong>
       </mat-error>
       <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('weakPassword')">
-        Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character.
+        Le mot de passe doit contenir au moins 1 lettre minuscule, 1 lettre majuscule, 1 chiffre, et 1 caractère spécial.
       </mat-error>
     </mat-form-field>
 
     <!-- Confirm Password Field -->
     <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
-      <input matInput type="password" placeholder="Confirm Password" formControlName="confirmPassword" required />
+      <input matInput type="password" placeholder="Confirmer le mot de passe" formControlName="confirmPassword" required />
       <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
-        Confirmation password is <strong>required</strong>
+        La confirmation du mot de passe est <strong>obligatoire</strong>
       </mat-error>
       <mat-error *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.dirty">
-        Passwords do not match
+        Les mots de passe ne correspondent pas
       </mat-error>
     </mat-form-field>
 
@@ -66,6 +94,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end" class="dialog-actions">
-  <button mat-button type="button" (click)="cancel()">Cancel</button>
-  <button mat-button color="primary" type="button" (click)="submit(form.value)" [disabled]="form.invalid">Save</button>
+  <button mat-button type="button" (click)="cancel()">Annuler</button>
+  <button mat-button color="primary" type="button" (click)="submit(form.value)" [disabled]="form.invalid">Sauvegarder</button>
 </mat-dialog-actions>

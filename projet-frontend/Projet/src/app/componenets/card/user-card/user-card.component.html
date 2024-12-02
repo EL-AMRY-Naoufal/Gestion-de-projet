@@ -1,12 +1,19 @@
-<mat-card class="user-card">
-    <mat-card-title>{{ user.username }}</mat-card-title>
-    <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
-    <mat-card-actions>
-        <button mat-icon-button color="primary" aria-label="Modifier" matTooltip="Modifier">
-            <mat-icon>edit</mat-icon>
+<div class="user-card">
+    <div class="user-info">
+        <h2 class="username">{{ user.username }}</h2>
+        <p class="email">{{ user.email }}</p>
+        <p class="role">Rôle(s) :
+            <span *ngFor="let role of user.roles; let i = index">
+              {{ role }}<span *ngIf="i < user.roles.length - 1">, </span>
+            </span>
+          </p>          
+    </div>
+    <div class="actions">
+        <button class="edit-btn" title="Modifier" (click)="onEditClick()">
+            <i class="fas fa-edit"></i> 
         </button>
         <button mat-icon-button color="warn" aria-label="Supprimer" matTooltip="Supprimer">
             <mat-icon>delete</mat-icon>
         </button>
-    </mat-card-actions>
-</mat-card>
+    </div>  
+</div>

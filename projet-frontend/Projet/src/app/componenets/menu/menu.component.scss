@@ -1,7 +1,12 @@
-mat-toolbar {
-    background-color: #000;
-    color: #ffeb3b;
-    padding: 16px;
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar .menu-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .spacer {

@@ -1,118 +1,142 @@
-/* Réinitialisation des styles de base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Corps de la page */
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-}
-
-/* Conteneur principal */
-.container {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-}
-
-/* Colonne gauche */
-.left-section {
-  background-color: #ffeb3b;
-  /* Couleur jaune */
-  flex: 1;
+.login-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100vh;
 }
 
-/* Colonne droite */
-.right-section {
-  flex: 1;
+.login-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
+  align-items: stretch; /* Étend les enfants pour qu'ils prennent toute la hauteur */
+  justify-content: space-between;
+  width: 70%;
+  /* height: 700px; /* Hauteur fixe pour l'illustration */
+  margin: 0 1rem;
+  box-shadow: 0 2px 32px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f9f9f9;
 }
 
-/* Style du formulaire */
-form {
-  width: 400px;
-  padding: 20px;
-  height: 500px;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  box-sizing: border-box;
-}
-
-h1 {
-  font-size: 24px;
+.login-form h1 {
+  margin-top: 0;
   margin-bottom: 20px;
-  font-weight: normal;
   color: #333;
+  font-size: 1.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+  width: 100%; /* Étend le titre à toute la largeur */
+  text-align: center; /* Centre le titre */
 }
 
-/* Champs de formulaire */
+
+.login-image {
+  flex: 1; /* L'image occupe la moitié de la largeur */
+  background-color: #eceff1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-image img {
+  width: 100%;
+  height: 100%; /* L'image occupe toute la hauteur */
+  object-fit: cover; /* Ajuste l'image pour remplir l'espace sans déformation */
+}
+
+.login-form {
+  flex: 1;
+  padding: 40px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centre verticalement le formulaire */
+}
+
+.login-form h1 {
+  margin-top: 0;
+  color: #333;
+  font-size: 1.8rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+}
+
 .form-control {
-  margin-bottom: 100px;
-  text-align: left;
+  margin-bottom: 20px;
+
+  input,
+  label {
+    display: block;
+  }
+
+  label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #555;
+  }
+
+  input {
+    box-sizing: border-box;
+    padding: 10px;
+    height: 40px;
+    border-radius: 4px;
+    width: 100%;
+    border: 2px solid #ddd;
+    background-color: #fafafa;
+    font-size: 1rem;
+
+    &:focus {
+      outline-offset: 2px;
+      outline: 2px solid #07c;
+      border-color: #07c;
+    }
+  }
 }
 
-label {
-  font-size: 14px;
-  display: block;
-  margin-bottom: 5px;
-  color: #333;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-  outline: none;
-  border-color: #32b0d0;
-  box-shadow: 0 0 5px rgba(52, 238, 238, 0.5);
-}
-
-/* Bouton */
 button {
-  background-color: #3cadca;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
+  background-color: #000000;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
   width: 100%;
-  transition: background-color 0.3s ease;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
 }
 
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column; /* Empile les éléments */
+    height: auto; /* Ajuste la hauteur pour mobile */
+    width: 100%;
+  }
+
+  .login-image {
+    display: none; /* Cacher l'image pour économiser de l'espace */
+  }
+
+  .login-form {
+    padding: 20px;
+    width: 100%;
+  }
 }
 
-button:hover:enabled {
-  background-color: #32b0d0;
-}
 
-/* Logo dans la section gauche */
-.logo {
-  max-width: 80%;
-  height: auto;
-  display: block;
+.mdp-oublie-label {
+    text-align: center;
+    font-size: .85em;
+    color:blue;
+    margin-top: 25px;
 }
