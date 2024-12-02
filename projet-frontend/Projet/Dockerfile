@@ -1,12 +1,12 @@
 # Argument pour spécifier la version de Node.js
-ARG NODE_VERSION=lts
+ARG NODE_VERSION=22.4
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Définir le répertoire de travail pour le projet
 WORKDIR /usr/src/app
 
 # Installer Angular CLI globalement pour le développement
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli --loglevel verbose
 
 # Copie commune du fichier package.json et package-lock.json pour gérer les dépendances
 COPY package*.json ./
@@ -15,7 +15,7 @@ COPY package*.json ./
 FROM base AS development
 
 # Commande pour démarrer le serveur Angular pour le développement
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
+# RUN ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
 
 CMD npm install && ng serve --host 0.0.0.0 --port 4200
 

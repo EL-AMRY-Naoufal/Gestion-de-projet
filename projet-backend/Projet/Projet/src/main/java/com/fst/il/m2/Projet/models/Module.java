@@ -19,7 +19,6 @@ public class Module {
 
     private int totalHeuresRequises;
 
-    private int groupes;
 
     @ElementCollection
     private Map<TypeHeure, Integer> heuresParType;
@@ -32,6 +31,9 @@ public class Module {
     @OneToMany(mappedBy = "module")
     private List<Affectation> affectations;
 
+    @OneToMany(mappedBy = "module")
+    private  List<Groupe> groupes;
+
     public Module() {
     }
 
@@ -39,10 +41,19 @@ public class Module {
         this.id = id;
         this.nom = nom;
         this.totalHeuresRequises = totalHeuresRequises;
-        this.groupes = groupes;
         this.heuresParType = heuresParType;
         this.formation = formation;
         this.affectations = affectations;
+    }
+
+    public Module(Long id, String nom, int totalHeuresRequises, Map<TypeHeure, Integer> heuresParType, Formation formation, List<Affectation> affectations, List<Groupe> groupes) {
+        this.id = id;
+        this.nom = nom;
+        this.totalHeuresRequises = totalHeuresRequises;
+        this.heuresParType = heuresParType;
+        this.formation = formation;
+        this.affectations = affectations;
+        this.groupes = groupes;
     }
 
     public Long getId() {
@@ -69,14 +80,6 @@ public class Module {
         this.totalHeuresRequises = totalHeuresRequises;
     }
 
-    public int getGroupes() {
-        return groupes;
-    }
-
-    public void setGroupes(int groupes) {
-        this.groupes = groupes;
-    }
-
     public Map<TypeHeure, Integer> getHeuresParType() {
         return heuresParType;
     }
@@ -99,5 +102,13 @@ public class Module {
 
     public void setAffectations(List<Affectation> affectations) {
         this.affectations = affectations;
+    }
+
+    public List<Groupe> getGroupes() {
+        return groupes;
+    }
+
+    public void setGroupes(List<Groupe> groupes) {
+        this.groupes = groupes;
     }
 }
