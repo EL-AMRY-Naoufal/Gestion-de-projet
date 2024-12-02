@@ -24,6 +24,9 @@ public class Formation {
     @OneToMany(mappedBy = "formation")
     private List<Module> modules;
 
+    @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Niveau> niveaux;
+
     public Formation() {
     }
 
@@ -33,6 +36,15 @@ public class Formation {
         this.totalHeures = totalHeures;
         this.responsableFormation = responsableFormation;
         this.modules = modules;
+    }
+
+    public Formation(Long id, String nom, int totalHeures, ResponsableFormation responsableFormation, List<Module> modules, List<Niveau> niveaux) {
+        this.id = id;
+        this.nom = nom;
+        this.totalHeures = totalHeures;
+        this.responsableFormation = responsableFormation;
+        this.modules = modules;
+        this.niveaux = niveaux;
     }
 
     public Long getId() {
@@ -73,5 +85,13 @@ public class Formation {
 
     public void setModules(List<Module> modules) {
         this.modules = modules;
+    }
+
+    public List<Niveau> getNiveaux() {
+        return niveaux;
+    }
+
+    public void setNiveaux(List<Niveau> niveaux) {
+        this.niveaux = niveaux;
     }
 }
