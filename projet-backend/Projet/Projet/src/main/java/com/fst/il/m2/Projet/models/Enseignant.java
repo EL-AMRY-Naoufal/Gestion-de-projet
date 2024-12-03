@@ -48,7 +48,7 @@ public class Enseignant {
     private List<Affectation> affectations;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
 

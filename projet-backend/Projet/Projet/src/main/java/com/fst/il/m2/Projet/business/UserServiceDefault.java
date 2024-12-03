@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,14 @@ public class UserServiceDefault implements UserService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
-                new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr", Role.CHEF_DE_DEPARTEMENT),
-                new User("rdf", passwordEncoder.encode("rdf"), "rdf@rdf.fr", Role.RESPONSABLE_DE_FORMATION),
-                new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr", Role.ENSEIGNANT),
-                new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr", Role.SECRETARIAT_PEDAGOGIQUE)
+                new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr",
+                        Map.of(2023, Role.CHEF_DE_DEPARTEMENT, 2024, Role.CHEF_DE_DEPARTEMENT)),
+                new User("rdf", passwordEncoder.encode("rdf"), "rdf@rdf.fr",
+                        Map.of(2023, Role.RESPONSABLE_DE_FORMATION, 2024, Role.RESPONSABLE_DE_FORMATION)),
+                new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr",
+                        Map.of(2023, Role.ENSEIGNANT, 2024, Role.ENSEIGNANT)),
+                new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr",
+                        Map.of(2023, Role.SECRETARIAT_PEDAGOGIQUE, 2024, Role.SECRETARIAT_PEDAGOGIQUE))
         );
         for(User u : users)
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
@@ -64,6 +70,28 @@ public class UserServiceDefault implements UserService {
             }
         }
         return null;
+    }
+
+    public Role getCurrentRole(User user) {
+        int currentYear = LocalDate.now().getYear(); // Get the current year
+        Map<Integer, Role> roles = user.getRoles();
+
+        // If there are no roles, return null (or some default role)
+        if (roles.isEmpty()) {
+            return null;
+        }
+
+        // Find the role for the current year, or the most recent year available
+        Role currentRole = roles.get(currentYear);
+        if (currentRole != null) {
+            return currentRole; // Return role for the current year if exists
+        }
+
+        // If there's no role for the current year, return the role of the most recent year
+        return roles.entrySet().stream()
+                .max(Map.Entry.comparingByKey()) // Get the most recent year (max year)
+                .map(Map.Entry::getValue)        // Get the role for that year
+                .orElse(null);                   // Return null if no roles exist
     }
 
     @Override

@@ -4,40 +4,41 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Users")
 public class User {
     @Id
-    @Column(name="Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Id")
     private Long id;
 
     @Column(name="Username", unique = true)
     private String username;
 
-
     @Column(name="Password")
     private String password;
 
-
     @Column(name="Email", unique = true)
-
     private String email;
 
-    @ElementCollection(targetClass = Role.class)
-    @Enumerated(EnumType.STRING)
+    // Map to store roles by year
+    @ElementCollection
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private List<Role> roles;
+    @MapKeyColumn(name = "year")  // The key column for the year
+    @Column(name = "role")        // The column for the role
+    @Enumerated(EnumType.STRING)  // Ensure the Role enum is stored as a string
+    private Map<Integer, Role> roles = new HashMap<>();
 
+    // Default constructor
     public User() {
     }
 
-    public User(Long id, String username, String password, String email, List<Role> roles) {
+    // Constructor with roles map
+    public User(Long id, String username, String password, String email, Map<Integer, Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -45,43 +46,21 @@ public class User {
         this.roles = roles;
     }
 
-    public User(String username, String password, String email, Role... roles) {
+    // Constructor for creating a user with roles for specific years
+    public User(String username, String password, String email, Map<Integer, Role> roles) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.roles = List.of(roles);
-    }
-
-    public User(Long id, String username, String password, String email, Role... roles) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.roles = List.of(roles);
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
-    public String getEmail() {
-        return email;
+    // Getters and setters
+    public Long getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password); ;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -92,16 +71,48 @@ public class User {
         this.username = username;
     }
 
-    public Long getId() {
-        return id;
+    public String getPassword() {
+        return password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Map<Integer, Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Map<Integer, Role> roles) {
+        this.roles = roles;
+    }
+
+    // Add a role for a specific year
+    public void addRole(Integer year, Role role) {
+        this.roles.put(year, role);
+    }
+
+    // Remove a role for a specific year
+    public void removeRole(Integer year) {
+        this.roles.remove(year);
+    }
+
+    // Check if a role exists for a specific year
+    public boolean hasRoleForYear(Integer year, Role role) {
+        return this.roles.get(year) != null && this.roles.get(year) == role;
+    }
+
+    // Utility method to check if user has a particular role
     public boolean hasRole(Role role) {
-        return roles != null && roles.contains(role);
+        return roles.containsValue(role);
     }
 
     @Override
@@ -114,6 +125,3 @@ public class User {
                 '}';
     }
 }
-
-
-

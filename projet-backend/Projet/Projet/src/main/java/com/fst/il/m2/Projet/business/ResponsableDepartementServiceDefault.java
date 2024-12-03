@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -31,7 +32,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private ModuleRepository moduleRepository;
 
     @Override
-    public User createUser(User user, Long responsableId) {
+    public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser) {
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
@@ -40,31 +41,47 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             throw new RuntimeException("Only Responsable de Département can create users");
         }
 
-        // Save the new user
-        User newUser = userRepository.save(user);
+        User newUser = null;
 
-        // Generate a token and send email for setting the password
+        // Ensure the user has roles for specific years (Example: 2023, 2024)
+        if (!user.getRoles().isEmpty()) {
+            Map<Integer, Role> userRoles = user.getRoles();
+
+            // Save the user directly for roles other than ENSEIGNANT
+            newUser = userRepository.save(user);
+
+            if (userRoles.containsValue(Role.CHEF_DE_DEPARTEMENT)) {
+                ResponsableDepartement responsableDepartement = new ResponsableDepartement();
+                responsableDepartement.setUser(newUser);
+                responsableDepartementRepository.save(responsableDepartement);
+            } else if (userRoles.containsValue(Role.RESPONSABLE_DE_FORMATION)) {
+                ResponsableFormation responsableFormation = new ResponsableFormation();
+                responsableFormation.setUser(newUser);
+                responsableFormationRepository.save(responsableFormation);
+            }
+        } else {
+            // Special handling for ENSEIGNANT role
+            if (associateEnseignantWithUser) {
+                // Create and associate User with Enseignant
+                newUser = userRepository.save(user);
+
+                Enseignant enseignant = new Enseignant();
+                enseignant.setUser(newUser);
+                enseignantRepository.save(enseignant);
+            } else {
+                // Create Enseignant without associating User
+                Enseignant enseignant = new Enseignant();
+                enseignantRepository.save(enseignant);
+            }
+        }
+
         String token = UUID.randomUUID().toString();
         //passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
         //passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
-        ;
-
-        if (user.getRoles().contains(Role.ENSEIGNANT)) {
-            Enseignant enseignant = new Enseignant();
-            enseignant.setUser(newUser);
-            enseignantRepository.save(enseignant); // Save in Enseignant table
-        } else if (user.getRoles().contains(Role.CHEF_DE_DEPARTEMENT)) {
-            ResponsableDepartement responsableDepartement = new ResponsableDepartement();
-            responsableDepartement.setUser(newUser);
-            responsableDepartementRepository.save(responsableDepartement); // Save in ResponsableDepartement table
-        } else if (user.getRoles().contains(Role.RESPONSABLE_DE_FORMATION)) {
-            ResponsableFormation responsableFormation = new ResponsableFormation();
-            responsableFormation.setUser(newUser);
-            responsableFormationRepository.save(responsableFormation); // Save in ResponsableFormation table
-        }
 
         return newUser;
     }
+
 
     @Override
     public User getUserById(Long id) {
@@ -128,11 +145,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         }
 
         // Check and remove from specific role-based tables
-        if (user.getRoles().contains(Role.ENSEIGNANT)) {
+        if (user.getRoles().containsValue(Role.ENSEIGNANT)) {
             enseignantRepository.deleteByUser(user);
-        } else if (user.getRoles().contains(Role.CHEF_DE_DEPARTEMENT)) {
+        } else if (user.getRoles().containsValue(Role.CHEF_DE_DEPARTEMENT)) {
             responsableDepartementRepository.deleteByUser(user);
-        } else if (user.getRoles().contains(Role.RESPONSABLE_DE_FORMATION)) {
+        } else if (user.getRoles().containsValue(Role.RESPONSABLE_DE_FORMATION)) {
             responsableFormationRepository.deleteByUser(user);
         }
 

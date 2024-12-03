@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
 
+import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
 
 import java.util.List;
@@ -10,4 +11,5 @@ public interface UserService {
     public void modifyPassword(Long id, String password);
     public User getUserByEmail(String email);
     public List<User> getAllUsersNotTeachers();
+    public Role getCurrentRole(User user);
 }

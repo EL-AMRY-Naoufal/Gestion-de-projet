@@ -11,10 +11,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,13 +36,14 @@ public class UserController {
         System.out.println(user);
         User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
         System.out.println(authenticatedUser);
-        if (authenticatedUser == null ) throw new UnauthorizedException("Authentication failed");
+        if (authenticatedUser == null) throw new UnauthorizedException("Authentication failed");
 
-        // Generate JWT token here
+        // Get the current role (the role for the current year)
+        Role currentRole = userService.getCurrentRole(authenticatedUser);
+
+        // Generate JWT token here with the most recent role
         String token = jwtUtil.generateToken(authenticatedUser.getUsername(),
-                authenticatedUser.getRoles().stream()
-                        .map(Role::name)
-                        .collect(Collectors.toList()));
+                currentRole != null ? List.of(currentRole.name()) : List.of()); // Only the current role
 
         AuthResponse response = new AuthResponse("Authentication succeeded", token, authenticatedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -64,9 +63,8 @@ public class UserController {
         else {
             return user.getId();
         }
-
     }
-    
+
     @GetMapping()
     public List<User> getAllUsersNotTeachers() {
         return this.userService.getAllUsersNotTeachers();

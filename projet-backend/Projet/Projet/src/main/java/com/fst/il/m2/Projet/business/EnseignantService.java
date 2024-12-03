@@ -97,25 +97,40 @@ public class EnseignantService {
         return this.userRepository.findAll(spec);
     }
 
-    public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees,  CategorieEnseignant categorieEnseignant, int nbHeureCategorie) {
+    public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees,
+                                       CategorieEnseignant categorieEnseignant, int nbHeureCategorie, int currentYear) {
 
+        // Find the user by ID
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        List<Role>  roles = user.getRoles();
-        if(!roles.contains(Role.ENSEIGNANT)) {
-            roles.add(Role.ENSEIGNANT);
+
+        // Get the current roles for the user (for the current year)
+        Map<Integer, Role> roles = user.getRoles();
+
+        // If the current year doesn't have the role of 'ENSEIGNANT', add it
+        if (!roles.containsKey(currentYear)) {
+            roles.put(currentYear, Role.ENSEIGNANT);  // Assigning the 'ENSEIGNANT' role for the current year
         }
-        user = this.userRepository.save(user);
+
+        // Save the updated user with the new role
+        user = userRepository.save(user);
+
+        // Create a map for the categories and hours
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
+
+        // Create the Enseignant entity
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
                 .user(user)
-                .maxHeuresService(nmaxHeuresService).heuresAssignees(heuresAssignees)
+                .maxHeuresService(nmaxHeuresService)
+                .heuresAssignees(heuresAssignees)
                 .build();
 
-        return this.enseignantRepository.save(enseignant);
+        // Save and return the Enseignant entity
+        return enseignantRepository.save(enseignant);
     }
+
 
     public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();

@@ -22,7 +22,11 @@ public class ResponsableDepartementController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
-        User createdUser = responsableDepartementService.createUser(userRequest.getUser(), userRequest.getResponsableId());
+        User createdUser = responsableDepartementService.createUser(
+                userRequest.getUser(),
+                userRequest.getResponsableId(),
+                userRequest.isAssociateEnseignantWithUser() // Pass the new parameter
+        );
         return ResponseEntity.ok(createdUser);
     }
 
