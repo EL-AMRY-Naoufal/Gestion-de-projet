@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.Controllers;
 
+import com.fst.il.m2.Projet.dto.ModuleDto;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.business.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class ModuleController {
 
     // Get all Modules
     @GetMapping
-    public ResponseEntity<List<Module>> getAllModules() {
-        List<Module> modules = moduleService.getAllModules();
+    public ResponseEntity<List<ModuleDto>> getAllModules() {
+        List<ModuleDto> modules = moduleService.getAllModules();
         return new ResponseEntity<>(modules, HttpStatus.OK);
     }
 

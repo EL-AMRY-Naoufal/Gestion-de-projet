@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {CommonModule, DatePipe} from '@angular/common';
 import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
-import {AffectationListComponent} from "./componenets/affectation-enseignant/affectation-enseignant.component";
+import {AffectationListComponent} from "./componenets/affectation/affectation-enseignant/affectation-enseignant.component";
 
 @NgModule({
   declarations: [

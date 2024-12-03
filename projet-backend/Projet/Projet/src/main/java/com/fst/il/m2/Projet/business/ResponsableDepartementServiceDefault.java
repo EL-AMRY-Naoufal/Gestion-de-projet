@@ -1,24 +1,19 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
-import com.fst.il.m2.Projet.models.Enseignant;
-import com.fst.il.m2.Projet.models.ResponsableDepartement;
-import com.fst.il.m2.Projet.models.ResponsableFormation;
-import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.repositories.EnseignantRepository;
-import com.fst.il.m2.Projet.repositories.ResponsableDepartementRepository;
-import com.fst.il.m2.Projet.repositories.ResponsableFormationRepository;
-import com.fst.il.m2.Projet.repositories.UserRepository;
+import com.fst.il.m2.Projet.models.*;
+import com.fst.il.m2.Projet.models.Module;
+import com.fst.il.m2.Projet.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class ResponsableDepartementServiceDefault implements ResponsableDepartementService{
+public class ResponsableDepartementServiceDefault implements ResponsableDepartementService {
 
     @Autowired
     private UserRepository userRepository;
@@ -30,8 +25,12 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private ResponsableDepartementRepository responsableDepartementRepository;
     @Autowired
     private ResponsableFormationRepository responsableFormationRepository;
+    @Autowired
+    private AffectationRepository affectationRepository;
+    @Autowired
+    private ModuleRepository moduleRepository;
 
- @Override
+    @Override
     public User createUser(User user, Long responsableId) {
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
@@ -48,7 +47,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         String token = UUID.randomUUID().toString();
         //passwordSetServiceDefault.createPasswordSetTokenForUser(newUser, token);
         //passwordSetServiceDefault.sendPasswordSetEmail(newUser, token);
-  ;
+        ;
 
         if (user.getRoles().contains(Role.ENSEIGNANT)) {
             Enseignant enseignant = new Enseignant();
@@ -87,6 +86,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public List<User> getUsersByRole(Role role) {
         return userRepository.findUserByRoles(role);
     }
+
     @Override
     public User updateUser(Long id, User user, Long responsableId) {
         // Check if the responsable has the required role
@@ -139,4 +139,45 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         // Delete the user from the User table
         userRepository.deleteById(id);
     }
+
+
+    @Override
+    public Affectation affecterModuleToEnseignant(Long userId, Long moduleId, int heuresAssignees) {
+
+        // Récupérer l'enseignant depius l'ID de l'utilisateur
+        Long enseignantID = enseignantRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId))
+                .getId();
+
+        System.err.println("enseignantID: " + enseignantID);
+
+        Enseignant enseignant = enseignantRepository.findById(enseignantID)
+                .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
+
+        // Récupérer le module
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found with id: " + moduleId));
+
+        // Vérifier si l'enseignant a des heures disponibles
+       /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
+            throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
+        }*/
+
+        // Créer une nouvelle affectation
+        Affectation affectation = new Affectation();
+        affectation.setEnseignant(enseignant);
+        affectation.setModule(module);
+        affectation.setHeuresAssignees(heuresAssignees);
+        affectation.setDateAffectation(LocalDate.now());
+
+        // Sauvegarder l'affectation
+        Affectation savedAffectation = affectationRepository.save(affectation);
+
+        // Mettre à jour les heures assignées de l'enseignant
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
+        enseignantRepository.save(enseignant);
+
+        return savedAffectation;
+    }
+
 }
