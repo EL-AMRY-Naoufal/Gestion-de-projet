@@ -9,6 +9,8 @@ import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class EnseignantService {
 
     private final EnseignantRepository enseignantRepository;
@@ -30,7 +31,26 @@ public class EnseignantService {
     private final UserSpecification userSpecifications;
     private final EnseignantSpecification enseignantSpecifications;
 
-    public List<Affectation> getAffectationsByEnseignantById(Long enseignantId) {
+    @Autowired
+    public EnseignantService(EnseignantRepository enseignantRepository,
+                             AffectationRepository affectationRepository,
+                             UserRepository userRepository,
+                             UserSpecification userSpecifications,
+                             EnseignantSpecification enseignantSpecifications) {
+        this.enseignantRepository = enseignantRepository;
+        this.affectationRepository = affectationRepository;
+        this.userRepository = userRepository;
+        this.userSpecifications = userSpecifications;
+        this.enseignantSpecifications = enseignantSpecifications;
+    }
+
+
+    public List<Affectation> getAffectationsByEnseignantById(Long userId) {
+        // Get the enseignant id from the user id
+        Long enseignantId = enseignantRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Enseignant not found"))
+                .getId();
+
         Enseignant enseignant = enseignantRepository.findById(enseignantId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found"));
         return enseignant.getAffectations();

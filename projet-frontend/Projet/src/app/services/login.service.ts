@@ -13,15 +13,11 @@ export class LoginService {
 
   private readonly _backendURL: any;
 
-    // private property to store default person
-  public _connectUser: number = 1;
-
-  private apiUrl = 'http://localhost:8080/api/users/authenticate';
-
   public userRoles = [];
   private authToken: string | null = null;
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router  ) {
     this._backendURL = {};
+
 
      // build backend base url
      let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -36,6 +32,7 @@ export class LoginService {
          // @ts-ignore
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
+
   }
 
 
@@ -47,6 +44,9 @@ export class LoginService {
     console.log("id " ,response.user.id);
     this.userRoles = response.user.roles;
     this.authToken = response.token;
+
+    //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
+    localStorage.setItem('userId', response.user.id);
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('userRole', JSON.stringify(this.userRoles));
@@ -67,10 +67,10 @@ export class LoginService {
   }
 
   /*
-  * Returns private property _connectUser
+  * Returns private property _connectUserID
   */
- get connectUser(): number{
-    return this._connectUser;
+  connectUser(): number{
+    return parseInt(localStorage.getItem('userId') || '0');
  }
 
 

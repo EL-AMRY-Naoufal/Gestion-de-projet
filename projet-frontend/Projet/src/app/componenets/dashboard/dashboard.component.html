@@ -7,11 +7,11 @@
   <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item blue" (click)="navigateToTeachers()">
       Enseignants
   </div>
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')" class="menu-item gray">
-      Affectations
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')"     (click)="navigateToAffectations()"
+       class="menu-item gray">
+    Affectations
   </div>
   <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()">
       Utilisateurs
   </div>
-
 </div>

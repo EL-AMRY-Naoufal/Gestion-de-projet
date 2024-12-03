@@ -39,7 +39,7 @@ export class UserService {
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
 
-     this._responsableId = this._loginService.connectUser;
+     this._responsableId = this._loginService.connectUser();
      if (!this._responsableId) {
       throw new Error("Responsable is not authenticated or responsableId is missing");
     }

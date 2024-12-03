@@ -43,6 +43,12 @@ export class DashboardComponent {
     this.router.navigate(['/users']);
   }
 
+  navigateToAffectations() {
+    this.router.navigate(['/enseignant/MesAffectations']);
+  }
+
+
+
   navigateToDashboard() {
     this.router.navigate(['/dashboard']);
   }

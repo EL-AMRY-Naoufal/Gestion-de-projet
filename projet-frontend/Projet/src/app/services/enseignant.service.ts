@@ -30,7 +30,7 @@ export class EnseignantService {
       );
   }
 
-  getAffectationsByEnseignantId(id: number): Observable<any> {
+  getAffectationsByEnseignantId(id: string): Observable<any> {
     return this.http.get<AffectationType>(`${this._backendURL.allEnseignants}/${id}/affectations`);
   }
 
