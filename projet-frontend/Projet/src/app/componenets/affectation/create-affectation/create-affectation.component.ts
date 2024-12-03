@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../../services/user.service';
 import {FormsModule} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
+import {ModuleService} from "../../../services/module.service";
+import {EnseignantService} from "../../../services/enseignant.service";
+import {LoginService} from "../../../services/login.service";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-create-affectation',
@@ -15,25 +19,53 @@ import {NgForOf, NgIf} from "@angular/common";
   standalone: true
 })
 export class CreateAffectationComponent implements OnInit {
-  enseignants = [
-    { id: 1, name: 'Enseignant 1' },
-    { id: 2, name: 'Enseignant 2' },
-  ]; // Remplacez par une requête API si nécessaire
 
-  modules = [
-    { id: 1, name: 'Module 1' },
-    { id: 2, name: 'Module 2' },
-  ]; // Remplacez par une requête API si nécessaire
+  myId!: string
 
-  enseignantId: string | null = null;
-  moduleId: string | null = null;
-  heuresAssignees: string | null = null;
+  enseignants!: any[]
+  modules!: any[]
+
+  enseignantId!: string
+  moduleId!: string
+  heuresAssignees!: string
+
   successMessage = '';
   errorMessage = '';
 
-  constructor(private affectationService: UserService) {}
+  constructor(private affectationService: UserService,
+              private moduleService: ModuleService,
+              private enseinganntServices: EnseignantService,
+              private loginService: LoginService
+  ) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    this.myId = this.loginService.connectUser() + '';
+
+    this.moduleService.getModules().subscribe(
+      (response) => {
+        this.modules = response;
+        console.log("modules", this.modules);
+      },
+      catchError => {
+        console.log("error", catchError);
+      }
+    );
+
+
+    this.enseinganntServices.getEnseignants().subscribe(
+      (response) => {
+        this.enseignants = response;
+        console.log("enseignants", this.enseignants);
+      },
+      catchError => {
+        console.log("error", catchError);
+      }
+
+    );
+  }
+
 
   onSubmit(): void {
     if (this.enseignantId && this.moduleId && this.heuresAssignees) {
@@ -47,6 +79,7 @@ export class CreateAffectationComponent implements OnInit {
           error: (error) => {
             this.errorMessage = "Une erreur s'est produite lors de la création de l'affectation.";
             this.successMessage = '';
+            console.error('Erreur lors de la création de l\'affectation :', error);
           },
         });
     } else {

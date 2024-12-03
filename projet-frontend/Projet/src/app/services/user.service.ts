@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { User } from '../componenets/shared/types/user.type';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
-import { defaultIfEmpty, filter, map, Observable } from 'rxjs';
+import {defaultIfEmpty, filter, map, Observable, throwError} from 'rxjs';
 import {AffectationType} from "../componenets/shared/types/affectation.type";
+import {catchError} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -145,11 +146,26 @@ export class UserService {
     return this._http.get<any[]>(this._backendURL.allUsers);
   }
 
-  //chemin pour creer une affectation avec un enseignant
-  createAffectation( idModule:string, EnseignantId:string,nombreHeure:string): Observable<AffectationType> {
 
-    //api/responsableDepartement/affectation/{idEnseignant}/{idModule}/{heure}
-    return this._http.post<AffectationType>(`${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,null);
+
+  createAffectation(EnseignantId: string, idModule: string, nombreHeure: string): Observable<any> {
+    return this._http.post(
+      `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,
+      null,
+      { responseType: 'text' }
+    ).pipe(
+      map((response) => {
+        try {
+          return JSON.parse(response);
+        } catch (e) {
+          return response;
+        }
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de la création de l\'affectation :', error);
+        return throwError(() => new Error('Une erreur est survenue.'));
+      })
+    );
   }
 
   searchUsers(username: string): Observable<any[]> {

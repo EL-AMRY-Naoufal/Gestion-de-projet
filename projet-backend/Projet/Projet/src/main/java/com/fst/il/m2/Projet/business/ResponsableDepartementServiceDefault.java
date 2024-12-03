@@ -142,11 +142,17 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
 
     @Override
-    public Affectation affecterModuleToEnseignant(Long enseignantId, Long moduleId, int heuresAssignees) {
+    public Affectation affecterModuleToEnseignant(Long userId, Long moduleId, int heuresAssignees) {
 
-        // Récupérer l'enseignant
-        Enseignant enseignant = enseignantRepository.findById(enseignantId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantId));
+        // Récupérer l'enseignant depius l'ID de l'utilisateur
+        Long enseignantID = enseignantRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId))
+                .getId();
+
+        System.err.println("enseignantID: " + enseignantID);
+
+        Enseignant enseignant = enseignantRepository.findById(enseignantID)
+                .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
 
         // Récupérer le module
         Module module = moduleRepository.findById(moduleId)

@@ -37,7 +37,7 @@ export class EnseignantService {
   getUserByName(name: string): Observable<any[]> {
     return this.http.get<any[]>(`${this._backendURL.allEnseignants}?name=${name}`);
   }
-  
+
   getEnseignantsNotInEnseignantTable(): Observable<User[]> {
     return this.http.get<User[]>(`${this._backendURL.allEnseignants}/enseignants-non-enregistres`);
   }

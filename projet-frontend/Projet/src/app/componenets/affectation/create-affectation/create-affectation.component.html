@@ -6,7 +6,7 @@
       <label for="enseignant">Enseignant :</label>
       <select id="enseignant" [(ngModel)]="enseignantId" name="enseignant" required>
         <option *ngFor="let enseignant of enseignants" [value]="enseignant.id">
-          {{ enseignant.name }}
+          {{ enseignant.username }}
         </option>
       </select>
     </div>
@@ -15,7 +15,7 @@
       <label for="module">Module :</label>
       <select id="module" [(ngModel)]="moduleId" name="module" required>
         <option *ngFor="let module of modules" [value]="module.id">
-          {{ module.name }}
+          {{ module.nom }}
         </option>
       </select>
     </div>
