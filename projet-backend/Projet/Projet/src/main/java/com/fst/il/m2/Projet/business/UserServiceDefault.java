@@ -2,8 +2,11 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.repositories.AnneeRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.security.JWTUtil;
 import jakarta.annotation.PostConstruct;
@@ -25,6 +28,9 @@ public class UserServiceDefault implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private AnneeRepository anneeRepository;
+
+    @Autowired
     private JWTUtil jwtUtil;  // Inject JWT utility
 
     public UserServiceDefault() {
@@ -44,16 +50,18 @@ public class UserServiceDefault implements UserService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
                 new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr",
-                        Map.of(2023, Role.CHEF_DE_DEPARTEMENT, 2024, Role.CHEF_DE_DEPARTEMENT)),
+                        Map.of(1L, Role.CHEF_DE_DEPARTEMENT, 2L, Role.CHEF_DE_DEPARTEMENT)),
                 new User("rdf", passwordEncoder.encode("rdf"), "rdf@rdf.fr",
-                        Map.of(2023, Role.RESPONSABLE_DE_FORMATION, 2024, Role.RESPONSABLE_DE_FORMATION)),
+                        Map.of(1L, Role.RESPONSABLE_DE_FORMATION, 2L, Role.RESPONSABLE_DE_FORMATION)),
                 new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr",
-                        Map.of(2023, Role.ENSEIGNANT, 2024, Role.ENSEIGNANT)),
+                        Map.of(1L, Role.ENSEIGNANT, 2L, Role.ENSEIGNANT)),
                 new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr",
-                        Map.of(2023, Role.SECRETARIAT_PEDAGOGIQUE, 2024, Role.SECRETARIAT_PEDAGOGIQUE))
+                        Map.of(1L, Role.SECRETARIAT_PEDAGOGIQUE, 2L, Role.SECRETARIAT_PEDAGOGIQUE))
         );
         for(User u : users)
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
+
+        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build()));
 
     }
 
@@ -73,8 +81,8 @@ public class UserServiceDefault implements UserService {
     }
 
     public Role getCurrentRole(User user) {
-        int currentYear = LocalDate.now().getYear(); // Get the current year
-        Map<Integer, Role> roles = user.getRoles();
+        Long currentYearId = anneeRepository.getCurrentYear().orElseThrow(NotFoundException::new).getId();
+        Map<Long, Role> roles = user.getRoles();
 
         // If there are no roles, return null (or some default role)
         if (roles.isEmpty()) {
@@ -82,7 +90,7 @@ public class UserServiceDefault implements UserService {
         }
 
         // Find the role for the current year, or the most recent year available
-        Role currentRole = roles.get(currentYear);
+        Role currentRole = roles.get(currentYearId);
         if (currentRole != null) {
             return currentRole; // Return role for the current year if exists
         }

@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,11 +36,11 @@ public class UserServiceDefaultTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        mockUser = new User("testUser", passwordEncoder.encode("password123"), "test@example.com", Role.ENSEIGNANT);
+        mockUser = new User("testUser", passwordEncoder.encode("password123"), "test@example.com", Map.of(1L, Role.ENSEIGNANT));
 
         when(userRepository.findUserByEmail(mockUser.getEmail())).thenReturn(Optional.ofNullable(mockUser));
 
-        user = new User(1L, "testUser", "password123", "test@example.com", Role.ENSEIGNANT);
+        user = new User(1L, "testUser", "password123", "test@example.com", Map.of(1L, Role.ENSEIGNANT));
     }
 
     @Test

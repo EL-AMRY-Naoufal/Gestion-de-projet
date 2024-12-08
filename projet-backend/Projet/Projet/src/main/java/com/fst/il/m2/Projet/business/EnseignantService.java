@@ -98,14 +98,14 @@ public class EnseignantService {
     }
 
     public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees,
-                                       CategorieEnseignant categorieEnseignant, int nbHeureCategorie, int currentYear) {
+                                       CategorieEnseignant categorieEnseignant, int nbHeureCategorie, Long currentYear) {
 
         // Find the user by ID
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         // Get the current roles for the user (for the current year)
-        Map<Integer, Role> roles = user.getRoles();
+        Map<Long, Role> roles = user.getRoles();
 
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if (!roles.containsKey(currentYear)) {

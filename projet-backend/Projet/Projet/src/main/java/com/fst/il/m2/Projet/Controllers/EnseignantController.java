@@ -46,10 +46,14 @@ public class EnseignantController {
 
     @PostMapping()
     public EnseignantDto createEnseignant(@RequestBody EnseignantDto enseignant) {
-        return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(enseignant.getId()
-                , enseignant.getMaxHeuresService(), enseignant.getHeuresAssignees(),
+        return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
+                enseignant.getId(),
+                enseignant.getMaxHeuresService(),
+                enseignant.getHeuresAssignees(),
                 enseignant.getCategorieEnseignant(),
-                enseignant.getNbHeureCategorie()));
+                enseignant.getNbHeureCategorie(),
+                1L)
+        );
     }
 
     @GetMapping("{id}")

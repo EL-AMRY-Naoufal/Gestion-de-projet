@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +41,7 @@ class EnseignantServiceTest {
         // Mock User
         User mockUser = new User();
         mockUser.setId(1L);
-        mockUser.setRoles(List.of(Role.ENSEIGNANT));
+        mockUser.setRoles(Map.of(1L, Role.ENSEIGNANT));
 
         // Mock Repository Behavior
         when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
@@ -53,7 +54,8 @@ class EnseignantServiceTest {
                 20,
                 5,
                 CategorieEnseignant.PROFESSEUR,
-                10
+                10,
+                1L
         );
 
         // Assert
@@ -76,7 +78,7 @@ class EnseignantServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                enseignantService.createEnseignant(1L, 20, 5, CategorieEnseignant.PROFESSEUR, 10));
+                enseignantService.createEnseignant(1L, 20, 5, CategorieEnseignant.PROFESSEUR, 10, 1L));
 
         assertEquals("User not found with id: 1", exception.getMessage());
 

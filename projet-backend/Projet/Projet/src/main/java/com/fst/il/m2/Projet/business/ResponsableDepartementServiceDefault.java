@@ -45,7 +45,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Ensure the user has roles for specific years (Example: 2023, 2024)
         if (!user.getRoles().isEmpty()) {
-            Map<Integer, Role> userRoles = user.getRoles();
+            Map<Long, Role> userRoles = user.getRoles();
 
             // Save the user directly for roles other than ENSEIGNANT
             newUser = userRepository.save(user);

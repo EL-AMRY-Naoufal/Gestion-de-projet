@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -16,5 +17,5 @@ public class UserGetAllDto {
     private Long id;
     private String username;
     private String email;
-    private List<Role> roles;
+    private Map<Long, Role> roles;
 }

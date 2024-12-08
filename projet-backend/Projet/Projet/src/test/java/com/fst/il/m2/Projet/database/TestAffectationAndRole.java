@@ -8,27 +8,30 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class TestAffectationAndRole {
 
+    static final Long currentYearId = 1L;
+
     // Tests pour l'entité User
     @Test
     public void testCreateUserWithMultipleRoles() {
-        User user = new User("jdoe", "password123", "jdoe@example.com", Role.ENSEIGNANT, Role.CHEF_DE_DEPARTEMENT);
+        User user = new User("jdoe", "password123", "jdoe@example.com", Map.of(currentYearId, Role.ENSEIGNANT, currentYearId, Role.CHEF_DE_DEPARTEMENT));
 
         assertEquals(2, user.getRoles().size());
-        assertTrue(user.hasRole(Role.CHEF_DE_DEPARTEMENT));
-        assertTrue(user.hasRole(Role.ENSEIGNANT));
+        assertTrue(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
+        assertTrue(user.hasRoleForYear(currentYearId, Role.ENSEIGNANT));
     }
 
     @Test
     public void testUserRoleAssignment() {
-        User user = new User("jdoe", "password123", "jdoe@example.com", Role.ENSEIGNANT, Role.SECRETARIAT_PEDAGOGIQUE);
+        User user = new User("jdoe", "password123", "jdoe@example.com", Map.of(1L, Role.ENSEIGNANT, 1L, Role.SECRETARIAT_PEDAGOGIQUE));
 
-        assertTrue(user.hasRole(Role.SECRETARIAT_PEDAGOGIQUE));
-        assertFalse(user.hasRole(Role.CHEF_DE_DEPARTEMENT));
+        assertTrue(user.hasRoleForYear(currentYearId, Role.SECRETARIAT_PEDAGOGIQUE));
+        assertFalse(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
     }
 
  /*   @Test
@@ -55,14 +58,14 @@ public class TestAffectationAndRole {
 
     @Test
     void testAddAndRemoveRole() {
-        User user = new User("janedoe", "password456", "janedoe@example.com", Role.ENSEIGNANT);
+        User user = new User("janedoe", "password456", "janedoe@example.com", Map.of(currentYearId, Role.ENSEIGNANT));
 
         // Ajouter un rôle
-        user.setRoles(Collections.singletonList(Role.CHEF_DE_DEPARTEMENT));
-        assertTrue(user.hasRole(Role.CHEF_DE_DEPARTEMENT));
+        user.setRoles(Map.of(currentYearId, Role.CHEF_DE_DEPARTEMENT));
+        assertTrue(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
 
         // Supprimer un rôle
         user.getRoles().remove(Role.ENSEIGNANT);
-        assertFalse(user.hasRole(Role.ENSEIGNANT));
+        assertFalse(user.hasRoleForYear(currentYearId, Role.ENSEIGNANT));
     }
 }

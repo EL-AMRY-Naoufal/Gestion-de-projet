@@ -2,12 +2,15 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
+@Data
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Users")
 public class User {
@@ -29,16 +32,16 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @MapKeyColumn(name = "year")  // The key column for the year
-    @Column(name = "role")        // The column for the role
+    @Column(name = "roles")        // The column for the role
     @Enumerated(EnumType.STRING)  // Ensure the Role enum is stored as a string
-    private Map<Integer, Role> roles = new HashMap<>();
+    private Map<Long, Role> roles = new HashMap<>();
 
     // Default constructor
     public User() {
     }
 
     // Constructor with roles map
-    public User(Long id, String username, String password, String email, Map<Integer, Role> roles) {
+    public User(Long id, String username, String password, String email, Map<Long, Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -47,7 +50,7 @@ public class User {
     }
 
     // Constructor for creating a user with roles for specific years
-    public User(String username, String password, String email, Map<Integer, Role> roles) {
+    public User(String username, String password, String email, Map<Long, Role> roles) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -55,59 +58,20 @@ public class User {
     }
 
     // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Map<Integer, Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Map<Integer, Role> roles) {
-        this.roles = roles;
-    }
 
     // Add a role for a specific year
-    public void addRole(Integer year, Role role) {
-        this.roles.put(year, role);
+    public void addRole(Long yearId, Role role) {
+        this.roles.put(yearId, role);
     }
 
     // Remove a role for a specific year
-    public void removeRole(Integer year) {
-        this.roles.remove(year);
+    public void removeRole(Long yearId) {
+        this.roles.remove(yearId);
     }
 
     // Check if a role exists for a specific year
-    public boolean hasRoleForYear(Integer year, Role role) {
-        return this.roles.get(year) != null && this.roles.get(year) == role;
+    public boolean hasRoleForYear(Long yearId, Role role) {
+        return this.roles.get(yearId) != null && this.roles.get(yearId) == role;
     }
 
     // Utility method to check if user has a particular role
