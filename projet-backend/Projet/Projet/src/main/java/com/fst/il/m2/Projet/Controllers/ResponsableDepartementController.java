@@ -25,7 +25,8 @@ public class ResponsableDepartementController {
         User createdUser = responsableDepartementService.createUser(
                 userRequest.getUser(),
                 userRequest.getResponsableId(),
-                userRequest.isAssociateEnseignantWithUser() // Pass the new parameter
+                userRequest.isAssociateEnseignantWithUser(), // Pass the new parameter,
+                userRequest.getYearId()
         );
         return ResponseEntity.ok(createdUser);
     }

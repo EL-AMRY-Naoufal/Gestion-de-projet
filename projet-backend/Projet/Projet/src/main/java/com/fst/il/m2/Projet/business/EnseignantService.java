@@ -6,6 +6,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
@@ -105,11 +106,11 @@ public class EnseignantService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
         // Get the current roles for the user (for the current year)
-        Map<Long, Role> roles = user.getRoles();
+        List<UserRole> roles = user.getRoles();
 
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
-        if (!roles.containsKey(currentYear)) {
-            roles.put(currentYear, Role.ENSEIGNANT);  // Assigning the 'ENSEIGNANT' role for the current year
+        if(!user.hasRoleForYear(currentYear, Role.ENSEIGNANT)){
+            user.addRole(currentYear, Role.ENSEIGNANT);
         }
 
         // Save the updated user with the new role

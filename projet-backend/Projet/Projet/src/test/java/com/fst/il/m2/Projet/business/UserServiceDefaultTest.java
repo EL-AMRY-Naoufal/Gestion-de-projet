@@ -3,6 +3,7 @@ package com.fst.il.m2.Projet.business;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,25 +33,39 @@ public class UserServiceDefaultTest {
     private User mockUser;
     private User user;
 
+    private static final Long currentYear = 1L;
+
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        mockUser = new User("testUser", passwordEncoder.encode("password123"), "test@example.com", Map.of(1L, Role.ENSEIGNANT));
+        mockUser = User.builder()
+                .username("testUser")
+                .password(passwordEncoder.encode("password123"))
+                .email("test@example.com")
+                .roles(List.of(UserRole.builder().year(currentYear).role(Role.ENSEIGNANT).build()))
+                .build();
 
         when(userRepository.findUserByEmail(mockUser.getEmail())).thenReturn(Optional.ofNullable(mockUser));
 
-        user = new User(1L, "testUser", "password123", "test@example.com", Map.of(1L, Role.ENSEIGNANT));
+        //user = new User(1L, "testUser", "password123", "test@example.com", Map.of(1L, Role.ENSEIGNANT));
+        user = User.builder()
+                .id(1L)
+                .username("testUser")
+                .password("password123")
+                .email("test@example.com")
+                .roles(List.of(UserRole.builder().year(currentYear).role(Role.ENSEIGNANT).build()))
+                .build();
     }
 
     @Test
     public void shouldAuthenticateWithSuccess() {
 
-        UserRequest userRequest = new UserRequest.Builder()
-                .setUser(user)
-                .setResponsableId(1L)
+        UserRequest userRequest = UserRequest.builder()
+                .user(user)
+                .responsableId(1L)
                 .build();
 
         User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(),  userRequest.getUser().getPassword());
@@ -60,9 +77,9 @@ public class UserServiceDefaultTest {
 
     @Test
     public void shouldFailAuthenticationWithInvalidPassword() {
-        UserRequest userRequest = new UserRequest.Builder()
-                .setUser(user)
-                .setResponsableId(1L)
+        UserRequest userRequest = UserRequest.builder()
+                .user(user)
+                .responsableId(1L)
                 .build();
 
         User authenticatedUser = userService.authenticate(userRequest.getUser().getEmail(), "wrongPassword");

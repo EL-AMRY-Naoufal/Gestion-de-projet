@@ -32,12 +32,12 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private ModuleRepository moduleRepository;
 
     @Override
-    public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser) {
+    public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
         // Check if the responsable has the required role
-        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+        if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can create users");
         }
 
@@ -45,16 +45,16 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Ensure the user has roles for specific years (Example: 2023, 2024)
         if (!user.getRoles().isEmpty()) {
-            Map<Long, Role> userRoles = user.getRoles();
+            List<UserRole> userRoles = user.getRoles();
 
             // Save the user directly for roles other than ENSEIGNANT
             newUser = userRepository.save(user);
 
-            if (userRoles.containsValue(Role.CHEF_DE_DEPARTEMENT)) {
+            if (user.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
                 ResponsableDepartement responsableDepartement = new ResponsableDepartement();
                 responsableDepartement.setUser(newUser);
                 responsableDepartementRepository.save(responsableDepartement);
-            } else if (userRoles.containsValue(Role.RESPONSABLE_DE_FORMATION)) {
+            } else if (user.hasRoleForYear(currentYear, Role.RESPONSABLE_DE_FORMATION)) {
                 ResponsableFormation responsableFormation = new ResponsableFormation();
                 responsableFormation.setUser(newUser);
                 responsableFormationRepository.save(responsableFormation);
@@ -145,14 +145,13 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         }
 
         // Check and remove from specific role-based tables
-        if (user.getRoles().containsValue(Role.ENSEIGNANT)) {
+        if (user.hasRole(Role.ENSEIGNANT)) {
             enseignantRepository.deleteByUser(user);
-        } else if (user.getRoles().containsValue(Role.CHEF_DE_DEPARTEMENT)) {
+        } else if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
             responsableDepartementRepository.deleteByUser(user);
-        } else if (user.getRoles().containsValue(Role.RESPONSABLE_DE_FORMATION)) {
+        } else if (user.hasRole(Role.RESPONSABLE_DE_FORMATION)) {
             responsableFormationRepository.deleteByUser(user);
         }
-
         // Delete the user from the User table
         userRepository.deleteById(id);
     }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ResponsableDepartementService {
-    User createUser(User user, Long responsableId, boolean associateEnseignantWithUser); // `responsableId` will be used to check the role.
+    User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear); // `responsableId` will be used to check the role.
     User getUserById(Long id);
     List<User> getAllUsers();
 

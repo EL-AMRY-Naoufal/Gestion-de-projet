@@ -39,11 +39,11 @@ public class UserController {
         if (authenticatedUser == null) throw new UnauthorizedException("Authentication failed");
 
         // Get the current role (the role for the current year)
-        Role currentRole = userService.getCurrentRole(authenticatedUser);
+        List<Role> currentRoles = userService.getCurrentRoles(authenticatedUser);
 
         // Generate JWT token here with the most recent role
         String token = jwtUtil.generateToken(authenticatedUser.getUsername(),
-                currentRole != null ? List.of(currentRole.name()) : List.of()); // Only the current role
+                currentRoles != null ? currentRoles.stream().map(Enum::name).toList() : null); // Only the current role
 
         AuthResponse response = new AuthResponse("Authentication succeeded", token, authenticatedUser);
         return new ResponseEntity<>(response, HttpStatus.OK);

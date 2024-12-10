@@ -17,5 +17,5 @@ public class UserGetAllDto {
     private Long id;
     private String username;
     private String email;
-    private Map<Long, Role> roles;
+    private List<Role> roles;
 }

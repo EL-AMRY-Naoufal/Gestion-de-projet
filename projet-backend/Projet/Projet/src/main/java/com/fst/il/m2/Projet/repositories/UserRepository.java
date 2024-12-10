@@ -18,8 +18,9 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     @Query("SELECT u FROM User u WHERE u.username LIKE %:username%")
     List<User> findUserByUsername(String username);
 
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r = :role")
+    @Query("SELECT u, ur.role FROM User u JOIN UserRole ur WHERE ur.role = :role")
     List<User> findUserByRoles(Role role);
 
+    @Query("SELECT u, ur.role FROM User u JOIN UserRole ur WHERE ur.role != :role")
     List<User> findUsersByRolesNotLike(Role role);
 }

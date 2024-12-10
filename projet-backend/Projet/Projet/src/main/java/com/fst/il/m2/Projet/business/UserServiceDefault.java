@@ -6,8 +6,10 @@ import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AnneeRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
+import com.fst.il.m2.Projet.repositories.UserRoleRepository;
 import com.fst.il.m2.Projet.security.JWTUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class UserServiceDefault implements UserService {
     private AnneeRepository anneeRepository;
 
     @Autowired
+    private UserRoleRepository userRoleRepository;
+
+    @Autowired
     private JWTUtil jwtUtil;  // Inject JWT utility
 
     public UserServiceDefault() {
@@ -46,17 +51,24 @@ public class UserServiceDefault implements UserService {
             Comptes de tests
          */
 
+        // UserRoles
+        Map<String, UserRole> userRoles = Map.of(
+                "cdd", UserRole.builder().year(1L).role(Role.CHEF_DE_DEPARTEMENT).build(),
+                "rdf", UserRole.builder().year(1L).role(Role.RESPONSABLE_DE_FORMATION).build(),
+                "ens", UserRole.builder().year(1L).role(Role.ENSEIGNANT).build(),
+                "sec", UserRole.builder().year(1L).role(Role.SECRETARIAT_PEDAGOGIQUE).build()
+        );
+
+        /*for(UserRole ur : userRoles.values()){
+            userRoleRepository.findAllByRoleAndYear(ur.getRole(), ur.getYear());
+        }*/
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
-                new User("cdd", passwordEncoder.encode("cdd"), "cdd@cdd.fr",
-                        Map.of(1L, Role.CHEF_DE_DEPARTEMENT, 2L, Role.CHEF_DE_DEPARTEMENT)),
-                new User("rdf", passwordEncoder.encode("rdf"), "rdf@rdf.fr",
-                        Map.of(1L, Role.RESPONSABLE_DE_FORMATION, 2L, Role.RESPONSABLE_DE_FORMATION)),
-                new User("ens", passwordEncoder.encode("ens"), "ens@ens.fr",
-                        Map.of(1L, Role.ENSEIGNANT, 2L, Role.ENSEIGNANT)),
-                new User("sec", passwordEncoder.encode("sec"), "sec@sec.fr",
-                        Map.of(1L, Role.SECRETARIAT_PEDAGOGIQUE, 2L, Role.SECRETARIAT_PEDAGOGIQUE))
+                User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(List.of(userRoles.get("cdd"))).build(),
+                User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(List.of(userRoles.get("rdf"))).build(),
+                User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(List.of(userRoles.get("ens"))).build(),
+                User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(List.of(userRoles.get("sec"))).build()
         );
         for(User u : users)
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
@@ -80,26 +92,19 @@ public class UserServiceDefault implements UserService {
         return null;
     }
 
-    public Role getCurrentRole(User user) {
+    public List<Role> getCurrentRoles(User user) {
         Long currentYearId = anneeRepository.getCurrentYear().orElseThrow(NotFoundException::new).getId();
-        Map<Long, Role> roles = user.getRoles();
+        List<Role> roles = user.getRoles().stream()
+                .filter(userRole -> userRole.getYear().equals(currentYearId))
+                .map(UserRole::getRole)
+                .toList();
 
         // If there are no roles, return null (or some default role)
         if (roles.isEmpty()) {
             return null;
         }
 
-        // Find the role for the current year, or the most recent year available
-        Role currentRole = roles.get(currentYearId);
-        if (currentRole != null) {
-            return currentRole; // Return role for the current year if exists
-        }
-
-        // If there's no role for the current year, return the role of the most recent year
-        return roles.entrySet().stream()
-                .max(Map.Entry.comparingByKey()) // Get the most recent year (max year)
-                .map(Map.Entry::getValue)        // Get the role for that year
-                .orElse(null);                   // Return null if no roles exist
+        return roles;
     }
 
     @Override

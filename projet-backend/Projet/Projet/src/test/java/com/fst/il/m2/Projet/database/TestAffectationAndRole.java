@@ -3,11 +3,13 @@ package com.fst.il.m2.Projet.database;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.models.UserRole;
 import org.junit.jupiter.api.Test;
 
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -19,7 +21,15 @@ public class TestAffectationAndRole {
     // Tests pour l'entité User
     @Test
     public void testCreateUserWithMultipleRoles() {
-        User user = new User("jdoe", "password123", "jdoe@example.com", Map.of(currentYearId, Role.ENSEIGNANT, currentYearId, Role.CHEF_DE_DEPARTEMENT));
+        User user = User.builder()
+                .username("jdoe")
+                .password("password123")
+                .email("jdoe@example.com")
+                .roles(List.of(
+                        UserRole.builder().year(currentYearId).role(Role.ENSEIGNANT).build(),
+                        UserRole.builder().year(currentYearId).role(Role.CHEF_DE_DEPARTEMENT).build()
+                ))
+                .build();
 
         assertEquals(2, user.getRoles().size());
         assertTrue(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
@@ -28,7 +38,15 @@ public class TestAffectationAndRole {
 
     @Test
     public void testUserRoleAssignment() {
-        User user = new User("jdoe", "password123", "jdoe@example.com", Map.of(1L, Role.ENSEIGNANT, 1L, Role.SECRETARIAT_PEDAGOGIQUE));
+        User user = User.builder()
+                .username("jdoe")
+                .password("password123")
+                .email("jdoe@example.com")
+                .roles(List.of(
+                        UserRole.builder().year(currentYearId).role(Role.ENSEIGNANT).build(),
+                        UserRole.builder().year(currentYearId).role(Role.SECRETARIAT_PEDAGOGIQUE).build()
+                ))
+                .build();
 
         assertTrue(user.hasRoleForYear(currentYearId, Role.SECRETARIAT_PEDAGOGIQUE));
         assertFalse(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
@@ -58,10 +76,23 @@ public class TestAffectationAndRole {
 
     @Test
     void testAddAndRemoveRole() {
-        User user = new User("janedoe", "password456", "janedoe@example.com", Map.of(currentYearId, Role.ENSEIGNANT));
+        //User user = new User("janedoe", "password456", "janedoe@example.com", Map.of(currentYearId, Role.ENSEIGNANT));
+        User user = User.builder()
+                .username("jdoe")
+                .password("password123")
+                .email("jdoe@example.com")
+                .roles(List.of(
+                        UserRole.builder().year(currentYearId).role(Role.ENSEIGNANT).build()
+                ))
+                .build();
 
         // Ajouter un rôle
-        user.setRoles(Map.of(currentYearId, Role.CHEF_DE_DEPARTEMENT));
+        //user.setRoles(Map.of(currentYearId, Role.CHEF_DE_DEPARTEMENT));
+        user.setRoles(
+                List.of(
+                        UserRole.builder().year(currentYearId).role(Role.CHEF_DE_DEPARTEMENT).build()
+                )
+        );
         assertTrue(user.hasRoleForYear(currentYearId, Role.CHEF_DE_DEPARTEMENT));
 
         // Supprimer un rôle

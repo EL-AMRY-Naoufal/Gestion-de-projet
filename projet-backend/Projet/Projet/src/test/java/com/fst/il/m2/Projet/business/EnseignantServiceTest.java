@@ -31,6 +31,8 @@ class EnseignantServiceTest {
     @InjectMocks
     private EnseignantService enseignantService;
 
+    private static final Long currentYear = 1L;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -41,7 +43,7 @@ class EnseignantServiceTest {
         // Mock User
         User mockUser = new User();
         mockUser.setId(1L);
-        mockUser.setRoles(Map.of(1L, Role.ENSEIGNANT));
+        mockUser.addRole(currentYear, Role.ENSEIGNANT);
 
         // Mock Repository Behavior
         when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));
