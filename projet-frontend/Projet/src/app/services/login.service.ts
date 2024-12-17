@@ -59,11 +59,11 @@ export class LoginService {
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
     localStorage.setItem('userId', response.user.id);
-    localStorage.setItem('currentYearId', this.currentYearId + '');
+    localStorage.setItem('currentYearId', currentYearId + '');
 
     if (typeof window !== 'undefined') {
-      localStorage.setItem('userRoles', JSON.stringify(this.userRoles));
-      if (this.authToken) localStorage.setItem('token', this.authToken);
+      localStorage.setItem('userRoles', JSON.stringify(userRoles));
+      if (this.authToken) localStorage.setItem('token', authToken);
     }
 
     this.router.navigate(['/dashboard']);
