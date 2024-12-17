@@ -52,10 +52,11 @@ export class LoginService {
 
     this.userRoles = response.user.roles.map((ur: any) => ({ role: ur.role, yearId: ur.year }));
     this.authToken = response.token;
+    this.currentYearId = response.currentYearId;
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
     localStorage.setItem('userId', response.user.id);
-    localStorage.setItem('currentYearId', response.currentYearId);
+    localStorage.setItem('currentYearId', this.currentYearId+"");
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('userRoles', JSON.stringify(this.userRoles));
