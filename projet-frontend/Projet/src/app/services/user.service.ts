@@ -114,14 +114,14 @@ export class UserService {
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
         body: { responsableId: this._responsableId },
         headers: new HttpHeaders({
-          'Authorization': `Bearer ${this._loginService.getAuthToken()}`  // Utilisation du token du LoginService
+          'Authorization': `Bearer ${this._loginService.authToken}`  // Utilisation du token du LoginService
         })
       })
       .pipe(map(() => id));
    }
 
   private _options(headerList: object = {}): any {
-    const token = this._loginService.getAuthToken(); // Récupère le token depuis LoginService
+    const token = this._loginService.authToken; // Récupère le token depuis LoginService
 
     // Crée un objet pour les en-têtes
     const headers: { [key: string]: string } = {

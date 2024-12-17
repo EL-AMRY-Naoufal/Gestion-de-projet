@@ -36,7 +36,7 @@ export class DashboardComponent {
   userRoles: string[] = [];
 
   constructor(private router: Router, private loginService: LoginService) {
-    this.userRoles = this.loginService.getUserRoles();
+    this.userRoles = this.loginService.userRoles;
   }
 
   navigateToUsers() {
@@ -46,8 +46,6 @@ export class DashboardComponent {
   navigateToAffectations() {
     this.router.navigate(['/enseignant/MesAffectations']);
   }
-
-
 
   navigateToDashboard() {
     this.router.navigate(['/dashboard']);

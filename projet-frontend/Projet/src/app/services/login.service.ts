@@ -7,35 +7,30 @@ import { environment } from '../../environments/environment.prod';
 type UserRole = {
   role: string;
   yearId: number;
-}
+};
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-
   private readonly _backendURL: any;
-
-  public userRoles: UserRole[] = [];
-  private authToken: string | null = null;
-  private currentYearId: number | null = null;
 
   constructor(private http: HttpClient, private router: Router) {
     this._backendURL = {};
 
-     // build backend base url
-     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
-     if (environment.backend.port) {
-       baseUrl += `:${environment.backend.port}`;
-     }
+    // build backend base url
+    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
+    if (environment.backend.port) {
+      baseUrl += `:${environment.backend.port}`;
+    }
 
-     // build all backend urls
-     // @ts-ignore
-     Object.keys(environment.backend.endpoints).forEach(
-       (k) =>
-         // @ts-ignore
-         (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
-     );
+    // build all backend urls
+    // @ts-ignore
+    Object.keys(environment.backend.endpoints).forEach(
+      (k) =>
+        // @ts-ignore
+        (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
+    );
   }
 
   login(formData: any): Observable<any> {
@@ -44,26 +39,32 @@ export class LoginService {
 
   handleLoginSuccess(response: any) {
     // Verify response is correct
-    if(!response.user || !response.token || !response.currentYearId || isNaN(response.currentYearId)) {
-      console.error("Incorrect login response:", response);
+    if (
+      !response.user ||
+      !response.token ||
+      !response.currentYearId ||
+      isNaN(response.currentYearId)
+    ) {
+      console.error('Incorrect login response:', response);
       this.router.navigate(['/login']);
       return;
     }
 
-    this.userRoles = response.user.roles.map((ur: any) => ({ role: ur.role, yearId: ur.year }));
-    this.authToken = response.token;
-    this.currentYearId = response.currentYearId;
+    const userRoles = response.user.roles.map((ur: any) => ({
+      role: ur.role,
+      yearId: ur.year,
+    }));
+    const authToken = response.token;
+    const currentYearId = response.currentYearId;
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
     localStorage.setItem('userId', response.user.id);
-    localStorage.setItem('currentYearId', this.currentYearId+"");
+    localStorage.setItem('currentYearId', this.currentYearId + '');
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('userRoles', JSON.stringify(this.userRoles));
-      if(this.authToken) localStorage.setItem('token', this.authToken);
+      if (this.authToken) localStorage.setItem('token', this.authToken);
     }
-
-    console.log(this.getUserRoles());
 
     this.router.navigate(['/dashboard']);
   }
@@ -78,16 +79,18 @@ export class LoginService {
   }
 
   /*
-  * Returns private property _connectUserID
-  */
-  connectUser(): number{
+   * Returns private property _connectUserID
+   */
+  connectUser(): number {
     return parseInt(localStorage.getItem('userId') || '0');
   }
 
   isLoggedIn(): boolean {
-     if (typeof window === 'undefined') return false; // Server environment
+    if (typeof window === 'undefined') return false; // Server environment
 
-    return !!localStorage.getItem('userRoles') && !!localStorage.getItem('token');
+    return (
+      !!localStorage.getItem('userRoles') && !!localStorage.getItem('token')
+    );
   }
 
   logout() {
@@ -95,30 +98,32 @@ export class LoginService {
       localStorage.removeItem('userRoles');
       localStorage.removeItem('token');
     }
-    this.userRoles = [];
     this.router.navigate(['/login']);
   }
 
   /**
    * @returns array of user roles for the current year
    */
-  getUserRoles(): string[] {
+  get userRoles(): string[] {
     if (typeof window !== 'undefined' && localStorage.getItem('userRoles')) {
-      const currentYearId = parseInt(localStorage.getItem('currentYearId') || '0');
-      return JSON.parse(localStorage.getItem('userRoles') || "[]")
-        .filter((ur: any) => ur.yearId === currentYearId).map((ur: any) => ur.role);
+      return (JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[])
+        .filter((ur: any) => ur.yearId === this.currentYearId)
+        .map((ur: any) => ur.role);
     }
     return [];
   }
 
-  getCurrentYearId(): number | null {
-    if (typeof window !== 'undefined' && localStorage.getItem('currentYearId')) {
+  get currentYearId(): number | null {
+    if (
+      typeof window !== 'undefined' &&
+      localStorage.getItem('currentYearId')
+    ) {
       return parseInt(localStorage.getItem('currentYearId') as string);
     }
     return null;
   }
 
-  getAuthToken(): string | null {
+  get authToken(): string | null {
     if (typeof window !== 'undefined' && localStorage.getItem('token')) {
       return localStorage.getItem('token');
     }

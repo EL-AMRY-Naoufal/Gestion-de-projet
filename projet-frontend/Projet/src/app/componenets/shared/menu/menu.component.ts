@@ -31,7 +31,7 @@ export class MenuComponent {
 userRoles: string[] = [];
 
   constructor(private router: Router, private loginService: LoginService) {
-    this.userRoles = this.loginService.getUserRoles()
+    this.userRoles = this.loginService.userRoles;
  }
 
   navigateToTeachers() {

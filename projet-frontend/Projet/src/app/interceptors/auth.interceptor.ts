@@ -1,5 +1,12 @@
 import { Injectable, Provider } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -9,12 +16,16 @@ import { LoginService } from '../services/login.service';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private loginService: LoginService, private router: Router) {} // Inject UserService et Router
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.loginService.getAuthToken();
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token = this.loginService.authToken;
 
-    if (token && !req.url.includes('authenticate')) { // Si c'est une requête d'authentification, on ne fourni pas le token
+    if (token && !req.url.includes('authenticate')) {
+      // Si c'est une requête d'authentification, on ne fourni pas le token
       const cloned = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${token}`)
+        headers: req.headers.set('Authorization', `Bearer ${token}`),
       });
       return next.handle(cloned).pipe(
         catchError((error: HttpErrorResponse) => {
@@ -32,5 +43,8 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 }
 
-export const authInterceptorProvider: Provider = 
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true };
+export const authInterceptorProvider: Provider = {
+  provide: HTTP_INTERCEPTORS,
+  useClass: AuthInterceptor,
+  multi: true,
+};
