@@ -1,10 +1,13 @@
-import { User } from './../componenets/shared/types/user.type';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 
+type UserRole = {
+  role: string;
+  yearId: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +16,12 @@ export class LoginService {
 
   private readonly _backendURL: any;
 
-  public userRoles = [];
+  public userRoles: UserRole[] = [];
   private authToken: string | null = null;
-  constructor(private http: HttpClient, private router: Router  ) {
-    this._backendURL = {};
+  private currentYearId: number | null = null;
 
+  constructor(private http: HttpClient, private router: Router) {
+    this._backendURL = {};
 
      // build backend base url
      let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -32,28 +36,34 @@ export class LoginService {
          // @ts-ignore
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
-
   }
-
 
   login(formData: any): Observable<any> {
     return this.http.post(this._backendURL.authenticate, formData);
   }
 
   handleLoginSuccess(response: any) {
-    console.log("id " ,response.user.id);
-    this.userRoles = response.user.roles;
+    // Verify response is correct
+    if(!response.user || !response.token || !response.currentYearId || isNaN(response.currentYearId)) {
+      console.error("Incorrect login response:", response);
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.userRoles = response.user.roles.map((ur: any) => ({ role: ur.role, yearId: ur.year }));
     this.authToken = response.token;
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
     localStorage.setItem('userId', response.user.id);
+    localStorage.setItem('currentYearId', response.currentYearId);
 
     if (typeof window !== 'undefined') {
-      localStorage.setItem('userRole', JSON.stringify(this.userRoles));
+      localStorage.setItem('userRoles', JSON.stringify(this.userRoles));
       if(this.authToken) localStorage.setItem('token', this.authToken);
     }
 
-    console.log('user', this.userRoles)
+    console.log(this.getUserRoles());
+
     this.router.navigate(['/dashboard']);
   }
 
@@ -71,38 +81,46 @@ export class LoginService {
   */
   connectUser(): number{
     return parseInt(localStorage.getItem('userId') || '0');
- }
-
+  }
 
   isLoggedIn(): boolean {
      if (typeof window === 'undefined') return false; // Server environment
 
-    return !!localStorage.getItem('userRole') && !!localStorage.getItem('token');
+    return !!localStorage.getItem('userRoles') && !!localStorage.getItem('token');
   }
 
   logout() {
-     if (typeof window !== 'undefined') {
-      localStorage.removeItem('userRole');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('userRoles');
       localStorage.removeItem('token');
     }
     this.userRoles = [];
     this.router.navigate(['/login']);
   }
 
+  /**
+   * @returns array of user roles for the current year
+   */
   getUserRoles(): string[] {
-    if (typeof window !== 'undefined' && localStorage.getItem('userRole')) {
-      return JSON.parse(localStorage.getItem('userRole') || '[]');
+    if (typeof window !== 'undefined' && localStorage.getItem('userRoles')) {
+      const currentYearId = parseInt(localStorage.getItem('currentYearId') || '0');
+      return JSON.parse(localStorage.getItem('userRoles') || "[]")
+        .filter((ur: any) => ur.yearId === currentYearId).map((ur: any) => ur.role);
     }
     return [];
   }
 
+  getCurrentYearId(): number | null {
+    if (typeof window !== 'undefined' && localStorage.getItem('currentYearId')) {
+      return parseInt(localStorage.getItem('currentYearId') as string);
+    }
+    return null;
+  }
+
   getAuthToken(): string | null {
-    console.log("getAuthToken");
     if (typeof window !== 'undefined' && localStorage.getItem('token')) {
       return localStorage.getItem('token');
     }
     return null;
   }
-
-
 }

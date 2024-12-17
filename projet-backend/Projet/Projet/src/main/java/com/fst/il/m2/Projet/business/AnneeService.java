@@ -14,4 +14,6 @@ public interface AnneeService {
 
     void deleteAnnee(Long id);
 
+    Long getCurrentYearId();
+
 }

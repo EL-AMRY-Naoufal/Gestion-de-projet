@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { UserService } from '../../services/user.service';
 import { UserCardComponent } from '../card/user-card/user-card.component';
-import { User } from '../shared/types/user.type';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 import { EnseignantService } from '../../services/enseignant.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,9 +17,6 @@ import { UpdateProfesseurComponent } from '../update-professeur/update-professeu
   styleUrls: ['./enseignants.component.scss']
 })
 
-  
-
-  
 export class EnseignantsComponent  implements OnInit{
  users: any[] = [];
   constructor(private userService: UserService,  

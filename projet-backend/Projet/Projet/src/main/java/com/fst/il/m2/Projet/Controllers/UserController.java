@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.Controllers;
 
+import com.fst.il.m2.Projet.business.AnneeService;
 import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.dto.UserAuthentification;
@@ -22,13 +23,15 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+    private final AnneeService anneeService;
 
     @Autowired
     private JWTUtil jwtUtil;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AnneeService anneeService) {
         this.userService = userService;
+        this.anneeService = anneeService;
     }
 
     @PostMapping("/authenticate")
@@ -45,8 +48,14 @@ public class UserController {
         String token = jwtUtil.generateToken(authenticatedUser.getUsername(),
                 currentRoles != null ? currentRoles.stream().map(Enum::name).toList() : null); // Only the current role
 
-        AuthResponse response = new AuthResponse("Authentication succeeded", token, authenticatedUser);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+                AuthResponse.builder()
+                        .message("Authentication succeeded")
+                        .token(token)
+                        .currentYearId(anneeService.getCurrentYearId())
+                        .user(authenticatedUser)
+                        .build()
+                , HttpStatus.OK);
     }
 
     @PutMapping("/{id}/password")
