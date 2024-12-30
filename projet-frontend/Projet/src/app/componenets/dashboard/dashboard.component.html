@@ -11,6 +11,10 @@
        class="menu-item gray">
     Affectations
   </div>
+
+  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToCreateAffectations()">
+      Creer des Affectations
+  </div>
   <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()">
       Utilisateurs
   </div>

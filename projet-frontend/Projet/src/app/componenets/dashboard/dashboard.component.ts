@@ -47,6 +47,11 @@ export class DashboardComponent {
     this.router.navigate(['/enseignant/MesAffectations']);
   }
 
+  // Navigate to the component to create affectations by the admin
+  navigateToCreateAffectations() {
+    this.router.navigate(['/admin/affectations']);
+  }
+
   navigateToDashboard() {
     this.router.navigate(['/dashboard']);
   }
