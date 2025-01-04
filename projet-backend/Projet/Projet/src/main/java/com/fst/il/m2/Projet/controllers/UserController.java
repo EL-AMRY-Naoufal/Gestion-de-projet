@@ -1,4 +1,4 @@
-package com.fst.il.m2.Projet.Controllers;
+package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.AnneeService;
 import com.fst.il.m2.Projet.business.UserService;
@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController

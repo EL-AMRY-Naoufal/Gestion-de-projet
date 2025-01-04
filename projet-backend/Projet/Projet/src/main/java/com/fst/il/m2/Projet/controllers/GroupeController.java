@@ -1,4 +1,4 @@
-package com.fst.il.m2.Projet.Controllers;
+package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.models.Groupe;
 import com.fst.il.m2.Projet.business.GroupeService;

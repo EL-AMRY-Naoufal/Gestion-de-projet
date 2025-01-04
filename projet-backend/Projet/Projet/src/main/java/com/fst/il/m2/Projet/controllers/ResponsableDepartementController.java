@@ -1,4 +1,4 @@
-package com.fst.il.m2.Projet.Controllers;
+package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -23,7 +22,7 @@ public class ResponsableDepartementController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
         User createdUser = responsableDepartementService.createUser(
-                userRequest.getUser(),
+                userRequest.getUser().toUser(),
                 userRequest.getResponsableId(),
                 userRequest.isAssociateEnseignantWithUser(), // Pass the new parameter,
                 userRequest.getYearId()
@@ -61,7 +60,7 @@ public class ResponsableDepartementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser(), userRequest.getResponsableId());
+        User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId());
         return ResponseEntity.ok(updatedUser);
     }
 

@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
+import { isPlatformBrowser } from '@angular/common';
 
 type UserRole = {
   role: string;
@@ -15,8 +16,12 @@ type UserRole = {
 export class LoginService {
   private readonly _backendURL: any;
 
-  constructor(private http: HttpClient, private router: Router) {
+  private readonly isBrowser!: boolean;
+
+  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
     this._backendURL = {};
+
+    this.isBrowser = isPlatformBrowser(this.platformId);
 
     // build backend base url
     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -58,12 +63,12 @@ export class LoginService {
     const currentYearId = response.currentYearId;
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
-    localStorage.setItem('userId', response.user.id);
-    localStorage.setItem('currentYearId', currentYearId + '');
-
-    if (typeof window !== 'undefined') {
+    if (this.isBrowser) {
+      console.log(authToken);
+      localStorage.setItem('userId', response.user.id);
+      localStorage.setItem('currentYearId', currentYearId + '');
       localStorage.setItem('userRoles', JSON.stringify(userRoles));
-      if (this.authToken) localStorage.setItem('token', authToken);
+      if(authToken) localStorage.setItem('token', authToken);
     }
 
     this.router.navigate(['/dashboard']);
@@ -82,11 +87,13 @@ export class LoginService {
    * Returns private property _connectUserID
    */
   connectUser(): number {
+    if(!this.isBrowser) return 0; // Server environment
+
     return parseInt(localStorage.getItem('userId') || '0');
   }
 
   isLoggedIn(): boolean {
-    if (typeof window === 'undefined') return false; // Server environment
+    if (!this.isBrowser) return false; // Server environment
 
     return (
       !!localStorage.getItem('userRoles') && !!localStorage.getItem('token')
@@ -94,7 +101,7 @@ export class LoginService {
   }
 
   logout() {
-    if (typeof window !== 'undefined') {
+    if(this.isBrowser) {
       localStorage.removeItem('userRoles');
       localStorage.removeItem('token');
     }
@@ -105,7 +112,7 @@ export class LoginService {
    * @returns array of user roles for the current year
    */
   get userRoles(): string[] {
-    if (typeof window !== 'undefined' && localStorage.getItem('userRoles')) {
+    if (this.isBrowser) {
       return (JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[])
         .filter((ur: any) => ur.yearId === this.currentYearId)
         .map((ur: any) => ur.role);
@@ -114,17 +121,14 @@ export class LoginService {
   }
 
   get currentYearId(): number | null {
-    if (
-      typeof window !== 'undefined' &&
-      localStorage.getItem('currentYearId')
-    ) {
+    if (this.isBrowser) {
       return parseInt(localStorage.getItem('currentYearId') as string);
     }
     return null;
   }
 
   get authToken(): string | null {
-    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
+    if (this.isBrowser) {
       return localStorage.getItem('token');
     }
     return null;

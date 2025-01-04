@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.fst.il.m2.Projet.mapper.UserMapper.userToUserDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -64,7 +65,7 @@ public class UserServiceDefaultTest {
     public void shouldAuthenticateWithSuccess() {
 
         UserRequest userRequest = UserRequest.builder()
-                .user(user)
+                .user(userToUserDto(user))
                 .responsableId(1L)
                 .build();
 
@@ -78,7 +79,7 @@ public class UserServiceDefaultTest {
     @Test
     public void shouldFailAuthenticationWithInvalidPassword() {
         UserRequest userRequest = UserRequest.builder()
-                .user(user)
+                .user(userToUserDto(user))
                 .responsableId(1L)
                 .build();
 
