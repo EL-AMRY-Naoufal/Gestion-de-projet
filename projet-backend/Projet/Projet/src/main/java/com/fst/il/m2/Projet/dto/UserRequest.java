@@ -34,12 +34,15 @@ public class UserRequest {
         private String password;
         private String email;
         private List<UserRoleDto> roles;
+        private Long id;
+
 
         public User toUser(){
             User user = User.builder()
                     .username(username)
                     .email(email)
                     .password(password)
+                    .id(id)
                     .build();
 
             user.addUserRoles(roles.stream().map(UserRoleDto::toUserRole).toList());
