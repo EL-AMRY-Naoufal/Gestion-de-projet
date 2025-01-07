@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserComponent } from "../componenets/user/user.component";
-import { User } from '../types/user.types';
+import { User } from '../componenets/shared/types/user.type';
 
 @Component({
   selector: 'app-user-update',

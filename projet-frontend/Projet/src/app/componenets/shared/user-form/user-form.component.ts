@@ -98,13 +98,18 @@ export class UserFormComponent {
    * OnInit implementation
    */
   ngOnInit(): void {
+    // Récupération des catégories depuis le service
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
-    if (this._isUpdateMode && this._model.roles.includes('ENSEIGNANT')) {
+
+    // Vérifier si nous sommes en mode mise à jour
+    if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+      // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
     }
   }
+
 
   private fetchEnseignantDetails(userId: number): void {
     this.enseignantService.getEnseignant(userId).subscribe({
@@ -122,36 +127,38 @@ export class UserFormComponent {
     });
   }
 
-
-  /**
-   * Function to handle component update
-   */
-  ngOnChanges(record: any): void {
-    if (record.model && record.model.currentValue) {
-      this._model = record.model.currentValue;
-      this._isUpdateMode = true;
-    } else {
-      this._model = {
-        id: 123,
-        username: '',
-        email: '',
-        roles: [],
-        password: ''
-      };
-      this._isUpdateMode = false;
-    }
-    if (this._isUpdateMode && this._model.roles.includes('ENSEIGNANT')) {
-      this.fetchEnseignantDetails(this._model.id!);
-      this._form.patchValue({
-        categorieEnseignant: this.enseignant.categorieEnseignant,
-        nbHeureCategorie: this.enseignant.nbHeureCategorie,
-      });
-    }
-
-
-    // update form's values with model
-    this._form.patchValue(this._model);
+/**
+ * Function to handle component update
+ */
+ngOnChanges(record: any): void {
+  if (record.model && record.model.currentValue) {
+    this._model = record.model.currentValue;
+    this._isUpdateMode = true;
+  } else {
+    this._model = {
+      id: 123,
+      username: '',
+      email: '',
+      roles: [],
+      password: ''
+    };
+    this._isUpdateMode = false;
   }
+
+  // Vérification et traitement du rôle ENSEIGNANT
+  if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+    this.fetchEnseignantDetails(this._model.id!);
+
+    // Mise à jour des champs spécifiques pour un enseignant
+    this._form.patchValue({
+      categorieEnseignant: this.enseignant?.categorieEnseignant,
+      nbHeureCategorie: this.enseignant?.nbHeureCategorie,
+    });
+  }
+
+  // Mise à jour des valeurs du formulaire avec le modèle complet
+  this._form.patchValue(this._model);
+}
 
   /**
    * Function to emit event to cancel process
@@ -160,91 +167,107 @@ export class UserFormComponent {
     this._cancel$.emit();
   }
 
-  /**
-   * Function to emit event to submit form and person
-   */
-  submit(user: User): void {
-    this._submit$.emit(user);
-    if (this._isUpdateMode && this.model.roles.includes('ENSEIGNANT')) {
-      this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
-      this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
-      this.enseignant.maxHeuresService = user.maxHeuresService as number;
-      this.enseignantService.updateEnseignant(this.enseignant).subscribe(
+/**
+ * Function to emit event to submit form and person
+ */
+submit(user: User): void {
+  // Émettre l'utilisateur via l'événement _submit$
+  this._submit$.emit(user);
 
-      );
-    }
+  // Vérifier si nous sommes en mode mise à jour et si le rôle ENSEIGNANT est présent
+  if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
+    // Mise à jour des propriétés de l'enseignant avec les valeurs de l'utilisateur
+    this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
+    this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
+    this.enseignant.maxHeuresService = user.maxHeuresService as number;
+
+    // Appeler le service pour mettre à jour l'enseignant
+    this.enseignantService.updateEnseignant(this.enseignant).subscribe(
+      () => {
+        console.log('Enseignant updated successfully');
+      },
+      error => {
+        console.error('Error updating enseignant:', error);
+      }
+    );
+  }
+}
+
+/**
+ * Function to build our form
+ */
+private _buildForm(): FormGroup {
+  const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
+    id: new FormControl(),
+    username: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(2)])
+    ),
+    email: new FormControl(
+      '',
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail])
+    ),
+    roles: new FormControl('', Validators.required),
+    password: new FormControl(
+      '',
+      this._isUpdateMode
+        ? null
+        : Validators.compose([
+            Validators.required,
+            Validators.minLength(6),
+            UserCustomValidators.strongPassword,
+          ])
+    ),
+    confirmPassword: new FormControl(
+      '',
+      this._isUpdateMode
+        ? null
+        : Validators.compose([Validators.required, Validators.minLength(6)])
+    ),
+  });
+
+  // Appliquer la validation personnalisée si ce n'est pas un mode de mise à jour
+  if (!this._isUpdateMode) {
+    _formGroup.setValidators(UserCustomValidators.matchPasswords);
   }
 
-  /**
-   * Function to build our form
-   */
-  private _buildForm(): FormGroup {
-    const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
-      id: new FormControl(),
-      username: new FormControl(
-        '',
-        Validators.compose([Validators.required, Validators.minLength(2)])
-      ),
-      email: new FormControl(
-        '',
-        Validators.compose([Validators.required, UserCustomValidators.googleEmail])
-      ),
-      roles: new FormControl('', Validators.required),
-      password: new FormControl(
-        '',
-        this._isUpdateMode
-          ? null
-          : Validators.compose([
-              Validators.required,
-              Validators.minLength(6),
-              UserCustomValidators.strongPassword,
-            ])
-      ),
-      confirmPassword: new FormControl(
-        '',
-        this._isUpdateMode
-          ? null
-          : Validators.compose([Validators.required, Validators.minLength(6)])
-      ),
-    });
+  // Fonction utilitaire pour ajouter des contrôles dynamiques
+  const addControl = (
+    name: string,
+    value: any,
+    baseValidators: any[] = [],
+    ...extraValidators: any[]
+  ) => {
+    const allValidators = [...baseValidators, ...extraValidators];
+    const control = new FormControl(value, Validators.compose(allValidators));
+    _formGroup.addControl(name, control);
+  };
 
-    if (!this._isUpdateMode) {
-      _formGroup.setValidators(UserCustomValidators.matchPasswords);
-    }
+  // Vérification si le rôle 'ENSEIGNANT' est présent
+  const isEnseignant = this.model?.roles?.some(role => role.role === 'ENSEIGNANT');
 
-    const addControl = (
-      name: string,
-      value: any,
-      baseValidators: any[] = [],
-      ...extraValidators: any[]
-    ) => {
-      const allValidators = [...baseValidators, ...extraValidators]; // Combine les validateurs
-      const control = new FormControl(value, Validators.compose(allValidators));
-      _formGroup.addControl(name, control);
-    };
+  // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
+  addControl(
+    'maxHeuresService',
+    this.enseignant?.maxHeuresService || this.defaultHeures,
+    isEnseignant ? [Validators.required] : [],
+    Validators.min(0)
+  );
+  addControl(
+    'categorieEnseignant',
+    this.enseignant?.categorieEnseignant || '',
+    isEnseignant ? [Validators.required] : []
+  );
+  addControl(
+    'nbHeureCategorie',
+    this.enseignant?.nbHeureCategorie || 0,
+    isEnseignant ? [Validators.required] : [],
+    Validators.min(0)
+  );
 
+  return _formGroup;
+}
 
-    const isEnseignant = this.model?.roles?.includes('ENSEIGNANT');
-    addControl(
-      'maxHeuresService',
-      this.enseignant?.maxHeuresService || this.defaultHeures,
-      isEnseignant ? [Validators.required] : [],
-      Validators.min(0),
-    );
-    addControl(
-      'categorieEnseignant',
-      this.enseignant?.categorieEnseignant || '',
-      isEnseignant ? [Validators.required] : []
-    );
-    addControl(
-      'nbHeureCategorie',
-      this.enseignant?.nbHeureCategorie || 0,
-      isEnseignant ? [Validators.required] : [],
-      Validators.min(0),
-    );
-
-    return _formGroup;
-  }
 
 
   /**

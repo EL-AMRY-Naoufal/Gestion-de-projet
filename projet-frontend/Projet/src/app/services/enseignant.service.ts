@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {AffectationType} from "../componenets/shared/types/affectation.type";
 import { environment } from '../../environments/environment.prod';
-import { User } from '../types/user.types';
 import { EnseignantDto } from '../componenets/shared/types/enseignant.type';
+import { User } from '../componenets/shared/types/user.type';
 
 @Injectable({
   providedIn: 'root'

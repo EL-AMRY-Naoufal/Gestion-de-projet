@@ -1,4 +1,5 @@
-import { User } from "../../../types/user.types";
+import { User } from "./user.type";
+
 
 export interface EnseignantDto {
     id?: number;

@@ -16,7 +16,8 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
-import { User } from '../../types/user.types';
+import { User } from '../shared/types/user.type';
+
 
 @Component({
   selector: 'app-list-users',

@@ -4,7 +4,7 @@ import { UserService } from '../../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 
 import { filter, merge, mergeMap, tap } from 'rxjs';
-import { User } from '../../types/user.types';
+import { User } from '../shared/types/user.type';
 
 @Component({
   selector: 'app-user',

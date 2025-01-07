@@ -4,8 +4,8 @@ import { MatCardModule } from '@angular/material/card';  // Pour le composant ma
 import { MatIconModule } from '@angular/material/icon';  // Pour les icônes
 import { MatButtonModule } from '@angular/material/button';  // Pour les boutons
 import { CommonModule } from '@angular/common';
-import { User } from '../../../types/user.types';
 import { LoginService } from '../../../services/login.service';
+import { User } from '../types/user.type';
 
 
 @Component({

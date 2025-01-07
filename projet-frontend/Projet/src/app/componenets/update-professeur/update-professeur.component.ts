@@ -9,9 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { CategorieEnseignantService } from '../../services/categorie-enseignant.service';
 import { UserService } from '../../services/user.service';
-import { User } from '../../types/user.types';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
+import { User } from '../shared/types/user.type';
 
 @Component({
   selector: 'app-update-professeur',
