@@ -42,11 +42,11 @@ public class UserServiceDefault implements UserService {
         this.userRepository = userRepository;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void postConstruct() {
-        /*
+        *//*
             Comptes de tests
-         */
+         *//*
 
         // UserRoles
         Map<String, Role> userRoles = Map.of(
@@ -56,9 +56,9 @@ public class UserServiceDefault implements UserService {
                 "sec", Role.SECRETARIAT_PEDAGOGIQUE
         );
 
-        /*for(UserRole ur : userRoles.values()){
+        *//*for(UserRole ur : userRoles.values()){
             userRoleRepository.findAllByRoleAndYear(ur.getRole(), ur.getYear());
-        }*/
+        }*//*
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
@@ -74,7 +74,7 @@ public class UserServiceDefault implements UserService {
 
         anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build()));
 
-    }
+    }*/
 
     @Override
     public User authenticate(String email, String password) {  // Return type is User

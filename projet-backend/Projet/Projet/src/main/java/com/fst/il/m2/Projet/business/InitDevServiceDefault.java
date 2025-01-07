@@ -7,10 +7,12 @@ import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class InitDevServiceDefault implements InitDevService {
@@ -29,23 +31,67 @@ public class InitDevServiceDefault implements InitDevService {
     ResponsableFormationRepository responsableFormationRepository;
     @Autowired
     GroupeRepository groupeRepository;
+    @Autowired
+    AnneeRepository anneeRepository;
 
     @PostConstruct
     public void postConstruct() {
+        /*
+            Comptes de tests
+         */
+
+        // UserRoles
+        Map<String, Role> userRoles = Map.of(
+                "cdd", Role.CHEF_DE_DEPARTEMENT,
+                "rdf", Role.RESPONSABLE_DE_FORMATION,
+                "ens", Role.ENSEIGNANT,
+                "sec", Role.SECRETARIAT_PEDAGOGIQUE
+        );
+
+        /*for(UserRole ur : userRoles.values()){
+            userRoleRepository.findAllByRoleAndYear(ur.getRole(), ur.getYear());
+        }*/
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        List<User> users = List.of(
+                User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).build()
+        );
+        for(User u : users){
+            u.addRole(1L, userRoles.get(u.getUsername()));
+            userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
+        }
+
+        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build()));
+
+
+
         //data to create : Annee -> Orientation -> Niveau -> ...?
 
         /**********USERS**********/
         //users enseignants
-        ArrayList<Role> rolesEnseignants = new ArrayList<>();
-        rolesEnseignants.add(Role.ENSEIGNANT);
-        User user1 = new User(5L, "username1", "password1", "email1@email.fr", rolesEnseignants);
-        User user2 = new User(6L, "username2", "password2", "email2@email.fr", rolesEnseignants);
+        ArrayList<UserRole> rolesEnseignant1 = new ArrayList<>();
+        rolesEnseignant1.add(new UserRole(1L,  Role.ENSEIGNANT, 2025L, null));
+        User user1 = new User(5L, "username1", "password1", "email1@email.fr", rolesEnseignant1);
+        user1.getRoles().forEach((role) -> role.setUser(user1));
+
+        ArrayList<UserRole> rolesEnseignant2 = new ArrayList<>();
+        rolesEnseignant2.add(new UserRole(2L,  Role.ENSEIGNANT, 2025L, null));
+        User user2 = new User(6L, "username2", "password2", "email2@email.fr", rolesEnseignant2);
+        user2.getRoles().forEach((role) -> role.setUser(user2));
 
         //users rdf
-        ArrayList<Role> rolesRDF = new ArrayList<>();
-        rolesRDF.add(Role.RESPONSABLE_DE_FORMATION);
-        User user3 = new User(7L, "username3", "password3", "email3@email.fr", rolesRDF);
-        User user4 = new User(8L, "username4", "password4", "email4@email.fr", rolesRDF);
+        ArrayList<UserRole> rolesRDF1 = new ArrayList<>();
+        rolesRDF1.add(new UserRole(3L, Role.RESPONSABLE_DE_FORMATION, 2025L, null));
+        User user3 = new User(7L, "username3", "password3", "email3@email.fr", rolesRDF1);
+        user3.getRoles().forEach((role) -> role.setUser(user3));
+
+        ArrayList<UserRole> rolesRDF2 = new ArrayList<>();
+        rolesRDF2.add(new UserRole(3L, Role.RESPONSABLE_DE_FORMATION, 2025L, null));
+        User user4 = new User(8L, "username4", "password4", "email4@email.fr", rolesRDF2);
+        user4.getRoles().forEach((role) -> role.setUser(user4));
 
         /**********RESPONSABLE FORMATIONS**********/
         ResponsableFormation responsableFormation1 = new ResponsableFormation(1L, user3);
@@ -106,17 +152,38 @@ public class InitDevServiceDefault implements InitDevService {
         groupe2.setModule(modules1.get(0));
         groupe3.setModule(modules2.get(0));
 
-        //update modules
-        modules1.get(0).setGroupes(groupes1);
-        modules2.get(0).setGroupes(groupes2);
+        //save users
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+        userRepository.save(user4);
 
-        //update Affectations
-        affectations1.get(0).setModule(modules1.get(0));
-        affectations1.get(1).setModule(modules2.get(0));
+        long time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 
-        //update Formations
-        formation1.setModules(modules1);
-        formation2.setModules(modules2);
+        //WAIT FOR USERS TO BE SAVED
+        while(userRepository.findById(8L).isEmpty())
+            if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
+                break;
+
+        userRepository.findAll().forEach((user)-> System.out.println(user.getId()));
+
+        //NOW USERS SHOULD BE SAVED
+
+        //save RDF
+        responsableFormationRepository.save(responsableFormation1);
+        responsableFormationRepository.save(responsableFormation2);
+
+        //save formations
+        formationRepository.save(formation1);
+        formationRepository.save(formation2);
+
+        //save enseignants
+        enseignantRepository.save(enseignant1);
+        enseignantRepository.save(enseignant2);
+
+        //save Affectations
+        affectations1.forEach((a) -> affectationRepository.save(a));
+        affectations2.forEach((a) -> affectationRepository.save(a));
 
         //update Enseignants
         ArrayList<Affectation> affectationsEnseignant1 = new ArrayList<>();
@@ -129,16 +196,6 @@ public class InitDevServiceDefault implements InitDevService {
         affectationsEnseignant2.add(affectations2.get(1));
         enseignant2.setAffectations(affectationsEnseignant2);
 
-        //save users
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        userRepository.save(user4);
-
-        //save RDF
-        responsableFormationRepository.save(responsableFormation1);
-        responsableFormationRepository.save(responsableFormation2);
-
         //save modules //TODO must create groupes before
 
         System.out.println("MODUUUUUULLLLLEEEE : " + modules1.get(0).getGroupes());
@@ -146,23 +203,29 @@ public class InitDevServiceDefault implements InitDevService {
         moduleRepository.save(modules1.get(0));
         moduleRepository.save(modules2.get(0));
 
+        //update Formations
+        formation1.setModules(modules1);
+        formation2.setModules(modules2);
+
+        //update Affectations
+        affectations1.get(0).setModule(modules1.get(0));
+        affectations1.get(1).setModule(modules2.get(0));
+
+
         //save groupes //TODO must create modules before
         groupeRepository.save(groupe1);
         groupeRepository.save(groupe2);
         groupeRepository.save(groupe3);
 
-        //save enseignants
-        enseignantRepository.save(enseignant1);
-        enseignantRepository.save(enseignant2);
-
-        //save formations
-        formationRepository.save(formation1);
-        formationRepository.save(formation2);
+        //update modules
+        modules1.get(0).setGroupes(groupes1);
+        modules2.get(0).setGroupes(groupes2);
 
 
-        //save Affectations
-        affectations1.forEach((a) -> affectationRepository.save(a));
-        affectations2.forEach((a) -> affectationRepository.save(a));
+
+
+
+        /**/
 
     }
 }
