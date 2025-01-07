@@ -1,19 +1,22 @@
+
+<!-- Faudrait vrm la supp celle la -->
+
 <div class="user-card">
     <div class="user-info">
         <h2 class="username">{{ user.username }}</h2>
-        <p class="email">{{ user.email }}</p>
+        <p class="email">{{ user.email }} </p>
         <p class="role">Rôle(s) :
             <span *ngFor="let role of user.roles; let i = index">
-              {{ role }}<span *ngIf="i < user.roles.length - 1">, </span>
+              {{ role.id }} <span *ngIf="i < user.roles.length - 1">, </span>
             </span>
-          </p>          
+          </p>
     </div>
     <div class="actions">
         <button class="edit-btn" title="Modifier" (click)="onEditClick()">
-            <i class="fas fa-edit"></i> 
+            <i class="fas fa-edit"></i>
         </button>
         <button mat-icon-button color="warn" aria-label="Supprimer" matTooltip="Supprimer">
             <mat-icon>delete</mat-icon>
         </button>
-    </div>  
+    </div>
 </div>
