@@ -36,7 +36,8 @@ public class Module {
 
     public Module() {
     }
-
+//
+    //TODO deprecated? ("groupes" useless here)
     public Module(Long id, String nom, int totalHeuresRequises, int groupes, Map<TypeHeure, Integer> heuresParType, Formation formation, List<Affectation> affectations) {
         this.id = id;
         this.nom = nom;
