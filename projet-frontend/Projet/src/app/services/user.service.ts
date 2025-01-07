@@ -1,12 +1,10 @@
 import { LoginService } from './login.service';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { User } from '../componenets/shared/types/user.type';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import {defaultIfEmpty, filter, map, Observable, throwError} from 'rxjs';
-import {AffectationType} from "../componenets/shared/types/affectation.type";
 import {catchError} from "rxjs/operators";
-import { isPlatformBrowser } from '@angular/common';
+import { User } from '../types/user.types';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +21,7 @@ export class UserService {
     this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
-       roles: ['ENSEIGNANT'],
+       roles: [],
        password: 'Ed*lZ%0qiA'
      };
      this._backendURL = {};
@@ -189,5 +187,9 @@ export class UserService {
   searchUsersByRole(role: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}/${role}`;
     return this._http.get<any[]>(url);
+  }
+
+  userHasRole(user: User, role: string): boolean {
+    return user.roles.filter(r => r.role === role && r.yearId == this._loginService.currentYearId).length > 0;
   }
 }

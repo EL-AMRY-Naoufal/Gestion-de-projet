@@ -11,8 +11,7 @@
     <mat-card-subtitle>
       <ng-container *ngIf="user.roles?.length; else noRoles">
         <span *ngFor="let roleDto of user.roles; let last = last">
-
-          {{ roleDto }} (Year: {{ roleDto }}) <!-- Affichage du rôle et de l'année -->
+          {{ roleDto.role }} <!-- Affichage du rôle et de l'année -->
           <span *ngIf="!last"><br></span>
         </span>
       </ng-container>
@@ -48,7 +47,7 @@
     <!-- Bouton pour supprimer l'utilisateur -->
     <button
       mat-button
-      *ngIf="!user.roles?.includes('CHEF_DE_DEPARTEMENT')"
+      *ngIf="isChefDepartement()"
       (click)="delete(user)"
     >
       Supprimer

@@ -135,7 +135,7 @@ export class UserFormComponent {
         id: 123,
         username: '',
         email: '',
-        roles: ['ENSEIGNANT'],
+        roles: [],
         password: ''
       };
       this._isUpdateMode = false;

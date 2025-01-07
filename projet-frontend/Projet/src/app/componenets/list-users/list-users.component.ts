@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { User } from '../shared/types/user.type';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 import { UserService } from '../../services/user.service';
 import { filter, map, mergeMap, Observable } from 'rxjs';
@@ -17,6 +16,7 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
+import { User } from '../../types/user.types';
 
 @Component({
   selector: 'app-list-users',
@@ -164,7 +164,7 @@ export class ListUsersComponent {
       .subscribe({
         next: (user: User) => { 
           (this._listUsers = this._listUsers.concat(user)); 
-          if (user.roles.includes('ENSEIGNANT')) { 
+          if (this._usersService.userHasRole(user, 'ENSEIGNANT')) { 
             this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),

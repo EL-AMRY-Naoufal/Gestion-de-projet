@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { UserCardComponent } from "../shared/user-card/user-card.component";
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../shared/types/user.type';
+
 import { filter, merge, mergeMap, tap } from 'rxjs';
+import { User } from '../../types/user.types';
 
 @Component({
   selector: 'app-user',
