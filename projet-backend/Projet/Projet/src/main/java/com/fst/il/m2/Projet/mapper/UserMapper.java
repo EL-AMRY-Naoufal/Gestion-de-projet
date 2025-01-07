@@ -1,10 +1,9 @@
 package com.fst.il.m2.Projet.mapper;
 
-import com.fst.il.m2.Projet.dto.UserGetAllDto;
-import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.models.UserRole;
-
 public class UserMapper {
+
+    // A corriger car supp da la classe UserGetAllDto
+    /*
     public static UserGetAllDto userToUserGetAllDto(User user) {
         return UserGetAllDto.builder()
                 .id(user.getId())
@@ -13,4 +12,20 @@ public class UserMapper {
                 .username(user.getUsername())
                 .build();
     }
+
+    public static UserRequest.UserDto userToUserDto(User user){
+        return UserRequest.UserDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRoles().stream().map(
+                        userRole -> UserRoleDto.builder()
+                                .role(userRole.getRole())
+                                .yearId(userRole.getYear())
+                                .build()
+                ).toList())
+                .build();
+    }
+
+     */
 }

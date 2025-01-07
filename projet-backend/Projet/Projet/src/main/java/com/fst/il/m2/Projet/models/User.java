@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import jakarta.persistence.*;
@@ -9,10 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Data
@@ -36,15 +34,22 @@ public class User {
     @Column(name="Email", unique = true)
     private String email;
 
+    @Builder.Default()
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "UserRole_id")
-    private List<UserRole> roles;
+    private List<UserRole> roles = new ArrayList<>();
 
     // Getters and setters
 
     // Add a role for a specific year
     public void addRole(Long yearId, Role role) {
-        this.roles.add(UserRole.builder().year(yearId).role(role).build());
+        this.roles.add(UserRole.builder().year(yearId).role(role).user(this).build());
+    }
+
+    public void addUserRoles(List<UserRole> userRoles){
+        for (UserRole ur : userRoles)
+            addRole(ur.getYear(), ur.getRole());
+
     }
 
     // Remove a role for a specific year

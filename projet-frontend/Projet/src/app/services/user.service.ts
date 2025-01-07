@@ -1,11 +1,12 @@
 import { LoginService } from './login.service';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { User } from '../componenets/shared/types/user.type';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import {defaultIfEmpty, filter, map, Observable, throwError} from 'rxjs';
 import {AffectationType} from "../componenets/shared/types/affectation.type";
 import {catchError} from "rxjs/operators";
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class UserService {
    private readonly _responsableId: number = 1;
 
    constructor(private _http: HttpClient, private _loginService: LoginService) {
-     this._defaultUser = {
+    this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
        roles: ['ENSEIGNANT'],
@@ -41,7 +42,7 @@ export class UserService {
          (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
      );
 
-     this._responsableId = this._loginService.connectUser();
+     this._responsableId = this._loginService.connectUser() ?? 0;
      if (!this._responsableId) {
       throw new Error("Responsable is not authenticated or responsableId is missing");
     }
@@ -78,9 +79,20 @@ export class UserService {
     * Function to create a new person
     */
    create(user: User): Observable<any> {
+
+      const newUser = {
+        ...user,
+        roles: [{
+          yearId: 1,
+          role: "ENSEIGNANT"
+        }]
+      }
+
       const body = {
         responsableId: this._responsableId,  // Ajoute le responsableId
-        user: user  // Ajoute l'objet user
+        user: newUser,  // Ajoute l'objet user
+        associateEnseignantWithUser: false,
+        yearId: 1
       };
 
      return this._http.post<User>(

@@ -38,6 +38,7 @@ export class UserCardComponent {
      * Returns private property _person
      */
     get user(): User {
+
       return this._user;
     }
 

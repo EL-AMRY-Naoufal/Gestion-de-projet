@@ -17,10 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,11 +49,11 @@ public class UserServiceDefault implements UserService {
          */
 
         // UserRoles
-        Map<String, UserRole> userRoles = Map.of(
-                "cdd", UserRole.builder().year(1L).role(Role.CHEF_DE_DEPARTEMENT).build(),
-                "rdf", UserRole.builder().year(1L).role(Role.RESPONSABLE_DE_FORMATION).build(),
-                "ens", UserRole.builder().year(1L).role(Role.ENSEIGNANT).build(),
-                "sec", UserRole.builder().year(1L).role(Role.SECRETARIAT_PEDAGOGIQUE).build()
+        Map<String, Role> userRoles = Map.of(
+                "cdd", Role.CHEF_DE_DEPARTEMENT,
+                "rdf", Role.RESPONSABLE_DE_FORMATION,
+                "ens", Role.ENSEIGNANT,
+                "sec", Role.SECRETARIAT_PEDAGOGIQUE
         );
 
         /*for(UserRole ur : userRoles.values()){
@@ -65,13 +62,15 @@ public class UserServiceDefault implements UserService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
-                User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(List.of(userRoles.get("cdd"))).build(),
-                User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(List.of(userRoles.get("rdf"))).build(),
-                User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(List.of(userRoles.get("ens"))).build(),
-                User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(List.of(userRoles.get("sec"))).build()
+                User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).build()
         );
-        for(User u : users)
+        for(User u : users){
+            u.addRole(1L, userRoles.get(u.getUsername()));
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
+        }
 
         anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build()));
 
