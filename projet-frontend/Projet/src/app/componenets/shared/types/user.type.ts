@@ -1,4 +1,4 @@
-import { CategorieEnseignant } from "../../../types/enseignant.type";
+import { CategorieEnseignant } from "./enseignant.type";
 
 export interface User {
     id?: number;

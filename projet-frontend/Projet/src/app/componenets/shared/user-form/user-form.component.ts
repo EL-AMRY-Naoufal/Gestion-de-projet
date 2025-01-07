@@ -9,7 +9,7 @@ import { UserCustomValidators } from './user-custom-validators';
 import { MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule, NgIf } from '@angular/common';
-import { CategorieEnseignant, EnseignantDto } from '../../../types/enseignant.type';
+import { CategorieEnseignant, EnseignantDto } from '../types/enseignant.type';
 import { EnseignantService } from '../../../services/enseignant.service';
 import { CategorieEnseignantService } from '../../../services/categorie-enseignant.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -121,7 +121,7 @@ export class UserFormComponent {
       },
     });
   }
-  
+
 
   /**
    * Function to handle component update
@@ -147,7 +147,7 @@ export class UserFormComponent {
         nbHeureCategorie: this.enseignant.nbHeureCategorie,
       });
     }
-    
+
 
     // update form's values with model
     this._form.patchValue(this._model);
@@ -207,11 +207,11 @@ export class UserFormComponent {
           : Validators.compose([Validators.required, Validators.minLength(6)])
       ),
     });
-  
+
     if (!this._isUpdateMode) {
       _formGroup.setValidators(UserCustomValidators.matchPasswords);
     }
-  
+
     const addControl = (
       name: string,
       value: any,
@@ -222,8 +222,8 @@ export class UserFormComponent {
       const control = new FormControl(value, Validators.compose(allValidators));
       _formGroup.addControl(name, control);
     };
-    
-  
+
+
     const isEnseignant = this.model?.roles?.includes('ENSEIGNANT');
     addControl(
       'maxHeuresService',
@@ -242,14 +242,14 @@ export class UserFormComponent {
       isEnseignant ? [Validators.required] : [],
       Validators.min(0),
     );
-  
+
     return _formGroup;
   }
-  
-  
+
+
   /**
    * Adds a new control or replaces an existing one in the FormGroup.
-   * 
+   *
    * @param formGroup The FormGroup to modify.
    * @param controlName The name of the control to add or replace.
    * @param control The new FormControl instance to set.
@@ -265,8 +265,8 @@ export class UserFormComponent {
       formGroup.addControl(controlName, control); // Add new control
     }
   }
-  
-  
+
+
 
   defaultHeures = 192;
   categories: string[] = [];

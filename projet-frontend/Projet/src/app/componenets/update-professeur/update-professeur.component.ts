@@ -10,7 +10,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { CategorieEnseignantService } from '../../services/categorie-enseignant.service';
 import { UserService } from '../../services/user.service';
 import { User } from '../../types/user.types';
-import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
+import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 
 @Component({
@@ -63,7 +63,7 @@ export class UpdateProfesseurComponent {
           this.enseignant = {
             maxHeuresService: this.defaultHeures,
             categorieEnseignant: CategorieEnseignant.PROFESSEUR,
-            heuresAssignees: 0, 
+            heuresAssignees: 0,
             nbHeureCategorie: 0
           };
         }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../types/user.types';
-import { EnseignantDto } from '../types/enseignant.type';
+import { EnseignantDto } from '../componenets/shared/types/enseignant.type';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class UpdateProfesseurService {
 
   private readonly _backendURL: any;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this._backendURL = {};
     // build backend base url
     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;

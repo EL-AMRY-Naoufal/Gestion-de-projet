@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { UserService } from '../../services/user.service';
-import { UserCardComponent } from '../card/user-card/user-card.component';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 import { EnseignantService } from '../../services/enseignant.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,15 +11,15 @@ import { UpdateProfesseurComponent } from '../update-professeur/update-professeu
   selector: 'app-enseignants',
   standalone: true,
   providers: [EnseignantService],
-  imports: [CommonModule, MenuComponent, UserCardComponent, SearchBarComponent, MenuComponent],
+  imports: [CommonModule, MenuComponent, SearchBarComponent, MenuComponent],
   templateUrl: './enseignants.component.html',
   styleUrls: ['./enseignants.component.scss']
 })
 
 export class EnseignantsComponent  implements OnInit{
  users: any[] = [];
-  constructor(private userService: UserService,  
-    private _usersService: UserService, 
+  constructor(private userService: UserService,
+    private _usersService: UserService,
     private enseignantService: EnseignantService,
     private dialog: MatDialog) {this.openDialog = this.openDialog.bind(this); }
 
@@ -35,7 +34,7 @@ export class EnseignantsComponent  implements OnInit{
         width: '500px',
         autoFocus: true
       });
-  
+
       dialogRef.afterClosed().subscribe(result => {
         this.enseignantService.getEnseignants().subscribe(data => {
           this.users = data;

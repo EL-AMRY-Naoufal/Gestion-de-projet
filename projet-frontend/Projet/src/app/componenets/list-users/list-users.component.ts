@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
-import { CategorieEnseignant, EnseignantDto } from '../../types/enseignant.type';
+import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 import { User } from '../../types/user.types';
@@ -162,9 +162,9 @@ export class ListUsersComponent {
         mergeMap((user: User | undefined) => this._add(user))
       )
       .subscribe({
-        next: (user: User) => { 
-          (this._listUsers = this._listUsers.concat(user)); 
-          if (this._usersService.userHasRole(user, 'ENSEIGNANT')) { 
+        next: (user: User) => {
+          (this._listUsers = this._listUsers.concat(user));
+          if (this._usersService.userHasRole(user, 'ENSEIGNANT')) {
             this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),

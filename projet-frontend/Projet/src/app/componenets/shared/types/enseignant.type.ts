@@ -1,7 +1,7 @@
-import { User } from "./user.types";
+import { User } from "../../../types/user.types";
 
 export interface EnseignantDto {
-    id?: number; 
+    id?: number;
     user?: User;
     categorieEnseignant: CategorieEnseignant;
     nbHeureCategorie: number;
