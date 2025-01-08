@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { UserDialogComponent } from '../componenets/shared/user-dialog/user-dialog.component';
+import { UserDialogComponent } from '../components/shared/user-dialog/user-dialog.component';
 import { filter, map, mergeMap } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserComponent } from "../componenets/user/user.component";
-import { User } from '../componenets/shared/types/user.type';
+import { UserComponent } from "../components/user/user.component";
+import { User } from '../components/shared/types/user.type';
 
 @Component({
   selector: 'app-user-update',

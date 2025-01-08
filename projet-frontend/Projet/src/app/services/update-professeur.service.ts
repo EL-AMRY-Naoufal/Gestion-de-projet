@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../types/user.types';
-import { EnseignantDto } from '../componenets/shared/types/enseignant.type';
+import { EnseignantDto } from '../components/shared/types/enseignant.type';
 
 @Injectable({
   providedIn: 'root'

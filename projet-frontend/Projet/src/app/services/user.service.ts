@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import {defaultIfEmpty, filter, map, Observable, throwError} from 'rxjs';
 import {catchError} from "rxjs/operators";
-import { User } from '../componenets/shared/types/user.type';
+import { User } from '../components/shared/types/user.type';
 
 @Injectable({
   providedIn: 'root'

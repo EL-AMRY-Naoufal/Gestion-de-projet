@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {AffectationType} from "../componenets/shared/types/affectation.type";
+import {AffectationType} from "../components/shared/types/affectation.type";
 import { environment } from '../../environments/environment.prod';
-import { EnseignantDto } from '../componenets/shared/types/enseignant.type';
-import { User } from '../componenets/shared/types/user.type';
+import { EnseignantDto } from '../components/shared/types/enseignant.type';
+import { User } from '../components/shared/types/user.type';
 
 @Injectable({
   providedIn: 'root'
