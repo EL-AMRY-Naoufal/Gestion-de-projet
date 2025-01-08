@@ -47,7 +47,7 @@
     <!-- Bouton pour supprimer l'utilisateur -->
     <button
       mat-button
-      *ngIf="isChefDepartement()"
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
       (click)="delete(user)"
     >
       Supprimer

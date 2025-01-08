@@ -1,3 +1,4 @@
+import { UserRoleDto } from './../types/user.type';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';  // Pour utiliser les liens de navigation
 import { MatCardModule } from '@angular/material/card';  // Pour le composant mat-card
@@ -26,6 +27,8 @@ export class UserCardComponent {
     private _user: User;
     // private property to store delete$ value
     private readonly _delete$: EventEmitter<User>;
+    userRoles: string[] = [];
+
 
     /**
      * Component constructor
@@ -33,6 +36,8 @@ export class UserCardComponent {
     constructor(private loginService: LoginService) {
       this._user = {} as User;
       this._delete$ = new EventEmitter<User>();
+      this.userRoles = this.loginService.userRoles;
+
     }
 
     /**
@@ -68,10 +73,6 @@ export class UserCardComponent {
      */
     delete(user: User): void {
       this._delete$.emit(user);
-    }
-
-    isChefDepartement(): boolean {
-      return this.user.roles.filter(role => role.yearId === this.loginService.currentYearId && role.role === 'CHEF_DE_DEPARTEMENT').length > 0;
     }
 
 
