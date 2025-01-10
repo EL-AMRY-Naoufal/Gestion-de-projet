@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User } from '../types/user.type';
+import { User, UserRoleDto } from '../types/user.type';
 import { UserCustomValidators } from './user-custom-validators';
 import { MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -15,8 +15,8 @@ import { CategorieEnseignantService } from '../../../services/categorie-enseigna
 import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
 
-type UserFormDto = {
-  id: number;
+export type UserFormDto = {
+  id?: number;
   username: string;
   email: string;
   roles: ("ENSEIGNANT" | "CHEF_DE_DEPARTEMENT" | "RESPONSABLE_DE_FORMATION" | "SECRETARIAT_PEDAGOGIQUE")[];
@@ -43,7 +43,7 @@ export class UserFormComponent {
   // private property to store cancel$ value
   private readonly _cancel$: EventEmitter<void>;
   // private property to store submit$ value
-  private readonly _submit$: EventEmitter<User>;
+  private readonly _submit$: EventEmitter<UserFormDto>;
   // private property to store form value
   private readonly _form: FormGroup;
 
@@ -58,7 +58,7 @@ export class UserFormComponent {
 
     this._model = {} as UserFormDto;
     this._isUpdateMode = !!data;
-    this._submit$ = new EventEmitter<User>();
+    this._submit$ = new EventEmitter<UserFormDto>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
   }
@@ -104,7 +104,7 @@ export class UserFormComponent {
    * Returns private property _submit$
    */
   @Output('submit')
-  get submit$(): EventEmitter<User> {
+  get submit$(): EventEmitter<UserFormDto> {
     return this._submit$;
   }
 
@@ -186,11 +186,8 @@ ngOnChanges(record: any): void {
  */
 submit(user: UserFormDto): void {
 
-  const userRoles = user.roles?.map(role => ({ yearId: this._loginService.currentYearId ?? 1, role })) ?? [];
-  const userToSend: User = { ...user, roles: userRoles  };
-
   // Émettre l'utilisateur via l'événement _submit$
-  this._submit$.emit(userToSend);
+  this._submit$.emit(user);
 
   // Vérifier si nous sommes en mode mise à jour et si le rôle ENSEIGNANT est présent
   if (this._isUpdateMode && this.model.roles.some(role => role === 'ENSEIGNANT')) {
