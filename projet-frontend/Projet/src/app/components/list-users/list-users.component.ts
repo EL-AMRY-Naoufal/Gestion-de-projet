@@ -15,7 +15,6 @@ import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
-import { SearchBarComponent } from "../shared/search-bar/search-bar.component";
 import { User } from '../shared/types/user.type';
 
 
@@ -190,7 +189,10 @@ export class ListUsersComponent {
    * Add new user
    */
   private _add(user: User | undefined): Observable<User> {
-    return this._usersService.create(user as User);
+    if (!user) {
+      return new Observable<User>();
+    }
+    return this._usersService.create(user);
   }
 
   private _addTeacher(enseignantDto: EnseignantDto) {

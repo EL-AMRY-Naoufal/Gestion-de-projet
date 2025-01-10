@@ -79,11 +79,7 @@ export class UserService {
    create(user: User): Observable<any> {
 
       const newUser = {
-        ...user,
-        roles: [{
-          yearId: 1,
-          role: "ENSEIGNANT"
-        }]
+        ...user
       }
 
       const body = {
