@@ -12,7 +12,20 @@ import { CommonModule, NgIf } from '@angular/common';
 import { CategorieEnseignant, EnseignantDto } from '../types/enseignant.type';
 import { EnseignantService } from '../../../services/enseignant.service';
 import { CategorieEnseignantService } from '../../../services/categorie-enseignant.service';
+import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
+
+type UserFormDto = {
+  id: number;
+  username: string;
+  email: string;
+  roles: ("ENSEIGNANT" | "CHEF_DE_DEPARTEMENT" | "RESPONSABLE_DE_FORMATION" | "SECRETARIAT_PEDAGOGIQUE")[];
+  password: string;
+  confirmPassword?: string;
+  categorieEnseignant?: CategorieEnseignant;
+  nbHeureCategorie?: number;
+  maxHeuresService?: number;
+}
 
 @Component({
   selector: 'app-user-form',
@@ -26,7 +39,7 @@ export class UserFormComponent {
   // private property to store update mode flag
   private _isUpdateMode: boolean;
   // private property to store model value
-  private _model: User;
+  private _model: UserFormDto;
   // private property to store cancel$ value
   private readonly _cancel$: EventEmitter<void>;
   // private property to store submit$ value
@@ -40,9 +53,10 @@ export class UserFormComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: User,
     @Inject(MAT_DIALOG_DATA) public dataTeacher: any,
     private enseignantService: EnseignantService,
-    private categorieService: CategorieEnseignantService
-  ) {
-    this._model = {} as User;
+    private categorieService: CategorieEnseignantService,
+    private _loginService: LoginService) {
+
+    this._model = {} as UserFormDto;
     this._isUpdateMode = !!data;
     this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
@@ -53,14 +67,14 @@ export class UserFormComponent {
    * Sets private property _model
    */
   @Input()
-  set model(model: User) {
+  set model(model: UserFormDto) {
     this._model = model;
   }
 
   /**
    * Returns private property _model
    */
-  get model(): User {
+  get model(): UserFormDto {
     return this._model;
   }
 
@@ -104,7 +118,7 @@ export class UserFormComponent {
     });
 
     // Vérifier si nous sommes en mode mise à jour
-    if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+    if (this._isUpdateMode && this._model.roles.some(role => role === 'ENSEIGNANT')) {
       // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
     }
@@ -146,7 +160,7 @@ ngOnChanges(record: any): void {
   }
 
   // Vérification et traitement du rôle ENSEIGNANT
-  if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this._model.roles.some(role => role === 'ENSEIGNANT')) {
     this.fetchEnseignantDetails(this._model.id!);
 
     // Mise à jour des champs spécifiques pour un enseignant
@@ -170,12 +184,16 @@ ngOnChanges(record: any): void {
 /**
  * Function to emit event to submit form and person
  */
-submit(user: User): void {
+submit(user: UserFormDto): void {
+
+  const userRoles = user.roles?.map(role => ({ yearId: this._loginService.currentYearId ?? 1, role })) ?? [];
+  const userToSend: User = { ...user, roles: userRoles  };
+
   // Émettre l'utilisateur via l'événement _submit$
-  this._submit$.emit(user);
+  this._submit$.emit(userToSend);
 
   // Vérifier si nous sommes en mode mise à jour et si le rôle ENSEIGNANT est présent
-  if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this.model.roles.some(role => role === 'ENSEIGNANT')) {
     // Mise à jour des propriétés de l'enseignant avec les valeurs de l'utilisateur
     this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
     this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
@@ -244,7 +262,7 @@ private _buildForm(): FormGroup {
   };
 
   // Vérification si le rôle 'ENSEIGNANT' est présent
-  const isEnseignant = this.model?.roles?.some(role => role.role === 'ENSEIGNANT');
+  const isEnseignant = this.model?.roles?.some(role => role === 'ENSEIGNANT');
 
   // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
   addControl(
