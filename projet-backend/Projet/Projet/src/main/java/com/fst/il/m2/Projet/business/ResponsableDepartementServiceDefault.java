@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ResponsableDepartementServiceDefault implements ResponsableDepartementService {
@@ -30,6 +32,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private AffectationRepository affectationRepository;
     @Autowired
     private ModuleRepository moduleRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Override
     public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
@@ -104,12 +108,13 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
     @Override
-    public User updateUser(Long id, User user, Long responsableId) {
+    @Transactional
+    public User updateUser(Long id, User user, Long responsableId, Long currentYear) {
         // Check if the responsable has the required role
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+        if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can update users");
         }
 
@@ -120,8 +125,25 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         existingUser.setUsername(user.getUsername());
 //        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
-        existingUser.setRoles(user.getRoles());
 
+        List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYear(id, currentYear);
+        Map<Role, UserRole> existingRolesMap = existingRoles.stream()
+                .collect(Collectors.toMap(UserRole::getRole, Function.identity()));
+
+        List<UserRole> newRoles = user.getRoles().stream().map(role -> {
+            if (existingRolesMap.containsKey(role.getRole())) {
+                // Update existing role
+                UserRole existingRole = existingRolesMap.get(role.getRole());
+                existingRole.setUser(existingUser);
+                return existingRole;
+            } else {
+                // Create new role
+                role.setUser(existingUser);
+                return role;
+            }
+        }).collect(Collectors.toList());
+
+        existingUser.setRoles(newRoles);
         return userRepository.save(existingUser);
     }
 

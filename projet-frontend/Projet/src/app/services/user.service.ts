@@ -102,7 +102,9 @@ export class UserService {
    update(id: string, user: User): Observable<any> {
     const body = {
       responsableId: this._responsableId,  // Ajoute le responsableId
-      user: user  // Ajoute l'objet user
+      user: user,  // Ajoute l'objet user
+      associateEnseignantWithUser: false,
+      yearId: 1
     };
      return this._http.put<User>(
        this._backendURL.oneUser.replace(':id', id),

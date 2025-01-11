@@ -14,8 +14,9 @@ export interface User {
 
 export interface UserRoleDto {
   yearId: number; // Correspond au champ `Long yearId` dans le Java
-  role: 'CHEF_DE_DEPARTEMENT' | 'RESPONSABLE_DE_FORMATION' | 'SECRETARIAT_PEDAGOGIQUE' | 'ENSEIGNANT';  // Utilisation du type `Role` défini précédemment
+  role: Roles;  // Utilisation du type `Role` défini précédemment
 }
 
+export type Roles = 'CHEF_DE_DEPARTEMENT' | 'RESPONSABLE_DE_FORMATION' | 'SECRETARIAT_PEDAGOGIQUE' | 'ENSEIGNANT'; 
 
 

@@ -15,8 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
-import { User } from '../shared/types/user.type';
-import { UserFormDto } from '../shared/user-form/user-form.component';
+import { Roles, User } from '../shared/types/user.type';
 import { LoginService } from '../../services/login.service';
 
 
@@ -42,7 +41,7 @@ export class ListUsersComponent {
   // private property to store dialogStatus value
   private _dialogStatus: string;
   // private property to store dialog reference
-  private _listUsersDialog: MatDialogRef<UserDialogComponent, UserFormDto> | undefined;
+  private _listUsersDialog: MatDialogRef<UserDialogComponent, User> | undefined;
   // private property to store view value
   private _view: string;
 
@@ -148,8 +147,8 @@ export class ListUsersComponent {
     this._listUsersDialog
       .afterClosed()
       .pipe(
-        filter((user: UserFormDto | undefined) => !!user),
-        map((user: UserFormDto | undefined) => {
+        filter((user: User | undefined) => !!user),
+        map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
           delete user?.id;
           this.enseignantDto.categorieEnseignant = user?.categorieEnseignant as CategorieEnseignant;
@@ -162,7 +161,7 @@ export class ListUsersComponent {
 
           return user;
         }),
-        mergeMap((user: UserFormDto | undefined) => this._add(user))
+        mergeMap((user: User | undefined) => this._add(user))
       )
       .subscribe({
         next: (user: User) => {
@@ -191,14 +190,14 @@ export class ListUsersComponent {
   /**
    * Add new user
    */
-  private _add(user: UserFormDto | undefined): Observable<User> {
+  private _add(user: User | undefined): Observable<User> {
     if (!user) {
       return new Observable<User>();
     }
 
     const userToSend: User = {
       ...user,
-      roles: user.roles.map((role) => { return {yearId: this._loginService.currentYearId ?? 1, role: role}}),
+      roles: user.roles.map((role) => { return {yearId: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
     }
 
     return this._usersService.create(userToSend);

@@ -5,7 +5,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserComponent } from "../components/user/user.component";
-import { User } from '../components/shared/types/user.type';
+import { User, UserRoleDto } from '../components/shared/types/user.type';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'app-user-update',
@@ -25,7 +26,8 @@ export class UserUpdateComponent {
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: UserService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _loginService: LoginService
   ) {}
 
   /**
@@ -38,6 +40,13 @@ export class UserUpdateComponent {
         mergeMap((id: string) => this._userService.fetchOne(id))
       )
       .subscribe((user: User) => this._initModal(user));
+  }
+
+  transformRolesToUserRoles(roles: string[], year: number): UserRoleDto[] {
+    return roles.map(role => ({
+      role: role as UserRoleDto['role'],
+      yearId: year
+    }));
   }
 
   /**
@@ -64,8 +73,16 @@ export class UserUpdateComponent {
 
           return { id, update: user };
         }),
-        mergeMap((_: { id: any; update: any }) =>
-          this._userService.update(_.id, _.update)
+        mergeMap((_: { id: any; update: any }) =>{
+          console.log('update ', _.update)
+          const userToSend: User = {
+            ..._.update,
+            roles: this.transformRolesToUserRoles(_.update.roles, this._loginService.currentYearId ?? 1)
+            //roles: _.update.roles.map((_) => { console.log(_); return {yearId: this._loginService.currentYearId ?? 1, role: _}}),
+          }
+          console.log('after update ', userToSend)
+          return this._userService.update(_.id, userToSend)
+        }
         )
       )
       .subscribe({

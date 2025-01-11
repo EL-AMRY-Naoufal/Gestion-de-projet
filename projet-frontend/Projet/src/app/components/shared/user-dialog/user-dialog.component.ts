@@ -1,7 +1,8 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { UserFormComponent, UserFormDto } from "../user-form/user-form.component"; 
+import { UserFormComponent } from "../user-form/user-form.component"; 
 import { CommonModule } from '@angular/common';
+import { User } from '../types/user.type';
 
 
 @Component({
@@ -17,14 +18,14 @@ export class UserDialogComponent {
    * Component constructor
    */
     constructor(
-      private _dialogRef: MatDialogRef<UserDialogComponent, UserFormDto>,
-      @Optional() @Inject(MAT_DIALOG_DATA) private _user: UserFormDto
+      private _dialogRef: MatDialogRef<UserDialogComponent, User>,
+      @Optional() @Inject(MAT_DIALOG_DATA) private _user: User
     ) {}
     
     /**
      * Returns user passed in dialog open
      */
-    get user(): UserFormDto {
+    get user(): User {
       return this._user;
     }
 
@@ -43,7 +44,7 @@ export class UserDialogComponent {
     /**
      * Function to close the modal and send user to parent
      */
-    onSave(user: UserFormDto): void {
+    onSave(user: User): void {
       this._dialogRef.close(user);
     }
 

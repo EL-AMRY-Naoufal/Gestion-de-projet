@@ -15,18 +15,6 @@ import { CategorieEnseignantService } from '../../../services/categorie-enseigna
 import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
 
-export type UserFormDto = {
-  id?: number;
-  username: string;
-  email: string;
-  roles: ("ENSEIGNANT" | "CHEF_DE_DEPARTEMENT" | "RESPONSABLE_DE_FORMATION" | "SECRETARIAT_PEDAGOGIQUE")[];
-  password: string;
-  confirmPassword?: string;
-  categorieEnseignant?: CategorieEnseignant;
-  nbHeureCategorie?: number;
-  maxHeuresService?: number;
-}
-
 @Component({
   selector: 'app-user-form',
   standalone: true,
@@ -39,11 +27,11 @@ export class UserFormComponent {
   // private property to store update mode flag
   private _isUpdateMode: boolean;
   // private property to store model value
-  private _model: UserFormDto;
+  private _model: User;
   // private property to store cancel$ value
   private readonly _cancel$: EventEmitter<void>;
   // private property to store submit$ value
-  private readonly _submit$: EventEmitter<UserFormDto>;
+  private readonly _submit$: EventEmitter<User>;
   // private property to store form value
   private readonly _form: FormGroup;
 
@@ -56,9 +44,9 @@ export class UserFormComponent {
     private categorieService: CategorieEnseignantService,
     private _loginService: LoginService) {
 
-    this._model = {} as UserFormDto;
+    this._model = {} as User;
     this._isUpdateMode = !!data;
-    this._submit$ = new EventEmitter<UserFormDto>();
+    this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
   }
@@ -67,14 +55,14 @@ export class UserFormComponent {
    * Sets private property _model
    */
   @Input()
-  set model(model: UserFormDto) {
+  set model(model: User) {
     this._model = model;
   }
 
   /**
    * Returns private property _model
    */
-  get model(): UserFormDto {
+  get model(): User {
     return this._model;
   }
 
@@ -104,7 +92,7 @@ export class UserFormComponent {
    * Returns private property _submit$
    */
   @Output('submit')
-  get submit$(): EventEmitter<UserFormDto> {
+  get submit$(): EventEmitter<User> {
     return this._submit$;
   }
 
@@ -118,10 +106,12 @@ export class UserFormComponent {
     });
 
     // Vérifier si nous sommes en mode mise à jour
-    if (this._isUpdateMode && this._model.roles.some(role => role === 'ENSEIGNANT')) {
+    if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
       // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
     }
+    this._form.patchValue({ roles: this._model.roles.map(role => role.role) });
+    
   }
 
 
@@ -160,7 +150,7 @@ ngOnChanges(record: any): void {
   }
 
   // Vérification et traitement du rôle ENSEIGNANT
-  if (this._isUpdateMode && this._model.roles.some(role => role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
     this.fetchEnseignantDetails(this._model.id!);
 
     // Mise à jour des champs spécifiques pour un enseignant
@@ -184,13 +174,13 @@ ngOnChanges(record: any): void {
 /**
  * Function to emit event to submit form and person
  */
-submit(user: UserFormDto): void {
+submit(user: User): void {
 
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
 
   // Vérifier si nous sommes en mode mise à jour et si le rôle ENSEIGNANT est présent
-  if (this._isUpdateMode && this.model.roles.some(role => role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
     // Mise à jour des propriétés de l'enseignant avec les valeurs de l'utilisateur
     this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
     this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
@@ -222,7 +212,7 @@ private _buildForm(): FormGroup {
       '',
       Validators.compose([Validators.required, UserCustomValidators.googleEmail])
     ),
-    roles: new FormControl('', Validators.required),
+    roles: new FormControl([], Validators.required),
     password: new FormControl(
       '',
       this._isUpdateMode
@@ -259,7 +249,7 @@ private _buildForm(): FormGroup {
   };
 
   // Vérification si le rôle 'ENSEIGNANT' est présent
-  const isEnseignant = this.model?.roles?.some(role => role === 'ENSEIGNANT');
+  const isEnseignant = this.model?.roles?.some(role => role.role === 'ENSEIGNANT');
 
   // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
   addControl(

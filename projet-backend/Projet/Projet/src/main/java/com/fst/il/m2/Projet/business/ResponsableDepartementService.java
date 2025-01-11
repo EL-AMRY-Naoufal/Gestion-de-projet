@@ -14,7 +14,7 @@ public interface ResponsableDepartementService {
 
     List<User> getUsersByUsername(String username);
     List<User> getUsersByRole(Role role);
-    User updateUser(Long id, User user, Long responsableId);
+    User updateUser(Long id, User user, Long responsableId, Long currentYear);
     void deleteUser(Long id, Long responsableId);
     Affectation affecterModuleToEnseignant(Long enseignantId, Long moduleId, int heuresAssignees);
 }
