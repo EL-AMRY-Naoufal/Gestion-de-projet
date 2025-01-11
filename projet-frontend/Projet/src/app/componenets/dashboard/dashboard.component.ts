@@ -65,4 +65,8 @@ export class DashboardComponent {
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);
   }
+
+  navigateToModules() {
+    this.router.navigate(['/modules'])
+  }
 }
