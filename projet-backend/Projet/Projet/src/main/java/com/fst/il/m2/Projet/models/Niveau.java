@@ -1,9 +1,13 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.util.List;
 
+//@Builder
+@AllArgsConstructor
 @Entity
 @Table(name="Niveau")
 public class Niveau {

@@ -23,18 +23,18 @@ public class Affectation {
     private Enseignant enseignant;
 
     @ManyToOne
-    @JoinColumn(name = "module_id")
-    private Module module;
+    @JoinColumn(name = "groupe_id")
+    private Groupe groupe;
 
     public Affectation() {
     }
 
-    public Affectation(Long id, int heuresAssignees, LocalDate dateAffectation, Enseignant enseignant, Module module) {
+    public Affectation(Long id, int heuresAssignees, LocalDate dateAffectation, Enseignant enseignant, Groupe groupe) {
         this.id = id;
         this.heuresAssignees = heuresAssignees;
         this.dateAffectation = dateAffectation;
         this.enseignant = enseignant;
-        this.module = module;
+        this.groupe = groupe;
     }
 
     public Long getId() {
@@ -69,11 +69,11 @@ public class Affectation {
         this.enseignant = enseignant;
     }
 
-    public Module getModule() {
-        return module;
+    public Groupe getGroupe() {
+        return groupe;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setGroupe(Groupe groupe) {
+        this.groupe = groupe;
     }
 }

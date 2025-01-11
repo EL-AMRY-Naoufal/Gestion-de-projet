@@ -29,31 +29,17 @@ public class Module {
     private Formation formation;
 
     @OneToMany(mappedBy = "module")
-    private List<Affectation> affectations;
-
-    @OneToMany(mappedBy = "module")
     private  List<Groupe> groupes;
 
     public Module() {
     }
-//
-    //TODO deprecated? ("groupes" useless here)
-    public Module(Long id, String nom, int totalHeuresRequises, int groupes, Map<TypeHeure, Integer> heuresParType, Formation formation, List<Affectation> affectations) {
-        this.id = id;
-        this.nom = nom;
-        this.totalHeuresRequises = totalHeuresRequises;
-        this.heuresParType = heuresParType;
-        this.formation = formation;
-        this.affectations = affectations;
-    }
 
-    public Module(Long id, String nom, int totalHeuresRequises, Map<TypeHeure, Integer> heuresParType, Formation formation, List<Affectation> affectations, List<Groupe> groupes) {
+    public Module(Long id, String nom, int totalHeuresRequises, Map<TypeHeure, Integer> heuresParType, Formation formation, List<Groupe> groupes) {
         this.id = id;
         this.nom = nom;
         this.totalHeuresRequises = totalHeuresRequises;
         this.heuresParType = heuresParType;
         this.formation = formation;
-        this.affectations = affectations;
         this.groupes = groupes;
     }
 
@@ -95,14 +81,6 @@ public class Module {
 
     public void setFormation(Formation formation) {
         this.formation = formation;
-    }
-
-    public List<Affectation> getAffectations() {
-        return affectations;
-    }
-
-    public void setAffectations(List<Affectation> affectations) {
-        this.affectations = affectations;
     }
 
     public List<Groupe> getGroupes() {

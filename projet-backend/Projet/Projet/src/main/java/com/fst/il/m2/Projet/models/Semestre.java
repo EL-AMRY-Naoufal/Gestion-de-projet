@@ -1,9 +1,11 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 @Entity
 @Table(name="Semestre")
 public class Semestre {
