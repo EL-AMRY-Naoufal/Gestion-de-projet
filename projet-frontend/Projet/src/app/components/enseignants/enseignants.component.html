@@ -1,18 +1,21 @@
 
-<!--
 <app-menu></app-menu>
-<app-search-bar></app-search-bar>
+
+
+<!--<app-search-bar></app-search-bar>-->
 
 <button class="add-teacher-btn" (click)="openDialog()">
   Ajouter un enseignant
 </button>
 
+
 <div class="user-cards-container">
   <app-user-card
-    *ngFor="let user of users"
-    [user]="user"
-    [openDialog]="openDialog"
-  >
+      [user]="user"
+      *ngFor="let user of users">
+      [openDialog]="openDialog"
   </app-user-card>
+
+  <div *ngIf="users.length === 0">Aucun enseignant n'est disponible</div>
 </div>
--->
+
