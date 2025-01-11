@@ -21,5 +21,5 @@ public class Annee {
 
     @ManyToOne
     @JoinColumn(name = "departement_id")
-    private Departement departement;
+    private Departement departement; //TODO one to many list departements
 }

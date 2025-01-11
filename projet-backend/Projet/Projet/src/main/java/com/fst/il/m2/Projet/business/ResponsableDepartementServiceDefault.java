@@ -30,6 +30,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private AffectationRepository affectationRepository;
     @Autowired
     private ModuleRepository moduleRepository;
+    @Autowired
+    private GroupeRepository groupeRepository;
 
     @Override
     public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
@@ -157,7 +159,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
 
     @Override
-    public Affectation affecterModuleToEnseignant(Long userId, Long moduleId, int heuresAssignees) {
+    public Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
         // Récupérer l'enseignant depius l'ID de l'utilisateur
         Long enseignantID = enseignantRepository.findByUserId(userId)
@@ -169,9 +171,9 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
 
-        // Récupérer le module
-        Module module = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new RuntimeException("Module not found with id: " + moduleId));
+        // Récupérer le groupe
+        Groupe groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new RuntimeException("Groupe not found with id: " + groupeId));
 
         // Vérifier si l'enseignant a des heures disponibles
        /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
@@ -181,7 +183,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         // Créer une nouvelle affectation
         Affectation affectation = new Affectation();
         affectation.setEnseignant(enseignant);
-        affectation.setModule(module);
+        affectation.setGroupe(groupe);
         affectation.setHeuresAssignees(heuresAssignees);
         affectation.setDateAffectation(LocalDate.now());
 
