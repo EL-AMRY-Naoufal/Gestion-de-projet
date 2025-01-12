@@ -16,7 +16,7 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
-import { LoginService } from '../../services/login.service';
+import { YearService } from '../../services/year-service';
 
 
 @Component({
@@ -69,7 +69,7 @@ export class ListUsersComponent {
     private _usersService: UserService,
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
-    private _loginService: LoginService
+    private _yearService: YearService
   ) {
     this._listUsers = [];
     this._dialogStatus = 'inactive';
@@ -197,7 +197,7 @@ export class ListUsersComponent {
 
     const userToSend: User = {
       ...user,
-      roles: user.roles.map((role) => { return {yearId: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
+      roles: user.roles.map((role) => { return {yearId: this._yearService.currentYearId, role: role as unknown as Roles}}),
     }
 
     return this._usersService.create(userToSend);

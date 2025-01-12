@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.prod';
 import {defaultIfEmpty, filter, map, Observable, throwError} from 'rxjs';
 import {catchError} from "rxjs/operators";
 import { User } from '../components/shared/types/user.type';
+import { YearService } from './year-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserService {
    private readonly _defaultUser: User;
    private readonly _responsableId: number = 1;
 
-   constructor(private _http: HttpClient, private _loginService: LoginService) {
+   constructor(private _http: HttpClient, private _loginService: LoginService, private _yearService: YearService) {
     this._defaultUser = {
        username: 'username',
        email: 'email@ema.il',
@@ -188,6 +189,6 @@ export class UserService {
   }
 
   userHasRole(user: User, role: string): boolean {
-    return user.roles.filter(r => r.role === role && r.yearId == this._loginService.currentYearId).length > 0;
+    return user.roles.filter(r => r.role === role && r.yearId == this._yearService.currentYearId).length > 0;
   }
 }
