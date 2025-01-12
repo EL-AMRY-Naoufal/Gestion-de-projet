@@ -138,7 +138,7 @@ private normalizeString(value: string): string {
 
 
   /**
- * Met à jour automatiquement l'email et le nom d'utilisateur.
+ * Met à jour automatiquement l'email et le pseudo d'utilisateur.
  */
 private updateEmailAndUsername(): void {
   const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
@@ -376,5 +376,6 @@ private _buildForm(): FormGroup {
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);
+
 
 }
