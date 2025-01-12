@@ -112,7 +112,28 @@ export class UserFormComponent {
     }
     this._form.patchValue({ roles: this._model.roles.map(role => role.role) });
 
+     // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
+    this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
+    this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
   }
+
+
+  /**
+ * Met à jour automatiquement l'email et le nom d'utilisateur.
+ */
+private updateEmailAndUsername(): void {
+  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+
+  if (firstname && name) {
+    const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
+    const formattedUsername = `${name}1u`;
+
+    // Mise à jour des champs email et username
+    this._form.get('email')?.setValue(formattedEmail, { emitEvent: false });
+    this._form.get('username')?.setValue(formattedUsername, { emitEvent: false });
+  }
+}
 
 
   private fetchEnseignantDetails(userId: number): void {
