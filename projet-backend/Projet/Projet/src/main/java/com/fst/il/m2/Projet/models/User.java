@@ -28,7 +28,7 @@ public class User {
     @Column(name="Name")
     private String name;
 
-    @Column(name="Fristname")
+    @Column(name="Firstname")
     private String firstname;
 
     @Column(name="Username", unique = true)

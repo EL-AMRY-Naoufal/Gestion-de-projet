@@ -109,11 +109,14 @@ export class UserService {
       associateEnseignantWithUser: false,
       yearId: 1
     };
+      console.log(user);
      return this._http.put<User>(
        this._backendURL.oneUser.replace(':id', id),
        body,
        this._options()
      );
+
+
    }
 
    /**
