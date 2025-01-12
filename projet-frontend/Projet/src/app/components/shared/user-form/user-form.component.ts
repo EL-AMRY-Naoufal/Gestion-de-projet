@@ -118,12 +118,35 @@ export class UserFormComponent {
   }
 
 
+
+/**
+ * Normalise une chaîne de caractères :
+ * - Remplace les caractères accentués par leurs équivalents non accentués
+ * - Convertit en minuscules
+ * - Remplace tous les types d'espaces (y compris insécables) par des tirets
+ *
+ * @param value La chaîne à normaliser
+ * @returns La chaîne normalisée
+ */
+private normalizeString(value: string): string {
+  return value
+    .toLowerCase() // Convertir en minuscules
+    .normalize("NFD") // Décomposer les caractères accentués
+    .trim(); // Supprimer les tirets en début et en fin
+}
+
+
+
   /**
  * Met à jour automatiquement l'email et le nom d'utilisateur.
  */
 private updateEmailAndUsername(): void {
   const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
   const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+
+  const normalizedFirstname = this.normalizeString(firstname);
+  const normalizedName = this.normalizeString(name);
+
 
   if (firstname && name) {
     const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
@@ -187,17 +210,33 @@ ngOnChanges(record: any): void {
   this._form.patchValue(this._model);
 }
 
-  /**
-   * Function to emit event to cancel process
-   */
-  cancel(): void {
-    this._cancel$.emit();
+/**
+ * Function to emit event to cancel process
+ */
+cancel(): void {
+  this._cancel$.emit();
+}
+
+
+
+/**
+ * Capitalize the first letter of a string and make the rest lowercase
+ */
+private capitalize(value: string): string {
+  if (!value) {
+    return value;
   }
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
 
 /**
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
+    // Transformer le nom et le prénom pour ajouter une majuscule
+    user.name = this.capitalize(user.name);
+    user.firstname = this.capitalize(user.firstname);
+
 
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
