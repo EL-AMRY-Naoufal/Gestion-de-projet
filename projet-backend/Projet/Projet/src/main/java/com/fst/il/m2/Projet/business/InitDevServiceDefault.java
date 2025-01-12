@@ -117,7 +117,7 @@ public class InitDevServiceDefault implements InitDevService {
         ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
 
         /*********DEPARTEMENTS*********/
-        Departement departement = Departement.builder().nom("INFORMATIQUE").formations(formations).responsableDepartement(responsableDepartement).build();
+        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).formations(formations).responsableDepartement(responsableDepartement).build();
 
         /**********ENSEIGNANTS**********/
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class Annee {
 
     private int debut;
 
-    @ManyToOne
-    @JoinColumn(name = "departement_id")
-    private Departement departement; //TODO one to many list departements
+    @OneToMany(mappedBy = "annee")
+    private List<Departement> departements;
+
 }
