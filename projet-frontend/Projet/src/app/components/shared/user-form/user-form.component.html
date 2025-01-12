@@ -3,6 +3,27 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" novalidate class="form-container">
+    <!-- Name -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput placeholder="Nom d'utilisateur" formControlName="name" required name="name"/>
+      <mat-error *ngIf="form.get('name')?.dirty && form.get('name')?.hasError('required')">
+        Le nom d'utilisateur est <strong>obligatoire</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('name')?.dirty && form.get('name')?.hasError('minlength')">
+        Le nom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Firstname -->
+    <mat-form-field class="full-width mgb20">
+      <input matInput placeholder="Nom d'utilisateur" formControlName="firstname" required name="firstname"/>
+      <mat-error *ngIf="form.get('firstname')?.dirty && form.get('firstname')?.hasError('required')">
+        Le nom d'utilisateur est <strong>obligatoire</strong>
+      </mat-error>
+      <mat-error *ngIf="form.get('firstname')?.dirty && form.get('firstname')?.hasError('minlength')">
+        Le nom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
+      </mat-error>
+    </mat-form-field>
 
     <!-- Username -->
     <mat-form-field class="full-width mgb20">
@@ -22,7 +43,7 @@
         L'email est <strong>obligatoire</strong>
       </mat-error>
       <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
-        Format d'email invalide
+        Format d'email invalide (name.lastname&#64;etu.univ-lorraine.fr )
       </mat-error>
     </mat-form-field>
 

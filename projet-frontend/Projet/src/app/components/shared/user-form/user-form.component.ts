@@ -111,7 +111,7 @@ export class UserFormComponent {
       this.fetchEnseignantDetails(this._model.id!);
     }
     this._form.patchValue({ roles: this._model.roles.map(role => role.role) });
-    
+
   }
 
 
@@ -142,6 +142,8 @@ ngOnChanges(record: any): void {
     this._model = {
       id: 123,
       username: '',
+      name:'',
+      firstname: '',
       email: '',
       roles: [],
       password: ''
@@ -205,6 +207,14 @@ private _buildForm(): FormGroup {
   const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
     id: new FormControl(),
     username: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(2)])
+    ),
+    name: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(2)])
+    ),
+    firstname: new FormControl(
       '',
       Validators.compose([Validators.required, Validators.minLength(2)])
     ),

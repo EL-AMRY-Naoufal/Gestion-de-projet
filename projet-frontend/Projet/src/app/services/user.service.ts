@@ -19,8 +19,11 @@ export class UserService {
 
    constructor(private _http: HttpClient, private _loginService: LoginService) {
     this._defaultUser = {
+
        username: 'username',
-       email: 'email@ema.il',
+       firstname: 'firstname',
+       name: 'lastname',
+       email: 'email@etu.univ-lorraine.fr',
        roles: [],
        password: 'Ed*lZ%0qiA'
      };

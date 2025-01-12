@@ -21,10 +21,10 @@ export class UserCustomValidators {
 
     /**
      * Custom validator to ensure that the email format is correct
-     * (e.g., name.lastname@gmail.com)
+     * (e.g., name.lastname@etu.univ-lorraine.fr)
      */
     static googleEmail(control: AbstractControl): ValidationErrors | null {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[etu.univ\-lorraine]+\.[fr]{2,}$/;
         return emailPattern.test(control.value) ? null : { googleEmail: true };
     }
 

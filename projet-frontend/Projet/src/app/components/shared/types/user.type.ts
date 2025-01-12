@@ -3,6 +3,8 @@ import { CategorieEnseignant } from "./enseignant.type";
 export interface User {
     id?: number;
     username: string;
+    firstname: string;
+    name: string;
     password: string;
     email: string;
     roles: UserRoleDto[];
@@ -17,6 +19,6 @@ export interface UserRoleDto {
   role: Roles;  // Utilisation du type `Role` défini précédemment
 }
 
-export type Roles = 'CHEF_DE_DEPARTEMENT' | 'RESPONSABLE_DE_FORMATION' | 'SECRETARIAT_PEDAGOGIQUE' | 'ENSEIGNANT'; 
+export type Roles = 'CHEF_DE_DEPARTEMENT' | 'RESPONSABLE_DE_FORMATION' | 'SECRETARIAT_PEDAGOGIQUE' | 'ENSEIGNANT';
 
 
