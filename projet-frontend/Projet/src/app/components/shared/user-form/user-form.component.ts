@@ -118,6 +118,16 @@ export class UserFormComponent {
   }
 
 
+  /**
+ * Function to capitalize the first letter and keep the rest in lowercase
+ */
+private capitalizeFirstLetter(value: string): string {
+  if (!value) return '';
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+
+
 
 /**
  * Normalise une chaîne de caractères :
@@ -156,6 +166,14 @@ private updateEmailAndUsername(): void {
     this._form.get('email')?.setValue(formattedEmail, { emitEvent: false });
     this._form.get('username')?.setValue(formattedUsername, { emitEvent: false });
   }
+
+    // Update firstname and name with the capitalized versions
+    if (firstname) {
+      this._form.get('firstname')?.setValue(this.capitalizeFirstLetter(firstname), { emitEvent: false });
+    }
+    if (name) {
+      this._form.get('name')?.setValue(this.capitalizeFirstLetter(name), { emitEvent: false });
+    }
 }
 
 
@@ -220,22 +238,9 @@ cancel(): void {
 
 
 /**
- * Capitalize the first letter of a string and make the rest lowercase
- */
-private capitalize(value: string): string {
-  if (!value) {
-    return value;
-  }
-  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-}
-
-/**
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
-    // Transformer le nom et le prénom pour ajouter une majuscule
-    user.name = this.capitalize(user.name);
-    user.firstname = this.capitalize(user.firstname);
 
 
   // Émettre l'utilisateur via l'événement _submit$
