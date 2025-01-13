@@ -19,8 +19,11 @@ export class UserService {
 
    constructor(private _http: HttpClient, private _loginService: LoginService) {
     this._defaultUser = {
+
        username: 'username',
-       email: 'email@ema.il',
+       firstname: 'firstname',
+       name: 'lastname',
+       email: 'email@etu.univ-lorraine.fr',
        roles: [],
        password: 'Ed*lZ%0qiA'
      };
@@ -106,11 +109,14 @@ export class UserService {
       associateEnseignantWithUser: false,
       yearId: 1
     };
+      console.log(user);
      return this._http.put<User>(
        this._backendURL.oneUser.replace(':id', id),
        body,
        this._options()
      );
+
+
    }
 
    /**

@@ -123,8 +123,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Update user information
         existingUser.setUsername(user.getUsername());
+        existingUser.setName(user.getName());
+        existingUser.setFirstname(user.getFirstname());
 //        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
+
 
         List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYear(id, currentYear);
         Map<Role, UserRole> existingRolesMap = existingRoles.stream()

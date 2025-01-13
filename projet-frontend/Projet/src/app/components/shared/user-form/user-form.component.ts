@@ -111,8 +111,70 @@ export class UserFormComponent {
       this.fetchEnseignantDetails(this._model.id!);
     }
     this._form.patchValue({ roles: this._model.roles.map(role => role.role) });
-    
+
+     // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
+    this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
+    this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
   }
+
+
+  /**
+ * Function to capitalize the first letter and keep the rest in lowercase
+ */
+private capitalizeFirstLetter(value: string): string {
+  if (!value) return '';
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+
+
+
+/**
+ * Normalise une chaîne de caractères :
+ * - Remplace les caractères accentués par leurs équivalents non accentués
+ * - Convertit en minuscules
+ * - Remplace tous les types d'espaces (y compris insécables) par des tirets
+ *
+ * @param value La chaîne à normaliser
+ * @returns La chaîne normalisée
+ */
+private normalizeString(value: string): string {
+  return value
+    .toLowerCase() // Convertir en minuscules
+    .normalize("NFD") // Décomposer les caractères accentués
+    .trim(); // Supprimer les tirets en début et en fin
+}
+
+
+
+  /**
+ * Met à jour automatiquement l'email et le pseudo d'utilisateur.
+ */
+private updateEmailAndUsername(): void {
+  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+
+  const normalizedFirstname = this.normalizeString(firstname);
+  const normalizedName = this.normalizeString(name);
+
+
+  if (firstname && name) {
+    const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
+    const formattedUsername = `${name}1u`;
+
+    // Mise à jour des champs email et username
+    this._form.get('email')?.setValue(formattedEmail, { emitEvent: false });
+    this._form.get('username')?.setValue(formattedUsername, { emitEvent: false });
+  }
+
+    // Update firstname and name with the capitalized versions
+    if (firstname) {
+      this._form.get('firstname')?.setValue(this.capitalizeFirstLetter(firstname), { emitEvent: false });
+    }
+    if (name) {
+      this._form.get('name')?.setValue(this.capitalizeFirstLetter(name), { emitEvent: false });
+    }
+}
 
 
   private fetchEnseignantDetails(userId: number): void {
@@ -142,6 +204,8 @@ ngOnChanges(record: any): void {
     this._model = {
       id: 123,
       username: '',
+      name:'',
+      firstname: '',
       email: '',
       roles: [],
       password: ''
@@ -164,17 +228,20 @@ ngOnChanges(record: any): void {
   this._form.patchValue(this._model);
 }
 
-  /**
-   * Function to emit event to cancel process
-   */
-  cancel(): void {
-    this._cancel$.emit();
-  }
+/**
+ * Function to emit event to cancel process
+ */
+cancel(): void {
+  this._cancel$.emit();
+}
+
+
 
 /**
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
+
 
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
@@ -205,6 +272,14 @@ private _buildForm(): FormGroup {
   const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
     id: new FormControl(),
     username: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(2)])
+    ),
+    name: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(2)])
+    ),
+    firstname: new FormControl(
       '',
       Validators.compose([Validators.required, Validators.minLength(2)])
     ),
@@ -306,5 +381,6 @@ private _buildForm(): FormGroup {
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);
+
 
 }
