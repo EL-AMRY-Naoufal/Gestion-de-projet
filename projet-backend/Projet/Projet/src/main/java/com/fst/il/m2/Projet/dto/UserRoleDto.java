@@ -10,12 +10,12 @@ import lombok.Data;
 @Builder
 @Data
 public class UserRoleDto {
-    private Long yearId;
+    private Long year;
     private Role role;
 
     public UserRole toUserRole(){
         return UserRole.builder()
-                .year(yearId)
+                .year(year)
                 .role(role)
                 .build();
     }

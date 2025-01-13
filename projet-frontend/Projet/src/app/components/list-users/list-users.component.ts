@@ -166,7 +166,7 @@ export class ListUsersComponent {
       .subscribe({
         next: (user: User) => {
           (this._listUsers = this._listUsers.concat(user));
-          if (this._usersService.userHasRole(user, 'ENSEIGNANT')) {
+          if (this._usersService.userHasRole(user, 'ENSEIGNANT', this._loginService.currentYearId)) {
             this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),
@@ -197,7 +197,7 @@ export class ListUsersComponent {
 
     const userToSend: User = {
       ...user,
-      roles: user.roles.map((role) => { return {yearId: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
+      roles: user.roles.map((role) => { return {year: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
     }
 
     return this._usersService.create(userToSend);

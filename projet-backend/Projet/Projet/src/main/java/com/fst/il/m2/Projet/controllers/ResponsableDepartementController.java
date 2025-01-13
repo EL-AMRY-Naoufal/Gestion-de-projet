@@ -25,7 +25,7 @@ public class ResponsableDepartementController {
                 userRequest.getUser().toUser(),
                 userRequest.getResponsableId(),
                 userRequest.isAssociateEnseignantWithUser(), // Pass the new parameter,
-                userRequest.getYearId()
+                userRequest.getYear()
         );
         return ResponseEntity.ok(createdUser);
     }
@@ -60,7 +60,7 @@ public class ResponsableDepartementController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
-        User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId(), userRequest.getYearId());
+        User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId(), userRequest.getYear());
         return ResponseEntity.ok(updatedUser);
     }
 
