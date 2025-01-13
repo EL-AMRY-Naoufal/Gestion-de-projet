@@ -15,7 +15,7 @@ export interface User {
 
 
 export interface UserRoleDto {
-  yearId: number; // Correspond au champ `Long yearId` dans le Java
+  year: number; // Correspond au champ `Long yearId` dans le Java
   role: Roles;  // Utilisation du type `Role` défini précédemment
 }
 

@@ -89,7 +89,7 @@ export class UserService {
         responsableId: this._responsableId,  // Ajoute le responsableId
         user: newUser,  // Ajoute l'objet user
         associateEnseignantWithUser: false,
-        yearId: 1
+        year: 1
       };
 
      return this._http.post<User>(
@@ -107,7 +107,7 @@ export class UserService {
       responsableId: this._responsableId,  // Ajoute le responsableId
       user: user,  // Ajoute l'objet user
       associateEnseignantWithUser: false,
-      yearId: 1
+      year: 1
     };
       console.log(user);
      return this._http.put<User>(
@@ -193,7 +193,7 @@ export class UserService {
     return this._http.get<any[]>(url);
   }
 
-  userHasRole(user: User, role: string): boolean {
-    return user.roles.filter(r => r.role === role && r.yearId == this._loginService.currentYearId).length > 0;
+  userHasRole(user: User, role: string, year: number| null): boolean {
+    return user.roles.filter(r => r.role === role && r.year == year).length > 0;;
   }
 }

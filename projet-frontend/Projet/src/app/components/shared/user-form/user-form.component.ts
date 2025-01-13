@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User, UserRoleDto } from '../types/user.type';
+import { Roles, User, UserRoleDto } from '../types/user.type';
 import { UserCustomValidators } from './user-custom-validators';
 import { MAT_DIALOG_DATA, MatDialogActions } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -106,7 +106,7 @@ export class UserFormComponent {
     });
 
     // Vérifier si nous sommes en mode mise à jour
-    if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+    if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
       // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
     }
@@ -182,7 +182,7 @@ private updateEmailAndUsername(): void {
       next: (enseignant) => {
         this.enseignant = enseignant;
         this._form.patchValue({
-          roles: this._model.roles,
+          maxHeuresService: enseignant.maxHeuresService,
           categorieEnseignant: enseignant.categorieEnseignant,
           nbHeureCategorie: enseignant.nbHeureCategorie,
         });
@@ -214,7 +214,7 @@ ngOnChanges(record: any): void {
   }
 
   // Vérification et traitement du rôle ENSEIGNANT
-  if (this._isUpdateMode && this._model.roles.some(role => role.role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this.form.get('roles')?.value.includes('ENSEIGNANT')) {
     this.fetchEnseignantDetails(this._model.id!);
 
     // Mise à jour des champs spécifiques pour un enseignant
@@ -247,12 +247,18 @@ submit(user: User): void {
   this._submit$.emit(user);
 
   // Vérifier si nous sommes en mode mise à jour et si le rôle ENSEIGNANT est présent
-  if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
+  if (this._isUpdateMode && this.form.get('roles')?.value.includes('ENSEIGNANT')) {
     // Mise à jour des propriétés de l'enseignant avec les valeurs de l'utilisateur
     this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
     this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
     this.enseignant.maxHeuresService = user.maxHeuresService as number;
 
+    const userToSend: User = {
+          ...user,
+          roles: user.roles.map((role) => { return {year: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
+        }
+
+    this.enseignant.user = userToSend;
     // Appeler le service pour mettre à jour l'enseignant
     this.enseignantService.updateEnseignant(this.enseignant).subscribe(
       () => {
@@ -324,7 +330,7 @@ private _buildForm(): FormGroup {
   };
 
   // Vérification si le rôle 'ENSEIGNANT' est présent
-  const isEnseignant = this.model?.roles?.some(role => role.role === 'ENSEIGNANT');
+  const isEnseignant = this.model?.roles?.some(role => role.role == 'ENSEIGNANT')
 
   // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
   addControl(

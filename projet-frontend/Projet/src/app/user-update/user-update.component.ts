@@ -45,7 +45,7 @@ export class UserUpdateComponent {
   transformRolesToUserRoles(roles: string[], year: number): UserRoleDto[] {
     return roles.map(role => ({
       role: role as UserRoleDto['role'],
-      yearId: year
+      year: year
     }));
   }
 

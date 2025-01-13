@@ -15,7 +15,7 @@ public class UserRequest {
     private Long responsableId;
     private boolean associateEnseignantWithUser; // New field
 
-    private Long yearId; // New field
+    private Long year; // New field
 
     @Override
     public String toString() {
