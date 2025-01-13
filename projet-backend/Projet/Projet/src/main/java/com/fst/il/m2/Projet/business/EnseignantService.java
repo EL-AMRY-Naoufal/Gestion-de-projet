@@ -105,21 +105,17 @@ public class EnseignantService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        // Get the current roles for the user (for the current year)
-        List<UserRole> roles = user.getRoles();
-
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if(!user.hasRoleForYear(currentYear, Role.ENSEIGNANT)){
             user.addRole(currentYear, Role.ENSEIGNANT);
+            // Save the updated user with the new role
+            user = userRepository.save(user);
         }
-
-        // Save the updated user with the new role
-        user = userRepository.save(user);
 
         // Create a map for the categories and hours
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
-
+        heuresAssignees += nbHeureCategorie;
         // Create the Enseignant entity
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
@@ -134,11 +130,15 @@ public class EnseignantService {
 
 
     public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.PROFESSEUR);
+        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         return this.enseignantRepository.save(enseignant);
     }
 

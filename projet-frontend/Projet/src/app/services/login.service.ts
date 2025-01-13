@@ -7,7 +7,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 type UserRole = {
   role: string;
-  yearId: number;
+  year: number;
 };
 
 @Injectable({
@@ -57,7 +57,7 @@ export class LoginService {
 
     const userRoles = response.user.roles.map((ur: any) => ({
       role: ur.role,
-      yearId: ur.year,
+      year: ur.year,
     }));
     const authToken = response.token;
     const currentYearId = response.currentYearId;
@@ -114,7 +114,7 @@ export class LoginService {
   get userRoles(): string[] {
     if (this.isBrowser) {
       return (JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[])
-        .filter((ur: any) => ur.yearId === this.currentYearId)
+        .filter((ur: any) => ur.year=== this.currentYearId)
         .map((ur: any) => ur.role);
     }
     return [];
