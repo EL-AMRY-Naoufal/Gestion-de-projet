@@ -12,7 +12,7 @@ export const environment = {
       categories: '/api/categories',
       role : '/api/responsableDepartement/role',
       allmodules : '/api/modules',
-
+      departements : '/api/departements',
     },
   },
 };

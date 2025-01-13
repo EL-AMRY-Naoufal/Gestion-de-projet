@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuComponent } from '../shared/menu/menu.component';
+import { DepartementService } from '../../services/departement.service';
 
 @Component({
   selector: 'app-modules',
@@ -10,6 +11,18 @@ import { MenuComponent } from '../shared/menu/menu.component';
   templateUrl: './modules.component.html',
   styleUrl: './modules.component.scss'
 })
-export class ModulesComponent {
+export class ModulesComponent implements OnInit {
+  departements: any[] = [];
+
+    constructor(private departementService: DepartementService) {
+      
+    }
+  
+    ngOnInit(): void {
+      this.departementService.getDepartementsByYear(1).subscribe(data => {
+        this.departements = data;
+        console.log(this.departements);
+      });  
+    }
 
 }
