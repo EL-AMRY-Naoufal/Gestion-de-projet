@@ -13,4 +13,6 @@ public interface DepartementService {
     Departement getDepartementById(Long id);
 
     void deleteDepartement(Long id);
+
+    List<Departement> getDepartementsByAnnee(Annee annee);
 }

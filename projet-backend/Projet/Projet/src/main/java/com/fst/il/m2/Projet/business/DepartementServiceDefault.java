@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Departement;
 import com.fst.il.m2.Projet.repositories.DepartementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,10 @@ public class DepartementServiceDefault implements DepartementService {
     @Override
     public void deleteDepartement(Long id) {
         departementRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Departement> getDepartementsByAnnee(Annee annee) {
+        return departementRepository.findYearDepartements(annee);
     }
 }
