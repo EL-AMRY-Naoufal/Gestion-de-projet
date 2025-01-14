@@ -228,8 +228,10 @@ export class ListUsersComponent {
   }
 
   searchTeachers(): void {
-    if (this.searchQuery.trim()) {
-      this._usersService.searchUsers(this.searchQuery.trim()).subscribe({
+    const normalizedQuery = this.normalizeString(this.searchQuery.trim());
+
+    if (normalizedQuery) {
+      this._usersService.searchUsers(normalizedQuery).subscribe({
         next: (data: User[]) => {
           if (Array.isArray(data)) {
             this._listUsers = data;
@@ -250,7 +252,13 @@ export class ListUsersComponent {
       this.ngOnInit();
     }
   }
-
+  private normalizeString(str: string): string {
+    return str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
   filterByRole() {
     if (this.selectedRole) {
       this._usersService
