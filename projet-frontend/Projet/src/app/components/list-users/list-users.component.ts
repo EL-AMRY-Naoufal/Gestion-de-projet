@@ -17,6 +17,7 @@ import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.t
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
 import { LoginService } from '../../services/login.service';
+import { EnseignantsComponent } from "../enseignants/enseignants.component";
 
 
 @Component({
@@ -31,6 +32,7 @@ import { LoginService } from '../../services/login.service';
     CommonModule,
     FormsModule,
     MenuComponent,
+    EnseignantsComponent
 ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',

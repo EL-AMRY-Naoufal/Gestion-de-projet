@@ -34,20 +34,27 @@
     </mat-card-subtitle>
   </mat-card-title-group>
 
-  <!-- Actions (modification et suppression avec icônes) -->
-  <mat-card-actions class="action-icons">
-    <!-- Lien pour modifier l'utilisateur avec une icône -->
-    <a mat-button *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" [routerLink]="['/edit', user.id]">
-      <mat-icon>edit</mat-icon>
-    </a>
+<!-- Actions (modification et suppression avec icônes personnalisées) -->
+<mat-card-actions class="custom-actions">
+  <!-- Lien pour modifier l'utilisateur avec une icône -->
+  <div
+    class="custom-icon edit-icon"
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    [routerLink]="['/edit', user.id]"
+    title="Edit user"
+  >
+    ✏️
+  </div>
 
-    <!-- Bouton pour supprimer l'utilisateur avec une icône -->
-    <button
-      mat-button
-      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-      (click)="delete(user)"
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
-  </mat-card-actions>
+  <!-- Bouton pour supprimer l'utilisateur avec une icône -->
+  <div
+    class="custom-icon delete-icon"
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    (click)="delete(user)"
+    title="Delete user"
+  >
+    🗑️
+  </div>
+</mat-card-actions>
+
 </mat-card>
