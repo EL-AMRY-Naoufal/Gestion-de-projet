@@ -25,6 +25,12 @@ public class User {
     @Column(name="Id")
     private Long id;
 
+    @Column(name="Name")
+    private String name;
+
+    @Column(name="Firstname")
+    private String firstname;
+
     @Column(name="Username", unique = true)
     private String username;
 
@@ -71,6 +77,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ",firstname='" + firstname + '\'' +
+                ",name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +

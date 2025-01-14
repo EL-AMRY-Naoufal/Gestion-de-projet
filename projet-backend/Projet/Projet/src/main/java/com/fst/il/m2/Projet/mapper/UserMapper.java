@@ -21,7 +21,7 @@ public class UserMapper {
                 .roles(user.getRoles().stream().map(
                         userRole -> UserRoleDto.builder()
                                 .role(userRole.getRole())
-                                .yearId(userRole.getYear())
+                                .year(userRole.getYear())
                                 .build()
                 ).toList())
                 .build();

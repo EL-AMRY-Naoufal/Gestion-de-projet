@@ -60,6 +60,19 @@ public class EnseignantController {
 
     @PutMapping()
     public  EnseignantDto updateEnseignant(@RequestBody EnseignantDto enseignant) {
+        if(enseignant.getId() == null) {
+            return EnseignantMapper.enseignantToEnseignantDto(
+                    this.enseignantService.createEnseignant(
+                            enseignant.getUser().getId(),
+                            enseignant.getMaxHeuresService(),
+                            enseignant.getHeuresAssignees(),
+                            enseignant.getCategorieEnseignant(),
+                            enseignant.getNbHeureCategorie(),
+                            1L
+
+                    )
+            );
+        }
         return EnseignantMapper.enseignantToEnseignantDto(
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),

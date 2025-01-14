@@ -13,8 +13,8 @@ mat-toolbar {
   justify-content: space-between; /* Positionne le logo et les liens aux extrémités */
   align-items: center;
   padding: 10px 30px; /* Padding pour donner de l'espace à gauche et à droite */
-  background-color: #000000; /* Fond noir */
-  color: #f3c00c; /* Texte jaune */
+  background-color: #bbd7f1; /* Fond noir */
+  color: #0a2b46; /* Texte jaune */
   font-family: Arial, sans-serif;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -27,7 +27,7 @@ mat-toolbar {
 }
 
 .navbar-logo .logo {
-  height: 40px;
+  height: 50px;
   width: auto; /* Ajuste la taille du logo */
 }
 
@@ -37,7 +37,7 @@ mat-toolbar {
 }
 
 .navbar-link {
-  color: #f3c00c; /* Couleur jaune */
+  color: #0a2b46; /* Texte jaune */
   text-decoration: none;
   font-size: 1.2rem;
   font-weight: bold;
@@ -45,7 +45,7 @@ mat-toolbar {
 }
 
 .navbar-link:hover {
-  color: #ffcc00; /* Couleur jaune plus clair au survol */
+  color: #248de2; /* Texte jaune */
   text-decoration: underline; /* Souligné au survol */
 }
 

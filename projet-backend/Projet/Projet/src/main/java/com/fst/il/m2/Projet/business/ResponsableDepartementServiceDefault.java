@@ -121,10 +121,19 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if(existingUser.hasRoleForYear(currentYear, Role.ENSEIGNANT )
+                && !user.hasRoleForYear(currentYear, Role.ENSEIGNANT)) {
+            this.enseignantRepository.deleteByUser(existingUser);
+
+        }
+
         // Update user information
         existingUser.setUsername(user.getUsername());
+        existingUser.setName(user.getName());
+        existingUser.setFirstname(user.getFirstname());
 //        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
+
 
         List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYear(id, currentYear);
         Map<Role, UserRole> existingRolesMap = existingRoles.stream()
