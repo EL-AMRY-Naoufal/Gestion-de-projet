@@ -1,26 +1,30 @@
+/* Styles de base pour mat-toolbar */
 mat-toolbar {
-  background-color: #000;
-  color: #ffeb3b;
+  background-color: #000; /* Fond noir */
+  color: #ffeb3b; /* Texte jaune */
   padding: 16px;
 }
 
+/* Classe spacer pour l'espacement flexible */
 .spacer {
   flex: 1 1 auto;
 }
+
 /* Navbar styling */
 .navbar {
   display: flex;
-  justify-content: space-between; /* Positionne le logo et les liens aux extrémités */
+  justify-content: space-between; /* Positionne les éléments aux extrémités */
   align-items: center;
-  padding: 10px 30px; /* Padding pour donner de l'espace à gauche et à droite */
-  background-color: #bbd7f1; /* Fond noir */
-  color: #0a2b46; /* Texte jaune */
+  padding: 10px 30px; /* Espace autour de la barre */
+  background-color: #bbd7f1; /* Couleur de fond bleu clair */
+  color: #0a2b46; /* Couleur du texte bleu foncé */
   font-family: Arial, sans-serif;
   width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  box-sizing: border-box; /* S'assure que le padding n'affecte pas la largeur totale */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de relief */
+  box-sizing: border-box; /* Inclut le padding dans la largeur totale */
 }
 
+/* Logo */
 .navbar-logo {
   display: flex;
   align-items: center;
@@ -28,37 +32,51 @@ mat-toolbar {
 
 .navbar-logo .logo {
   height: 50px;
-  width: auto; /* Ajuste la taille du logo */
+  width: auto; /* Ajuste la taille proportionnellement */
 }
 
+/* Liens de la barre de navigation */
 .navbar-links {
   display: flex;
-  gap: 20px; /* Espacement entre les liens */
+  gap: 20px; /* Espace entre les liens */
 }
 
 .navbar-link {
-  color: #0a2b46; /* Texte jaune */
-  text-decoration: none;
-  font-size: 1.2rem;
+  color: #0a2b46; /* Couleur du texte */
+  text-decoration: none; /* Supprime le soulignement par défaut */
+  font-size: 1.2rem; /* Taille de texte lisible */
   font-weight: bold;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease; /* Animation pour un effet au survol */
 }
 
 .navbar-link:hover {
-  color: #248de2; /* Texte jaune */
-  text-decoration: underline; /* Souligné au survol */
+  color: #248de2; /* Couleur du texte au survol */
+  text-decoration: underline; /* Ajoute un soulignement au survol */
 }
 
-/* Pour les petits écrans (responsive) */
+/* Section centrale pour la navigation (nouveau) */
+.navbar-center {
+  flex: 2;
+  display: flex;
+  justify-content: center; /* Centre les éléments */
+  gap: 30px; /* Espacement uniforme entre les liens */
+}
+
+/* Responsive Design pour petits écrans */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
     padding: 10px;
-    text-align: center; /* Centre les éléments sur les petits écrans */
+    text-align: center; /* Centre les éléments */
   }
 
-  .navbar-links {
-    flex-direction: column;
-    gap: 10px;
+  .navbar-links,
+  .navbar-center {
+    flex-direction: column; /* Empile les éléments verticalement */
+    gap: 15px;
+  }
+
+  .navbar-logo {
+    margin-bottom: 10px; /* Ajoute un espace sous le logo */
   }
 }
