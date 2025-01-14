@@ -52,4 +52,7 @@ userRoles: string[] = [];
    this.loginService.logout();
     this.router.navigate(['']);
   }
+  navigateToAffectations() {
+    this.router.navigate(['/enseignant/MesAffectations']);
+  }
 }

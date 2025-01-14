@@ -1,26 +1,23 @@
 
-<!--
-<mat-toolbar color="primary">
-  <span>LOGO</span>
-  <span class="spacer"></span>
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Mon compte</button>
-    <button mat-menu-item (click)="logout()">Déconnecter</button>
-  </mat-menu>
-</mat-toolbar>
--->
-
 <nav class="navbar">
+  <!-- Logo à gauche -->
   <div class="navbar-logo">
-    <img src="/assets/images/logo.png" alt="Logo" class="logo" />
-  </div>
-  <div class="navbar-links">
     <a href="/dashboard" class="navbar-link">
-      Accueil</a>
-    <a href="/mon-compte" class="navbar-link">Mon Compte</a>
-    <a (click)=" logout()" class="navbar-link">Déconnexion</a>
+      <img src="/assets/images/logo.png" alt="Logo" class="logo" />
+    </a>
+  </div>
+
+  <!-- Liens au milieu -->
+  <div class="navbar-center">
+    <a   *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()" class="navbar-link">Gestion des utilisateurs</a>
+    <a href="/modules" class="navbar-link">Gestion des modules</a>
+    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')"     (click)="navigateToAffectations()"  class="navbar-link">Gestion des affectations</a>
+  </div>
+
+  <!-- Icône de déconnexion à droite -->
+  <div class="navbar-links">
+    <a (click)="logout()" class="navbar-link">
+      <i class="fas fa-power-off"></i>
+    </a>
   </div>
 </nav>

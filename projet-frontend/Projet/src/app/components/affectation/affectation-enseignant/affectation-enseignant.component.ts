@@ -3,6 +3,7 @@ import { EnseignantService } from '../../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
 import {AffectationType} from "../../shared/types/affectation.type";
 import {LoginService} from "../../../services/login.service";
+import { MenuComponent } from "../../shared/menu/menu.component";
 
 @Component({
   selector: 'app-affectation-list',
@@ -10,8 +11,9 @@ import {LoginService} from "../../../services/login.service";
   templateUrl: 'affectation-enseignant.component.html',
   imports: [
     NgIf,
-    NgForOf
-  ],
+    NgForOf,
+    MenuComponent
+],
   styleUrls: ['affectation-enseignant.component.scss']
 })
 export class AffectationListComponent implements OnInit {
