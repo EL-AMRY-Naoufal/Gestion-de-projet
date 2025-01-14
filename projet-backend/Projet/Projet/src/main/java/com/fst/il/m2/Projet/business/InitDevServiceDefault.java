@@ -86,6 +86,10 @@ public class InitDevServiceDefault implements InitDevService {
         Annee annee = Annee.builder().id(1L).debut(2024).build();
         anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));
 
+        //TODO frontend user roles do not work when we add a year. (in "get userRoles()" function from login.service.ts)
+//        Annee annee2025 = Annee.builder().debut(2025).build();
+//        anneeRepository.save(annee2025);
+
 
 
         //data to create : Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe

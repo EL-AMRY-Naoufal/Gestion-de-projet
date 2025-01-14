@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/enseignants").permitAll()
                         .requestMatchers("/api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
+                        .requestMatchers(("/api/annees/**")).hasAuthority("CHEF_DE_DEPARTEMENT")
 
                         //partie creation des affectations
                         .requestMatchers("/api/modules").permitAll()
