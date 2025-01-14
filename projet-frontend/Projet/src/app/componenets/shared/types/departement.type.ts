@@ -1,6 +1,8 @@
+import { FormationType } from "./formation.type";
+
 export type DepartementType = {
     id : string;
     nom: string;
-    formation : string | null;
+    formations : FormationType[] | null;
     responsableDeDepartement : string;
 }

@@ -13,6 +13,7 @@ export const environment = {
       role : '/api/responsableDepartement/role',
       allmodules : '/api/modules',
       departements : '/api/departements',
+      annees : '/api/annees',
     },
   },
 };

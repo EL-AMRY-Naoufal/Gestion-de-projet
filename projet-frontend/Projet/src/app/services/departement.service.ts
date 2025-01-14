@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment.prod";
 import { DepartementType } from "../componenets/shared/types/departement.type";
-
+import { catchError, map, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,8 +26,8 @@ export class DepartementService {
       (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
     );
   }
-  
-  getDepartementsByYear(yearId: number): Observable<any> {
-    return this.http.get<DepartementType>(`${this._backendURL.departements}/year/${yearId}`);
+
+  getDepartementsByYear(yearId: number): Observable<DepartementType[]> {
+    return this.http.get<DepartementType[]>(`${this._backendURL.departements}/year/${yearId}`);
   }
-}    
+}

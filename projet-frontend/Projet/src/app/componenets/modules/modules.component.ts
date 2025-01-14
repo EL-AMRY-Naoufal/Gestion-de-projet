@@ -3,36 +3,61 @@ import {MenuComponent} from '../shared/menu/menu.component';
 import {Annee} from "../../types/modules.types";
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
+import { AnneeService } from '../../services/annee.service';
+import { AnneeType } from '../shared/types/annee.type';
+import { CommonModule } from '@angular/common';
+import { DepartementType } from '../shared/types/departement.type';
 
 @Component({
   selector: 'app-modules',
   standalone: true,
   imports: [
     MenuComponent,
+    CommonModule,
     NgForOf,
   ],
   templateUrl: './modules.component.html',
   styleUrl: './modules.component.scss'
 })
-export class ModulesComponent /*implements OnInit */ {
+export class ModulesComponent implements OnInit {
 
-
+  annees: AnneeType[] = [];
+  constructor(private departementService: DepartementService, private anneeService : AnneeService) {}
 
   selectedItemType: string | null = null;
   selectedItem: any = null;
-  /*  departements: any[] = [];
 
-      constructor(private departementService: DepartementService) {
+  ngOnInit(): void {
+    //get all annees
+    this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
+      this.annees = data;
+      console.log(this.annees);
 
-      }*/
+      //for each annee, get all departements
+      this.annees.forEach(annee => {
+        //send request to backend
+        this.departementService.getDepartementsByYear(annee.id).subscribe(data => {
+          //reassign departements to each annee
+          this.annees[annee.id].departements = data;
 
-  /*    ngOnInit(): void {
-        this.departementService.getDepartementsByYear(1).subscribe(data => {
-          this.departements = data;
-          console.log(this.departements);
+          if(annee.departements != null) {
+
+            //for each departement, get all formations (skip)
+            annee.departements.forEach(departement => {
+              if(departement.formations != null) {
+
+                //for each formations, get all niveaux
+                departement.formations.forEach(formation => {
+
+                  //get formations //TODO faire le backend
+                });
+              }
+            });
+          }
         });
-      }*/
-
+      })
+    })
+  }
 
 
 //exemple pour tester
@@ -162,5 +187,5 @@ export class ModulesComponent /*implements OnInit */ {
 
   removeGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.splice(groupeIndex, 1);
-  }
+  }  
 }

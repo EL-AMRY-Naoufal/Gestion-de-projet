@@ -2,6 +2,82 @@
 
 Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
 
+<!--
+<ul class="tree">
+    <li>
+      <details open>
+        <summary>Annees</summary>
+        <ul>
+          <li *ngFor="let annee of annees">
+            <details open>
+              <summary>{{annee.debut}}-{{annee.debut+1}}</summary>
+              <ul>
+                <li *ngFor="let departement of annee.departements">
+                    <details>
+                        <summary>{{departement.nom}}</summary>
+                        <ul>
+                          <li *ngFor="let formation of departement.formations">
+                            <details>
+                                <summary>{{formation.nom}}</summary>
+                                <ul>
+                                  <li>
+                                    <details>
+                                        <summary>Niveau M2</summary>
+                                        <ul>
+                                          <li>
+                                            <details>
+                                                <summary>Orientation IL</summary>
+                                                <ul>
+                                                    <li>
+                                                        <details>
+                                                            <summary>Semestre 1</summary>
+                                                            <ul>
+                                                              <li>
+                                                                <details>
+                                                                    <summary>Module Gestion de Projet</summary>
+                                                                    <ul>
+                                                                      <li>
+                                                                        <details>
+                                                                            <summary>Groupe TD1</summary>
+                                                                            <ul>
+                                                                              <li>Affectation enseignant 1</li>
+                                                                            </ul>
+                                                                        </details>
+                                                                      </li>
+                                                                      <li>
+                                                                        <details>
+                                                                            <summary>Groupe TP1</summary>
+                                                                            <ul>
+                                                                              <li>Affectation enseignant 2</li>
+                                                                            </ul>
+                                                                        </details>
+                                                                      </li>
+                                                                    </ul>
+                                                                </details>
+                                                              </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                          </li>
+                                        </ul>
+                                    </details>
+                                  </li>
+                                </ul>
+                            </details>
+                          </li>
+                        </ul>
+                    </details>
+                </li>
+                </ul>
+            </details>
+          </li>
+        </ul>
+      </details>
+    </li>
+  </ul>-->
+
 <ul class="tree">
   <li *ngFor="let annee of data.annees; let i = index">
     <details>
