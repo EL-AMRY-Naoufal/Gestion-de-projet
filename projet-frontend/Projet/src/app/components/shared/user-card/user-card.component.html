@@ -3,7 +3,6 @@
     <!-- Titre avec le nom d'utilisateur -->
     <mat-card-title>
       <a href="javascript:void(0);">
-
         <span>{{ user.name }} </span>
         <span>{{ user.firstname }}</span><br/>
         <span>{{ user.username }} </span>
@@ -35,25 +34,20 @@
     </mat-card-subtitle>
   </mat-card-title-group>
 
-
-
-  <mat-card-content>
-    <!-- Contenu principal de la carte, qui occupe tout l'espace disponible -->
-  </mat-card-content>
-
-  <mat-card-actions>
-    <!-- Lien pour modifier l'utilisateur -->
-    <a mat-button [routerLink]="['/edit', user.id]">
-      Modifier
+  <!-- Actions (modification et suppression avec icônes) -->
+  <mat-card-actions class="action-icons">
+    <!-- Lien pour modifier l'utilisateur avec une icône -->
+    <a mat-button *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" [routerLink]="['/edit', user.id]">
+      <mat-icon>edit</mat-icon>
     </a>
 
-    <!-- Bouton pour supprimer l'utilisateur -->
+    <!-- Bouton pour supprimer l'utilisateur avec une icône -->
     <button
       mat-button
       *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
       (click)="delete(user)"
     >
-      Supprimer
+      <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>
