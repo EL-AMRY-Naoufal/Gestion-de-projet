@@ -42,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/modules").permitAll()
                         .requestMatchers("/api/responsableDepartement").permitAll()
 
+                        .requestMatchers("/api/annees").permitAll()
+
 
                         .anyRequest().authenticated()
                 )

@@ -14,6 +14,7 @@ import { EnseignantService } from '../../../services/enseignant.service';
 import { CategorieEnseignantService } from '../../../services/categorie-enseignant.service';
 import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
+import { YearService } from '../../../services/year-service';
 
 @Component({
   selector: 'app-user-form',
@@ -42,7 +43,7 @@ export class UserFormComponent {
     @Inject(MAT_DIALOG_DATA) public dataTeacher: any,
     private enseignantService: EnseignantService,
     private categorieService: CategorieEnseignantService,
-    private _loginService: LoginService) {
+    private _yearService: YearService,) {
 
     this._model = {} as User;
     this._isUpdateMode = !!data;
@@ -255,7 +256,7 @@ submit(user: User): void {
 
     const userToSend: User = {
           ...user,
-          roles: user.roles.map((role) => { return {year: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
+          roles: user.roles.map((role) => { return {year: this._yearService.currentYearId, role: role as unknown as Roles}}),
         }
 
     this.enseignant.user = userToSend;

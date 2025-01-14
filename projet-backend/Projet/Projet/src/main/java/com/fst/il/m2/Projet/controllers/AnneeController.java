@@ -30,7 +30,7 @@ public class AnneeController {
     @GetMapping
     public ResponseEntity<List<AnneeDto>> getAllAnnees() {
         List<AnneeDto> annees = anneeService.getAllAnnees().stream().map(
-                annee -> AnneeDto.builder().id(annee.getId()).label(annee.getDebut() + "-" + (annee.getDebut() + 1)).build()
+                annee -> AnneeDto.builder().id(annee.getId()).debut(annee.getDebut()).build()
         ).toList();
         return new ResponseEntity<>(annees, HttpStatus.OK);
     }

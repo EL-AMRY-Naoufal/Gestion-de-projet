@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { isPlatformBrowser } from '@angular/common';
+import { YearService } from './year-service';
 
 type UserRole = {
   role: string;
@@ -18,7 +19,7 @@ export class LoginService {
 
   private readonly isBrowser!: boolean;
 
-  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private _yearService: YearService) {
     this._backendURL = {};
 
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -64,9 +65,10 @@ export class LoginService {
 
     //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
     if (this.isBrowser) {
-      console.log(authToken);
       localStorage.setItem('userId', response.user.id);
-      localStorage.setItem('currentYearId', currentYearId + '');
+
+      this._yearService.currentYearId = currentYearId;
+
       localStorage.setItem('userRoles', JSON.stringify(userRoles));
       if(authToken) localStorage.setItem('token', authToken);
     }
