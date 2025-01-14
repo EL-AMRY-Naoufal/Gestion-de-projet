@@ -13,11 +13,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
-import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
+import {
+  CategorieEnseignant,
+  EnseignantDto,
+} from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
-
 
 @Component({
   selector: 'app-list-users',
@@ -31,7 +33,7 @@ import { YearService } from '../../services/year-service';
     CommonModule,
     FormsModule,
     MenuComponent,
-],
+  ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })
@@ -52,14 +54,15 @@ export class ListUsersComponent {
     categorieEnseignant: CategorieEnseignant.PROFESSEUR,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
-    heuresAssignees: 0
-  }
+    heuresAssignees: 0,
+  };
   roles: string[] = [
     'CHEF_DE_DEPARTEMENT',
     'RESPONSABLE_DE_FORMATION',
     'SECRETARIAT_PEDAGOGIQUE',
     'ENSEIGNANT',
   ];
+  private _loginService: any;
 
   /**
    * Component constructor
@@ -151,13 +154,15 @@ export class ListUsersComponent {
         map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
           delete user?.id;
-          this.enseignantDto.categorieEnseignant = user?.categorieEnseignant as CategorieEnseignant;
-          this.enseignantDto.nbHeureCategorie = user?.nbHeureCategorie as number;
-          this.enseignantDto.maxHeuresService = user?.maxHeuresService as number;
+          this.enseignantDto.categorieEnseignant =
+            user?.categorieEnseignant as CategorieEnseignant;
+          this.enseignantDto.nbHeureCategorie =
+            user?.nbHeureCategorie as number;
+          this.enseignantDto.maxHeuresService =
+            user?.maxHeuresService as number;
           delete user?.categorieEnseignant;
           delete user?.maxHeuresService;
           delete user?.nbHeureCategorie;
-
 
           return user;
         }),
@@ -165,9 +170,18 @@ export class ListUsersComponent {
       )
       .subscribe({
         next: (user: User) => {
-          (this._listUsers = this._listUsers.concat(user));
-          if (this._usersService.userHasRole(user, 'ENSEIGNANT', this._loginService.currentYearId)) {
-            this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
+          this._listUsers = this._listUsers.concat(user);
+          if (
+            this._usersService.userHasRole(
+              user,
+              'ENSEIGNANT',
+              this._loginService.currentYearId
+            )
+          ) {
+            this.enseignantDto.id = user.id;
+            this._addTeacher(this.enseignantDto);
+          }
+        },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),
       });
@@ -197,21 +211,20 @@ export class ListUsersComponent {
 
     const userToSend: User = {
       ...user,
-<<<<<<< HEAD
-      roles: user.roles.map((role) => { return {yearId: this._yearService.currentYearId, role: role as unknown as Roles}}),
-=======
-      roles: user.roles.map((role) => { return {year: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
->>>>>>> df9f2bb36f2442c93cb37fabba75ce1547c96d7f
-    }
+      roles: user.roles.map((role) => {
+        return {
+          year: this._loginService.currentYearId ?? 1,
+          role: role as unknown as Roles,
+        };
+      }),
+    };
 
     return this._usersService.create(userToSend);
   }
 
   private _addTeacher(enseignantDto: EnseignantDto) {
-    console.log("enseignant ", enseignantDto)
-    this._enseignantService.createEnseignant(enseignantDto).subscribe(
-
-    );
+    console.log('enseignant ', enseignantDto);
+    this._enseignantService.createEnseignant(enseignantDto).subscribe();
   }
 
   searchTeachers(): void {
