@@ -83,7 +83,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.label || 'Nouvelle Année' }}
-        <button (click)="addAnnee()">+</button>
+        <button (click)="addChild('DEPARTEMENT', i)">+</button>
         <button (click)="removeAnnee(i)">-</button>
       </summary>
       <ul>
@@ -91,7 +91,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.label || 'Nouveau Département' }}
-              <button (click)="addDepartement(i)">+</button>
+              <button (click)="addChild('FORMATION', i, j)">+</button>
               <button (click)="removeDepartement(i, j)">-</button>
             </summary>
             <ul>
@@ -99,7 +99,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.label || 'Nouvelle Formation' }}
-                    <button (click)="addFormation(i, j)">+</button>
+                    <button (click)="addChild('NIVEAU', i, j, k)">+</button>
                     <button (click)="removeFormation(i, j, k)">-</button>
                   </summary>
                   <ul>
@@ -107,7 +107,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.label || 'Nouveau Niveau' }}
-                          <button (click)="addNiveau(i, j, k)">+</button>
+                          <button (click)="addChild('ORIENTATION', i, j, k, l)">+</button>
                           <button (click)="removeNiveau(i, j, k, l)">-</button>
                         </summary>
                         <ul>
@@ -115,7 +115,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                             <details>
                               <summary (click)="showType('ORIENTATION', orientation)">
                                 Orientation: {{ orientation.label || 'Nouvelle Orientation' }}
-                                <button (click)="addOrientation(i, j, k, l)">+</button>
+                                <button (click)="addChild('SEMESTRE', i, j, k, l, m)">+</button>
                                 <button (click)="removeOrientation(i, j, k, l, m)">-</button>
                               </summary>
                               <ul>
@@ -123,7 +123,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                   <details>
                                     <summary (click)="showType('SEMESTRE', semestre)">
                                       Semestre: {{ semestre.label || 'Nouveau Semestre' }}
-                                      <button (click)="addSemestre(i, j, k, l, m)">+</button>
+                                      <button (click)="addChild('MODULE', i, j, k, l, m, n)">+</button>
                                       <button (click)="removeSemestre(i, j, k, l, m, n)">-</button>
                                     </summary>
                                     <ul>
@@ -131,20 +131,9 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                         <details>
                                           <summary (click)="showType('MODULE', module)">
                                             Module: {{ module.label || 'Nouveau Module' }}
-                                            <button (click)="addModule(i, j, k, l, m, n)">+</button>
+                                            <button (click)="addChild('GROUPE', i, j, k, l, m, n, o)">+</button>
                                             <button (click)="removeModule(i, j, k, l, m, n, o)">-</button>
                                           </summary>
-                                          <ul>
-                                            <li *ngFor="let groupe of module.groupes; let p = index">
-                                              <details>
-                                                <summary (click)="showType('GROUPE', groupe)">
-                                                  Groupe: {{ groupe.nom || 'Nouveau Groupe' }}
-                                                  <button (click)="addGroupe(i, j, k, l, m, n, o)">+</button>
-                                                  <button (click)="removeGroupe(i, j, k, l, m, n, o, p)">-</button>
-                                                </summary>
-                                              </details>
-                                            </li>
-                                          </ul>
                                         </details>
                                       </li>
                                     </ul>

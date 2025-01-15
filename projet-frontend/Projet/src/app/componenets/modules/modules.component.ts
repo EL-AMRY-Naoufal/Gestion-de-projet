@@ -110,51 +110,56 @@ export class ModulesComponent implements OnInit {
   }
 
   addAnnee() {
-    this.data.annees.push({label: '', departements: []});
+    if (this.data.annees.length === 0) {
+      this.data.annees.push({ label: '', departements: [] });
+    } else {
+      const lastAnnee = this.data.annees[this.data.annees.length - 1];
+      lastAnnee.departements.push({ label: '', formations: [] });
+    }
   }
 
-  addDepartement(anneeIndex: number) {
-    this.data.annees[anneeIndex].departements.push({label: '', formations: []});
-  }
-
-  addFormation(anneeIndex: number, departementIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations.push({label: '', niveaux: []});
-  }
-
-  addNiveau(anneeIndex: number, departementIndex: number, formationIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push({
-      label: '',
-      orientations: []
-    });
-  }
-
-  addOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.push({
-      label: '',
-      semestres: []
-    });
-  }
-
-  addSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres.push({
-      label: '',
-      modules: []
-    });
-  }
-
-  addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules.push({
-      label: '',
-      groupes: []
-    });
-  }
-
-  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push({
-      id: '',
-      nom: '',
-      heures: 0
-    });
+  addChild(type: string, anneeIndex: number, departementIndex?: number, formationIndex?: number, niveauIndex?: number, orientationIndex?: number, semestreIndex?: number, moduleIndex?: number) {
+    switch (type) {
+      case 'DEPARTEMENT':
+        this.data.annees[anneeIndex].departements.push({ label: '', formations: [] });
+        break;
+      case 'FORMATION':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations.push({ label: '', niveaux: [] });
+        break;
+      case 'NIVEAU':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux.push({
+          label: '',
+          orientations: [],
+        });
+        break;
+      case 'ORIENTATION':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations.push({
+          label: '',
+          semestres: [],
+        });
+        break;
+      case 'SEMESTRE':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres.push({
+          label: '',
+          modules: [],
+        });
+        break;
+      case 'MODULE':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres[semestreIndex!].modules.push({
+          label: '',
+          groupes: [],
+        });
+        break;
+      case 'GROUPE':
+        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres[semestreIndex!].modules[moduleIndex!].groupes.push({
+          id: '',
+          nom: '',
+          heures: 0,
+        });
+        break;
+      default:
+        console.warn('Type non pris en charge:', type);
+    }
   }
 
   removeAnnee(index: number) {
@@ -187,5 +192,5 @@ export class ModulesComponent implements OnInit {
 
   removeGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.splice(groupeIndex, 1);
-  }  
+  }
 }
