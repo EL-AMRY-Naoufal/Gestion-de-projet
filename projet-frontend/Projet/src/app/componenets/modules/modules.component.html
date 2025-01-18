@@ -78,12 +78,29 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
     </li>
   </ul>-->
 
+
+<!-- fenetre de dialogue pour ajouter une nouvelle année -->
+<div *ngIf="showAddAnneeDialog" class="dialog">
+  <h3>Ajouter une nouvelle année</h3>
+  <form (ngSubmit)="addAnnee()">
+    <label for="debut">Année:</label>
+    <input id="debut" [(ngModel)]="newAnnee.debut" name="debut" required>
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="closeAddAnneeDialog()">Annuler</button>
+  </form>
+</div>
+
+
+<div class="button-container">
+  Nouvelle année
+<button (click)="openAddAnneeDialog()">+</button>
+</div>
 <ul class="tree">
   <li *ngFor="let annee of data.annees; let i = index">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <button (click)="addChild('DEPARTEMENT', i)">+</button>
+        <button (click)="addDepartement( i)">+</button>
         <button (click)="removeAnnee(i)">-</button>
       </summary>
       <ul>
@@ -91,7 +108,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <button (click)="addChild('FORMATION', i, j)">+</button>
+              <button (click)="addFormation( i, j)">+</button>
               <button (click)="removeDepartement(i, j)">-</button>
             </summary>
             <ul>
@@ -99,7 +116,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <button (click)="addChild('NIVEAU', i, j, k)">+</button>
+                    <button (click)="addNiveau( i, j, k)">+</button>
                     <button (click)="removeFormation(i, j, k)">-</button>
                   </summary>
                   <ul>
@@ -107,7 +124,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.label || 'Nouveau Niveau' }}
-                          <button (click)="addChild('ORIENTATION', i, j, k, l)">+</button>
+                          <button (click)="addOrientation( i, j, k, l)">+</button>
                           <button (click)="removeNiveau(i, j, k, l)">-</button>
                         </summary>
                         <ul>
@@ -115,7 +132,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                             <details>
                               <summary (click)="showType('ORIENTATION', orientation)">
                                 Orientation: {{ orientation.label || 'Nouvelle Orientation' }}
-                                <button (click)="addChild('SEMESTRE', i, j, k, l, m)">+</button>
+                                <button (click)="addSemestre( i, j, k, l, m)">+</button>
                                 <button (click)="removeOrientation(i, j, k, l, m)">-</button>
                               </summary>
                               <ul>
@@ -123,7 +140,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                   <details>
                                     <summary (click)="showType('SEMESTRE', semestre)">
                                       Semestre: {{ semestre.label || 'Nouveau Semestre' }}
-                                      <button (click)="addChild('MODULE', i, j, k, l, m, n)">+</button>
+                                      <button (click)="addModule( i, j, k, l, m, n)">+</button>
                                       <button (click)="removeSemestre(i, j, k, l, m, n)">-</button>
                                     </summary>
                                     <ul>
@@ -131,7 +148,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                         <details>
                                           <summary (click)="showType('MODULE', module)">
                                             Module: {{ module.nom || 'Nouveau Module' }}
-                                            <button (click)="addChild('GROUPE', i, j, k, l, m, n, o)">+</button>
+                                            <button (click)="addGroupe( i, j, k, l, m, n, o)">+</button>
                                             <button (click)="removeModule(i, j, k, l, m, n, o)">-</button>
                                           </summary>
                                         </details>

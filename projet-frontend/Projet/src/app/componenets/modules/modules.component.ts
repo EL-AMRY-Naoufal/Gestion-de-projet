@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuComponent} from '../shared/menu/menu.component';
-import {Annee} from "../../types/modules.types";
+import {Annee, Departement} from "../../types/modules.types";
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
 import { AnneeService } from '../../services/annee.service';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-modules',
@@ -13,19 +14,31 @@ import { CommonModule } from '@angular/common';
     MenuComponent,
     CommonModule,
     NgForOf,
+    FormsModule,
   ],
   templateUrl: './modules.component.html',
   styleUrl: './modules.component.scss'
 })
 export class ModulesComponent implements OnInit {
 
+  // les boolean pour afficher les dialogues
+  showAddAnneeDialog: boolean = false;
+  showAddDepartementDialog: boolean = false;
+
+  newAnnee: Annee = { debut: '', departements: [] };
+  newDepartement: Departement = { nom: '', responsableDeDepartement: '', formations: [] };
+
   annees: Annee[] = [];
+
   constructor(private departementService: DepartementService, private anneeService : AnneeService) {}
 
-  selectedItemType: string | null = null;
-  selectedItem: any = null;
+
 
   ngOnInit(): void {
+
+
+
+
     //get all annees
     this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
       this.annees = data;
@@ -39,16 +52,16 @@ export class ModulesComponent implements OnInit {
           this.departementService.getDepartementsByYear(annee_id).subscribe(data => {
             //reassign departements to each annee
             this.annees[annee_id].departements = data;
-  
+
             if(annee.departements != null) {
-  
+
               //for each departement, get all formations (skip)
               annee.departements.forEach(departement => {
                 if(departement.formations != null) {
-  
+
                   //for each formations, get all niveaux
                   departement.formations.forEach(formation => {
-  
+
                     //get formations //TODO faire le backend
                   });
                 }
@@ -129,63 +142,80 @@ export class ModulesComponent implements OnInit {
     console.log(`Type: ${type}`, item);
   }
 
-  addAnnee() {
-    if (this.data.annees.length === 0) {
-      this.data.annees.push({ debut: '', departements: [] });
-    } else {
-      const lastAnnee = this.data.annees[this.data.annees.length - 1];
-      lastAnnee.departements.push({ nom: '', responsableDeDepartement: '', formations: [] });
-    }
+
+  openAddAnneeDialog() {
+    this.showAddAnneeDialog = true;
   }
 
-  addChild(type: string, anneeIndex: number, departementIndex?: number, formationIndex?: number, niveauIndex?: number, orientationIndex?: number, semestreIndex?: number, moduleIndex?: number) {
-    switch (type) {
-      case 'DEPARTEMENT':
-        this.data.annees[anneeIndex].departements.push({ nom: '', responsableDeDepartement: '', formations: [] });
-        break;
-      case 'FORMATION':
-            this.data.annees[anneeIndex].departements[departementIndex!].formations.push({ nom: '', totalHeures: 0, responsableFormation: '', modules: [], niveaux: [] });
-        break;
-      case 'NIVEAU':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux.push({
-          label: '',
-          orientations: [],
-        });
-        break;
-      case 'ORIENTATION':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations.push({
-          label: '',
-          semestres: [],
-        });
-        break;
-      case 'SEMESTRE':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres.push({
-          label: '',
-          modules: [],
-        });
-        break;
-      case 'MODULE':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres[semestreIndex!].modules.push({
-          nom: '',
-          totalHeuresRequises: 0,
-          heuresParType: new Map([
-            ["CM", 10],
-            ["TD", 10],
-            ["TP", 10],
-          ]),
-          groupes: [],
-        });
-        break;
-      case 'GROUPE':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres[semestreIndex!].modules[moduleIndex!].groupes.push({
-          id: '',
-          nom: '',
-          heures: 0,
-        });
-        break;
-      default:
-        console.warn('Type non pris en charge:', type);
-    }
+  closeAddAnneeDialog() {
+    this.showAddAnneeDialog = false;
+  }
+  addAnnee() {
+    this.data.annees.push(this.newAnnee);
+    this.newAnnee = { debut: '', departements: [] };
+    this.closeAddAnneeDialog();
+  }
+
+
+
+ addDepartement(anneeIndex: number) {
+    this.data.annees[anneeIndex].departements.push({
+      nom: '',
+      responsableDeDepartement: '',
+      formations: [],
+    });
+  }
+
+  addFormation(anneeIndex: number, departementIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations.push({
+      nom: '',
+      totalHeures: 0,
+      responsableFormation: '',
+      modules: [],
+      niveaux: [],
+    });
+  }
+
+  addNiveau(anneeIndex: number, departementIndex: number, formationIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push({
+      label: '',
+      orientations: [],
+    });
+  }
+
+  addOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.push({
+      label: '',
+      semestres: [],
+    });
+  }
+
+  addSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres.push({
+      label: '',
+      modules: [],
+    });
+  }
+
+  addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules.push({
+      nom: '',
+      totalHeuresRequises: 0,
+      heuresParType: new Map([
+        ["CM", 10],
+        ["TD", 10],
+        ["TP", 10],
+      ]),
+      groupes: [],
+    });
+  }
+
+  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push({
+      id: '',
+      nom: '',
+      heures: 0,
+    });
   }
 
   removeAnnee(index: number) {
