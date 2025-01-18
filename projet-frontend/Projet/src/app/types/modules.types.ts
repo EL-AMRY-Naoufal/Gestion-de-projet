@@ -5,8 +5,11 @@ export interface Groupe {
 }
 
 export interface Module {
-  label?: string;
+  id?: string;
+  nom: string;
+  totalHeuresRequises: number;
   groupes: Groupe[];
+  heuresParType:Map<string, number>;
 }
 
 export interface Semestre {
@@ -25,16 +28,23 @@ export interface Niveau {
 }
 
 export interface Formation {
-  label?: string;
-  niveaux: Niveau[];
+  id?: number;
+  nom: string;
+  totalHeures: number;
+  responsableFormation: string;
+  modules: Module[];
+  niveaux: Niveau[]; 
 }
 
 export interface Departement {
-  label?: string;
-  formations: Formation[];
+  id? : number;
+  nom: string;
+  formations : Formation[];
+  responsableDeDepartement : string;
 }
 
 export interface Annee {
-  label?: string;
+  id?: number;
+  debut: string;
   departements: Departement[];
 }

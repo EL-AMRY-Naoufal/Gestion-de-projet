@@ -82,7 +82,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
   <li *ngFor="let annee of data.annees; let i = index">
     <details>
       <summary (click)="showType('ANNEE', annee)">
-        Année: {{ annee.label || 'Nouvelle Année' }}
+        Année: {{ annee.debut || 'Nouvelle Année' }}
         <button (click)="addChild('DEPARTEMENT', i)">+</button>
         <button (click)="removeAnnee(i)">-</button>
       </summary>
@@ -90,7 +90,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
         <li *ngFor="let departement of annee.departements; let j = index">
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
-              Département: {{ departement.label || 'Nouveau Département' }}
+              Département: {{ departement.nom || 'Nouveau Département' }}
               <button (click)="addChild('FORMATION', i, j)">+</button>
               <button (click)="removeDepartement(i, j)">-</button>
             </summary>
@@ -98,7 +98,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
               <li *ngFor="let formation of departement.formations; let k = index">
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
-                    Formation: {{ formation.label || 'Nouvelle Formation' }}
+                    Formation: {{ formation.nom || 'Nouvelle Formation' }}
                     <button (click)="addChild('NIVEAU', i, j, k)">+</button>
                     <button (click)="removeFormation(i, j, k)">-</button>
                   </summary>
@@ -130,7 +130,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                       <li *ngFor="let module of semestre.modules; let o = index">
                                         <details>
                                           <summary (click)="showType('MODULE', module)">
-                                            Module: {{ module.label || 'Nouveau Module' }}
+                                            Module: {{ module.nom || 'Nouveau Module' }}
                                             <button (click)="addChild('GROUPE', i, j, k, l, m, n, o)">+</button>
                                             <button (click)="removeModule(i, j, k, l, m, n, o)">-</button>
                                           </summary>

@@ -2,8 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment.prod";
-import { DepartementType } from "../componenets/shared/types/departement.type";
-import { AnneeType } from "../componenets/shared/types/annee.type";
+import { Annee } from "../types/modules.types";
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +32,6 @@ export class AnneeService {
   }
 
   getAnneeById(id: number): Observable<any> {
-    return this.http.get<AnneeType>(`${this._backendURL.annees}/${id}`)
+    return this.http.get<Annee>(`${this._backendURL.annees}/${id}`)
   }
 }

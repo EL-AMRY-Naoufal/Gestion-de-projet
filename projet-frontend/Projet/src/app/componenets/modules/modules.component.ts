@@ -4,9 +4,7 @@ import {Annee} from "../../types/modules.types";
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
 import { AnneeService } from '../../services/annee.service';
-import { AnneeType } from '../shared/types/annee.type';
 import { CommonModule } from '@angular/common';
-import { DepartementType } from '../shared/types/departement.type';
 
 @Component({
   selector: 'app-modules',
@@ -21,7 +19,7 @@ import { DepartementType } from '../shared/types/departement.type';
 })
 export class ModulesComponent implements OnInit {
 
-  annees: AnneeType[] = [];
+  annees: Annee[] = [];
   constructor(private departementService: DepartementService, private anneeService : AnneeService) {}
 
   selectedItemType: string | null = null;
@@ -36,25 +34,28 @@ export class ModulesComponent implements OnInit {
       //for each annee, get all departements
       this.annees.forEach(annee => {
         //send request to backend
-        this.departementService.getDepartementsByYear(annee.id).subscribe(data => {
-          //reassign departements to each annee
-          this.annees[annee.id].departements = data;
-
-          if(annee.departements != null) {
-
-            //for each departement, get all formations (skip)
-            annee.departements.forEach(departement => {
-              if(departement.formations != null) {
-
-                //for each formations, get all niveaux
-                departement.formations.forEach(formation => {
-
-                  //get formations //TODO faire le backend
-                });
-              }
-            });
-          }
-        });
+        if(annee.id != undefined) {
+          let annee_id = annee.id;
+          this.departementService.getDepartementsByYear(annee_id).subscribe(data => {
+            //reassign departements to each annee
+            this.annees[annee_id].departements = data;
+  
+            if(annee.departements != null) {
+  
+              //for each departement, get all formations (skip)
+              annee.departements.forEach(departement => {
+                if(departement.formations != null) {
+  
+                  //for each formations, get all niveaux
+                  departement.formations.forEach(formation => {
+  
+                    //get formations //TODO faire le backend
+                  });
+                }
+              });
+            }
+          });
+        }
       })
     })
   }
@@ -65,13 +66,20 @@ export class ModulesComponent implements OnInit {
   data: { annees: Annee[] } = {
     annees: [
       {
-        label: '2025',
+        id: 0,
+        debut: '2025',
         departements: [
           {
-            label: 'Informatique',
+            id: 1,
+            nom: 'Informatique',
+            responsableDeDepartement: 'RDD',
             formations: [
               {
-                label: 'Master',
+                id: 1,
+                nom: 'Master',
+                totalHeures: 10,
+                responsableFormation: "RDF",
+                modules: [],
                 niveaux: [
                   {
                     label: 'M2',
@@ -83,12 +91,24 @@ export class ModulesComponent implements OnInit {
                             label: 'S1',
                             modules: [
                               {
-                                label: 'Concept Web',
-                                groupes: [{ nom: 'Groupe A', heures: 20 }]
+                                nom: 'Concept Web',
+                                groupes: [{ nom: 'Groupe A', heures: 20 }],
+                                totalHeuresRequises: 0,
+                                heuresParType: new Map([
+                                  ["CM", 10],
+                                  ["TD", 10],
+                                  ["TP", 10],
+                                ])
                               },
                               {
-                                label: 'Service Web',
-                                groupes: [{ nom: 'Groupe B', heures: 15 }]
+                                nom: 'Service Web',
+                                groupes: [{ nom: 'Groupe B', heures: 15 }],
+                                totalHeuresRequises: 0,
+                                heuresParType: new Map([
+                                  ["CM", 10],
+                                  ["TD", 10],
+                                  ["TP", 10],
+                                ])
                               }
                             ]
                           }
@@ -111,20 +131,20 @@ export class ModulesComponent implements OnInit {
 
   addAnnee() {
     if (this.data.annees.length === 0) {
-      this.data.annees.push({ label: '', departements: [] });
+      this.data.annees.push({ debut: '', departements: [] });
     } else {
       const lastAnnee = this.data.annees[this.data.annees.length - 1];
-      lastAnnee.departements.push({ label: '', formations: [] });
+      lastAnnee.departements.push({ nom: '', responsableDeDepartement: '', formations: [] });
     }
   }
 
   addChild(type: string, anneeIndex: number, departementIndex?: number, formationIndex?: number, niveauIndex?: number, orientationIndex?: number, semestreIndex?: number, moduleIndex?: number) {
     switch (type) {
       case 'DEPARTEMENT':
-        this.data.annees[anneeIndex].departements.push({ label: '', formations: [] });
+        this.data.annees[anneeIndex].departements.push({ nom: '', responsableDeDepartement: '', formations: [] });
         break;
       case 'FORMATION':
-        this.data.annees[anneeIndex].departements[departementIndex!].formations.push({ label: '', niveaux: [] });
+            this.data.annees[anneeIndex].departements[departementIndex!].formations.push({ nom: '', totalHeures: 0, responsableFormation: '', modules: [], niveaux: [] });
         break;
       case 'NIVEAU':
         this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux.push({
@@ -146,7 +166,13 @@ export class ModulesComponent implements OnInit {
         break;
       case 'MODULE':
         this.data.annees[anneeIndex].departements[departementIndex!].formations[formationIndex!].niveaux[niveauIndex!].orientations[orientationIndex!].semestres[semestreIndex!].modules.push({
-          label: '',
+          nom: '',
+          totalHeuresRequises: 0,
+          heuresParType: new Map([
+            ["CM", 10],
+            ["TD", 10],
+            ["TP", 10],
+          ]),
           groupes: [],
         });
         break;
