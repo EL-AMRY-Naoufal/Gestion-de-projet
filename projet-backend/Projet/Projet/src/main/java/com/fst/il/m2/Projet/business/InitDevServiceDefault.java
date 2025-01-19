@@ -9,6 +9,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.fst.il.m2.Projet.models.Module;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -141,11 +142,14 @@ public class InitDevServiceDefault implements InitDevService {
 
         /**********MODULES**********/
         List<com.fst.il.m2.Projet.models.Module> modules1 = List.of(
-                new com.fst.il.m2.Projet.models.Module(1L, "module 1", 60, heuresParTypesM1, formation1, null)
-        );
+                Module.builder().nom("Service Web").totalHeuresRequises(60).heuresParType(heuresParTypesM1).semestre(S1).build(),
+                Module.builder().nom("Concept Web").totalHeuresRequises(50).heuresParType(heuresParTypesM1).semestre(S1).build()
+
+                );
         List<com.fst.il.m2.Projet.models.Module> modules2 = List.of(
-                new com.fst.il.m2.Projet.models.Module(2L, "module 2", 40, heuresParTypesM2, formation2, null)
-        );
+                Module.builder().nom("Verification").totalHeuresRequises(40).heuresParType(heuresParTypesM2).semestre(S2).build(),
+                Module.builder().nom("Modélisation").totalHeuresRequises(30).heuresParType(heuresParTypesM2).semestre(S2).build()
+                );
 
         /**********GROUPES**********/
 //        Groupe groupe1 = Groupe.builder().nom("groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
@@ -188,8 +192,6 @@ public class InitDevServiceDefault implements InitDevService {
             if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
                 break;
 
-        userRepository.findAll().forEach((user)-> System.out.println(user.getId()));
-
         //NOW USERS SHOULD BE SAVED
 
         //save RDF
@@ -221,8 +223,9 @@ public class InitDevServiceDefault implements InitDevService {
         enseignantRepository.save(enseignant2);
 
         //save modules
-        moduleRepository.save(modules1.get(0));
-        moduleRepository.save(modules2.get(0));
+        modules1.forEach(m -> moduleRepository.save(m));
+        modules2.forEach(m -> moduleRepository.save(m));
+
 
         //save groupes
         groupeRepository.save(groupe1);
@@ -233,6 +236,12 @@ public class InitDevServiceDefault implements InitDevService {
         affectations1.forEach((a) -> affectationRepository.save(a));
         affectations2.forEach((a) -> affectationRepository.save(a));
         affectations3.forEach((a) -> affectationRepository.save(a));
+
+        //update Semestres
+        S1.setModules(modules1);
+        semestreRepository.save(S1);
+        S2.setModules(modules2);
+        semestreRepository.save(S2);
 
         //update Enseignants
         ArrayList<Affectation> affectationsEnseignant1 = new ArrayList<>();
@@ -246,10 +255,6 @@ public class InitDevServiceDefault implements InitDevService {
         affectationsEnseignant2.add(affectations2.get(1));
         affectationsEnseignant2.add(affectations3.get(1));
         enseignant2.setAffectations(affectationsEnseignant2);
-
-        //update Formations
-        formation1.setModules(modules1);
-        formation2.setModules(modules2);
 
         //WAIT FOR GROUPES TO BE SAVED
         time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());

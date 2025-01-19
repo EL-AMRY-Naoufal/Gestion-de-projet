@@ -39,7 +39,6 @@ public class FormationServiceDefault implements FormationService {
                     existingFormation.setNom(formation.getNom());
                     existingFormation.setTotalHeures(formation.getTotalHeures());
                     existingFormation.setResponsableFormation(formation.getResponsableFormation());
-                    existingFormation.setModules(formation.getModules());
                     existingFormation.setNiveaux(formation.getNiveaux());
                     return formationRepository.save(existingFormation);
                 })
