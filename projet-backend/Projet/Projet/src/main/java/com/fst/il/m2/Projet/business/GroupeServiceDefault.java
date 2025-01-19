@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.models.Groupe;
+import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.repositories.GroupeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class GroupeServiceDefault implements GroupeService {
     @Override
     public Groupe getGroupeById(Long id) {
         return groupeRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<Groupe> getGroupesByModule(Module module) {
+        return groupeRepository.findGroupesByModule(module);
     }
 
     @Override

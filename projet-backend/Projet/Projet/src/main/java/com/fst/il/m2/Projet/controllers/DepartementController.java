@@ -21,9 +21,12 @@ public class DepartementController {
     @GetMapping("/year/{anneeId}")
     public List<Departement> getDepartementsByYear(@PathVariable String anneeId) {
         List<Departement> departements = departementService.getDepartementsByAnnee(Annee.builder().id(Long.valueOf(anneeId)).build());
-        departements.forEach((d) -> System.out.println(d.getNom()));
+
         //emptying "niveaux" and "modules" so the json is not too big
-        departements.get(0).getFormations().forEach((f) -> {f.setNiveaux(null);f.setModules(null);});
+        departements.forEach((d) -> {
+            d.getFormations().forEach((f) -> {f.setNiveaux(null);});
+        });
+
         return departements;
     }
 

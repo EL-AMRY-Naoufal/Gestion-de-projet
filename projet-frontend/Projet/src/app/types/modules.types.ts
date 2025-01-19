@@ -1,20 +1,22 @@
+import { EnseignantDto } from "./enseignant.type";
 
 export type Affectation = {
-  id?: string;
-  enseignant?: string;
+  id?: number;
+  enseignant?: EnseignantDto;
+  nomEnseignant?: string;
   heuresAssignees: number;
   dateAffectation?: string;
 };
 
 export interface Groupe {
-  id?: string;
+  id?: number;
   nom: string;
   heures: number;
   affectations: Affectation[];
 }
 
 export interface Module {
-  id?: string;
+  id?: number;
   nom: string;
   totalHeuresRequises: number;
   groupes: Groupe[];
@@ -22,16 +24,19 @@ export interface Module {
 }
 
 export interface Semestre {
+  id?: number;
   nom?: string;
   modules: Module[];
 }
 
 export interface Orientation {
+  id?: number;
   nom?: string;
   semestres: Semestre[];
 }
 
 export interface Niveau {
+  id?: number;
   nom?: string;
   orientations: Orientation[];
 }

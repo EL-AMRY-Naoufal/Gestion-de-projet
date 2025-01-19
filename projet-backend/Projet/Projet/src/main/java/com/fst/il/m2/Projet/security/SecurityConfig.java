@@ -30,7 +30,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/{id}/password").permitAll() //TODO temporarily
                         .requestMatchers("/api/users/user/**").permitAll() //TODO temporarily
-                        .requestMatchers("/api/departements/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/users/authenticate").permitAll() // Open login endpoint
                         .requestMatchers("/api/enseignants/enseignants-non-enregistres").permitAll()
@@ -39,6 +38,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
                         .requestMatchers(("/api/annees/**")).hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/departements/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/niveaux/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/groupes/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+
+
 
                         //partie creation des affectations
                         .requestMatchers("/api/modules").permitAll()

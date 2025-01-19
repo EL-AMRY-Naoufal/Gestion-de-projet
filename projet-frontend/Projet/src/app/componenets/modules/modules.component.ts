@@ -15,6 +15,9 @@ import {AddOrientationDialogComponent} from "./dialog/add-orientation-dialog/add
 import {AddSemestreDialogComponent} from "./dialog/add-semestre-dialog/add-semestre-dialog.component";
 import {AddModulesDialogComponent} from "./dialog/add-modules-dialog/add-modules-dialog.component";
 import {AddGroupeDialogComponent} from "./dialog/add-groupe-dialog/add-groupe-dialog.component";
+import { NiveauService } from '../../services/niveau.service';
+import { SemestreService } from '../../services/semestre.service';
+import { GroupeService } from '../../services/groupe.service';
 
 @Component({
   selector: 'app-modules',
@@ -37,41 +40,83 @@ export class ModulesComponent implements OnInit {
   newAnnee: Annee = { debut: '', departements: [] };
   newDepartement: Departement = { nom: '', responsableDeDepartement: '', formations: [] };
 
-  annees: Annee[] = [];
+  data: { annees: Annee[] } = { annees: [] }
 
-  constructor(public dialog: MatDialog,private departementService: DepartementService, private anneeService : AnneeService) {}
+  constructor(
+    public dialog: MatDialog, 
+    private departementService: DepartementService, 
+    private anneeService : AnneeService, 
+    private niveauService : NiveauService, 
+    private semestreService : SemestreService, 
+    private groupeService : GroupeService
+  ) {}
 
 
 
   ngOnInit(): void {
-
-
-
-
     //get all annees
     this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
-      this.annees = data;
-      console.log(this.annees);
+      this.data.annees = data;
 
       //for each annee, get all departements
-      this.annees.forEach(annee => {
+      this.data.annees.forEach((annee, anneeIndex) => {
         //send request to backend
         if(annee.id != undefined) {
           let annee_id = annee.id;
           this.departementService.getDepartementsByYear(annee_id).subscribe(data => {
             //reassign departements to each annee
-            this.annees[annee_id].departements = data;
+            this.data.annees[anneeIndex].departements = data;
 
             if(annee.departements != null) {
 
               //for each departement, get all formations (skip)
-              annee.departements.forEach(departement => {
+              annee.departements.forEach((departement, departementIndex) => {
                 if(departement.formations != null) {
 
                   //for each formations, get all niveaux
-                  departement.formations.forEach(formation => {
+                  departement.formations.forEach((formation, formationIndex) => {
+                    if(formation.id != undefined) {
+                      this.niveauService.getNiveauxByFormation(formation.id).subscribe(data => {
+                          this.data.annees[anneeIndex].departements[departementIndex]
+                          .formations[formationIndex].niveaux = data;
 
-                    //get formations //TODO faire le backend
+                          //for each niveau, get all orientations (skip)
+                          formation.niveaux.forEach((niveau, niveauIndex) => {
+                              
+                            //for each orientation, get all semestres
+                            niveau.orientations.forEach((orientation, orientationIndex) => {
+                              if(orientation.id != undefined) {
+                                this.semestreService.getSemestresByOrientation(orientation.id).subscribe(data => {
+                                  this.data.annees[anneeIndex]
+                                  .departements[departementIndex].formations[formationIndex]
+                                  .niveaux[niveauIndex].orientations[orientationIndex]
+                                  .semestres = data;
+                                  //for each semestre, get all modules (skip)
+                                  orientation.semestres.forEach((semestre, semestreIndex) => {
+                                    
+                                    //for each module, get all groupes
+                                    semestre.modules.forEach((module, moduleIndex) => {
+                                      if(module.id != undefined) {
+                                        this.groupeService.getGroupesByModule(module.id).subscribe(data => {
+                                          this.data.annees[anneeIndex]
+                                          .departements[departementIndex].formations[formationIndex]
+                                          .niveaux[niveauIndex].orientations[orientationIndex]
+                                          .semestres[semestreIndex].modules[moduleIndex].groupes = data;
+
+                                          //TODO username utilisé temporairement
+                                          module.groupes.forEach((groupe, groupeId) => {
+                                            groupe.affectations.forEach(affectation => affectation.nomEnseignant = affectation.enseignant?.user?.username)
+                                          })
+                                        })
+                                      }
+                                    })
+                                  })
+                                })
+                              }
+                            })
+                          })
+                      })
+                    }
                   });
                 }
               });
@@ -84,101 +129,101 @@ export class ModulesComponent implements OnInit {
 
 
 //exemple de données pour l"affichage
-  data: { annees: Annee[] } = {
-    annees: [
-      {
-        id: 0,
-        debut: '2025',
-        departements: [
-          {
-            id: 1,
-            nom: 'Informatique',
-            responsableDeDepartement: 'RDD',
-            formations: [
-              {
-                id: 1,
-                nom: 'Master',
-                totalHeures: 10,
-                responsableFormation: "RDF",
-                niveaux: [
-                  {
-                    nom: 'M2',
-                    orientations: [
-                      {
-                        nom: 'IL',
-                        semestres: [
-                          {
-                            nom: 'S1',
-                            modules: [
-                              {
-                                nom: 'Concept Web',
-                                groupes: [
-                                  {
-                                    nom: 'Groupe A',
-                                    heures: 20,
-                                    affectations: [
-                                      {
-                                        enseignant:"HAJEK Simon",
-                                        dateAffectation: '2025-01-01',
-                                        heuresAssignees: 10
-                                      }
-                                    ]
-                                  },
-                                ],
-                                totalHeuresRequises: 0,
-                                heuresParType: new Map([
-                                  ["CM", 10],
-                                  ["TD", 10],
-                                  ["TP", 10],
-                                ])
-                              },
-                              {
-                                nom: 'Service Web',
-                                groupes: [
-                                  {
-                                    nom: 'Groupe B',
-                                    heures: 15,
-                                    affectations: [
-                                      {
-                                        enseignant: "ROBERT Antoine",
-                                        dateAffectation: '2025-01-03',
-                                        heuresAssignees: 5
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    nom: 'Groupe D',
-                                    heures: 30,
-                                    affectations: [
-                                      {
-                                        enseignant: "CIRSTEA Horatiu",
-                                        dateAffectation: '2025-01-04',
-                                        heuresAssignees: 20
-                                      }
-                                    ]
-                                  }
-                                ],
-                                totalHeuresRequises: 0,
-                                heuresParType: new Map([
-                                  ["CM", 10],
-                                  ["TD", 10],
-                                  ["TP", 10],
-                                ])
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  };
+  // data: { annees: Annee[] } = {
+  //   annees: [
+  //     {
+  //       id: 0,
+  //       debut: '2025',
+  //       departements: [
+  //         {
+  //           id: 1,
+  //           nom: 'Informatique',
+  //           responsableDeDepartement: 'RDD',
+  //           formations: [
+  //             {
+  //               id: 1,
+  //               nom: 'Master',
+  //               totalHeures: 10,
+  //               responsableFormation: "RDF",
+  //               niveaux: [
+  //                 {
+  //                   nom: 'M2',
+  //                   orientations: [
+  //                     {
+  //                       nom: 'IL',
+  //                       semestres: [
+  //                         {
+  //                           nom: 'S1',
+  //                           modules: [
+  //                             {
+  //                               nom: 'Concept Web',
+  //                               groupes: [
+  //                                 {
+  //                                   nom: 'Groupe A',
+  //                                   heures: 20,
+  //                                   affectations: [
+  //                                     {
+  //                                       enseignant:"HAJEK Simon",
+  //                                       dateAffectation: '2025-01-01',
+  //                                       heuresAssignees: 10
+  //                                     }
+  //                                   ]
+  //                                 },
+  //                               ],
+  //                               totalHeuresRequises: 0,
+  //                               heuresParType: new Map([
+  //                                 ["CM", 10],
+  //                                 ["TD", 10],
+  //                                 ["TP", 10],
+  //                               ])
+  //                             },
+  //                             {
+  //                               nom: 'Service Web',
+  //                               groupes: [
+  //                                 {
+  //                                   nom: 'Groupe B',
+  //                                   heures: 15,
+  //                                   affectations: [
+  //                                     {
+  //                                       enseignant: "ROBERT Antoine",
+  //                                       dateAffectation: '2025-01-03',
+  //                                       heuresAssignees: 5
+  //                                     }
+  //                                   ]
+  //                                 },
+  //                                 {
+  //                                   nom: 'Groupe D',
+  //                                   heures: 30,
+  //                                   affectations: [
+  //                                     {
+  //                                       enseignant: "CIRSTEA Horatiu",
+  //                                       dateAffectation: '2025-01-04',
+  //                                       heuresAssignees: 20
+  //                                     }
+  //                                   ]
+  //                                 }
+  //                               ],
+  //                               totalHeuresRequises: 0,
+  //                               heuresParType: new Map([
+  //                                 ["CM", 10],
+  //                                 ["TD", 10],
+  //                                 ["TP", 10],
+  //                               ])
+  //                             }
+  //                           ]
+  //                         }
+  //                       ]
+  //                     }
+  //                   ]
+  //                 }
+  //               ]
+  //             }
+  //           ]
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // };
 
 
   showType(type: string, item: any) {

@@ -12,8 +12,11 @@ export const environment = {
       categories: '/api/categories',
       role : '/api/responsableDepartement/role',
       allmodules : '/api/modules',
-      departements : '/api/departements',
       annees : '/api/annees',
+      departements : '/api/departements',
+      niveaux: '/api/niveaux',
+      semestres: '/api/semestres',
+      groupes: '/api/groupes',
     },
   },
 };

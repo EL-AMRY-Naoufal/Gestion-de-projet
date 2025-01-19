@@ -1,7 +1,8 @@
 package com.fst.il.m2.Projet.controllers;
 
-import com.fst.il.m2.Projet.models.Groupe;
 import com.fst.il.m2.Projet.business.GroupeService;
+import com.fst.il.m2.Projet.models.Groupe;
+import com.fst.il.m2.Projet.models.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,23 @@ public class GroupeController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/module/{moduleId}")
+    public List<Groupe> getGroupesByModuleId(@PathVariable Long moduleId) {
+        List<Groupe> groupes = groupeService.getGroupesByModule(Module.builder().id(moduleId).build());
+
+        //emptying "module" so the json is not too deep
+
+        groupes.forEach(g -> {
+            g.setModule(null);
+            g.getAffectations().forEach(a -> {
+                a.setGroupe(null);
+                a.getEnseignant().setAffectations(null);
+            });
+        });
+
+        return groupes;
     }
 
     // Delete a Groupe by ID

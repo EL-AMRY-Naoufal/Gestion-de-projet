@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.repositories.NiveauRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class NiveauServiceDefault implements NiveauService {
     @Override
     public List<Niveau> getAllNiveaux() {
         return niveauRepository.findAll();
+    }
+
+    @Override
+    public List<Niveau> getNiveauxByFormation(Formation formation) {
+        return niveauRepository.findNiveauxByFormation(formation);
     }
 
     @Override
