@@ -1,8 +1,8 @@
 .tree {
-  list-style : none;
   padding-left: 1rem;
 
   li {
+    list-style: none;
     margin-bottom: 0.5rem;
     position: relative;
 
@@ -32,7 +32,7 @@
 
     details {
       summary {
-        font-weight: bold;
+
         cursor: pointer;
         padding: 0.5rem;
         border: 1px solid #ddd;
@@ -44,6 +44,7 @@
         }
 
         button {
+          float: right;
           margin-left: 1rem;
           padding: 0.2rem 0.5rem;
           font-size: 0.8rem;

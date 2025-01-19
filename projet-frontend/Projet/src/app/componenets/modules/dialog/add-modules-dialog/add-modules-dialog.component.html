@@ -1,0 +1,30 @@
+<div class="dialog">
+  <h3>Ajouter un nouveau Module</h3>
+  <form (ngSubmit)="onAdd()">
+    <label for="nom">Nom:</label>
+    <input id="nom" [(ngModel)]="newModule.nom" name="nom" required>
+
+    <label for="heuresRequises">Total heures requises:</label>
+    <input id="heuresRequises" [(ngModel)]="newModule.totalHeuresRequises" name="heuresRequises" required>
+
+    <div>
+      <h4>Types d'heures :</h4>
+      <button type="button" (click)="addType()">Ajouter un type</button>
+
+      <div *ngFor="let type of heuresList; let i = index">
+        <label [for]="'type-' + i">Type:</label>
+        <select [(ngModel)]="type.type" [name]="'type-' + i" required>
+          <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+        </select>
+
+        <label [for]="'heures-' + i">Heures:</label>
+        <input [id]="'heures-' + i" type="number" [(ngModel)]="type.heures" [name]="'heures-' + i" required>
+
+        <button type="button" (click)="removeType(i)">Supprimer</button>
+      </div>
+    </div>
+
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </form>
+</div>

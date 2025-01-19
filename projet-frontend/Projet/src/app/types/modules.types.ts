@@ -1,7 +1,16 @@
+
+export type Affectation = {
+  id?: string;
+  enseignant?: string;
+  heuresAssignees: number;
+  dateAffectation?: string;
+};
+
 export interface Groupe {
   id?: string;
   nom: string;
   heures: number;
+  affectations: Affectation[];
 }
 
 export interface Module {
@@ -13,17 +22,17 @@ export interface Module {
 }
 
 export interface Semestre {
-  label?: string;
+  nom?: string;
   modules: Module[];
 }
 
 export interface Orientation {
-  label?: string;
+  nom?: string;
   semestres: Semestre[];
 }
 
 export interface Niveau {
-  label?: string;
+  nom?: string;
   orientations: Orientation[];
 }
 
@@ -32,8 +41,7 @@ export interface Formation {
   nom: string;
   totalHeures: number;
   responsableFormation: string;
-  modules: Module[];
-  niveaux: Niveau[]; 
+  niveaux: Niveau[];
 }
 
 export interface Departement {

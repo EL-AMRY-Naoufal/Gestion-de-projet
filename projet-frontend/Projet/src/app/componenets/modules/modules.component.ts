@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuComponent} from '../shared/menu/menu.component';
-import {Annee, Departement} from "../../types/modules.types";
+import {Annee, Departement, Formation, Groupe, Module, Niveau, Orientation, Semestre} from "../../types/modules.types";
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
 import { AnneeService } from '../../services/annee.service';
@@ -9,6 +9,12 @@ import {FormsModule} from "@angular/forms";
 import {AddAnneeDialogComponent} from "./dialog/add-annee-dialog/add-annee-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {AddDepartementDialogComponent} from "./dialog/add-departement-dialog/add-departement-dialog.component";
+import {AddFormationDialogComponent} from "./dialog/add-formation-dialog/add-formation-dialog.component";
+import {AddNiveauDialogComponent} from "./dialog/add-niveau-dialog/add-niveau-dialog.component";
+import {AddOrientationDialogComponent} from "./dialog/add-orientation-dialog/add-orientation-dialog.component";
+import {AddSemestreDialogComponent} from "./dialog/add-semestre-dialog/add-semestre-dialog.component";
+import {AddModulesDialogComponent} from "./dialog/add-modules-dialog/add-modules-dialog.component";
+import {AddGroupeDialogComponent} from "./dialog/add-groupe-dialog/add-groupe-dialog.component";
 
 @Component({
   selector: 'app-modules',
@@ -77,8 +83,7 @@ export class ModulesComponent implements OnInit {
   }
 
 
-//exemple pour tester
-
+//exemple de données pour l"affichage
   data: { annees: Annee[] } = {
     annees: [
       {
@@ -95,20 +100,31 @@ export class ModulesComponent implements OnInit {
                 nom: 'Master',
                 totalHeures: 10,
                 responsableFormation: "RDF",
-                modules: [],
                 niveaux: [
                   {
-                    label: 'M2',
+                    nom: 'M2',
                     orientations: [
                       {
-                        label: 'IL',
+                        nom: 'IL',
                         semestres: [
                           {
-                            label: 'S1',
+                            nom: 'S1',
                             modules: [
                               {
                                 nom: 'Concept Web',
-                                groupes: [{ nom: 'Groupe A', heures: 20 }],
+                                groupes: [
+                                  {
+                                    nom: 'Groupe A',
+                                    heures: 20,
+                                    affectations: [
+                                      {
+                                        enseignant:"HAJEK Simon",
+                                        dateAffectation: '2025-01-01',
+                                        heuresAssignees: 10
+                                      }
+                                    ]
+                                  },
+                                ],
                                 totalHeuresRequises: 0,
                                 heuresParType: new Map([
                                   ["CM", 10],
@@ -118,7 +134,30 @@ export class ModulesComponent implements OnInit {
                               },
                               {
                                 nom: 'Service Web',
-                                groupes: [{ nom: 'Groupe B', heures: 15 }],
+                                groupes: [
+                                  {
+                                    nom: 'Groupe B',
+                                    heures: 15,
+                                    affectations: [
+                                      {
+                                        enseignant: "ROBERT Antoine",
+                                        dateAffectation: '2025-01-03',
+                                        heuresAssignees: 5
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    nom: 'Groupe D',
+                                    heures: 30,
+                                    affectations: [
+                                      {
+                                        enseignant: "CIRSTEA Horatiu",
+                                        dateAffectation: '2025-01-04',
+                                        heuresAssignees: 20
+                                      }
+                                    ]
+                                  }
+                                ],
                                 totalHeuresRequises: 0,
                                 heuresParType: new Map([
                                   ["CM", 10],
@@ -140,6 +179,7 @@ export class ModulesComponent implements OnInit {
       }
     ]
   };
+
 
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
@@ -171,61 +211,93 @@ export class ModulesComponent implements OnInit {
   }
 
   addDepartement(anneeIndex: number, newDepartement: Departement) {
-    console.log("long ", this.data.annees);
     this.data.annees[anneeIndex].departements.push(newDepartement);
   }
 
+  openAddFormationDialog(anneeIndex: number, departementIndex: number): void {
+    const dialogRef = this.dialog.open(AddFormationDialogComponent);
 
-  addFormation(anneeIndex: number, departementIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations.push({
-      nom: '',
-      totalHeures: 0,
-      responsableFormation: '',
-      modules: [],
-      niveaux: [],
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+       this.addFormation(anneeIndex,departementIndex,result);
+      }
     });
   }
 
-  addNiveau(anneeIndex: number, departementIndex: number, formationIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push({
-      label: '',
-      orientations: [],
+  addFormation(anneeIndex: number, departementIndex: number, newFormation: Formation) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations.push(newFormation);
+  }
+
+
+  openAddNiveauDialog(anneeIndex: number, departementIndex: number, formationIndex: number): void {
+    const dialogRef = this.dialog.open(AddNiveauDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addNiveau(anneeIndex, departementIndex, formationIndex, result);
+      }
     });
   }
 
-  addOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.push({
-      label: '',
-      semestres: [],
+  addNiveau(anneeIndex: number, departementIndex: number, formationIndex: number, newNiveau: Niveau) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push(newNiveau);
+  }
+
+  openAddOrientationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
+    const dialogRef = this.dialog.open(AddOrientationDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addOrientation(anneeIndex, departementIndex, formationIndex, niveauIndex, result);
+      }
     });
   }
 
-  addSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres.push({
-      label: '',
-      modules: [],
+  addOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, newOrientation: Orientation) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.push(newOrientation);
+  }
+  openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number): void {
+    const dialogRef = this.dialog.open(AddSemestreDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addSemestre(anneeIndex, departementIndex, formationIndex, niveauIndex, orientationIndex, result);
+      }
     });
   }
 
-  addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules.push({
-      nom: '',
-      totalHeuresRequises: 0,
-      heuresParType: new Map([
-        ["CM", 10],
-        ["TD", 10],
-        ["TP", 10],
-      ]),
-      groupes: [],
+  addSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, newSemestre: Semestre) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres.push(newSemestre);
+  }
+
+  openAddModuleDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number): void {
+    const dialogRef = this.dialog.open(AddModulesDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addModule(anneeIndex, departementIndex, formationIndex, niveauIndex, orientationIndex, semestreIndex, result);
+      }
     });
   }
 
-  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number) {
-    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push({
-      id: '',
-      nom: '',
-      heures: 0,
+  addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, newModule: Module) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules.push(newModule);
+  }
+
+
+  openAddGroupeDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number): void {
+    const dialogRef = this.dialog.open(AddGroupeDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addGroupe(anneeIndex, departementIndex, formationIndex, niveauIndex, orientationIndex, semestreIndex, moduleIndex, result);
+      }
     });
+  }
+
+  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number, semestreIndex: number, moduleIndex: number, newGroupe: Groupe)
+  {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations[orientationIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push(newGroupe);
   }
 
   removeAnnee(index: number) {

@@ -1,0 +1,9 @@
+<div class="dialog">
+  <h3>Ajouter une nouvelle orientation</h3>
+  <form (ngSubmit)="onAdd()">
+    <label for="nom">Nom:</label>
+    <input id="nom" [(ngModel)]="newOrientation.nom" name="nom" required>
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </form>
+</div>

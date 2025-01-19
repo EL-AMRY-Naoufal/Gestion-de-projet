@@ -1,0 +1,15 @@
+<div class="dialog">
+  <h3>Ajouter un nouveau groupe</h3>
+  <form (ngSubmit)="onAdd()">
+    <label for="nom">Nom:</label>
+    <input id="nom" [(ngModel)]="newGroupe.nom" name="nom" required>
+
+    <label for="type">Type:</label>
+    <select id="type" [(ngModel)]="newGroupe.type" name="type" required>
+      <option value="TP">TP</option>
+      <option value="TD">TD</option>
+      <option value="CM">CM</option>
+    </select>
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </form>

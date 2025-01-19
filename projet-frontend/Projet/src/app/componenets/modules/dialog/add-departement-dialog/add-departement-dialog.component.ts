@@ -13,7 +13,7 @@ import {MatDialogRef} from "@angular/material/dialog";
 })
 export class AddDepartementDialogComponent {
 
-  newDepartement = { nom: '', responsableDeDepartement: '' };
+  newDepartement = { nom: '', responsableDeDepartement: '', formations: [] };
 
   constructor(public dialogRef: MatDialogRef<AddDepartementDialogComponent>) {}
 
