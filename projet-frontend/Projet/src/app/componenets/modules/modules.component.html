@@ -79,28 +79,17 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
   </ul>-->
 
 
-<!-- fenetre de dialogue pour ajouter une nouvelle année -->
-<div *ngIf="showAddAnneeDialog" class="dialog">
-  <h3>Ajouter une nouvelle année</h3>
-  <form (ngSubmit)="addAnnee()">
-    <label for="debut">Année:</label>
-    <input id="debut" [(ngModel)]="newAnnee.debut" name="debut" required>
-    <button type="submit">Ajouter</button>
-    <button type="button" (click)="closeAddAnneeDialog()">Annuler</button>
-  </form>
-</div>
-
-
 <div class="button-container">
   Nouvelle année
-<button (click)="openAddAnneeDialog()">+</button>
+  <button (click)="openAddAnneeDialog()">+</button>
 </div>
+
 <ul class="tree">
   <li *ngFor="let annee of data.annees; let i = index">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <button (click)="addDepartement( i)">+</button>
+        <button (click)="openAddDepartementDialog(i)">+</button>
         <button (click)="removeAnnee(i)">-</button>
       </summary>
       <ul>

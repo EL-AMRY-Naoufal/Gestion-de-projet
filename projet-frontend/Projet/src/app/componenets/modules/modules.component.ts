@@ -6,6 +6,9 @@ import {NgForOf} from "@angular/common";
 import { AnneeService } from '../../services/annee.service';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from "@angular/forms";
+import {AddAnneeDialogComponent} from "./dialog/add-annee-dialog/add-annee-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {AddDepartementDialogComponent} from "./dialog/add-departement-dialog/add-departement-dialog.component";
 
 @Component({
   selector: 'app-modules',
@@ -30,7 +33,7 @@ export class ModulesComponent implements OnInit {
 
   annees: Annee[] = [];
 
-  constructor(private departementService: DepartementService, private anneeService : AnneeService) {}
+  constructor(public dialog: MatDialog,private departementService: DepartementService, private anneeService : AnneeService) {}
 
 
 
@@ -143,28 +146,35 @@ export class ModulesComponent implements OnInit {
   }
 
 
-  openAddAnneeDialog() {
-    this.showAddAnneeDialog = true;
-  }
+  openAddAnneeDialog(): void {
+    const dialogRef = this.dialog.open(AddAnneeDialogComponent);
 
-  closeAddAnneeDialog() {
-    this.showAddAnneeDialog = false;
-  }
-  addAnnee() {
-    this.data.annees.push(this.newAnnee);
-    this.newAnnee = { debut: '', departements: [] };
-    this.closeAddAnneeDialog();
-  }
-
-
-
- addDepartement(anneeIndex: number) {
-    this.data.annees[anneeIndex].departements.push({
-      nom: '',
-      responsableDeDepartement: '',
-      formations: [],
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addAnnee(result);
+      }
     });
   }
+
+  addAnnee(newAnnee : Annee): void {
+    this.data.annees.push(newAnnee);
+  }
+
+  openAddDepartementDialog(anneeIndex: number): void {
+    const dialogRef = this.dialog.open(AddDepartementDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addDepartement(anneeIndex,result);
+      }
+    });
+  }
+
+  addDepartement(anneeIndex: number, newDepartement: Departement) {
+    console.log("long ", this.data.annees);
+    this.data.annees[anneeIndex].departements.push(newDepartement);
+  }
+
 
   addFormation(anneeIndex: number, departementIndex: number) {
     this.data.annees[anneeIndex].departements[departementIndex].formations.push({

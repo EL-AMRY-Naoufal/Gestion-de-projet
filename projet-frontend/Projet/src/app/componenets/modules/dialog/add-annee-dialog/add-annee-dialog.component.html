@@ -1,0 +1,9 @@
+<div class="dialog">
+  <h3>Ajouter une nouvelle année</h3>
+  <form (ngSubmit)="onAdd()">
+    <label for="debut">Année:</label>
+    <input id="debut" [(ngModel)]="newAnnee.debut" name="debut" required>
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </form>
+</div>
