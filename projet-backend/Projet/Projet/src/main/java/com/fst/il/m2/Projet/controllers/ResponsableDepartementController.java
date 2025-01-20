@@ -4,6 +4,7 @@ import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,12 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("{userId}/roles")
+    public List<UserRole> getUserRoles(@PathVariable Long userId, @RequestBody Long year) {
+        System.out.println("im in here " + userId + " year " + year);
+       return  responsableDepartementService.getRolesByUserIdAndYear(userId, year);
+
+    }
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId(), userRequest.getYear());
