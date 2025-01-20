@@ -1,0 +1,171 @@
+/* Style général des cards */
+mat-card,
+mat-list-item {
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #ffffff; /* Couleur de fond blanche */
+  border-radius: 8px; /* Bordure arrondie */
+  margin: 5px;
+  width: 100%;
+  max-width: 360px; /* Limiter la largeur maximale */
+  height: 180px; /* Hauteur fixe pour les cards */
+  padding: 1.5em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour la carte */
+  transition: all 0.3s ease; /* Transition douce au survol */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Assure que l'email et les actions sont bien espacés */
+}
+
+/* Style pour les titres des cards */
+mat-card-title span {
+  font-size: 1.25rem;
+  font-weight: 600; /* Police plus marquée */
+  line-height: 1.4;
+  color: #0a2b46; /* Bleu foncé pour le titre */
+}
+
+/* Style des sous-titres (rôles et email) */
+mat-card-subtitle {
+  font-size: 0.9rem;
+  color: #777777; /* Gris clair pour les sous-titres */
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+mat-card-subtitle.contact-info {
+  margin-top: 6px;
+  font-size: 0.95rem; /* Léger agrandissement du texte de l'email */
+  display: flex;
+  align-items: center;
+  margin-bottom: auto; /* Assure que l'email reste en bas */
+}
+
+mat-card-subtitle .contact-info a {
+  font-weight: 500; /* Lien un peu plus marqué */
+  color: #337ab7; /* Couleur des liens bleus */
+  text-decoration: none;
+  margin-left: 6px;
+}
+
+mat-card-subtitle .contact-info a:hover {
+  text-decoration: underline;
+}
+
+/* Les icônes de contact */
+.contact-info mat-icon {
+  color: #0a2b46; /* Couleur des icônes en bleu foncé */
+  margin-right: 8px;
+}
+
+/* Style pour le texte tronqué */
+a.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 200px;
+  color: #337ab7; /* Couleur bleue */
+}
+
+@media (max-width: 600px) {
+  a.truncate {
+    width: 150px;
+  }
+}
+
+/* Taille responsive pour l'élément */
+@media (min-width: 768px) {
+  :host(.wide) mat-card {
+    width: 600px;
+  }
+}
+
+/* Positionnement des actions (icônes en haut à droite) */
+mat-card-actions.action-icons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px; /* Diminution de l'écart entre les icônes */
+  margin: 0; /* Réinitialisation de la marge pour un alignement parfait */
+}
+
+/* Pour les icônes dans les boutons d'action */
+mat-card-actions a mat-icon,
+mat-card-actions button mat-icon {
+  font-size: 20px; /* Taille des icônes */
+  color: #0a2b46; /* Couleur des icônes */
+}
+
+/* Action de suppression et modification des boutons */
+mat-card-actions a,
+mat-card-actions button {
+  background-color: transparent !important; /* Pas de fond pour les boutons */
+  border: none; /* Pas de bordure */
+  padding: 0; /* Pas de padding */
+  margin: 0; /* Réinitialiser la marge */
+  display: flex; /* Utilisation du flexbox */
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease; /* Légère animation de transformation */
+}
+
+/* Effet de survol : agrandissement des icônes */
+mat-card-actions a:hover,
+mat-card-actions button:hover {
+  background-color: transparent !important; /* Pas de fond pour les boutons */
+  transform: scale(1.3); /* Agrandissement au survol */
+  outline: none !important; /* Retirer tout effet de focus ou contour */
+  box-shadow: none !important; /* S'assurer qu'il n'y a pas d'ombre ou de contour qui apparaît */
+}
+
+/* Pour les liens dans le contenu de la card */
+a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+/* Style des sections avec des compétences ou des tags */
+.skills {
+  background-color: #f9f9f9; /* Fond clair */
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+.hl {
+  background-color: #ff9800; /* Orange vif pour les éléments en surbrillance */
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Positionnement des actions */
+.custom-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px; /* Espacement entre les icônes */
+  margin: 0;
+}
+
+/* Icônes personnalisées */
+.custom-icon {
+  font-size: 20px; /* Taille de l'icône */
+  color: #0a2b46; /* Couleur par défaut */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Effet au survol */
+.custom-icon:hover {
+  transform: scale(1.3); /* Agrandissement */
+  color: #ff9800; /* Couleur de survol */
+}
+
+

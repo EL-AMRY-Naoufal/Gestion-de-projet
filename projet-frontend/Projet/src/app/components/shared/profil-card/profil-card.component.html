@@ -1,0 +1,46 @@
+<mat-card class="mat-whiteframe-2dp">
+  <mat-card-title-group>
+    <!-- Titre avec le nom d'utilisateur -->
+    <mat-card-title>
+      <a href="javascript:void(0);">
+        <span>{{ user.name }} </span>
+        <span>{{ user.firstname }}</span><br/>
+      </a>
+    </mat-card-title>
+
+    <!-- Sous-titre pour afficher les rôles de l'utilisateur -->
+    <mat-card-subtitle>
+      <ng-container *ngIf="user.roles?.length; else noRoles">
+        <span *ngFor="let roleDto of user.roles; let last = last">
+          {{ roleDto.role }} <!-- Affichage du rôle et de l'année -->
+          <span *ngIf="!last"><br></span>
+        </span>
+      </ng-container>
+      <ng-template #noRoles>
+        <span>No roles assigned</span>
+      </ng-template>
+    </mat-card-subtitle>
+
+
+<!-- Actions (modification et suppression avec icônes personnalisées) -->
+<mat-card-actions class="custom-actions">
+  <!-- Lien pour modifier l'utilisateur avec une icône -->
+  <div
+    class="custom-icon edit-icon"
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    [routerLink]="['/edit', user.id]"
+    title="Edit user"
+  >
+    ✏️
+  </div>
+
+  <!-- Bouton pour supprimer l'utilisateur avec une icône -->
+  <div
+    class="custom-icon delete-icon"
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    (click)="delete(user)"
+    title="Delete user"
+  >
+    🗑️
+  </div>
+</mat-card-actions>
