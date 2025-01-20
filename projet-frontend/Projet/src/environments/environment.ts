@@ -15,6 +15,7 @@ export const environment = {
       authenticate :'/api/users/authenticate',
       categories: '/api/categories',
       role : '/api/responsableDepartement/role/',
+      allYears: '/api/annees',
     },
   },
 };

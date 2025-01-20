@@ -13,12 +13,13 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../shared/menu/menu.component';
-import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
+import {
+  CategorieEnseignant,
+  EnseignantDto,
+} from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
-import { LoginService } from '../../services/login.service';
-import { EnseignantsComponent } from "../enseignants/enseignants.component";
-
+import { YearService } from '../../services/year-service';
 
 @Component({
   selector: 'app-list-users',
@@ -32,8 +33,7 @@ import { EnseignantsComponent } from "../enseignants/enseignants.component";
     CommonModule,
     FormsModule,
     MenuComponent,
-    EnseignantsComponent
-],
+  ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })
@@ -54,14 +54,15 @@ export class ListUsersComponent {
     categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
-    heuresAssignees: 0
-  }
+    heuresAssignees: 0,
+  };
   roles: string[] = [
     'CHEF_DE_DEPARTEMENT',
     'RESPONSABLE_DE_FORMATION',
     'SECRETARIAT_PEDAGOGIQUE',
     'ENSEIGNANT',
   ];
+  private _loginService: any;
 
   /**
    * Component constructor
@@ -71,7 +72,7 @@ export class ListUsersComponent {
     private _usersService: UserService,
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
-    private _loginService: LoginService
+    private _yearService: YearService
   ) {
     this._listUsers = [];
     this._dialogStatus = 'inactive';
@@ -153,13 +154,15 @@ export class ListUsersComponent {
         map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
           delete user?.id;
-          this.enseignantDto.categorieEnseignant = user?.categorieEnseignant as CategorieEnseignant;
-          this.enseignantDto.nbHeureCategorie = user?.nbHeureCategorie as number;
-          this.enseignantDto.maxHeuresService = user?.maxHeuresService as number;
+          this.enseignantDto.categorieEnseignant =
+            user?.categorieEnseignant as CategorieEnseignant;
+          this.enseignantDto.nbHeureCategorie =
+            user?.nbHeureCategorie as number;
+          this.enseignantDto.maxHeuresService =
+            user?.maxHeuresService as number;
           delete user?.categorieEnseignant;
           delete user?.maxHeuresService;
           delete user?.nbHeureCategorie;
-
 
           return user;
         }),
@@ -167,9 +170,18 @@ export class ListUsersComponent {
       )
       .subscribe({
         next: (user: User) => {
-          (this._listUsers = this._listUsers.concat(user));
-          if (this._usersService.userHasRole(user, 'ENSEIGNANT', this._loginService.currentYearId)) {
-            this.enseignantDto.id = user.id; this._addTeacher(this.enseignantDto) } },
+          this._listUsers = this._listUsers.concat(user);
+          if (
+            this._usersService.userHasRole(
+              user,
+              'ENSEIGNANT',
+              this._loginService.currentYearId
+            )
+          ) {
+            this.enseignantDto.id = user.id;
+            this._addTeacher(this.enseignantDto);
+          }
+        },
         error: () => (this._dialogStatus = 'inactive'),
         complete: () => (this._dialogStatus = 'inactive'),
       });
@@ -199,22 +211,27 @@ export class ListUsersComponent {
 
     const userToSend: User = {
       ...user,
-      roles: user.roles.map((role) => { return {year: this._loginService.currentYearId ?? 1, role: role as unknown as Roles}}),
-    }
+      roles: user.roles.map((role) => {
+        return {
+          year: this._loginService.currentYearId ?? 1,
+          role: role as unknown as Roles,
+        };
+      }),
+    };
 
     return this._usersService.create(userToSend);
   }
 
   private _addTeacher(enseignantDto: EnseignantDto) {
-    console.log("enseignant ", enseignantDto)
-    this._enseignantService.createEnseignant(enseignantDto).subscribe(
-
-    );
+    console.log('enseignant ', enseignantDto);
+    this._enseignantService.createEnseignant(enseignantDto).subscribe();
   }
 
   searchTeachers(): void {
-    if (this.searchQuery.trim()) {
-      this._usersService.searchUsers(this.searchQuery.trim()).subscribe({
+    const normalizedQuery = this.normalizeString(this.searchQuery.trim());
+
+    if (normalizedQuery) {
+      this._usersService.searchUsers(normalizedQuery).subscribe({
         next: (data: User[]) => {
           if (Array.isArray(data)) {
             this._listUsers = data;
@@ -235,7 +252,13 @@ export class ListUsersComponent {
       this.ngOnInit();
     }
   }
-
+  private normalizeString(str: string): string {
+    return str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
   filterByRole() {
     if (this.selectedRole) {
       this._usersService

@@ -7,7 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserComponent } from "../components/user/user.component";
 import { User, UserRoleDto } from '../components/shared/types/user.type';
 import { LoginService } from '../services/login.service';
-import { ListUsersComponent } from "../components/list-users/list-users.component";
+import { YearService } from '../services/year-service';
+import { ListUsersComponent } from '../components/list-users/list-users.component';
 
 @Component({
   selector: 'app-user-update',
@@ -28,7 +29,7 @@ export class UserUpdateComponent {
     private _router: Router,
     private _userService: UserService,
     private _dialog: MatDialog,
-    private _loginService: LoginService
+    private _yearService: YearService
   ) {}
 
   /**
@@ -78,8 +79,7 @@ export class UserUpdateComponent {
           console.log('update ', _.update)
           const userToSend: User = {
             ..._.update,
-            roles: this.transformRolesToUserRoles(_.update.roles, this._loginService.currentYearId ?? 1)
-            //roles: _.update.roles.map((_) => { console.log(_); return {yearId: this._loginService.currentYearId ?? 1, role: _}}),
+            roles: this.transformRolesToUserRoles(_.update.roles, this._yearService.currentYearId)
           }
           console.log('after update ', userToSend)
           return this._userService.update(_.id, userToSend)
