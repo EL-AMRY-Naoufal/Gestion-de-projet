@@ -27,3 +27,8 @@
 <ng-template #noAffectations>
   <p class="no-affectations-message">Aucune affectation trouvée pour cet enseignant.</p>
 </ng-template>
+
+
+<div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToCreateAffectations()">
+  Creer des Affectations
+</div>
