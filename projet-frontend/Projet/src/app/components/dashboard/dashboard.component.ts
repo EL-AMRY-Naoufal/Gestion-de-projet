@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,6 +12,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoginService } from '../../services/login.service';
 import { MenuComponent } from '../shared/menu/menu.component';
+import { Year } from '../shared/types/year.type';
+import { YearService } from '../../services/year-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,15 +31,42 @@ import { MenuComponent } from '../shared/menu/menu.component';
     MatFormFieldModule,
     MatCardModule,
     MatMenuModule,
+    FormsModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   userRoles: string[] = [];
+  years: Year[] = [];
+  selectedYearId: number | undefined;
 
-  constructor(private router: Router, private loginService: LoginService) {
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private yearService: YearService
+  ) {
     this.userRoles = this.loginService.userRoles;
+  }
+  ngOnInit(): void {
+    // Fetch available years
+    this.yearService.getAllYears().subscribe((years) => {
+      this.years = years;
+      console.log('years: ', years);
+
+      // Set initial selected year based on the currentYearId in YearService
+      const currentYearId = this.yearService.currentYearId;
+      this.selectedYearId = years.find((year) => year.id === currentYearId)?.id;
+      console.log('ID de l’année courante :', this.selectedYearId);
+    });
+  }
+
+  onYearChange(): void {
+    const yearId = Number(this.selectedYearId);
+    console.log('ID sélectionné  :', yearId);
+
+    const selectedYear = this.years.find((year) => year.id === yearId);
+    console.log('Année sélectionnée :', selectedYear);
   }
 
   navigateToUsers() {
@@ -60,7 +90,6 @@ export class DashboardComponent {
     this.loginService.logout();
     this.router.navigate(['']);
   }
-
 
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);

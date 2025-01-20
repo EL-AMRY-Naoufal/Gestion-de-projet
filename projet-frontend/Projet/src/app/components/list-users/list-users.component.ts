@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 import { UserService } from '../../services/user.service';
 import { filter, map, mergeMap, Observable } from 'rxjs';
@@ -20,6 +20,8 @@ import {
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
+import { Year } from '../shared/types/year.type';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-list-users',
@@ -37,7 +39,7 @@ import { YearService } from '../../services/year-service';
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })
-export class ListUsersComponent {
+export class ListUsersComponent implements OnInit {
   // private property to store people value
   private _listUsers: User[];
   // private property to store dialogStatus value
@@ -64,6 +66,10 @@ export class ListUsersComponent {
   ];
   private _loginService: any;
 
+  userRoles: string[] = [];
+  years: Year[] = [];
+  selectedYearId: number | undefined;
+
   /**
    * Component constructor
    */
@@ -72,8 +78,10 @@ export class ListUsersComponent {
     private _usersService: UserService,
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
-    private _yearService: YearService
+    private loginService: LoginService,
+    private yearService: YearService
   ) {
+    this.userRoles = this.loginService.userRoles;
     this._listUsers = [];
     this._dialogStatus = 'inactive';
     this._view = 'card';
@@ -119,6 +127,24 @@ export class ListUsersComponent {
         this._listUsers = []; // En cas d'erreur, assigner un tableau vide
       },
     });
+    // Fetch available years
+    this.yearService.getAllYears().subscribe((years) => {
+      this.years = years;
+      console.log('years: ', years);
+
+      // Set initial selected year based on the currentYearId in YearService
+      const currentYearId = this.yearService.currentYearId;
+      this.selectedYearId = years.find((year) => year.id === currentYearId)?.id;
+      console.log('ID de l’année courante  user:', this.selectedYearId);
+    });
+  }
+
+  onYearChange(): void {
+    const yearId = Number(this.selectedYearId);
+    console.log('ID sélectionné  :', yearId);
+
+    const selectedYear = this.years.find((year) => year.id === yearId);
+    console.log('Année sélectionnée :', selectedYear);
   }
 
   /**

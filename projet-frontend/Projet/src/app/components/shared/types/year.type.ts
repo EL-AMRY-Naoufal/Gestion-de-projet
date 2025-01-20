@@ -1,4 +1,4 @@
 export interface Year {
-    id: number;
-    label: string;
+  id: number;
+  debut: string;
 }

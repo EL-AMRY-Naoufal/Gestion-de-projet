@@ -1,5 +1,18 @@
 <app-menu></app-menu>
 
+<div class="year-selection-container">
+  <label for="yearSelect">Choisissez une année :</label>
+  <select
+    id="yearSelect"
+    [(ngModel)]="selectedYearId"
+    (change)="onYearChange()"
+  >
+    <option *ngFor="let year of years" [value]="year.id">
+      {{ year.debut }}
+    </option>
+  </select>
+</div>
+
 <div class="main-content">
   <!-- Conteneur de recherche et rôle -->
   <div class="search-and-role-container">
@@ -21,7 +34,8 @@
       <app-user-card
         [user]="user"
         (deleteUser)="delete($event)"
-        *ngFor="let user of listUsers">
+        *ngFor="let user of listUsers"
+      >
       </app-user-card>
     </div>
     <div *ngSwitchDefault>

@@ -1,21 +1,59 @@
 <app-menu></app-menu>
 
+<div class="year-selection-container">
+  <label for="yearSelect">Choisissez une année :</label>
+  <select
+    id="yearSelect"
+    [(ngModel)]="selectedYearId"
+    (change)="onYearChange()"
+  >
+    <option *ngFor="let year of years" [value]="year.id">
+      {{ year.debut }}
+    </option>
+  </select>
+</div>
+
 <div class="menu-container">
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('RESPONSABLE_DE_FORMATION')" class="menu-item yellow">
-      Formation
+  <div
+    *ngIf="
+      userRoles.includes('CHEF_DE_DEPARTEMENT') ||
+      userRoles.includes('RESPONSABLE_DE_FORMATION')
+    "
+    class="menu-item yellow"
+  >
+    Formation
   </div>
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item blue" (click)="navigateToTeachers()">
-      Enseignants
+  <div
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    class="menu-item blue"
+    (click)="navigateToTeachers()"
+  >
+    Enseignants
   </div>
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')"     (click)="navigateToAffectations()"
-       class="menu-item gray">
+  <div
+    *ngIf="
+      userRoles.includes('CHEF_DE_DEPARTEMENT') ||
+      userRoles.includes('ENSEIGNANT') ||
+      userRoles.includes('SECRETARIAT_PEDAGOGIQUE')
+    "
+    (click)="navigateToAffectations()"
+    class="menu-item gray"
+  >
     Affectations
   </div>
 
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToCreateAffectations()">
-      Creer des Affectations
+  <div
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    class="menu-item yellow"
+    (click)="navigateToCreateAffectations()"
+  >
+    Creer des Affectations
   </div>
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()">
-      Utilisateurs
+  <div
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+    class="menu-item vert"
+    (click)="navigateToUsers()"
+  >
+    Utilisateurs
   </div>
 </div>
