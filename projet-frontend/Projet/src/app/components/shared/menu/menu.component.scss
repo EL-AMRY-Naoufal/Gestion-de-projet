@@ -22,6 +22,15 @@ mat-toolbar {
   width: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de relief */
   box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+  position: fixed; /* Fixe la barre en haut de l'écran */
+  top: 0; /* Position verticale à 0 (haut de l'écran) */
+  z-index: 1000; /* Assure que la barre reste au-dessus des autres éléments */
+}
+
+/* Ajout d'espace en haut pour éviter de masquer le contenu */
+body {
+  margin: 0;
+  padding-top: 70px; /* Ajoute un espace correspondant à la hauteur de la navbar */
 }
 
 /* Logo */
