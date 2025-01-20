@@ -134,7 +134,7 @@ public class EnseignantService {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.PROFESSEUR);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
         nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);

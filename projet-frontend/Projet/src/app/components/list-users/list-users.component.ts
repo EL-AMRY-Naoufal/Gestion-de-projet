@@ -51,7 +51,7 @@ export class ListUsersComponent {
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
     heuresAssignees: 0

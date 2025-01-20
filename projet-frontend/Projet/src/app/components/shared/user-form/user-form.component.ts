@@ -115,6 +115,9 @@ export class UserFormComponent {
      // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
     this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
     this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
+
+    // Ajout de la logique pour surveiller les changements de 'nbHeureCategorie '
+    this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateNbHeureCategorie())
   }
 
 
@@ -175,6 +178,39 @@ private updateEmailAndUsername(): void {
       this._form.get('name')?.setValue(this.capitalizeFirstLetter(name), { emitEvent: false });
     }
 }
+
+
+private updateNbHeureCategorie(): void {
+  const categorie = this._form.get('categorieEnseignant')?.value;
+
+  let nbHeureCategorie = 0;
+
+  // Définir le nombre d'heures selon la catégorie
+  switch (categorie) {
+    case 'ENSEIGNANT_CHERCHEUR':
+      nbHeureCategorie = 192;
+      break;
+    case 'PRAG':
+      nbHeureCategorie = 384;
+      break;
+    case 'ATER':
+      nbHeureCategorie = 192;
+      break;
+    case 'DCCE':
+      nbHeureCategorie = 64;
+      break;
+    case 'VACATAIRE':
+      nbHeureCategorie = 32;
+      break;
+    default:
+      console.warn(`Catégorie non reconnue : ${categorie}`);
+      break;
+  }
+
+  // Mettre à jour le champ 'nbHeureCategorie' avec la valeur correspondante
+  this._form.get('nbHeureCategorie')?.setValue(nbHeureCategorie, { emitEvent: false });
+}
+
 
 
   private fetchEnseignantDetails(userId: number): void {
@@ -381,9 +417,9 @@ private _buildForm(): FormGroup {
   categories: string[] = [];
   enseignant: EnseignantDto = {
     maxHeuresService: 192,
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    categorieEnseignant: CategorieEnseignant.ATER,
     heuresAssignees: 0,
-    nbHeureCategorie: 0
+    nbHeureCategorie: 192
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);
