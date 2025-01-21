@@ -69,7 +69,8 @@ export class ListUsersComponent implements OnInit {
 
   userRoles: string[] = [];
   years: Year[] = [];
-  selectedYearId: number | undefined;
+  selectedYearId: number | null = null;
+  selectedYear: any | null = null;
 
   /**
    * Component constructor
@@ -132,26 +133,26 @@ export class ListUsersComponent implements OnInit {
     this.yearService.getAllYears().subscribe((years) => {
       this.years = years;
       console.log('years: ', years);
-
-      // Set initial selected year based on the currentYearId in YearService
-      const currentYearId = this.yearService.currentYearId;
-      this.selectedYearId = years.find((year) => year.id === currentYearId)?.id;
     });
   }
 
   onYearChange(): void {
     const yearId = Number(this.selectedYearId);
-    const selectedYear = this.years.find((year) => year.id === yearId);
+    this.selectedYear = this.years.find((year) => year.id === yearId);
     console.log('for 1 1 ', this._usersService.getRoleByUserIdAndYear(1, 1));
 
-    if (selectedYear) {
+    if (this.selectedYear) {
       // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
       this._listUsers.forEach((user) => {
         this._usersService
-          .getRoleByUserIdAndYear(user.id as number, selectedYear.debut)
+          .getRoleByUserIdAndYear(user.id as number, this.selectedYear.debut)
           .subscribe({
             next: (roles: any[]) => {
-              user.roles = roles;
+              user.roles = roles.map((roleDto) => ({
+                ...roleDto,
+                role: roleDto.role,
+                year: this.selectedYear.debut,
+              }));
               console.log(`Rôles pour l'utilisateur ${user.username}:`, roles);
             },
             error: (err: any) => {
@@ -162,6 +163,14 @@ export class ListUsersComponent implements OnInit {
             },
           });
       });
+    }
+  }
+  getSelectedYear() {
+    console.log('yr', this.selectedYear);
+
+    if (this.selectedYear != null) {
+      console.log('yr', this.selectedYear.debut);
+      return this.selectedYear.debut;
     }
   }
 

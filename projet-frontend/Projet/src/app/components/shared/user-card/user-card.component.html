@@ -3,10 +3,10 @@
     <!-- Titre avec le nom d'utilisateur -->
     <mat-card-title>
       <a href="javascript:void(0);">
-
         <span>{{ user.name }} </span>
-        <span>{{ user.firstname }}</span><br/>
-        <span>{{ user.username }} </span>
+        <span>{{ user.firstname }}</span
+        ><br />
+        <span>{{ user.username }}</span>
       </a>
     </mat-card-title>
 
@@ -14,12 +14,15 @@
     <mat-card-subtitle>
       <ng-container *ngIf="user.roles?.length; else noRoles">
         <span *ngFor="let roleDto of user.roles; let last = last">
-          {{ roleDto.role }} <!-- Affichage du rôle et de l'année -->
-          <span *ngIf="!last"><br></span>
+          <span *ngIf="roleDto.year === selectedYear">
+            {{ roleDto.role }}
+            <!-- Affichage du rôle spécifique -->
+          </span>
+          <span *ngIf="!last"><br /></span>
         </span>
       </ng-container>
       <ng-template #noRoles>
-        <span>No roles assigned</span>
+        <span>Aucun rôle assigné</span>
       </ng-template>
     </mat-card-subtitle>
 
@@ -35,17 +38,13 @@
     </mat-card-subtitle>
   </mat-card-title-group>
 
-
-
   <mat-card-content>
     <!-- Contenu principal de la carte, qui occupe tout l'espace disponible -->
   </mat-card-content>
 
   <mat-card-actions>
     <!-- Lien pour modifier l'utilisateur -->
-    <a mat-button [routerLink]="['/edit', user.id]">
-      Modifier
-    </a>
+    <a mat-button [routerLink]="['/edit', user.id]">Modifier</a>
 
     <!-- Bouton pour supprimer l'utilisateur -->
     <button

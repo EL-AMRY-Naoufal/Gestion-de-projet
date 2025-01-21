@@ -1,19 +1,5 @@
 <app-menu></app-menu>
 
-<div class="year-selection-container">
-  <label for="yearSelect">Choisissez une année :</label>
-  <select
-    id="yearSelect"
-    [(ngModel)]="selectedYearId"
-    (change)="onYearChange()"
-  >
-    <option *ngFor="let year of years" [value]="year.id">
-      {{ year.debut }}
-    </option>
-    <option value="" selected>2</option>
-  </select>
-</div>
-
 <div class="main-content">
   <!-- Conteneur de recherche et rôle -->
   <div class="search-and-role-container">
@@ -21,10 +7,20 @@
       <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
       <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
     </div>
+
     <div class="role">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
-        <option value="" disabled selected>Choisir un rôle</option>
+        <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+      </select>
+    </div>
+
+    <div class="year">
+      <select id="year" [(ngModel)]="selectedYearId" (change)="onYearChange()">
+        <option value="null" disabled selected>Choisissez une année</option>
+        <option *ngFor="let year of years" [value]="year.id">
+          {{ year.debut }}
+        </option>
       </select>
     </div>
   </div>
@@ -34,6 +30,7 @@
     <div *ngSwitchCase="'card'" class="user-grid">
       <app-user-card
         [user]="user"
+        [selectedYear]="getSelectedYear()"
         (deleteUser)="delete($event)"
         *ngFor="let user of listUsers"
       >

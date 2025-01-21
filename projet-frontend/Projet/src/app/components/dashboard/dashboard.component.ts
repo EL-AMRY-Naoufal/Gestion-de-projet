@@ -61,14 +61,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onYearChange(): void {
-    const yearId = Number(this.selectedYearId);
-    console.log('ID sélectionné  :', yearId);
-
-    const selectedYear = this.years.find((year) => year.id === yearId);
-    console.log('Année sélectionnée :', selectedYear);
-  }
-
   navigateToUsers() {
     this.router.navigate(['/users']);
   }

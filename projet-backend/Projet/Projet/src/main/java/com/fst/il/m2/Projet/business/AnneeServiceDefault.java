@@ -17,8 +17,8 @@ public class AnneeServiceDefault implements  AnneeService{
 
     @PostConstruct
     public void postContruct(){
-        anneeRepository.save(Annee.builder().debut(1).id(1L).build());
-        //anneeRepository.save(Annee.builder().debut(2).id(2L).build());
+        anneeRepository.save(Annee.builder().debut(2024).id(1L).build());
+        anneeRepository.save(Annee.builder().debut(2023).id(2L).build());
     }
 
     @Override
