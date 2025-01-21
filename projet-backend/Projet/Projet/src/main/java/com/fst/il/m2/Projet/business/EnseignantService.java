@@ -149,7 +149,7 @@ public class EnseignantService {
     public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
 
         User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
-        Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new)
+        Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new);
 
         Affectation affectation = affectationRepository.findByEnseignantIdAndAssignationId(enseignant.getId(), affectationId)
                 .orElseThrow(NotFoundException::new);
