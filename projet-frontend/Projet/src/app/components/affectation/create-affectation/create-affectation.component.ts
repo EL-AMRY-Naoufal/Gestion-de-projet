@@ -6,6 +6,7 @@ import {ModuleService} from "../../../services/module.service";
 import {EnseignantService} from "../../../services/enseignant.service";
 import {LoginService} from "../../../services/login.service";
 import {catchError} from "rxjs/operators";
+import { MenuComponent } from "../../shared/menu/menu.component";
 
 @Component({
   selector: 'app-create-affectation',
@@ -14,8 +15,9 @@ import {catchError} from "rxjs/operators";
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
-  ],
+    NgIf,
+    MenuComponent
+],
   standalone: true
 })
 export class CreateAffectationComponent implements OnInit {

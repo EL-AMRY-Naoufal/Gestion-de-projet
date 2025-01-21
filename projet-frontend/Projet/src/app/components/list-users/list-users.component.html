@@ -1,6 +1,14 @@
 <app-menu></app-menu>
 
+
 <div class="main-content">
+  <div class="header-container">
+    <h1 class="page-header">Liste des utilisateurs</h1>
+    <div class="custom-button plus-button" (click)="showDialog()" title="Show more">
+      +
+    </div>
+  </div>
+
   <!-- Conteneur de recherche et rôle -->
   <div class="search-and-role-container">
     <div class="search-bar">
@@ -41,10 +49,11 @@
     </div>
   </section>
 
-  <!-- Bouton flottant -->
-  <section class="buttons-fab" *ngIf="dialogStatus === 'inactive'">
-    <button (click)="showDialog()" mat-fab color="accent" class="button-add">
-      <i class="material-icons">add</i>
-    </button>
-  </section>
+
+
+  <!-- Affichage des profils -->
+ <app-enseignants></app-enseignants>
 </div>
+
+
+

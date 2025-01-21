@@ -22,7 +22,7 @@ import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
 import { Year } from '../shared/types/year.type';
 import { LoginService } from '../../services/login.service';
-import { HttpEvent, HttpResponse } from '@angular/common/http';
+import { EnseignantsComponent } from '../enseignants/enseignants.component';
 
 @Component({
   selector: 'app-list-users',
@@ -32,10 +32,10 @@ import { HttpEvent, HttpResponse } from '@angular/common/http';
     UserCardComponent,
     NgSwitch,
     NgSwitchCase,
-    NgIf,
     CommonModule,
     FormsModule,
     MenuComponent,
+    EnseignantsComponent
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
@@ -54,7 +54,7 @@ export class ListUsersComponent implements OnInit {
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
     heuresAssignees: 0,
