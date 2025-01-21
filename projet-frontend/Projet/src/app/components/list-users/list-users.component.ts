@@ -22,6 +22,7 @@ import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
 import { Year } from '../shared/types/year.type';
 import { LoginService } from '../../services/login.service';
+import { HttpEvent, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-users',
@@ -135,16 +136,33 @@ export class ListUsersComponent implements OnInit {
       // Set initial selected year based on the currentYearId in YearService
       const currentYearId = this.yearService.currentYearId;
       this.selectedYearId = years.find((year) => year.id === currentYearId)?.id;
-      console.log('ID de l’année courante  user:', this.selectedYearId);
     });
   }
 
   onYearChange(): void {
     const yearId = Number(this.selectedYearId);
-    console.log('ID sélectionné  :', yearId);
-
     const selectedYear = this.years.find((year) => year.id === yearId);
-    console.log('Année sélectionnée :', selectedYear);
+    console.log('for 1 1 ', this._usersService.getRoleByUserIdAndYear(1, 1));
+
+    if (selectedYear) {
+      // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
+      this._listUsers.forEach((user) => {
+        this._usersService
+          .getRoleByUserIdAndYear(user.id as number, selectedYear.debut)
+          .subscribe({
+            next: (roles: any[]) => {
+              user.roles = roles;
+              console.log(`Rôles pour l'utilisateur ${user.username}:`, roles);
+            },
+            error: (err: any) => {
+              console.error(
+                `Erreur lors de la récupération des rôles pour l'utilisateur ${user.username}:`,
+                err
+              );
+            },
+          });
+      });
+    }
   }
 
   /**
@@ -285,12 +303,15 @@ export class ListUsersComponent implements OnInit {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]/g, '');
   }
+
   filterByRole() {
+    console.log('im in ');
     if (this.selectedRole) {
       this._usersService
         .searchUsersByRole(this.selectedRole)
         .subscribe((data) => {
           this._listUsers = data;
+          console.log('filtred list : ', data);
         });
     } else {
       this.listUsers;

@@ -1,4 +1,4 @@
 export interface Year {
   id: number;
-  debut: string;
+  debut: number;
 }

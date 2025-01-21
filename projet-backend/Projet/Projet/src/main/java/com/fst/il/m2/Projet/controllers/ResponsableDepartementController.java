@@ -59,11 +59,10 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("{userId}/roles")
-    public List<UserRole> getUserRoles(@PathVariable Long userId, @RequestBody Long year) {
-        System.out.println("im in here " + userId + " year " + year);
-       return  responsableDepartementService.getRolesByUserIdAndYear(userId, year);
-
+    @GetMapping("/user/{userId}/year/{year}")
+    public  ResponseEntity<List<UserRole>> getUserRoles(@PathVariable Long userId, @PathVariable Long year) {
+        List<UserRole> userRolesByYear =   responsableDepartementService.getRolesByUserIdAndYear(userId, year);
+        return ResponseEntity.ok(userRolesByYear);
     }
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
