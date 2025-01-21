@@ -99,7 +99,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     @Override
     public List<User> getUsersByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUsersByUsername(username);
     }
 
     @Override

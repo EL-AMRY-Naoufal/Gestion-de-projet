@@ -3,18 +3,17 @@ package com.fst.il.m2.Projet.business;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -129,7 +128,7 @@ public class EnseignantService {
     }
 
 
-    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
 
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
@@ -145,6 +144,20 @@ public class EnseignantService {
     public Enseignant getEnseignantById(Long id) {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
         return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
+    }
+
+    public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
+
+        User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
+        Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new)
+
+        Affectation affectation = affectationRepository.findByEnseignantIdAndAssignationId(enseignant.getId(), affectationId)
+                .orElseThrow(NotFoundException::new);
+
+        affectation.setCommentaire(commentaire);
+        affectationRepository.save(affectation);
+
+        return commentaire;
     }
 
 }
