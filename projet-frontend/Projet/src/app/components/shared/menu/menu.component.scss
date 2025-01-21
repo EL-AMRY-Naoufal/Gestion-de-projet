@@ -71,6 +71,10 @@ body {
   gap: 30px; /* Espacement uniforme entre les liens */
 }
 
+a {
+  cursor: pointer;
+}
+
 /* Responsive Design pour petits écrans */
 @media (max-width: 768px) {
   .navbar {

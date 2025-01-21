@@ -20,6 +20,7 @@ import {
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
+import { EnseignantsComponent } from '../enseignants/enseignants.component';
 
 @Component({
   selector: 'app-list-users',
@@ -33,6 +34,7 @@ import { YearService } from '../../services/year-service';
     CommonModule,
     FormsModule,
     MenuComponent,
+    EnseignantsComponent
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
