@@ -145,9 +145,10 @@ export class ListUsersComponent implements OnInit {
       // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
       this._listUsers.forEach((user) => {
         this._usersService
-          .getRoleByUserIdAndYear(user.id as number, this.selectedYear.debut)
+          .getRoleByUserIdAndYear(user.id as number, this.selectedYear.id)
           .subscribe({
             next: (roles: any[]) => {
+              console.log('roles', roles);
               user.roles = roles.map((roleDto) => ({
                 ...roleDto,
                 role: roleDto.role,
