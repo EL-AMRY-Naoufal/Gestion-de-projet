@@ -19,10 +19,14 @@ import { UserCardComponent } from "../shared/user-card/user-card.component";
 
 export class EnseignantsComponent  implements OnInit{
  users: any[] = [];
+ private _view: string;
   constructor(private userService: UserService,
     private _usersService: UserService,
     private enseignantService: EnseignantService,
-    private dialog: MatDialog) {this.openDialog = this.openDialog.bind(this); }
+    private dialog: MatDialog) {
+      this.openDialog = this.openDialog.bind(this);
+      this._view = 'card';
+    }
 
   ngOnInit(): void {
     this.enseignantService.getEnseignants().subscribe(data => {
@@ -45,4 +49,12 @@ export class EnseignantsComponent  implements OnInit{
         }
       });
     }
+
+
+          /**
+   * Returns private property _view
+   */
+  get view(): string {
+    return this._view;
+  }
 }

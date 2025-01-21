@@ -1,80 +1,78 @@
 
 
-
-/* Style du bouton "Ajouter un enseignant" */
-.add-teacher-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 15px;
+/* Global */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.add-teacher-btn i {
-    margin-right: 10px;
-    font-size: 20px;
+/* Conteneur principal */
+.main-content {
+  padding: 20px;
+  margin-top: 60px;
 }
 
-.add-teacher-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #003e7e);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-}
-
-.add-teacher-btn:active {
-    transform: translateY(0);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-
-.search-and-add-container {
+/* Titre et bouton plus */
+.header-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  /* Augmente l'espace sous la barre de recherche */
+  justify-content: center;
+  gap: 20px; /* Espace entre le titre et le bouton */
+  margin-bottom: 20px;
 }
 
-.user-card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 15px;
+.page-header {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
   text-align: center;
-  border: 1px solid #ddd;
-  transition: transform 0.2s;
-  /* Ajoute un effet léger au survol */
 }
 
-.user-card:hover {
-  transform: scale(1.03);
-  /* Zoom léger au survol */
-}
-
-.search-and-add-container {
+.plus-button {
+  background-color: #1e7c34;
+  color: #fff;
+  width: 40px;
+  height: 40px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.search-bar {
-  flex: 2;
+.plus-button:hover {
+  background-color: #145823;
+}
+
+/* Conteneur de recherche et rôle */
+.search-and-role-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* Espacement entre recherche et rôle */
+  margin: 0 auto;
+  padding: 10px;
+  width: 80%; /* Adapte la largeur à 80% de l'écran */
+  max-width: 1200px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Barre de recherche */
+.search-bar {
+  display: flex;
+  align-items: center;
   border: 1px solid #ddd;
   border-radius: 5px;
   overflow: hidden;
-  background-color: #f9f9f9;
+  background-color: #fff;
+  flex: 2;
 }
 
 .search-bar input[type="text"] {
@@ -88,30 +86,131 @@
   outline: none;
 }
 
+.search-bar .search-icon {
+  font-size: 16px;
+  color: #555;
+  background-color: #f5f5f5;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Sélecteur de rôle */
 .role {
   flex: 1;
 }
 
 .role select {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
-}
-
-.add-teacher-btn {
-  flex: 1;
-  background-color: #ffeb3b;
-  color: black;
-  border: none;
-  padding: 10px 15px;
-  font-size: 14px;
-  border-radius: 5px;
+  background-color: #fff;
   cursor: pointer;
-  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.add-teacher-btn:hover {
-  background-color: #feeb44;
+.role select:hover {
+  background-color: #eef7ff;
+}
+
+.role select:focus {
+  outline: none;
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
+/* Conteneur des utilisateurs */
+.card-content {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+  width: 100%; /* Utilisation complète de l'écran */
+}
+
+/* Grille des utilisateurs */
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes fixes */
+  gap: 0.75em; /* Espacement réduit entre les cartes */
+  padding: 16px;
+  justify-content: center;
+  max-height: calc(3 * 200px + 2 * 0.75em); /* Hauteur maximale pour 3 cartes */
+  overflow-y: auto; /* Barre de défilement si nécessaire */
+  width: 100%; /* Utilisation complète de la largeur disponible */
+  max-width: 1700px; /* Largeur maximale */
+  margin: 0 auto; /* Centre la grille horizontalement */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Barre de défilement stylisée (optionnel) */
+.user-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.user-grid::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.user-grid::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.user-grid::-webkit-scrollbar-track {
+  background-color: #f9f9f9;
+}
+
+/* Bouton flottant (optionnel) */
+.buttons-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.buttons-fab button {
+  background-color: #1e7c34;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buttons-fab button:hover {
+  background-color: #0f3f19;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .search-and-role-container {
+    flex-direction: column;
+    gap: 10px;
+    width: 90%;
+  }
+
+  .user-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur écrans moyens */
+  }
+}
+
+@media (max-width: 480px) {
+  .user-grid {
+    grid-template-columns: 1fr; /* 1 colonne sur petits écrans */
+  }
+
+  app-user-card {
+    padding: 10px;
+  }
 }
