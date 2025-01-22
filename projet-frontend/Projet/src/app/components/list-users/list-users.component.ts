@@ -70,7 +70,7 @@ export class ListUsersComponent implements OnInit {
   userRoles: string[] = [];
   years: Year[] = [];
   selectedYearId: number | null = null;
-  selectedYear: any | null = null;
+  selectedYear: Year | null = null;
 
   /**
    * Component constructor
@@ -81,7 +81,7 @@ export class ListUsersComponent implements OnInit {
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
     private loginService: LoginService,
-    private yearService: YearService
+    private _yearService: YearService
   ) {
     this.userRoles = this.loginService.userRoles;
     this._listUsers = [];
@@ -130,7 +130,7 @@ export class ListUsersComponent implements OnInit {
       },
     });
     // Fetch available years
-    this.yearService.getAllYears().subscribe((years) => {
+    this._yearService.getAllYears().subscribe((years) => {
       this.years = years;
       console.log('years: ', years);
     });
@@ -138,21 +138,21 @@ export class ListUsersComponent implements OnInit {
 
   onYearChange(): void {
     const yearId = Number(this.selectedYearId);
-    this.selectedYear = this.years.find((year) => year.id === yearId);
+    this.selectedYear = this.years.find((year) => year.id === yearId) ?? null;
     console.log('for 1 1 ', this._usersService.getRoleByUserIdAndYear(1, 1));
 
     if (this.selectedYear) {
       // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
       this._listUsers.forEach((user) => {
         this._usersService
-          .getRoleByUserIdAndYear(user.id as number, this.selectedYear.id)
+          .getRoleByUserIdAndYear(user.id as number, this.selectedYear?.id ?? 1)
           .subscribe({
             next: (roles: any[]) => {
               console.log('roles', roles);
               user.roles = roles.map((roleDto) => ({
                 ...roleDto,
                 role: roleDto.role,
-                year: this.selectedYear.debut,
+                year: this.selectedYear?.debut,
               }));
               console.log(`Rôles pour l'utilisateur ${user.username}:`, roles);
             },
@@ -166,6 +166,7 @@ export class ListUsersComponent implements OnInit {
       });
     }
   }
+
   getSelectedYear() {
     console.log('yr', this.selectedYear);
 
@@ -173,6 +174,7 @@ export class ListUsersComponent implements OnInit {
       console.log('yr', this.selectedYear.debut);
       return this.selectedYear.debut;
     }
+    return 2021;
   }
 
   /**
@@ -220,7 +222,7 @@ export class ListUsersComponent implements OnInit {
 
           return user;
         }),
-        mergeMap((user: User | undefined) => this._add(user))
+        mergeMap((user: User | undefined) => this._add(user)),
       )
       .subscribe({
         next: (user: User) => {
@@ -229,7 +231,7 @@ export class ListUsersComponent implements OnInit {
             this._usersService.userHasRole(
               user,
               'ENSEIGNANT',
-              this._loginService.currentYearId
+              this._yearService.currentYearId
             )
           ) {
             this.enseignantDto.id = user.id;
@@ -259,6 +261,7 @@ export class ListUsersComponent implements OnInit {
    * Add new user
    */
   private _add(user: User | undefined): Observable<User> {
+
     if (!user) {
       return new Observable<User>();
     }
@@ -267,7 +270,7 @@ export class ListUsersComponent implements OnInit {
       ...user,
       roles: user.roles.map((role) => {
         return {
-          year: this._loginService.currentYearId ?? 1,
+          year: this._yearService.currentYearId ?? 1,
           role: role as unknown as Roles,
         };
       }),
