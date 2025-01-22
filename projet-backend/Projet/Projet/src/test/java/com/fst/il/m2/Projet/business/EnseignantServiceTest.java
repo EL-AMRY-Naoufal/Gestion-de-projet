@@ -55,7 +55,7 @@ class EnseignantServiceTest {
                 1L,
                 20,
                 5,
-                CategorieEnseignant.PROFESSEUR,
+                CategorieEnseignant.ENSEIGNANT_CHERCHEUR,
                 10,
                 1L
         );
@@ -64,8 +64,8 @@ class EnseignantServiceTest {
         assertNotNull(result);
         assertEquals(20, result.getMaxHeuresService());
         assertEquals(5, result.getHeuresAssignees());
-        assertTrue(result.getCategorieEnseignant().containsKey(CategorieEnseignant.PROFESSEUR));
-        assertEquals(10, result.getCategorieEnseignant().get(CategorieEnseignant.PROFESSEUR));
+        assertTrue(result.getCategorieEnseignant().containsKey(CategorieEnseignant.ENSEIGNANT_CHERCHEUR));
+        assertEquals(10, result.getCategorieEnseignant().get(CategorieEnseignant.ENSEIGNANT_CHERCHEUR));
 
         // Verify Repository Calls
         verify(userRepository, times(1)).findById(1L);
@@ -80,7 +80,7 @@ class EnseignantServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                enseignantService.createEnseignant(1L, 20, 5, CategorieEnseignant.PROFESSEUR, 10, 1L));
+                enseignantService.createEnseignant(1L, 20, 5, CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 10, 1L));
 
         assertEquals("User not found with id: 1", exception.getMessage());
 
@@ -106,15 +106,15 @@ class EnseignantServiceTest {
         Enseignant result = enseignantService.updateEnseignant(
                 1L,
                 30,
-                CategorieEnseignant.DOCTORANT,
+                CategorieEnseignant.PRAG, // c'etais ecrit doctorant mais pas sur du changement
                 15
         );
 
         // Assert
         assertNotNull(result);
         assertEquals(30, result.getMaxHeuresService());
-        assertTrue(result.getCategorieEnseignant().containsKey(CategorieEnseignant.DOCTORANT));
-        assertEquals(15, result.getCategorieEnseignant().get(CategorieEnseignant.DOCTORANT));
+        assertTrue(result.getCategorieEnseignant().containsKey(CategorieEnseignant.PRAG));// c'etais ecrit doctorant mais pas sur du changement
+        assertEquals(15, result.getCategorieEnseignant().get(CategorieEnseignant.PRAG));// c'etais ecrit doctorant mais pas sur du changement
 
         // Verify Repository Calls
         verify(enseignantRepository, times(1)).getReferenceById(1L);
@@ -128,7 +128,7 @@ class EnseignantServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                enseignantService.updateEnseignant(1L, 30, CategorieEnseignant.PROFESSEUR, 15));
+                enseignantService.updateEnseignant(1L, 30, CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 15));
 
         assertEquals("Entity not found", exception.getMessage());
 

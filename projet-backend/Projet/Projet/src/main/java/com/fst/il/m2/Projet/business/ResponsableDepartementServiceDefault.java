@@ -108,6 +108,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
     @Override
+    public List<UserRole> getRolesByUserIdAndYear(Long userId, Long year) {
+        return userRoleRepository.findByUserIdAndYear(userId, year);
+    }
+
+    @Override
     @Transactional
     public User updateUser(Long id, User user, Long responsableId, Long currentYear) {
         // Check if the responsable has the required role

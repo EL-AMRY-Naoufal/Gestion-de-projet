@@ -34,7 +34,7 @@ export class UpdateProfesseurComponent {
   categories: string[] = [];
   enseignant: EnseignantDto = {
     maxHeuresService: -1,
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
     heuresAssignees: 0,
     nbHeureCategorie: 0
   };
@@ -62,7 +62,7 @@ export class UpdateProfesseurComponent {
           console.error('Error fetching enseignant:', error);
           this.enseignant = {
             maxHeuresService: this.defaultHeures,
-            categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+            categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
             heuresAssignees: 0,
             nbHeureCategorie: 0
           };
@@ -72,7 +72,7 @@ export class UpdateProfesseurComponent {
     else {
       this.enseignant = {
         maxHeuresService: this.defaultHeures || 0,
-        categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+        categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
         heuresAssignees: 0,
         nbHeureCategorie: 0
       };

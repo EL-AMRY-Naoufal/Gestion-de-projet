@@ -4,9 +4,7 @@
     <mat-card-title>
       <a href="javascript:void(0);">
         <span>{{ user.name }} </span>
-        <span>{{ user.firstname }}</span
-        ><br />
-        <span>{{ user.username }}</span>
+        <span>{{ user.firstname }}</span><br/>
       </a>
     </mat-card-title>
 
@@ -14,29 +12,15 @@
     <mat-card-subtitle>
       <ng-container *ngIf="user.roles?.length; else noRoles">
         <span *ngFor="let roleDto of user.roles; let last = last">
-          <span *ngIf="roleDto.year === selectedYear">
-            {{ roleDto.role }}
-            <!-- Affichage du rôle spécifique -->
-          </span>
-          <span *ngIf="!last"><br /></span>
+          {{ roleDto.role }} <!-- Affichage du rôle et de l'année -->
+          <span *ngIf="!last"><br></span>
         </span>
       </ng-container>
       <ng-template #noRoles>
-        <span>Aucun rôle assigné</span>
+        <span>No roles assigned</span>
       </ng-template>
     </mat-card-subtitle>
 
-    <!-- Sous-titre pour l'email de l'utilisateur -->
-    <mat-card-subtitle class="contact-info">
-      <a
-        [href]="'mailto:' + user.email"
-        [title]="'Send an email to ' + user.username"
-        class="truncate"
-      >
-        {{ user.email }}
-      </a>
-    </mat-card-subtitle>
-  </mat-card-title-group>
 
 <!-- Actions (modification et suppression avec icônes personnalisées) -->
 <mat-card-actions class="custom-actions">
@@ -60,5 +44,3 @@
     🗑️
   </div>
 </mat-card-actions>
-
-</mat-card>

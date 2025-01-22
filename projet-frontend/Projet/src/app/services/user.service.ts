@@ -188,12 +188,16 @@ export class UserService {
 
   searchUsers(username: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;
-    console.log('back response ', url);
-
     return this._http.get<any[]>(url);
   }
   searchUsersByRole(role: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}/${role}`;
+    return this._http.get<any[]>(url);
+  }
+
+  getRoleByUserIdAndYear(userId: number, year: number) {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/user/${userId}/year/${year}`;
+
     return this._http.get<any[]>(url);
   }
 

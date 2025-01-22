@@ -4,6 +4,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {AffectationType} from "../../shared/types/affectation.type";
 import {LoginService} from "../../../services/login.service";
 import { MenuComponent } from "../../shared/menu/menu.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-affectation-list',
@@ -21,8 +22,14 @@ export class AffectationListComponent implements OnInit {
   affectations: AffectationType[] = [];
 
   enseignantId!: string;
+  userRoles: string[] = [];
 
-  constructor(private enseignantService: EnseignantService, private loginService: LoginService) { }
+  constructor(private enseignantService: EnseignantService, private loginService: LoginService,private router: Router) {
+    this.userRoles = this.loginService.userRoles;
+
+  }
+
+
 
   ngOnInit(): void {
 
@@ -50,4 +57,10 @@ export class AffectationListComponent implements OnInit {
       }
     );
   }
+
+
+    // Navigate to the component to create affectations by the admin
+    navigateToCreateAffectations() {
+      this.router.navigate(['/admin/affectations']);
+    }
 }

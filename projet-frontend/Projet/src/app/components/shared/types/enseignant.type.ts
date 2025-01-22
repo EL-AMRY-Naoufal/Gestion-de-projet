@@ -12,7 +12,11 @@ export interface EnseignantDto {
 
 
 export enum CategorieEnseignant {
-    PROFESSEUR = 'PROFESSEUR',
-    DOCTORANT = 'DOCTORANT',
-    MAITRE_CONFERENCES = 'MAITRE_CONFERENCES'
+    EnseignantChercheur = 'Enseignant_Chercheur',
+    PRAG = 'PRAG',
+    ATER = 'ATER',
+    DCCE = 'DCCE',
+    VACATAIRE = 'Vacataire',
+
+
 }

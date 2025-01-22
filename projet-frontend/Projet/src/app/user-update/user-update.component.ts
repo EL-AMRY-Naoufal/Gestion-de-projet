@@ -8,11 +8,12 @@ import { UserComponent } from "../components/user/user.component";
 import { User, UserRoleDto } from '../components/shared/types/user.type';
 import { LoginService } from '../services/login.service';
 import { YearService } from '../services/year-service';
+import { ListUsersComponent } from '../components/list-users/list-users.component';
 
 @Component({
   selector: 'app-user-update',
   standalone: true,
-  imports: [UserComponent],
+  imports: [UserComponent, ListUsersComponent],
   templateUrl: './user-update.component.html',
   styleUrl: './user-update.component.scss'
 })

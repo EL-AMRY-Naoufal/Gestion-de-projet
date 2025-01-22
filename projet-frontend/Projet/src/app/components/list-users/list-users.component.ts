@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDialogComponent } from '../shared/user-dialog/user-dialog.component';
 import { UserService } from '../../services/user.service';
 import { filter, map, mergeMap, Observable } from 'rxjs';
@@ -20,6 +20,9 @@ import {
 import { EnseignantService } from '../../services/enseignant.service';
 import { Roles, User } from '../shared/types/user.type';
 import { YearService } from '../../services/year-service';
+import { Year } from '../shared/types/year.type';
+import { LoginService } from '../../services/login.service';
+import { EnseignantsComponent } from '../enseignants/enseignants.component';
 
 @Component({
   selector: 'app-list-users',
@@ -29,15 +32,15 @@ import { YearService } from '../../services/year-service';
     UserCardComponent,
     NgSwitch,
     NgSwitchCase,
-    NgIf,
     CommonModule,
     FormsModule,
     MenuComponent,
+    EnseignantsComponent
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
 })
-export class ListUsersComponent {
+export class ListUsersComponent implements OnInit {
   // private property to store people value
   private _listUsers: User[];
   // private property to store dialogStatus value
@@ -51,7 +54,7 @@ export class ListUsersComponent {
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
-    categorieEnseignant: CategorieEnseignant.PROFESSEUR,
+    categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
     heuresAssignees: 0,
@@ -64,6 +67,11 @@ export class ListUsersComponent {
   ];
   private _loginService: any;
 
+  userRoles: string[] = [];
+  years: Year[] = [];
+  selectedYearId: number | null = null;
+  selectedYear: any | null = null;
+
   /**
    * Component constructor
    */
@@ -72,8 +80,10 @@ export class ListUsersComponent {
     private _usersService: UserService,
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
-    private _yearService: YearService
+    private loginService: LoginService,
+    private yearService: YearService
   ) {
+    this.userRoles = this.loginService.userRoles;
     this._listUsers = [];
     this._dialogStatus = 'inactive';
     this._view = 'card';
@@ -119,6 +129,50 @@ export class ListUsersComponent {
         this._listUsers = []; // En cas d'erreur, assigner un tableau vide
       },
     });
+    // Fetch available years
+    this.yearService.getAllYears().subscribe((years) => {
+      this.years = years;
+      console.log('years: ', years);
+    });
+  }
+
+  onYearChange(): void {
+    const yearId = Number(this.selectedYearId);
+    this.selectedYear = this.years.find((year) => year.id === yearId);
+    console.log('for 1 1 ', this._usersService.getRoleByUserIdAndYear(1, 1));
+
+    if (this.selectedYear) {
+      // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
+      this._listUsers.forEach((user) => {
+        this._usersService
+          .getRoleByUserIdAndYear(user.id as number, this.selectedYear.id)
+          .subscribe({
+            next: (roles: any[]) => {
+              console.log('roles', roles);
+              user.roles = roles.map((roleDto) => ({
+                ...roleDto,
+                role: roleDto.role,
+                year: this.selectedYear.debut,
+              }));
+              console.log(`Rôles pour l'utilisateur ${user.username}:`, roles);
+            },
+            error: (err: any) => {
+              console.error(
+                `Erreur lors de la récupération des rôles pour l'utilisateur ${user.username}:`,
+                err
+              );
+            },
+          });
+      });
+    }
+  }
+  getSelectedYear() {
+    console.log('yr', this.selectedYear);
+
+    if (this.selectedYear != null) {
+      console.log('yr', this.selectedYear.debut);
+      return this.selectedYear.debut;
+    }
   }
 
   /**
@@ -259,12 +313,15 @@ export class ListUsersComponent {
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]/g, '');
   }
+
   filterByRole() {
+    console.log('im in ');
     if (this.selectedRole) {
       this._usersService
         .searchUsersByRole(this.selectedRole)
         .subscribe((data) => {
           this._listUsers = data;
+          console.log('filtred list : ', data);
         });
     } else {
       this.listUsers;
