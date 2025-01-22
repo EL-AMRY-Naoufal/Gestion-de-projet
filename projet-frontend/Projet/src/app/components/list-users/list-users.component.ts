@@ -273,6 +273,8 @@ export class ListUsersComponent implements OnInit {
       }),
     };
 
+    console.log(this._listUsers)
+
     return this._usersService.create(userToSend);
   }
 
