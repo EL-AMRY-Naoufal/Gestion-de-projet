@@ -14,7 +14,7 @@ import {AffectationListComponent} from "./components/affectation/affectation-ens
     AppComponent,
     AffectationListComponent,
     LoginComponent,
-    EnseignantsComponent
+    EnseignantsComponent,
 
   ],
   imports: [

@@ -28,6 +28,7 @@
 </div>
 
 
+
  <!-- Conteneur de recherche
  <div class="search-and-role-container">
   <div class="search-bar">
@@ -36,17 +37,17 @@
   </div>
 </div>-->
 
-<!-- Conteneur des profils --> <!--
+<!-- Conteneur des profils -->
 <section [ngSwitch]="view" class="card-content">
   <div *ngSwitchCase="'card'" class="user-grid">
-
     <app-profil-card
       [user]="user"
-      *ngFor="let user of users">
+      *ngFor="let user of users"
+    >
     </app-profil-card>
-    </div>
-
-  <div *ngSwitchDefault>
-    <p>Aucun profil trouvé</p>
   </div>
-</section>-->
+  <div *ngSwitchDefault>
+    <p>Aucun utilisateur trouvé</p>
+  </div>
+</section>
+
