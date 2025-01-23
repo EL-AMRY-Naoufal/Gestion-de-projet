@@ -35,7 +35,7 @@ import { EnseignantsComponent } from '../enseignants/enseignants.component';
     CommonModule,
     FormsModule,
     MenuComponent,
-    EnseignantsComponent
+    EnseignantsComponent,
   ],
   templateUrl: './list-users.component.html',
   styleUrl: './list-users.component.scss',
@@ -222,7 +222,7 @@ export class ListUsersComponent implements OnInit {
 
           return user;
         }),
-        mergeMap((user: User | undefined) => this._add(user)),
+        mergeMap((user: User | undefined) => this._add(user))
       )
       .subscribe({
         next: (user: User) => {
@@ -261,7 +261,6 @@ export class ListUsersComponent implements OnInit {
    * Add new user
    */
   private _add(user: User | undefined): Observable<User> {
-
     if (!user) {
       return new Observable<User>();
     }
@@ -318,7 +317,6 @@ export class ListUsersComponent implements OnInit {
   }
 
   filterByRole() {
-    console.log('im in ');
     if (this.selectedRole) {
       this._usersService
         .searchUsersByRole(this.selectedRole)

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -47,16 +48,12 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/role/{role}")
-    public ResponseEntity<List<User>> getAllUserByRole(@PathVariable String role) {
-        Role roleEnum;
-        try {
-            roleEnum = Role.valueOf(role.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Collections.emptyList());
-        }
-        List <User> users = responsableDepartementService.getUsersByRole(roleEnum);
-        return ResponseEntity.ok(users);
+    @GetMapping("/users/by-role")
+    public List<User> getUsersByRole(@RequestParam Role role) {
+        List<UserRole> userRoles = responsableDepartementService.getUsersByRole(role);
+        return userRoles.stream()
+                .map(UserRole::getUser)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/user/{userId}/year/{year}")
@@ -83,5 +80,6 @@ public class ResponsableDepartementController {
         responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idModule, heure);
         return ResponseEntity.ok("Enseignant affecté avec succès");
     }
+
 
 }

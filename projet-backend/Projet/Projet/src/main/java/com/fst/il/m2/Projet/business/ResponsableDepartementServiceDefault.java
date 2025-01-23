@@ -103,11 +103,6 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
     @Override
-    public List<User> getUsersByRole(Role role) {
-        return userRepository.findUserByRoles(role);
-    }
-
-    @Override
     public List<UserRole> getRolesByUserIdAndYear(Long userId, Long year) {
         return userRoleRepository.findByUserIdAndYear(userId, year);
     }
@@ -231,4 +226,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return savedAffectation;
     }
 
-}
+    public List<UserRole> getUsersByRole(Role role) {
+        return userRoleRepository.findByRole(role);
+    }
+
+    }
