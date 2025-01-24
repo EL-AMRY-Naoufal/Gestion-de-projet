@@ -19,4 +19,5 @@ public interface ResponsableDepartementService {
     void deleteUser(Long id, Long responsableId);
     Affectation affecterModuleToEnseignant(Long enseignantId, Long moduleId, int heuresAssignees);
      List<UserRole> getUsersByRole(Role role);
+     List<UserRole> getUsersByRoleAndYear(Role role, Long year);
 }

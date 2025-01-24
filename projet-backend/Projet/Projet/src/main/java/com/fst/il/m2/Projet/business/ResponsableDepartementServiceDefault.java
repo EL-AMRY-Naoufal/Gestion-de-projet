@@ -229,5 +229,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public List<UserRole> getUsersByRole(Role role) {
         return userRoleRepository.findByRole(role);
     }
+    public List<UserRole> getUsersByRoleAndYear(Role role, Long year) {
+        return userRoleRepository.findByRoleAndYear(role, year);
+    }
 
     }

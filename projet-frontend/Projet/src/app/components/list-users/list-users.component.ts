@@ -129,17 +129,18 @@ export class ListUsersComponent implements OnInit {
         this._listUsers = []; // En cas d'erreur, assigner un tableau vide
       },
     });
-    // Fetch available years
-    this._yearService.getAllYears().subscribe((years) => {
-      this.years = years;
-      console.log('years: ', years);
+
+    this._yearService.selectedYear$.subscribe((year) => {
+      this.selectedYear = year;
+      if (year !== null) {
+        this.onYearChange();
+      }
     });
   }
 
   onYearChange(): void {
     const yearId = Number(this.selectedYearId);
-    this.selectedYear = this.years.find((year) => year.id === yearId) ?? null;
-    console.log('for 1 1 ', this._usersService.getRoleByUserIdAndYear(1, 1));
+    console.log(' this.onchange ', this.selectedYear);
 
     if (this.selectedYear) {
       // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
@@ -168,10 +169,7 @@ export class ListUsersComponent implements OnInit {
   }
 
   getSelectedYear() {
-    console.log('yr', this.selectedYear);
-
     if (this.selectedYear != null) {
-      console.log('yr', this.selectedYear.debut);
       return this.selectedYear.debut;
     }
     return 2021;
@@ -317,9 +315,9 @@ export class ListUsersComponent implements OnInit {
   }
 
   filterByRole() {
-    if (this.selectedRole) {
+    if (this.selectedRole && this.selectedYear) {
       this._usersService
-        .searchUsersByRole(this.selectedRole)
+        .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
           console.log('filtred list : ', data);

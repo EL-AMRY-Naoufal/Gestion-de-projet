@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +55,12 @@ public class ResponsableDepartementController {
         return userRoles.stream()
                 .map(UserRole::getUser)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/users/by-role-and-year")
+    public List<User> getUsersByRoleAndYear(@RequestParam Role role, @RequestParam Long year) {
+        List<UserRole> userRoles = responsableDepartementService.getUsersByRoleAndYear(role, year);
+        return userRoles.stream().map(UserRole::getUser).collect(Collectors.toList());
     }
 
     @GetMapping("/user/{userId}/year/{year}")
