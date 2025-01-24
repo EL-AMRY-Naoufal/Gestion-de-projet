@@ -170,7 +170,11 @@ export class ListUsersComponent implements OnInit {
     if (this.selectedYear != null) {
       return this.selectedYear.debut;
     }
-    return 2021;
+    return 0;
+  }
+
+  isYearSelected() {
+    return this.selectedYear != null;
   }
 
   /**
@@ -318,6 +322,7 @@ export class ListUsersComponent implements OnInit {
         .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
+          console.log('filter', this._listUsers);
         });
     } else {
       this._listUsers = [];

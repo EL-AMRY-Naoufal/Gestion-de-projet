@@ -52,6 +52,7 @@ export class UserCardComponent {
     this._user = user;
   }
   @Input() selectedYear!: number;
+  @Input() isYearSelected!: boolean;
 
   /**
    * Returns private property _delete$

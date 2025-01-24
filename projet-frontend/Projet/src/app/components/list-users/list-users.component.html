@@ -19,7 +19,7 @@
       <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
     </div>
 
-    <div class="role" *ngIf="selectedYear != null">
+    <div class="role" *ngIf="isYearSelected()">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
         <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
@@ -33,6 +33,7 @@
       <app-user-card
         [user]="user"
         [selectedYear]="getSelectedYear()"
+        [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
         *ngFor="let user of listUsers"
       >
