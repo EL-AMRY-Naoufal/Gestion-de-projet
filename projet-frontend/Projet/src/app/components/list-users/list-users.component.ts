@@ -149,13 +149,11 @@ export class ListUsersComponent implements OnInit {
           .getRoleByUserIdAndYear(user.id as number, this.selectedYear?.id ?? 1)
           .subscribe({
             next: (roles: any[]) => {
-              console.log('roles', roles);
               user.roles = roles.map((roleDto) => ({
                 ...roleDto,
                 role: roleDto.role,
                 year: this.selectedYear?.debut,
               }));
-              console.log(`Rôles pour l'utilisateur ${user.username}:`, roles);
             },
             error: (err: any) => {
               console.error(
@@ -320,10 +318,9 @@ export class ListUsersComponent implements OnInit {
         .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
-          console.log('filtred list : ', data);
         });
     } else {
-      this.listUsers;
+      this._listUsers = [];
     }
   }
 }

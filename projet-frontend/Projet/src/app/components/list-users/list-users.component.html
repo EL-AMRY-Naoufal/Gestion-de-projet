@@ -1,6 +1,6 @@
 <app-menu></app-menu>
 
-<div class="main-content" (change)="ngOnInit()">
+<div class="main-content">
   <div class="header-container">
     <h1 class="page-header">Liste des utilisateurs</h1>
     <div
@@ -19,7 +19,7 @@
       <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
     </div>
 
-    <div class="role">
+    <div class="role" *ngIf="selectedYear != null">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
         <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
