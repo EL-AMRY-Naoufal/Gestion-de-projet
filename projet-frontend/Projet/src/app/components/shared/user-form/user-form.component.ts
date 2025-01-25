@@ -272,14 +272,10 @@ cancel(): void {
   this._cancel$.emit();
 }
 
-
-
 /**
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
-
-
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
 
@@ -292,7 +288,9 @@ submit(user: User): void {
 
     const userToSend: User = {
           ...user,
-          roles: user.roles.map((role) => { return {year: this._yearService.currentYearId, role: role as unknown as Roles}}),
+          roles: user.roles.map((role) => { 
+            return {year: this._yearService.currentYearId, role: role as unknown as Roles}
+          }),
         }
 
     this.enseignant.user = userToSend;

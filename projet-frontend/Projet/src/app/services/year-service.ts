@@ -46,10 +46,12 @@ export class YearService {
     if (this.isBrowser) {
       localStorage.setItem('currentYearId', yearId.toString());
     }
+    this.selectedYearSubject.next({ id: yearId, debut: 0 });
     this._currentYearId = yearId;
   }
 
   setSelectedYear(year: Year | null): void {
+    this._currentYearId = year?.id;
     this.selectedYearSubject.next(year);
   }
 

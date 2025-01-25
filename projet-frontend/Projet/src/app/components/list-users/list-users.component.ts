@@ -265,11 +265,13 @@ export class ListUsersComponent implements OnInit {
       return new Observable<User>();
     }
 
+    console.log('user iddd', this._yearService.currentYearId);
+
     const userToSend: User = {
       ...user,
       roles: user.roles.map((role) => {
         return {
-          year: this._yearService.currentYearId ?? 1,
+          year: this._yearService.currentYearId,
           role: role as unknown as Roles,
         };
       }),

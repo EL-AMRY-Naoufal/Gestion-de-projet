@@ -68,9 +68,15 @@ body {
   flex: 2;
   display: flex;
   justify-content: center; /* Centre les éléments */
+  align-items: center;
   gap: 30px; /* Espacement uniforme entre les liens */
 }
 
+.year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .year select {
   width: 100%;
   padding: 10px;

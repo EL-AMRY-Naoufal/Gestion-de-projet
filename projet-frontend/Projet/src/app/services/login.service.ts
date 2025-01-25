@@ -1,7 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { isPlatformBrowser } from '@angular/common';
 import { YearService } from './year-service';
@@ -19,10 +19,15 @@ export class LoginService {
 
   private readonly isBrowser!: boolean;
 
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
   constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private _yearService: YearService) {
     this._backendURL = {};
 
     this.isBrowser = isPlatformBrowser(this.platformId);
+
+    this.isAuthenticatedSubject.next(this.isLoggedIn());
 
     // build backend base url
     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -71,6 +76,8 @@ export class LoginService {
 
       localStorage.setItem('userRoles', JSON.stringify(userRoles));
       if(authToken) localStorage.setItem('token', authToken);
+
+      this.isAuthenticatedSubject.next(true);
     }
 
     this.router.navigate(['/dashboard']);
@@ -106,6 +113,7 @@ export class LoginService {
     if(this.isBrowser) {
       localStorage.removeItem('userRoles');
       localStorage.removeItem('token');
+      this.isAuthenticatedSubject.next(false);
     }
     this.router.navigate(['/login']);
   }
