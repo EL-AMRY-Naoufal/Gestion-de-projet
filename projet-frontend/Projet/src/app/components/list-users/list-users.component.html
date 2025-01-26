@@ -33,7 +33,7 @@
         [selectedYear]="getSelectedYear()"
         [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
-        *ngFor="let user of listUsers"
+        *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
       >
       </app-user-card>
     </div>

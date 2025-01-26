@@ -65,11 +65,9 @@ export class ListUsersComponent implements OnInit {
     'SECRETARIAT_PEDAGOGIQUE',
     'ENSEIGNANT',
   ];
-  private _loginService: any;
 
   userRoles: string[] = [];
   years: Year[] = [];
-  selectedYearId: number | null = null;
   selectedYear: Year | null = null;
 
   /**
@@ -114,6 +112,12 @@ export class ListUsersComponent implements OnInit {
    * OnInit implementation
    */
   ngOnInit(): void {
+    
+    this.selectedYear = {
+      id: this._yearService.currentYearId,
+      debut: 2021,
+    };
+
     this._usersService.fetch().subscribe({
       next: (listUsers: User[]) => {
         // Vérifier que la réponse est bien un tableau
@@ -132,28 +136,21 @@ export class ListUsersComponent implements OnInit {
 
     this._yearService.selectedYear$.subscribe((year) => {
       this.selectedYear = year;
-      if (year !== null) {
-        this.onYearChange();
-      }
+      this.onYearChange();
     });
   }
 
   onYearChange(): void {
-    const yearId = Number(this.selectedYearId);
-    console.log(' this.onchange ', this.selectedYear);
-
-    if (this.selectedYear) {
+    /*if (this.selectedYear) {
       // Pour chaque utilisateur de la liste, récupérer les rôles pour l'année sélectionnée
       this._listUsers.forEach((user) => {
         this._usersService
           .getRoleByUserIdAndYear(user.id as number, this.selectedYear?.id ?? 1)
           .subscribe({
             next: (roles: any[]) => {
-              user.roles = roles.map((roleDto) => ({
-                ...roleDto,
-                role: roleDto.role,
-                year: this.selectedYear?.debut,
-              }));
+              user.roles = roles.filter(
+                (role) => role.year === this.selectedYear?.id
+              );
             },
             error: (err: any) => {
               console.error(
@@ -163,7 +160,16 @@ export class ListUsersComponent implements OnInit {
             },
           });
       });
-    }
+    }*/
+  }
+
+  getListUsersWithRolesOfSelectedYear(): User[] {
+    return this.listUsers.map((user) => {
+      return {
+        ...user,
+        roles: user.roles.filter((role) => role.year === this.selectedYear?.id),
+      } 
+    });
   }
 
   getSelectedYear() {
@@ -265,8 +271,6 @@ export class ListUsersComponent implements OnInit {
       return new Observable<User>();
     }
 
-    console.log('user iddd', this._yearService.currentYearId);
-
     const userToSend: User = {
       ...user,
       roles: user.roles.map((role) => {
@@ -281,7 +285,6 @@ export class ListUsersComponent implements OnInit {
   }
 
   private _addTeacher(enseignantDto: EnseignantDto) {
-    console.log('enseignant ', enseignantDto);
     this._enseignantService.createEnseignant(enseignantDto).subscribe();
   }
 
@@ -324,7 +327,6 @@ export class ListUsersComponent implements OnInit {
         .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
-          console.log('filter', this._listUsers);
         });
     } else {
       this._listUsers = [];

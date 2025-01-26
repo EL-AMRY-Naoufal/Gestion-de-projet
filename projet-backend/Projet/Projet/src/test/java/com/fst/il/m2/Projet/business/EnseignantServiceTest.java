@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
@@ -43,7 +44,7 @@ class EnseignantServiceTest {
         // Mock User
         User mockUser = new User();
         mockUser.setId(1L);
-        mockUser.addRole(currentYear, Role.ENSEIGNANT);
+        mockUser.addRole(Annee.builder().id(currentYear).build(), Role.ENSEIGNANT);
 
         // Mock Repository Behavior
         when(userRepository.findById(1L)).thenReturn(Optional.of(mockUser));

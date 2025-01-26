@@ -3,14 +3,13 @@ package com.fst.il.m2.Projet.controllers;
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.mapper.UserMapper;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Year;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,8 +38,10 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(user);
     }
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = responsableDepartementService.getAllUsers();
+    public ResponseEntity<List<UserRequest.UserDto>> getAllUsers() {
+        List<UserRequest.UserDto> users = responsableDepartementService.getAllUsers().stream()
+                .map(UserMapper::userToUserDto)
+                .toList();
         return ResponseEntity.ok(users);
     }
     @GetMapping("/{username}")
@@ -60,7 +61,10 @@ public class ResponsableDepartementController {
     @GetMapping("/users/by-role-and-year")
     public List<User> getUsersByRoleAndYear(@RequestParam Role role, @RequestParam Long year) {
         List<UserRole> userRoles = responsableDepartementService.getUsersByRoleAndYear(role, year);
-        return userRoles.stream().map(UserRole::getUser).collect(Collectors.toList());
+        System.out.println(userRoles.stream().map(UserRole::getId).toList());
+        System.out.println(userRoles.stream().map(UserRole::getYear).toList());
+        System.out.println(userRoles.stream().map(UserRole::getRole).toList());
+        return userRoles.stream().map(UserRole::getUser).toList();
     }
 
     @GetMapping("/user/{userId}/year/{year}")

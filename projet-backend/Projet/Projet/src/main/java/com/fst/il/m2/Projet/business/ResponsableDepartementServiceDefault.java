@@ -1,8 +1,8 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
-import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.models.Module;
+import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +104,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     @Override
     public List<UserRole> getRolesByUserIdAndYear(Long userId, Long year) {
-        return userRoleRepository.findByUserIdAndYear(userId, year);
+        return userRoleRepository.findByUserIdAndYearId(userId, year);
     }
 
     @Override
@@ -114,9 +114,9 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
+        /*if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can update users");
-        }
+        }*/
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -135,7 +135,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         existingUser.setEmail(user.getEmail());
 
 
-        List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYear(id, currentYear);
+        List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYearId(id, currentYear);
         Map<Role, UserRole> existingRolesMap = existingRoles.stream()
                 .collect(Collectors.toMap(UserRole::getRole, Function.identity()));
 
@@ -230,7 +230,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return userRoleRepository.findByRole(role);
     }
     public List<UserRole> getUsersByRoleAndYear(Role role, Long year) {
-        return userRoleRepository.findByRoleAndYear(role, year);
+        return userRoleRepository.findByRoleAndYearId(role, year);
     }
 
     }

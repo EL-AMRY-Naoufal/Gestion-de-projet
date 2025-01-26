@@ -1,10 +1,8 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Annee;
-import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AnneeRepository;
@@ -16,9 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserServiceDefault implements UserService {
@@ -60,6 +59,11 @@ public class UserServiceDefault implements UserService {
             userRoleRepository.findAllByRoleAndYear(ur.getRole(), ur.getYear());
         }*/
 
+        List<Annee> annees = List.of(
+                anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build())),
+                anneeRepository.findById(2L).orElseGet(() -> anneeRepository.save(Annee.builder().id(2L).debut(2025).build()))
+        );
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
                 User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(new ArrayList<>()).name("cdd").firstname("cdd").build(),
@@ -68,12 +72,9 @@ public class UserServiceDefault implements UserService {
                 User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).name("sec").firstname("sec").build()
         );
         for(User u : users){
-            u.addRole(1L, userRoles.get(u.getUsername()));
+            u.addRole(Annee.builder().id(1L).build(), userRoles.get(u.getUsername()));
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
         }
-
-        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build()));
-
     }
 
     @Override
@@ -94,7 +95,7 @@ public class UserServiceDefault implements UserService {
     public List<Role> getCurrentRoles(User user) {
         Long currentYearId = anneeRepository.getCurrentYear().orElseThrow(NotFoundException::new).getId();
         List<Role> roles = user.getRoles().stream()
-                .filter(userRole -> userRole.getYear().equals(currentYearId))
+                .filter(userRole -> userRole.getYear().getId().equals(currentYearId))
                 .map(UserRole::getRole)
                 .toList();
 

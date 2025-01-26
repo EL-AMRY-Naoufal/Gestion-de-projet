@@ -27,6 +27,7 @@ export class YearService {
       this._currentYearId = parseInt(
         localStorage.getItem('currentYearId') || ''
       );
+      this.selectedYearSubject.next({ id: this._currentYearId, debut: 0 });
     }
   }
 

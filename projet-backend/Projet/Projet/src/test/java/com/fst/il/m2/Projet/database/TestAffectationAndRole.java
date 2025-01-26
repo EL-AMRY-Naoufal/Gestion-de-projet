@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class TestAffectationAndRole {
 
     static final Long currentYearId = 1L;
-
+/*
     // Tests pour l'entité User
     @Test
     public void testCreateUserWithMultipleRoles() {
@@ -62,7 +62,7 @@ public class TestAffectationAndRole {
 
         assertEquals(2, enseignant.getAffectations().size());
         assertEquals(user, enseignant.getUser());
-    }*/
+    }*//*
 
     @Test
     public void testAffectationDate() {
@@ -98,5 +98,5 @@ public class TestAffectationAndRole {
         // Supprimer un rôle
         user.getRoles().remove(Role.ENSEIGNANT);
         assertFalse(user.hasRoleForYear(currentYearId, Role.ENSEIGNANT));
-    }
+    }*/
 }

@@ -1,20 +1,18 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -107,7 +105,7 @@ public class EnseignantService {
 
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if(!user.hasRoleForYear(currentYear, Role.ENSEIGNANT)){
-            user.addRole(currentYear, Role.ENSEIGNANT);
+            user.addRole(Annee.builder().id(currentYear).build(), Role.ENSEIGNANT);
             // Save the updated user with the new role
             user = userRepository.save(user);
         }

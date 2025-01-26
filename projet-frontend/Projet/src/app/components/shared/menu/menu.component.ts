@@ -46,7 +46,6 @@ export class MenuComponent {
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private _usersService: UserService,
     private _yearService: YearService
   ) {
     this.userRoles = this.loginService.userRoles;
@@ -89,7 +88,6 @@ export class MenuComponent {
     this.selectedYear = this.years.find((year) => year.id === yearId) ?? null;
     if (this.selectedYear) {
       this._yearService.setSelectedYear(this.selectedYear); // Mettre à jour l'année sélectionnée
-      console.log('Year selected in MenuComponent:', this.selectedYear);
     }
   }
 }
