@@ -41,8 +41,6 @@ public class InitDevServiceDefault implements InitDevService {
     @Autowired
     NiveauRepository niveauRepository;
     @Autowired
-    OrientationRepository orientationRepository;
-    @Autowired
     SemestreRepository semestreRepository;
 
     @PostConstruct
@@ -110,13 +108,12 @@ public class InitDevServiceDefault implements InitDevService {
 
         /**********NIVEAU**********/
 //        Niveau M2 = Niveau.builder().nom("M2").formation(formation1).build(); //add orientation
-        Niveau M2 = new Niveau(1L, "M2", formation2, null);
-        /**********ORIENTATION**********/
-        Orientation IL = Orientation.builder().nom("IL").niveau(M2).build(); //add semestres
+        Niveau M1 = new Niveau(1L, "M1", formation2, null);
+        Niveau M2IL = new Niveau(1L, "M2 IL", formation2, null);
 
         /**********SEMESTRE**********/
-        Semestre S1 = Semestre.builder().nom("S1").orientation(IL).build(); //add modules
-        Semestre S2 = Semestre.builder().nom("S2").orientation(IL).build(); //add modules
+        Semestre S1 = Semestre.builder().nom("S1").niveau(M2IL).build(); //add modules
+        Semestre S2 = Semestre.builder().nom("S2").niveau(M2IL).build(); //add modules
 
         /*********RESPONSABLE DEPARTEMENT*********/
         ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
@@ -203,10 +200,8 @@ public class InitDevServiceDefault implements InitDevService {
         formationRepository.save(formation2);
 
         //save niveau
-        niveauRepository.save(M2);
-
-        //save orientation
-        orientationRepository.save(IL);
+        niveauRepository.save(M1);
+        niveauRepository.save(M2IL);
 
         //save semestres
         semestreRepository.save(S1);

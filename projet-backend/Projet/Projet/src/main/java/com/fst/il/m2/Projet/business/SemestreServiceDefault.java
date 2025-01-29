@@ -1,6 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.models.Orientation;
+import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
 import com.fst.il.m2.Projet.repositories.SemestreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class SemestreServiceDefault implements SemestreService {
     }
 
     @Override
-    public List<Semestre> getSemestresByOrientation(Orientation orientation) {
-        return semestreRepository.findSemestresByOrientation(orientation);
+    public List<Semestre> getSemestresByNiveau(Niveau niveau) {
+        return semestreRepository.findSemestresByNiveau(niveau);
     }
 
     @Override
