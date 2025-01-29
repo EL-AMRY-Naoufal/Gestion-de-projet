@@ -2,82 +2,6 @@
 
 Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
 
-<!--
-<ul class="tree">
-    <li>
-      <details open>
-        <summary>Annees</summary>
-        <ul>
-          <li *ngFor="let annee of annees">
-            <details open>
-              <summary>{{annee.debut}}-{{annee.debut+1}}</summary>
-              <ul>
-                <li *ngFor="let departement of annee.departements">
-                    <details>
-                        <summary>{{departement.nom}}</summary>
-                        <ul>
-                          <li *ngFor="let formation of departement.formations">
-                            <details>
-                                <summary>{{formation.nom}}</summary>
-                                <ul>
-                                  <li>
-                                    <details>
-                                        <summary>Niveau M2</summary>
-                                        <ul>
-                                          <li>
-                                            <details>
-                                                <summary>Orientation IL</summary>
-                                                <ul>
-                                                    <li>
-                                                        <details>
-                                                            <summary>Semestre 1</summary>
-                                                            <ul>
-                                                              <li>
-                                                                <details>
-                                                                    <summary>Module Gestion de Projet</summary>
-                                                                    <ul>
-                                                                      <li>
-                                                                        <details>
-                                                                            <summary>Groupe TD1</summary>
-                                                                            <ul>
-                                                                              <li>Affectation enseignant 1</li>
-                                                                            </ul>
-                                                                        </details>
-                                                                      </li>
-                                                                      <li>
-                                                                        <details>
-                                                                            <summary>Groupe TP1</summary>
-                                                                            <ul>
-                                                                              <li>Affectation enseignant 2</li>
-                                                                            </ul>
-                                                                        </details>
-                                                                      </li>
-                                                                    </ul>
-                                                                </details>
-                                                              </li>
-                                                            </ul>
-                                                        </details>
-                                                    </li>
-                                                </ul>
-                                            </details>
-                                          </li>
-                                        </ul>
-                                    </details>
-                                  </li>
-                                </ul>
-                            </details>
-                          </li>
-                        </ul>
-                    </details>
-                </li>
-                </ul>
-            </details>
-          </li>
-        </ul>
-      </details>
-    </li>
-  </ul>-->
-
 
 <div class="button-container">
   Nouvelle année
@@ -97,7 +21,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <button (click)="openAddFormationDialog( i, j)">+</button>
+              <button (click)="openAddFormationDialog(i, j)">+</button>
               <button (click)="removeDepartement(i, j)">-</button>
             </summary>
             <ul>
@@ -105,7 +29,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <button (click)="openAddNiveauDialog( i, j, k)">+</button>
+                    <button (click)="openAddNiveauDialog(i, j, k)">+</button>
                     <button (click)="removeFormation(i, j, k)">-</button>
                   </summary>
                   <ul>
@@ -113,61 +37,46 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <button (click)="openAddOrientationDialog( i, j, k, l)">+</button>
+                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
                           <button (click)="removeNiveau(i, j, k, l)">-</button>
                         </summary>
                         <ul>
-                          <li *ngFor="let orientation of niveau.orientations; let m = index">
+                          <li *ngFor="let semestre of niveau.semestres; let n = index">
                             <details>
-                              <summary (click)="showType('ORIENTATION', orientation)">
-                                Orientation: {{ orientation.nom || 'Nouvelle Orientation' }}
-                                <button (click)="openAddSemestreDialog( i, j, k, l, m)">+</button>
-                                <button (click)="removeOrientation(i, j, k, l, m)">-</button>
+                              <summary (click)="showType('SEMESTRE', semestre)">
+                                Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
+                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
+                                <button (click)="removeSemestre(i, j, k, l, n)">-</button>
                               </summary>
                               <ul>
-                                <li *ngFor="let semestre of orientation.semestres; let n = index">
+                                <li *ngFor="let module of semestre.modules; let o = index">
                                   <details>
-                                    <summary (click)="showType('SEMESTRE', semestre)">
-                                      Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                      <button (click)="openAddModuleDialog( i, j, k, l, m, n)">+</button>
-                                      <button (click)="removeSemestre(i, j, k, l, m, n)">-</button>
+                                    <summary (click)="showType('MODULE', module)">
+                                      Module: {{ module.nom || 'Nouveau Module' }}
+                                      <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
+                                      <button (click)="removeModule(i, j, k, l, n, o)">-</button>
                                     </summary>
                                     <ul>
-                                      <li *ngFor="let module of semestre.modules; let o = index">
+                                      <li *ngFor="let groupe of module.groupes; let p = index">
                                         <details>
-                                          <summary (click)="showType('MODULE', module)">
-                                            Module: {{ module.nom || 'Nouveau Module' }}
-                                            <button (click)="openAddGroupeDialog( i, j, k, l, m, n, o)">+</button>
-                                            <button (click)="removeModule(i, j, k, l, m, n, o)">-</button>
+                                          <summary (click)="showType('GROUPE', groupe)">
+                                            Groupe: {{ groupe.nom || 'Nouveau Groupe' }}
+                                            <button (click)="removeGroupe(i, j, k, l, n, o, p)">-</button>
                                           </summary>
                                           <ul>
-                                            <li *ngFor="let groupe of module.groupes; let p = index">
+                                            <li *ngFor="let affectation of groupe.affectations; let q = index">
                                               <details>
-                                                <summary (click)="showType('GROUPE', groupe)">
-                                                  Groupe: {{ groupe.nom || 'Nouveau Groupe' }}
-                                                  <button (click)="removeGroupe(i, j, k, l, m, n, o, p)">-</button>
+                                                <summary (click)="showType('AFFECTATION', affectation)">
+                                                  {{ affectation.nomEnseignant || 'Nouvelle Affectation' }}
                                                 </summary>
-                                                <ul>
-                                                  <li *ngFor="let affectation of groupe.affectations; let q = index">
-                                                    <details>
-                                                      <summary (click)="showType('AFFECTATION', affectation)">
-                                                        {{ affectation.nomEnseignant || 'Nouvelle Affectation' }}
-<!--
-                                                        <button (click)="removeAffectation(i, j, k, l, m, n, o, p, q)">-</button>
--->
-                                                      </summary>
-                                                      <div class="affectation-details">
-                                                        <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p> <!--TODO-->
-                                                        <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
-                                                        <p><strong>Heures assignées :</strong> {{ affectation.heuresAssignees }}</p>
-                                                      </div>
-                                                    </details>
-                                                  </li>
-                                                </ul>
+                                                <div class="affectation-details">
+                                                  <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
+                                                  <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
+                                                  <p><strong>Heures assignées :</strong> {{ affectation.heuresAssignees }}</p>
+                                                </div>
                                               </details>
                                             </li>
                                           </ul>
-
                                         </details>
                                       </li>
                                     </ul>

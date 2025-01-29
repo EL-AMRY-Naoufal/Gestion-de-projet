@@ -32,21 +32,15 @@ import { GroupeService } from '../../services/groupe.service';
 })
 export class ModulesComponent implements OnInit {
 
-  // les boolean pour afficher les dialogues
-  showAddAnneeDialog: boolean = false;
-  showAddDepartementDialog: boolean = false;
-
-  newAnnee: Annee = { debut: '', departements: [] };
-  newDepartement: Departement = { nom: '', responsableDeDepartement: '', formations: [] };
 
   data: { annees: Annee[] } = { annees: [] }
 
   constructor(
-    public dialog: MatDialog, 
-    private departementService: DepartementService, 
-    private anneeService : AnneeService, 
-    private niveauService : NiveauService, 
-    private semestreService : SemestreService, 
+    public dialog: MatDialog,
+    private departementService: DepartementService,
+    private anneeService : AnneeService,
+    private niveauService : NiveauService,
+    private semestreService : SemestreService,
     private groupeService : GroupeService
   ) {}
 
@@ -83,7 +77,7 @@ export class ModulesComponent implements OnInit {
                           //for each niveau, get all semestres
                           formation.niveaux.forEach((niveau, niveauIndex) => {
                             if(niveau.id != undefined) {
-                              
+
                               this.semestreService.getSemestresByNiveau(niveau.id).subscribe(data => {
                                 this.data.annees[anneeIndex]
                                 .departements[departementIndex].formations[formationIndex]
@@ -184,20 +178,7 @@ export class ModulesComponent implements OnInit {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push(newNiveau);
   }
 
-  // openAddOrientationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddOrientationDialogComponent);
-
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.addOrientation(anneeIndex, departementIndex, formationIndex, niveauIndex, result);
-  //     }
-  //   });
-  // }
-
-  // addOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, newOrientation: Orientation) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.push(newOrientation);
-  // }
-  openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number): void {
+  openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
     const dialogRef = this.dialog.open(AddSemestreDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
