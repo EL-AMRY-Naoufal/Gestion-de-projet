@@ -33,4 +33,10 @@ export class ApiService {
         return this._http.get<Year[]>(this._backendURL.allYears);
     }
 
+    updateAffectation(idAffectation: number, idEnseignant: number, comment: string): Observable<any> {
+        return this._http.put<any>(`${this._backendURL.allEnseignants}/${idEnseignant}/affectations/${idAffectation}/commentaire`, {
+            commentaire: comment
+        });
+    }
+
 }

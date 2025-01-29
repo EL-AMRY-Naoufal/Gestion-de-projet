@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/enseignants")
 @RequiredArgsConstructor
+@Validated
 public class EnseignantController {
     private final EnseignantService enseignantService;
 
@@ -85,7 +87,7 @@ public class EnseignantController {
         );
     }
 
-    @PutMapping("/{idAffectation}/commentaire")
+    @PutMapping("/{id}/affectations/{idAffectation}/commentaire")
     public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
         enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
 

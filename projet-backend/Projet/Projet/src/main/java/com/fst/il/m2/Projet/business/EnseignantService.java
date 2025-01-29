@@ -16,6 +16,7 @@ import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +44,7 @@ public class EnseignantService {
         this.userSpecifications = userSpecifications;
         this.enseignantSpecifications = enseignantSpecifications;
     }
-
-
+    
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
         //affiche l'id de l'enseignant demandé
@@ -57,15 +57,14 @@ public class EnseignantService {
         }
 */
         // Get the enseignant id from the user id
-        Long enseignantId = enseignantRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"))
-                .getId();
 
-        Enseignant enseignant = enseignantRepository.findById(enseignantId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"));
+        System.out.println(userId);
+
+        Enseignant enseignant = enseignantRepository.findByUserId(userId)
+                .orElseThrow(NotFoundException::new);
+
         return enseignant.getAffectations();
     }
-
 
     public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
@@ -74,7 +73,8 @@ public class EnseignantService {
                         affectation.getId(),
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
-                        affectation.getModule() != null ? affectation.getModule().getNom() : null
+                        affectation.getModule() != null ? affectation.getModule().getNom() : null,
+                        affectation.getCommentaire()
                 ))
                 .collect(Collectors.toList());
     }
@@ -145,6 +145,7 @@ public class EnseignantService {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
         return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
     }
+
 
     public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
 

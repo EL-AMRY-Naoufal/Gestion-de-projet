@@ -23,7 +23,7 @@
 }
 
 .custom-table thead tr {
-  background-color: yellow;
+  background-color: #bbd7f1;
   color: black;
 }
 
@@ -47,4 +47,50 @@
   color: #999;
   font-style: italic;
   margin-top: 20px;
+}
+
+.commentaire-case {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+
+/* Icônes personnalisées */
+.custom-icon {
+  font-size: 20px; /* Taille de l'icône */
+  color: #0a2b46; /* Couleur par défaut */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Effet au survol */
+.custom-icon:hover {
+  transform: scale(1.2); /* Agrandissement */
+  color: #ff9800; /* Couleur de survol */
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: .4rem;
+}
+
+.commentaire-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-wrap: break-word; 
+}
+
+.commentaire-text-input {
+  flex: 1;
 }

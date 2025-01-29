@@ -1,5 +1,5 @@
 export type AffectationType = {
-  id: string;
+  id: number;
   description: string | null;
   heuresAssignees: string;
   nomModule: string;

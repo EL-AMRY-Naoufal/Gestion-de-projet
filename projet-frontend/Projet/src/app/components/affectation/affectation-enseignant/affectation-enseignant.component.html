@@ -18,8 +18,38 @@
         <td>{{ affectation.nomModule }}</td>
         <td>{{ affectation.heuresAssignees }}</td>
         <td>{{ affectation.dateAffectation }}</td>
-        <td>{{affectation.coAffecte}}</td>
-        <td>{{affectation.commentaire}}</td>
+        <td>{{ affectation.coAffecte }}</td>
+        <td>
+          <div class="commentaire-case">
+            <ng-container *ngIf="editingId !== affectation.id; else editMode">
+              <div class="commentaire-text">{{ affectation.commentaire }}</div>
+              <button mat-icon-button (click)="startEditing(affectation)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </ng-container>
+            
+            <ng-template #editMode>
+              <mat-form-field class="commentaire-text-input"  hintLabel="Max 255 caractères">
+                <textarea matInput 
+                        [(ngModel)]="editedComment"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="2"
+                        cdkAutosizeMaxRows="10"
+                        maxlength="255">
+                </textarea>
+                <mat-hint align="end">{{editedComment.length || 0}}/255</mat-hint>
+              </mat-form-field>
+              <div class="buttons-container">
+                <button mat-icon-button (click)="saveComment(affectation)">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button (click)="cancelEditing()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>

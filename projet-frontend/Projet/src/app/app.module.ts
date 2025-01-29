@@ -11,10 +11,7 @@ import {AffectationListComponent} from "./components/affectation/affectation-ens
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AffectationListComponent,
-    LoginComponent,
-    EnseignantsComponent
+
 
   ],
   imports: [
@@ -26,6 +23,6 @@ import {AffectationListComponent} from "./components/affectation/affectation-ens
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule { }

@@ -20,8 +20,7 @@ public class Affectation {
 
     private LocalDate dateAffectation;
 
-    @Lob
-    @Column(length = 512)
+    @Column
     private String commentaire = "";
 
     // Relations
