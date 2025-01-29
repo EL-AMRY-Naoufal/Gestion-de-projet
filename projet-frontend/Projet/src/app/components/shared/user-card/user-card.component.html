@@ -12,18 +12,18 @@
 
     <!-- Sous-titre pour afficher les rôles de l'utilisateur -->
     <mat-card-subtitle>
-      <ng-container *ngIf="user.roles?.length; else noRoles">
-        <span *ngFor="let roleDto of user.roles; let last = last">
-          <span *ngIf="roleDto.year === selectedYear">
+      <span *ngIf="isYearSelected">
+        <ng-container *ngIf="user.roles?.length; else noRoles">
+          <span *ngFor="let roleDto of user.roles; let last = last">
             {{ roleDto.role }}
             <!-- Affichage du rôle spécifique -->
+            <span *ngIf="!last"><br /></span>
           </span>
-          <span *ngIf="!last"><br /></span>
-        </span>
-      </ng-container>
-      <ng-template #noRoles>
-        <span>Aucun rôle assigné</span>
-      </ng-template>
+        </ng-container>
+        <ng-template #noRoles>
+          <span>Aucun rôle assigné</span>
+        </ng-template>
+      </span>
     </mat-card-subtitle>
 
     <!-- Sous-titre pour l'email de l'utilisateur -->
@@ -38,27 +38,26 @@
     </mat-card-subtitle>
   </mat-card-title-group>
 
-<!-- Actions (modification et suppression avec icônes personnalisées) -->
-<mat-card-actions class="custom-actions">
-  <!-- Lien pour modifier l'utilisateur avec une icône -->
-  <div
-    class="custom-icon edit-icon"
-    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-    [routerLink]="['/edit', user.id]"
-    title="Edit user"
-  >
-    ✏️
-  </div>
+  <!-- Actions (modification et suppression avec icônes personnalisées) -->
+  <mat-card-actions class="custom-actions">
+    <!-- Lien pour modifier l'utilisateur avec une icône -->
+    <div
+      class="custom-icon edit-icon"
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      [routerLink]="['/edit', user.id]"
+      title="Edit user"
+    >
+      ✏️
+    </div>
 
-  <!-- Bouton pour supprimer l'utilisateur avec une icône -->
-  <div
-    class="custom-icon delete-icon"
-    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-    (click)="delete(user)"
-    title="Delete user"
-  >
-    🗑️
-  </div>
-</mat-card-actions>
-
+    <!-- Bouton pour supprimer l'utilisateur avec une icône -->
+    <div
+      class="custom-icon delete-icon"
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="delete(user)"
+      title="Delete user"
+    >
+      🗑️
+    </div>
+  </mat-card-actions>
 </mat-card>

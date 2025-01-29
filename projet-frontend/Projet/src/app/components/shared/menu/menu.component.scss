@@ -68,7 +68,34 @@ body {
   flex: 2;
   display: flex;
   justify-content: center; /* Centre les éléments */
+  align-items: center;
   gap: 30px; /* Espacement uniforme entre les liens */
+}
+
+.year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.year select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.year select:hover {
+  background-color: #eef7ff;
+}
+
+.year select:focus {
+  outline: none;
+  background-color: #e0f7fa;
+  color: #00796b;
 }
 
 a {

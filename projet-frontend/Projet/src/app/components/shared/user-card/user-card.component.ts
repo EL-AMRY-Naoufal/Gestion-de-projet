@@ -52,6 +52,7 @@ export class UserCardComponent {
     this._user = user;
   }
   @Input() selectedYear!: number;
+  @Input() isYearSelected!: boolean;
 
   /**
    * Returns private property _delete$
@@ -63,7 +64,11 @@ export class UserCardComponent {
   /**
    * OnInit implementation
    */
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log([
+      this.isYearSelected, this.user, this.selectedYear
+    ])
+  }
 
   /**
    * Function to emit event to delete current user

@@ -190,8 +190,9 @@ export class UserService {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;
     return this._http.get<any[]>(url);
   }
-  searchUsersByRole(role: string): Observable<any[]> {
-    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}/${role}`;
+  searchUsersByRoleAndYear(role: string, year: number): Observable<any[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}?role=${role}&year=${year}`;
+    console.log('role', url);
     return this._http.get<any[]>(url);
   }
 
