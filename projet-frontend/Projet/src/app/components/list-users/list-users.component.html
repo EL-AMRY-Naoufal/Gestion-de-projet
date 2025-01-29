@@ -1,10 +1,11 @@
-<app-menu></app-menu>
-
-
 <div class="main-content">
   <div class="header-container">
     <h1 class="page-header">Liste des utilisateurs</h1>
-    <div class="custom-button plus-button" (click)="showDialog()" title="Show more">
+    <div
+      class="custom-button plus-button"
+      (click)="showDialog()"
+      title="Show more"
+    >
       +
     </div>
   </div>
@@ -16,19 +17,10 @@
       <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
     </div>
 
-    <div class="role">
+    <div class="role" *ngIf="isYearSelected()">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
         <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-      </select>
-    </div>
-
-    <div class="year">
-      <select id="year" [(ngModel)]="selectedYearId" (change)="onYearChange()">
-        <option value="null" disabled selected>Choisissez une année</option>
-        <option *ngFor="let year of years" [value]="year.id">
-          {{ year.debut }}
-        </option>
       </select>
     </div>
   </div>
@@ -39,8 +31,9 @@
       <app-user-card
         [user]="user"
         [selectedYear]="getSelectedYear()"
+        [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
-        *ngFor="let user of listUsers"
+        *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
       >
       </app-user-card>
     </div>
@@ -49,11 +42,6 @@
     </div>
   </section>
 
-
-
   <!-- Affichage des profils -->
- <app-enseignants></app-enseignants>
+  <app-enseignants></app-enseignants>
 </div>
-
-
-

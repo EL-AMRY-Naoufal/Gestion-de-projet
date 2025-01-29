@@ -1,4 +1,3 @@
-
 <nav class="navbar">
   <!-- Logo à gauche -->
   <div class="navbar-logo">
@@ -9,9 +8,36 @@
 
   <!-- Liens au milieu -->
   <div class="navbar-center">
-    <a   *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item vert" (click)="navigateToUsers()" class="navbar-link">Gestion du personnels</a>
+    <a
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      class="menu-item vert"
+      (click)="navigateToUsers()"
+      class="navbar-link"
+      >Gestion du personnels</a
+    >
     <a href="/modules" class="navbar-link">Gestion des modules</a>
-    <a *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') || userRoles.includes('ENSEIGNANT')  || userRoles.includes('SECRETARIAT_PEDAGOGIQUE')"     (click)="navigateToAffectations()"  class="navbar-link">Gestion des affectations</a>
+    <a
+      *ngIf="
+        userRoles.includes('CHEF_DE_DEPARTEMENT') ||
+        userRoles.includes('ENSEIGNANT') ||
+        userRoles.includes('SECRETARIAT_PEDAGOGIQUE')
+      "
+      (click)="navigateToAffectations()"
+      class="navbar-link"
+      >Gestion des affectations</a
+    >
+    <div class="year">
+      <select
+        id="year"
+        [(ngModel)]="selectedYearId"
+        (change)="onYearSelected()"
+      >
+        <option value="null" disabled selected>Choisissez une année</option>
+        <option *ngFor="let year of years" [value]="year.id">
+          {{ year.debut }}
+        </option>
+      </select>
+    </div>
   </div>
 
   <!-- Icône de déconnexion à droite -->

@@ -11,11 +11,18 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Year } from '../types/year.type';
+import { User } from '../types/user.type';
+import { UserService } from '../../../services/user.service';
+import { YearService } from '../../../services/year-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, MatSidenavModule,
+  imports: [
+    CommonModule,
+    MatSidenavModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -23,17 +30,39 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatInputModule,
     MatFormFieldModule,
     MatCardModule,
-    MatMenuModule],
+    MatMenuModule,
+    FormsModule,
+  ],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
-userRoles: string[] = [];
+  userRoles: string[] = [];
+  private _listUsers: User[];
+  years: Year[] = [];
+  selectedYearId: number | null = null;
+  selectedYear: Year | null = null;
 
-  constructor(private router: Router, private loginService: LoginService) {
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private _yearService: YearService
+  ) {
     this.userRoles = this.loginService.userRoles;
- }
+    this._listUsers = [];
+  }
 
+  ngOnInit(): void {
+      this._yearService.getAllYears().subscribe((years) => {
+        this.years = years;
+        this.selectedYearId = this._yearService.currentYearId ?? null;
+      });
+
+      this._yearService.selectedYear$.subscribe((year) => {
+        this.selectedYear = year;
+        this.selectedYearId = year?.id ?? null;
+      });
+  }
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);
   }
@@ -42,17 +71,23 @@ userRoles: string[] = [];
     this.router.navigate(['/dashboard']);
   }
 
-
   navigateToUsers() {
     this.router.navigate(['/users']);
   }
 
-
   logout() {
-   this.loginService.logout();
+    this.loginService.logout();
     this.router.navigate(['']);
   }
   navigateToAffectations() {
     this.router.navigate(['/enseignant/MesAffectations']);
+  }
+
+  onYearSelected(): void {
+    const yearId = Number(this.selectedYearId);
+    this.selectedYear = this.years.find((year) => year.id === yearId) ?? null;
+    if (this.selectedYear) {
+      this._yearService.setSelectedYear(this.selectedYear); // Mettre à jour l'année sélectionnée
+    }
   }
 }

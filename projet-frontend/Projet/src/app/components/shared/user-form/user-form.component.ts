@@ -111,7 +111,15 @@ export class UserFormComponent {
       // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
     }
-    this._form.patchValue({ roles: this._model.roles.map(role => role.role) });
+
+    console.log('liste des roles', this._model.roles);
+    console.log('liste des roles', this._model.roles.filter(role => role.year === this._yearService.currentYearId).map(role => role.role));
+    
+    this._form.patchValue({ roles: this._model
+      .roles
+      .filter(role => role.year === this._yearService.currentYearId)
+      .map(role => role.role) 
+    });
 
      // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
     this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
@@ -272,14 +280,10 @@ cancel(): void {
   this._cancel$.emit();
 }
 
-
-
 /**
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
-
-
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
 
@@ -292,7 +296,9 @@ submit(user: User): void {
 
     const userToSend: User = {
           ...user,
-          roles: user.roles.map((role) => { return {year: this._yearService.currentYearId, role: role as unknown as Roles}}),
+          roles: user.roles.map((role) => { 
+            return {year: this._yearService.currentYearId, role: role as unknown as Roles}
+          }),
         }
 
     this.enseignant.user = userToSend;
