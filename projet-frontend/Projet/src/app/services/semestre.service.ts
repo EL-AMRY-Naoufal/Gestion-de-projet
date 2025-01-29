@@ -28,8 +28,8 @@ export class SemestreService {
         );
     }
     
-    getSemestresByOrientation(orientationId: number): Observable<Semestre[]> {
-        return this.http.get<Semestre[]>(`${this._backendURL.semestres}/orientation/${orientationId}`)
+    getSemestresByNiveau(niveauId: number): Observable<Semestre[]> {
+        return this.http.get<Semestre[]>(`${this._backendURL.semestres}/niveau/${niveauId}`)
     }
 
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {

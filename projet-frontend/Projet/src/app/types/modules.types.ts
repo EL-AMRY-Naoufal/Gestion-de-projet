@@ -29,16 +29,10 @@ export interface Semestre {
   modules: Module[];
 }
 
-export interface Orientation {
-  id?: number;
-  nom?: string;
-  semestres: Semestre[];
-}
-
 export interface Niveau {
   id?: number;
   nom?: string;
-  orientations: Orientation[];
+  semestres: Semestre[];
 }
 
 export interface Formation {
