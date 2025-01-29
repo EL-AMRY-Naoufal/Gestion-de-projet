@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Module, Niveau} from "../../../../types/modules.types";
+import {Formation, Module, Niveau} from "../../../../types/modules.types";
 import {MatDialogRef} from "@angular/material/dialog";
 import {FormsModule} from "@angular/forms";
 
@@ -14,7 +14,7 @@ import {FormsModule} from "@angular/forms";
 })
 export class AddFormationDialogComponent {
 
-  newFormation = { nom: '', responsableFormation: '', totalHeures: 0, niveaux: [] };
+  newFormation : Formation = { nom: '', responsableFormation: '',  niveaux: [] };
 
   constructor(public dialogRef: MatDialogRef<AddFormationDialogComponent>) {}
 

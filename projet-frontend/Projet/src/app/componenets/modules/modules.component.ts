@@ -7,6 +7,7 @@ import { AnneeService } from '../../services/annee.service';
 import { CommonModule } from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {AddAnneeDialogComponent} from "./dialog/add-annee-dialog/add-annee-dialog.component";
+import {AddAffectationComponent} from "./dialog/add-affectation/add-affectation.component";
 import {MatDialog} from "@angular/material/dialog";
 import {AddDepartementDialogComponent} from "./dialog/add-departement-dialog/add-departement-dialog.component";
 import {AddFormationDialogComponent} from "./dialog/add-formation-dialog/add-formation-dialog.component";
@@ -222,6 +223,23 @@ export class ModulesComponent implements OnInit {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push(newGroupe);
   }
 
+
+  openAddAffectationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number): void {
+    const dialogRef = this.dialog.open(AddAffectationComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addAffectation(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, moduleIndex, groupeIndex, result);
+      }
+    });
+
+  }
+
+
+  addAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, newAffectation: any) {
+    this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].affectations.push(newAffectation);
+  }
+
   removeAnnee(index: number) {
     this.data.annees.splice(index, 1);
   }
@@ -238,9 +256,6 @@ export class ModulesComponent implements OnInit {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.splice(niveauIndex, 1);
   }
 
-  // removeOrientation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, orientationIndex: number) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].orientations.splice(orientationIndex, 1);
-  // }
 
   removeSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres.splice(semestreIndex, 1);

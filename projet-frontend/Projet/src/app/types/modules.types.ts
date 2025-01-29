@@ -1,4 +1,12 @@
-import { EnseignantDto } from "./enseignant.type";
+import {EnseignantDto} from "./enseignant.type";
+
+export enum TypeHeure {
+  CM = "CM",
+  TD = "TD",
+  TP = "TP",
+  EI = "EI",
+  TPL = "TPL",
+}
 
 export type Affectation = {
   id?: number;
@@ -12,15 +20,16 @@ export interface Groupe {
   id?: number;
   nom: string;
   heures: number;
+  type: TypeHeure;
   affectations: Affectation[];
 }
 
 export interface Module {
   id?: number;
   nom: string;
-  totalHeuresRequises: number;
   groupes: Groupe[];
-  heuresParType:Map<string, number>;
+  heuresParType: Map<string, number>;
+  nombreGroupes: number;
 }
 
 export interface Semestre {
@@ -38,20 +47,19 @@ export interface Niveau {
 export interface Formation {
   id?: number;
   nom: string;
-  totalHeures: number;
   responsableFormation: string;
   niveaux: Niveau[];
 }
 
 export interface Departement {
-  id? : number;
+  id?: number;
   nom: string;
-  formations : Formation[];
-  responsableDeDepartement : string;
+  formations: Formation[];
+  responsableDeDepartement: string;
 }
 
 export interface Annee {
   id?: number;
-  debut: string;
+  debut: number;
   departements: Departement[];
 }

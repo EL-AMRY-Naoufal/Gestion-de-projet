@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import { Module } from "../../../../types/modules.types";
+import {Groupe, Module, TypeHeure} from "../../../../types/modules.types";
 import { NgForOf } from "@angular/common";
 
 @Component({
@@ -15,29 +15,36 @@ import { NgForOf } from "@angular/common";
   styleUrl: './add-modules-dialog.component.scss'
 })
 export class AddModulesDialogComponent {
-  newModule: Module = { nom: '', totalHeuresRequises: 0, groupes: [], heuresParType: new Map<string, number>() };
-  types = ['CM', 'TD', 'TP']; // Types possibles
-  heuresList: { type: string; heures: number }[] = []; // Liste des types et heures ajoutés
+
+  newModule: Module = { nom: '', groupes: [], heuresParType: new Map<string, number>() , nombreGroupes: 0 };
+  types = Object.values(TypeHeure);
+
+  heuresList = this.types.map(type => ({ type, heures: 0, groupes: 0 }));
 
   constructor(public dialogRef: MatDialogRef<AddModulesDialogComponent>) {}
 
-  // Ajouter un type à la liste
-  addType(): void {
-    this.heuresList.push({ type: '', heures: 0 });
-  }
-
-  // Supprimer un type de la liste
-  removeType(index: number): void {
-    this.heuresList.splice(index, 1);
-  }
-
-  // Sauvegarder le module avec les heures par type
   onAdd(): void {
     this.heuresList.forEach(entry => {
+      // Sauvegarde des heures pour chaque type
       this.newModule.heuresParType.set(entry.type, entry.heures);
+
+      // Créer les groupes en fonction du nombre de groupes spécifié pour chaque type
+      for (let i = 0; i < entry.groupes; i++) {
+        const newGroupe: Groupe = {
+          nom: `${entry.type} Groupe ${i + 1}`, // Exemple de nom de groupe
+          heures: entry.heures,
+          type: entry.type,
+          affectations: []
+        };
+        console.log(newGroupe);
+        this.newModule.groupes.push(newGroupe);
+      }
     });
+
+    // Fermer la fenêtre de dialogue avec le nouveau module, incluant les groupes
     this.dialogRef.close(this.newModule);
   }
+
 
   // Annuler l'opération
   onCancel(): void {

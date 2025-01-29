@@ -1,30 +1,33 @@
 <div class="dialog">
   <h3>Ajouter un nouveau Module</h3>
-  <form (ngSubmit)="onAdd()">
-    <label for="nom">Nom:</label>
-    <input id="nom" [(ngModel)]="newModule.nom" name="nom" required>
+  <form (ngSubmit)="onAdd()" class="form-container">
+    <div class="form-group">
+      <label for="nom">Nom:</label>
+      <input id="nom" [(ngModel)]="newModule.nom" name="nom" required class="input-field">
+    </div>
 
-    <label for="heuresRequises">Total heures requises:</label>
-    <input id="heuresRequises" [(ngModel)]="newModule.totalHeuresRequises" name="heuresRequises" required>
-
-    <div>
+    <div class="form-group">
       <h4>Types d'heures :</h4>
-      <button type="button" (click)="addType()">Ajouter un type</button>
+      <div *ngFor="let type of heuresList; let i = index" class="type-container">
+        <fieldset class="type-fieldset">
+          <legend>{{ type.type }} :</legend>
 
-      <div *ngFor="let type of heuresList; let i = index">
-        <label [for]="'type-' + i">Type:</label>
-        <select [(ngModel)]="type.type" [name]="'type-' + i" required>
-          <option *ngFor="let t of types" [value]="t">{{ t }}</option>
-        </select>
+          <div class="input-group">
+            <label [for]="'heures-' + i">Heures:</label>
+            <input [id]="'heures-' + i" type="number" [(ngModel)]="type.heures" [name]="'heures-' + i" required class="input-field">
+          </div>
 
-        <label [for]="'heures-' + i">Heures:</label>
-        <input [id]="'heures-' + i" type="number" [(ngModel)]="type.heures" [name]="'heures-' + i" required>
-
-        <button type="button" (click)="removeType(i)">Supprimer</button>
+          <div class="input-group">
+            <label [for]="'groupes-' + i">Nombre de Groupes:</label>
+            <input [id]="'groupes-' + i" type="number" [(ngModel)]="type.groupes" [name]="'groupes-' + i" required class="input-field">
+          </div>
+        </fieldset>
       </div>
     </div>
 
-    <button type="submit">Ajouter</button>
-    <button type="button" (click)="onCancel()">Annuler</button>
+    <div class="button-group">
+      <button type="submit" class="btn-submit">Ajouter</button>
+      <button type="button" (click)="onCancel()" class="btn-cancel">Annuler</button>
+    </div>
   </form>
 </div>

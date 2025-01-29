@@ -5,8 +5,6 @@
     <input id="nom" [(ngModel)]="newFormation.nom" name="nom" required>
     <label for="responsableDeFormation">Responsable de formation:</label>
     <input id="responsableDeFormation" [(ngModel)]="newFormation.responsableFormation" name="responsableFormation" required>
-    <label for="heureDeFormation">Heure de formation:</label>
-    <input id="heureDeFormation" [(ngModel)]="newFormation.totalHeures" name="heureFormation" required>
     <button type="submit">Ajouter</button>
     <button type="button" (click)="onCancel()">Annuler</button>
   </form>

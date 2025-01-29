@@ -57,29 +57,31 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                       <button (click)="removeModule(i, j, k, l, n, o)">-</button>
                                     </summary>
                                     <ul>
-                                      <li *ngFor="let groupe of module.groupes; let p = index">
-                                        <details>
-                                          <summary (click)="showType('GROUPE', groupe)">
-                                            Groupe: {{ groupe.nom || 'Nouveau Groupe' }}
-                                            <button (click)="removeGroupe(i, j, k, l, n, o, p)">-</button>
-                                          </summary>
-                                          <ul>
-                                            <li *ngFor="let affectation of groupe.affectations; let q = index">
-                                              <details>
-                                                <summary (click)="showType('AFFECTATION', affectation)">
-                                                  {{ affectation.nomEnseignant || 'Nouvelle Affectation' }}
-                                                </summary>
-                                                <div class="affectation-details">
-                                                  <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
-                                                  <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
-                                                  <p><strong>Heures assignées :</strong> {{ affectation.heuresAssignees }}</p>
-                                                </div>
-                                              </details>
-                                            </li>
-                                          </ul>
-                                        </details>
-                                      </li>
-                                    </ul>
+                                    <li *ngFor="let groupe of module.groupes; let p = index">
+                                      <details>
+                                        <summary (click)="showType('GROUPE', groupe)">
+                                          {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heures }} heures)
+                                          <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)">Ajouter une Affectation</button>
+                                          <button (click)="removeGroupe(i, j, k, l, n, o, p)">-</button>
+                                        </summary>
+                                        <ul>
+                                          <li *ngFor="let affectation of groupe.affectations; let q = index">
+                                            <details>
+                                              <summary (click)="showType('AFFECTATION', affectation)">
+                                                {{ affectation.nomEnseignant || 'Nouvelle Affectation' }}
+                                              </summary>
+                                              <div class="affectation-details">
+                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
+                                                <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
+                                                <p><strong>Heures assignées :</strong> {{ affectation.heuresAssignees }}</p>
+                                              </div>
+                                            </details>
+                                          </li>
+                                        </ul>
+                                      </details>
+                                    </li>
+                                  </ul>
+
                                   </details>
                                 </li>
                               </ul>
