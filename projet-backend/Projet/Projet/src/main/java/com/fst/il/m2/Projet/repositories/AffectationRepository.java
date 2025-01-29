@@ -1,7 +1,6 @@
 package com.fst.il.m2.Projet.repositories;
 
 import com.fst.il.m2.Projet.models.Affectation;
-import com.fst.il.m2.Projet.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

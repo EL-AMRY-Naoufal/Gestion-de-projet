@@ -1,27 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.enumurators.Role;
-import com.fst.il.m2.Projet.models.Affectation;
-import com.fst.il.m2.Projet.models.Enseignant;
-import com.fst.il.m2.Projet.models.Module;
-import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.repositories.AffectationRepository;
-import com.fst.il.m2.Projet.repositories.EnseignantRepository;
-import com.fst.il.m2.Projet.repositories.ModuleRepository;
-import com.fst.il.m2.Projet.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ResponsableDepartementServiceDefaultTest {

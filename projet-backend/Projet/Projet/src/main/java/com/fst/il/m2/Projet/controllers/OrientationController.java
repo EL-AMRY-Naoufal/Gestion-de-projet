@@ -1,7 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
-import com.fst.il.m2.Projet.models.Orientation;
 import com.fst.il.m2.Projet.business.OrientationService;
+import com.fst.il.m2.Projet.models.Orientation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

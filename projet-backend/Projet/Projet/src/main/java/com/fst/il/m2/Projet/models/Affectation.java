@@ -1,9 +1,7 @@
 package com.fst.il.m2.Projet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.Length;
 
 import java.time.LocalDate;
 
