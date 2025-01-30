@@ -3,6 +3,8 @@ package com.fst.il.m2.Projet.business;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
@@ -42,8 +44,7 @@ public class EnseignantService {
         this.userSpecifications = userSpecifications;
         this.enseignantSpecifications = enseignantSpecifications;
     }
-
-
+    
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
         //affiche l'id de l'enseignant demandé
@@ -56,15 +57,14 @@ public class EnseignantService {
         }
 */
         // Get the enseignant id from the user id
-        Long enseignantId = enseignantRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"))
-                .getId();
 
-        Enseignant enseignant = enseignantRepository.findById(enseignantId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"));
+        System.out.println(userId);
+
+        Enseignant enseignant = enseignantRepository.findByUserId(userId)
+                .orElseThrow(NotFoundException::new);
+
         return enseignant.getAffectations();
     }
-
 
     public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
@@ -73,7 +73,8 @@ public class EnseignantService {
                         affectation.getId(),
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
-                        affectation.getModule() != null ? affectation.getModule().getNom() : null
+                        affectation.getModule() != null ? affectation.getModule().getNom() : null,
+                        affectation.getCommentaire()
                 ))
                 .collect(Collectors.toList());
     }
@@ -127,7 +128,7 @@ public class EnseignantService {
     }
 
 
-    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
 
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
@@ -143,6 +144,21 @@ public class EnseignantService {
     public Enseignant getEnseignantById(Long id) {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
         return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
+    }
+
+
+    public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
+
+        User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
+        Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new);
+
+        Affectation affectation = affectationRepository.findByEnseignantIdAndAssignationId(enseignant.getId(), affectationId)
+                .orElseThrow(NotFoundException::new);
+
+        affectation.setCommentaire(commentaire);
+        affectationRepository.save(affectation);
+
+        return commentaire;
     }
 
 }

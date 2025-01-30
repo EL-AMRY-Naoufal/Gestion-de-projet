@@ -1,12 +1,13 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -99,7 +100,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     @Override
     public List<User> getUsersByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUsersByUsername(username);
     }
 
     @Override
@@ -192,17 +193,17 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Récupérer l'enseignant depius l'ID de l'utilisateur
         Long enseignantID = enseignantRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId))
+                .orElseThrow(NotFoundException::new)
                 .getId();
 
         System.err.println("enseignantID: " + enseignantID);
 
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
+                .orElseThrow(NotFoundException::new);
 
         // Récupérer le module
         Module module = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new RuntimeException("Module not found with id: " + moduleId));
+                .orElseThrow(NotFoundException::new);
 
         // Vérifier si l'enseignant a des heures disponibles
        /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
@@ -215,6 +216,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         affectation.setModule(module);
         affectation.setHeuresAssignees(heuresAssignees);
         affectation.setDateAffectation(LocalDate.now());
+        affectation.setCommentaire("");
 
         // Sauvegarder l'affectation
         Affectation savedAffectation = affectationRepository.save(affectation);

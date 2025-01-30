@@ -34,7 +34,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/authenticate").permitAll() // Open login endpoint
                         .requestMatchers("/api/enseignants/enseignants-non-enregistres").permitAll()
                         .requestMatchers("/api/enseignants/**").permitAll()
-                        .requestMatchers("/api/enseignants").permitAll()
                         .requestMatchers("/api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
 

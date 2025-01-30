@@ -6,7 +6,6 @@ import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ResponsableDepartementService {
     User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear); // `responsableId` will be used to check the role.
