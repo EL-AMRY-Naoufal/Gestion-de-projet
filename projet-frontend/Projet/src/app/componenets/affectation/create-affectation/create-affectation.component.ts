@@ -21,10 +21,8 @@ import {catchError} from "rxjs/operators";
 export class CreateAffectationComponent implements OnInit {
 
   myId!: string
-
   enseignants!: any[]
   modules!: any[]
-
   enseignantId!: string
   moduleId!: string
   heuresAssignees!: string

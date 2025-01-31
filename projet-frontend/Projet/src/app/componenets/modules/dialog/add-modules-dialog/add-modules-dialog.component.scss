@@ -1,6 +1,8 @@
 @import "../common-dialog-styles.scss";
 
 .dialog {
+  overflow-y: scroll;
+  max-height: 20cm;
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;

@@ -1,8 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.dto.GroupeDto;
 import com.fst.il.m2.Projet.dto.ModuleDto;
-import com.fst.il.m2.Projet.models.Affectation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fst.il.m2.Projet.repositories.ModuleRepository;
@@ -24,11 +23,16 @@ public class ModuleServiceDefault implements ModuleService{
         return modules.stream().map(
                 module -> new ModuleDto(
                         module.getId(),
-                        module.getNom()
+                        module.getNom(),
+                        module.getGroupes().stream().map(
+                                groupe -> new GroupeDto(
+                                        groupe.getId(),
+                                        groupe.getNom()
+                                )
+                        ).collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
-
 
 
     // Get a module by ID

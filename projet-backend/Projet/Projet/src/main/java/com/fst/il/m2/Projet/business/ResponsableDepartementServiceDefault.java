@@ -2,7 +2,6 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.*;
-import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -159,15 +157,14 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
 
     @Override
-    public Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
+    public void affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
-        // Récupérer l'enseignant depius l'ID de l'utilisateur
+        // Récupérer l'id de l'enseignant depuis la table des users
         Long enseignantID = enseignantRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId))
                 .getId();
 
-        System.err.println("enseignantID: " + enseignantID);
-
+//        System.err.println("enseignantID: " + enseignantID);
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
 
@@ -179,6 +176,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
        /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
             throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
         }*/
+
+
 
         // Créer une nouvelle affectation
         Affectation affectation = new Affectation();
@@ -194,7 +193,6 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
 
-        return savedAffectation;
     }
 
 }

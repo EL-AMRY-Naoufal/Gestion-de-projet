@@ -225,14 +225,18 @@ export class ModulesComponent implements OnInit {
 
 
   openAddAffectationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number): void {
-    const dialogRef = this.dialog.open(AddAffectationComponent);
+    const dialogRef = this.dialog.open(AddAffectationComponent, {
+      data: {
+        moduleId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].id,
+        groupeId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].id
+      }
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.addAffectation(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, moduleIndex, groupeIndex, result);
       }
     });
-
   }
 
 
