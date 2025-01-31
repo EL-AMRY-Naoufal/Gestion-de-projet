@@ -21,7 +21,6 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.loginService.authToken;
-    console.log('Token:', token);
 
     if (token && !req.url.includes('authenticate')) {
       // Si c'est une requête d'authentification, on ne fourni pas le token

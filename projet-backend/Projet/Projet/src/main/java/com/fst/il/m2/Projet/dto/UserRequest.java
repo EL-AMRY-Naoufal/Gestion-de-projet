@@ -15,7 +15,7 @@ public class UserRequest {
     private Long responsableId;
     private boolean associateEnseignantWithUser; // New field
 
-    private Long yearId; // New field
+    private Long year; // New field
 
     @Override
     public String toString() {
@@ -31,6 +31,8 @@ public class UserRequest {
     @Data
     public static class UserDto {
         private String username;
+        private String name;
+        private String firstname;
         private String password;
         private String email;
         private List<UserRoleDto> roles;
@@ -39,6 +41,8 @@ public class UserRequest {
 
         public User toUser(){
             User user = User.builder()
+                    .name(name)
+                    .firstname(firstname)
                     .username(username)
                     .email(email)
                     .password(password)

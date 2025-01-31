@@ -1,11 +1,12 @@
 package com.fst.il.m2.Projet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
 @Table(name = "Affectations")
 public class Affectation {
 
@@ -16,6 +17,9 @@ public class Affectation {
     private int heuresAssignees;
 
     private LocalDate dateAffectation;
+
+    @Column
+    private String commentaire = "";
 
     // Relations
     @ManyToOne

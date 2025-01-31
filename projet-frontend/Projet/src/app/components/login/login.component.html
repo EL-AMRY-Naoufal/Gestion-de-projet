@@ -1,0 +1,26 @@
+<div class="login-page-container">
+  <div class="login-container">
+    <!-- Section de l'image à gauche -->
+    <div class="login-image">
+      <img src="/assets/images/premierepage.png" alt="Illustration" />
+    </div>
+
+    <!-- Section du formulaire à droite -->
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" autocomplete="new-password" class="login-form">
+      <h1>Connexion</h1>
+
+      <div class="form-control">
+        <label for="email">Email</label>
+        <input name="email" ngModel required email id="email" autocomplete="new-password" type="email" />
+      </div>
+
+      <div class="form-control">
+        <label for="password">Mot de passe</label>
+        <input name="password" ngModel required id="password" autocomplete="new-password" type="password" />
+      </div>
+
+      <button type="submit" [disabled]="!loginForm.valid">Connexion</button>
+      <label class="mdp-oublie-label" (click)="goToResetPasswordPage()">Mot de passe oublié?</label>
+    </form>
+  </div>
+</div>
