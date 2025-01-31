@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {FormsModule} from "@angular/forms";
-import {Semestre} from "../../../../types/modules.types";
 
 @Component({
   selector: 'app-add-niveau-dialog',

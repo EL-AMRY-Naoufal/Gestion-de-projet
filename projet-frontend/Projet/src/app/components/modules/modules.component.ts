@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuComponent} from '../shared/menu/menu.component';
-import {Annee, Departement, Formation, Groupe, Module, Niveau, Semestre} from "../../types/modules.types";
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
 import { AnneeService } from '../../services/annee.service';
@@ -18,6 +17,7 @@ import {AddGroupeDialogComponent} from "./dialog/add-groupe-dialog/add-groupe-di
 import { NiveauService } from '../../services/niveau.service';
 import { SemestreService } from '../../services/semestre.service';
 import { GroupeService } from '../../services/groupe.service';
+import { Annee, Departement, Formation, Niveau, Semestre, Groupe, Module } from '../shared/types/modules.types';
 
 @Component({
   selector: 'app-modules',

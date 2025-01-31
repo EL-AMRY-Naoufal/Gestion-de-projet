@@ -9,10 +9,7 @@ import { UserComponent } from './components/user/user.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import {AffectationListComponent} from "./components/affectation/affectation-enseignant/affectation-enseignant.component";
 import {CreateAffectationComponent} from "./components/affectation/create-affectation/create-affectation.component";
-import {AffectationListComponent} from "./componenets/affectation/affectation-enseignant/affectation-enseignant.component";
-import {CreateAffectationComponent} from "./componenets/affectation/create-affectation/create-affectation.component";
-import { ModulesComponent } from './componenets/modules/modules.component';
-
+import { ModulesComponent } from './components/modules/modules.component';
 
   // Route vers le dashboard
 export const routes: Routes = [

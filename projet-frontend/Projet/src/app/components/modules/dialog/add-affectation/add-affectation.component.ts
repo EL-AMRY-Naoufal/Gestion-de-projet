@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { catchError } from 'rxjs/operators';
 import {UserService} from "../../../../services/user.service";
 import {ModuleService} from "../../../../services/module.service";
@@ -14,7 +14,8 @@ import {LoginService} from "../../../../services/login.service";
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
 
   templateUrl: './add-affectation.component.html',

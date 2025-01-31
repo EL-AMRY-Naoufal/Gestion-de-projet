@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
-import {Groupe, Module, TypeHeure} from "../../../../types/modules.types";
 import { NgForOf } from "@angular/common";
+import { TypeHeure, Module, Groupe } from '../../../shared/types/modules.types';
 
 @Component({
   selector: 'app-add-modules-dialog',

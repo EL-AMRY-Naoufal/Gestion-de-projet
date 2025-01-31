@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormsModule } from "@angular/forms";
-import { Annee } from "../../../../types/modules.types";
+import { Annee } from '../../../shared/types/modules.types';
 
 @Component({
   selector: 'app-add-annee-dialog',

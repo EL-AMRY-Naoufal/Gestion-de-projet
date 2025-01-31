@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {Formation, Module, Niveau} from "../../../../types/modules.types";
 import {MatDialogRef} from "@angular/material/dialog";
 import {FormsModule} from "@angular/forms";
+import { Formation } from '../../../shared/types/modules.types';
 
 @Component({
   selector: 'app-add-formation-dialog',

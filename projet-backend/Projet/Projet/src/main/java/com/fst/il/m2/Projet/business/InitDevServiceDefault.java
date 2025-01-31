@@ -77,13 +77,14 @@ public class InitDevServiceDefault implements InitDevService {
                 User.builder().username("username3").password(passwordEncoder.encode("password3")).email("email3@email.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("username4").password(passwordEncoder.encode("password4")).email("email4@email.fr").roles(new ArrayList<>()).build()
                 );
+        Annee annee = Annee.builder().id(1L).debut(2024).build();
+        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));
+
         for(User u : users){
-            u.addRole(1L, userRoles.get(u.getUsername()));
+            u.addRole(annee, userRoles.get(u.getUsername()));
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
         }
 
-        Annee annee = Annee.builder().id(1L).debut(2024).build();
-        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));
 
         //TODO frontend user roles do not work when we add a year. (in "get userRoles()" function from login.service.ts)
 //        Annee annee2025 = Annee.builder().debut(2025).build();
@@ -95,39 +96,39 @@ public class InitDevServiceDefault implements InitDevService {
 
 
 
-        /**********RESPONSABLE FORMATIONS**********/
+        ///********RESPONSABLE FORMATIONS
         ResponsableFormation responsableFormation1 = new ResponsableFormation(1L, users.get(6));
         ResponsableFormation responsableFormation2 = new ResponsableFormation(2L, users.get(7));
 
-        /**********FORMATIONS**********/
+        ///********FORMATIONS
         Formation formation1 = new Formation(1L, "Licence", 200, responsableFormation1,null);
         Formation formation2 = new Formation(2L, "Master", 200, responsableFormation2,null);
         ArrayList<Formation> formations = new ArrayList<>();
         formations.add(formation1);
         formations.add(formation2);
 
-        /**********NIVEAU**********/
-//        Niveau M2 = Niveau.builder().nom("M2").formation(formation1).build(); //add orientation
+        ///********NIVEAU
+        //        Niveau M2 = Niveau.builder().nom("M2").formation(formation1).build(); //add orientation
         Niveau M1 = new Niveau(1L, "M1", formation2, null);
         Niveau M2IL = new Niveau(1L, "M2 IL", formation2, null);
 
-        /**********SEMESTRE**********/
+        ///********SEMESTRE
         Semestre S1 = Semestre.builder().nom("S1").niveau(M2IL).build(); //add modules
         Semestre S2 = Semestre.builder().nom("S2").niveau(M2IL).build(); //add modules
 
-        /*********RESPONSABLE DEPARTEMENT*********/
+        ///*******RESPONSABLE DEPARTEMENT
         ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
 
-        /*********DEPARTEMENTS*********/
+        ///*******DEPARTEMENTS
         Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).formations(formations).responsableDepartement(responsableDepartement).build();
 
-        /**********ENSEIGNANTS**********/
+        ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
-        heuresRequises.put(CategorieEnseignant.PROFESSEUR, 100);
+        heuresRequises.put(CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 100);
         Enseignant enseignant1 = new Enseignant(1L, heuresRequises, 100, 70, null, users.get(4));
         Enseignant enseignant2 = new Enseignant(2L, heuresRequises, 100, 30, null, users.get(5));
 
-        /**********TYPES D'HEURES**********/
+        ///********TYPES D'HEURES
         Map<TypeHeure, Integer> heuresParTypesM1 = new HashMap<>(Map.of());
         heuresParTypesM1.put(TypeHeure.CM, 30);
         heuresParTypesM1.put(TypeHeure.TD, 20);
@@ -137,7 +138,7 @@ public class InitDevServiceDefault implements InitDevService {
         heuresParTypesM2.put(TypeHeure.TD, 30);
         heuresParTypesM2.put(TypeHeure.TP, 20);
 
-        /**********MODULES**********/
+        ///********MODULES
         List<com.fst.il.m2.Projet.models.Module> modules1 = List.of(
                 Module.builder().nom("Service Web").totalHeuresRequises(60).heuresParType(heuresParTypesM1).semestre(S1).build(),
                 Module.builder().nom("Concept Web").totalHeuresRequises(50).heuresParType(heuresParTypesM1).semestre(S1).build()
@@ -148,8 +149,8 @@ public class InitDevServiceDefault implements InitDevService {
                 Module.builder().nom("Modélisation").totalHeuresRequises(30).heuresParType(heuresParTypesM2).semestre(S2).build()
                 );
 
-        /**********GROUPES**********/
-//        Groupe groupe1 = Groupe.builder().nom("groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
+        ///********GROUPES
+        //        Groupe groupe1 = Groupe.builder().nom("groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
 //        Groupe groupe2 = Groupe.builder().nom("groupe 2").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).build();
 //        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
 
@@ -162,7 +163,7 @@ public class InitDevServiceDefault implements InitDevService {
         ArrayList<Groupe> groupes2 = new ArrayList<>();
         groupes2.add(groupe3);
 
-        /**********AFFECTATIONS**********/
+        ///********AFFECTATIONS
         LocalDate date = LocalDate.of(2025, 1, 1);
 
         List<Affectation> affectations1 = new ArrayList<>();
