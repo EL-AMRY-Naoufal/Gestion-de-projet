@@ -46,10 +46,7 @@ public class NiveauController {
         //emptying "orientations" and "formation" so the json is not too deep
         niveaux.forEach((n) -> {
             n.setFormation(null);
-            n.getSemestres().forEach((s) -> {
-                //emptying "semestres" and "niveau" so the json is not too deep
-                s.setNiveau(null);
-            });
+            n.setSemestres(null);
         });
 
         return niveaux;
