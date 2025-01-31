@@ -10,15 +10,17 @@ import {EnseignantService} from "../../../../services/enseignant.service";
 import {LoginService} from "../../../../services/login.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {Groupe, Module} from "../../../../types/modules.types";
 import {group} from "@angular/animations";
+import {Module} from "../../../shared/types/modules.types";
+
 
 @Component({
   selector: 'app-create-affectation-dialog',
   standalone: true,
   imports: [
     FormsModule,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
 
   templateUrl: './add-affectation.component.html',
