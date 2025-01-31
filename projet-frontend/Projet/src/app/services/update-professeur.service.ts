@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { User } from '../types/user.types';
-import { EnseignantDto } from '../types/enseignant.type';
+import { User } from '../components/shared/types/user.type';
+import { EnseignantDto } from '../components/shared/types/enseignant.type';
+import { Year } from '../components/shared/types/year.type';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UpdateProfesseurService {
 
   private readonly _backendURL: any;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this._backendURL = {};
     // build backend base url
     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
@@ -36,9 +37,11 @@ export class UpdateProfesseurService {
   createEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
     return this.http.post<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
+  
   updateEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
     return this.http.put<EnseignantDto>(`${this._backendURL.allEnseignants}`, enseignant);
   }
+
   getEnseignant(id: number): Observable<EnseignantDto> {
     return this.http.get<EnseignantDto>(`${this._backendURL.allEnseignants}/${id}`);
   }

@@ -1,15 +1,21 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.models.Module;
+import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ResponsableDepartementServiceDefault implements ResponsableDepartementService {
@@ -30,6 +36,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private ModuleRepository moduleRepository;
     @Autowired
     private GroupeRepository groupeRepository;
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
     @Override
     public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
@@ -95,33 +103,60 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     @Override
     public List<User> getUsersByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+        return userRepository.findUsersByUsername(username);
     }
 
     @Override
-    public List<User> getUsersByRole(Role role) {
-        return userRepository.findUserByRoles(role);
+    public List<UserRole> getRolesByUserIdAndYear(Long userId, Long year) {
+        return userRoleRepository.findByUserIdAndYearId(userId, year);
     }
 
     @Override
-    public User updateUser(Long id, User user, Long responsableId) {
+    @Transactional
+    public User updateUser(Long id, User user, Long responsableId, Long currentYear) {
         // Check if the responsable has the required role
         User responsable = userRepository.findById(responsableId)
                 .orElseThrow(() -> new RuntimeException("Responsable not found"));
 
-        if (!responsable.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+        /*if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can update users");
-        }
+        }*/
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        if(existingUser.hasRoleForYear(currentYear, Role.ENSEIGNANT )
+                && !user.hasRoleForYear(currentYear, Role.ENSEIGNANT)) {
+            this.enseignantRepository.deleteByUser(existingUser);
+
+        }
+
         // Update user information
         existingUser.setUsername(user.getUsername());
+        existingUser.setName(user.getName());
+        existingUser.setFirstname(user.getFirstname());
 //        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
-        existingUser.setRoles(user.getRoles());
 
+
+        List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYearId(id, currentYear);
+        Map<Role, UserRole> existingRolesMap = existingRoles.stream()
+                .collect(Collectors.toMap(UserRole::getRole, Function.identity()));
+
+        List<UserRole> newRoles = user.getRoles().stream().map(role -> {
+            if (existingRolesMap.containsKey(role.getRole())) {
+                // Update existing role
+                UserRole existingRole = existingRolesMap.get(role.getRole());
+                existingRole.setUser(existingUser);
+                return existingRole;
+            } else {
+                // Create new role
+                role.setUser(existingUser);
+                return role;
+            }
+        }).collect(Collectors.toList());
+
+        existingUser.setRoles(newRoles);
         return userRepository.save(existingUser);
     }
 
@@ -161,12 +196,12 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
         // Récupérer l'id de l'enseignant depuis la table des users
         Long enseignantID = enseignantRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId))
+                .orElseThrow(NotFoundException::new)
                 .getId();
 
 //        System.err.println("enseignantID: " + enseignantID);
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + enseignantID));
+                .orElseThrow(NotFoundException::new);
 
         // Récupérer le groupe
         Groupe groupe = groupeRepository.findById(groupeId)
@@ -185,6 +220,7 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         affectation.setGroupe(groupe);
         affectation.setHeuresAssignees(heuresAssignees);
         affectation.setDateAffectation(LocalDate.now());
+        affectation.setCommentaire("");
 
         // Sauvegarder l'affectation
         Affectation savedAffectation = affectationRepository.save(affectation);
@@ -195,4 +231,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
     }
 
-}
+    public List<UserRole> getUsersByRole(Role role) {
+        return userRoleRepository.findByRole(role);
+    }
+    public List<UserRole> getUsersByRoleAndYear(Role role, Long year) {
+        return userRoleRepository.findByRoleAndYearId(role, year);
+    }
+
+    }

@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.AnneeService;
+import com.fst.il.m2.Projet.dto.AnneeDto;
 import com.fst.il.m2.Projet.models.Annee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,18 +28,16 @@ public class AnneeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Annee>> getAllAnnees() {
-        List<Annee> annees = anneeService.getAllAnnees();
-        System.out.println(annees.get(0));
-        annees.forEach((annee) -> annee.setDepartements(null)); //TODO
+    public ResponseEntity<List<AnneeDto>> getAllAnnees() {
+        List<AnneeDto> annees = anneeService.getAllAnnees().stream().map(
+                annee -> AnneeDto.builder().id(annee.getId()).debut(annee.getDebut()).build()
+        ).toList();
         return new ResponseEntity<>(annees, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Annee> getAnneeById(@PathVariable Long id) {
         Annee annee = anneeService.getAnneeById(id);
-        System.out.println("get annee by id  : " + annee);
-        annee.setDepartements(null); //TODO
         return new ResponseEntity<>(annee, HttpStatus.OK);
     }
 

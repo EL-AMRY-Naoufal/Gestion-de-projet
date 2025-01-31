@@ -1,16 +1,15 @@
 import {RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './componenets/login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './componenets/dashboard/dashboard.component';
-import { EnseignantsComponent } from './componenets/enseignants/enseignants.component';
-import { ResetPasswordComponent } from './componenets/reset-password/reset-password.component';
-import { ListUsersComponent } from './componenets/list-users/list-users.component';
-import { UserComponent } from './componenets/user/user.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { EnseignantsComponent } from './components/enseignants/enseignants.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { ListUsersComponent } from './components/list-users/list-users.component';
+import { UserComponent } from './components/user/user.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
-import {AffectationListComponent} from "./componenets/affectation/affectation-enseignant/affectation-enseignant.component";
-import {CreateAffectationComponent} from "./componenets/affectation/create-affectation/create-affectation.component";
-import { ModulesComponent } from './componenets/modules/modules.component';
-
+import {AffectationListComponent} from "./components/affectation/affectation-enseignant/affectation-enseignant.component";
+import {CreateAffectationComponent} from "./components/affectation/create-affectation/create-affectation.component";
+import { ModulesComponent } from './components/modules/modules.component';
 
   // Route vers le dashboard
 export const routes: Routes = [

@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
-import { User } from '../componenets/shared/types/user.type';
-import { UserDialogComponent } from '../componenets/shared/user-dialog/user-dialog.component';
+import { UserDialogComponent } from '../components/shared/user-dialog/user-dialog.component';
 import { filter, map, mergeMap } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserComponent } from "../componenets/user/user.component";
+import { UserComponent } from "../components/user/user.component";
+import { User, UserRoleDto } from '../components/shared/types/user.type';
+import { LoginService } from '../services/login.service';
+import { YearService } from '../services/year-service';
+import { ListUsersComponent } from '../components/list-users/list-users.component';
 
 @Component({
   selector: 'app-user-update',
   standalone: true,
-  imports: [UserComponent],
+  imports: [UserComponent, ListUsersComponent],
   templateUrl: './user-update.component.html',
   styleUrl: './user-update.component.scss'
 })
@@ -25,7 +28,8 @@ export class UserUpdateComponent {
     private _route: ActivatedRoute,
     private _router: Router,
     private _userService: UserService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _yearService: YearService
   ) {}
 
   /**
@@ -38,6 +42,13 @@ export class UserUpdateComponent {
         mergeMap((id: string) => this._userService.fetchOne(id))
       )
       .subscribe((user: User) => this._initModal(user));
+  }
+
+  transformRolesToUserRoles(roles: string[], year: number): UserRoleDto[] {
+    return roles.map(role => ({
+      role: role as UserRoleDto['role'],
+      year: year
+    }));
   }
 
   /**
@@ -64,8 +75,15 @@ export class UserUpdateComponent {
 
           return { id, update: user };
         }),
-        mergeMap((_: { id: any; update: any }) =>
-          this._userService.update(_.id, _.update)
+        mergeMap((_: { id: any; update: any }) =>{
+          console.log('update ', _.update)
+          const userToSend: User = {
+            ..._.update,
+            roles: this.transformRolesToUserRoles(_.update.roles, this._yearService.currentYearId)
+          }
+          console.log('after update ', userToSend)
+          return this._userService.update(_.id, userToSend)
+        }
         )
       )
       .subscribe({

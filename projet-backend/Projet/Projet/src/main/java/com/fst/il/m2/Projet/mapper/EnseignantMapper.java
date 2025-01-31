@@ -6,7 +6,7 @@ import com.fst.il.m2.Projet.models.Enseignant;
 
 public class EnseignantMapper {
     public static EnseignantDto enseignantToEnseignantDto(Enseignant enseignant) {
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.PROFESSEUR);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
         return EnseignantDto.builder()
                 .id(enseignant.getId())
                 .categorieEnseignant(categorie)

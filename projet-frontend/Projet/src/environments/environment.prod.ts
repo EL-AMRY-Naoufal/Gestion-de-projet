@@ -8,7 +8,7 @@ export const environment = {
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
-      authenticate :'/api/users/authenticate',
+      authenticate: '/api/users/authenticate',
       categories: '/api/categories',
       role : '/api/responsableDepartement/role',
       allmodules : '/api/modules',
@@ -20,5 +20,3 @@ export const environment = {
     },
   },
 };
-
-

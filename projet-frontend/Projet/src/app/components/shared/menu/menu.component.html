@@ -1,0 +1,49 @@
+<nav class="navbar">
+  <!-- Logo à gauche -->
+  <div class="navbar-logo">
+    <a href="/dashboard" class="navbar-link">
+      <img src="/assets/images/logo.png" alt="Logo" class="logo" />
+    </a>
+  </div>
+
+  <!-- Liens au milieu -->
+  <div class="navbar-center">
+    <a
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      class="menu-item vert"
+      (click)="navigateToUsers()"
+      class="navbar-link"
+      >Gestion du personnels</a
+    >
+    <a href="/modules" class="navbar-link">Gestion des modules</a>
+    <a
+      *ngIf="
+        userRoles.includes('CHEF_DE_DEPARTEMENT') ||
+        userRoles.includes('ENSEIGNANT') ||
+        userRoles.includes('SECRETARIAT_PEDAGOGIQUE')
+      "
+      (click)="navigateToAffectations()"
+      class="navbar-link"
+      >Gestion des affectations</a
+    >
+    <div class="year">
+      <select
+        id="year"
+        [(ngModel)]="selectedYearId"
+        (change)="onYearSelected()"
+      >
+        <option value="null" disabled selected>Choisissez une année</option>
+        <option *ngFor="let year of years" [value]="year.id">
+          {{ year.debut }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Icône de déconnexion à droite -->
+  <div class="navbar-links">
+    <a (click)="logout()" class="navbar-link">
+      <i class="fas fa-power-off"></i>
+    </a>
+  </div>
+</nav>

@@ -1,20 +1,20 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +45,6 @@ public class EnseignantService {
         this.enseignantSpecifications = enseignantSpecifications;
     }
 
-
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
         //affiche l'id de l'enseignant demandé
@@ -58,15 +57,14 @@ public class EnseignantService {
         }
 */
         // Get the enseignant id from the user id
-        Long enseignantId = enseignantRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"))
-                .getId();
 
-        Enseignant enseignant = enseignantRepository.findById(enseignantId)
-                .orElseThrow(() -> new RuntimeException("Enseignant not found"));
+        System.out.println(userId);
+
+        Enseignant enseignant = enseignantRepository.findByUserId(userId)
+                .orElseThrow(NotFoundException::new);
+
         return enseignant.getAffectations();
     }
-
 
     public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
@@ -75,7 +73,8 @@ public class EnseignantService {
                         affectation.getId(),
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
-                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null
+                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null,
+                        affectation.getCommentaire()
                 ))
                 .collect(Collectors.toList());
     }
@@ -105,21 +104,17 @@ public class EnseignantService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        // Get the current roles for the user (for the current year)
-        List<UserRole> roles = user.getRoles();
-
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if(!user.hasRoleForYear(currentYear, Role.ENSEIGNANT)){
-            user.addRole(currentYear, Role.ENSEIGNANT);
+            user.addRole(Annee.builder().id(currentYear).build(), Role.ENSEIGNANT);
+            // Save the updated user with the new role
+            user = userRepository.save(user);
         }
-
-        // Save the updated user with the new role
-        user = userRepository.save(user);
 
         // Create a map for the categories and hours
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
-
+        heuresAssignees += nbHeureCategorie;
         // Create the Enseignant entity
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
@@ -133,18 +128,37 @@ public class EnseignantService {
     }
 
 
-    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
+        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         return this.enseignantRepository.save(enseignant);
     }
 
     public Enseignant getEnseignantById(Long id) {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
         return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
+    }
+
+
+    public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
+
+        User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
+        Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new);
+
+        Affectation affectation = affectationRepository.findByEnseignantIdAndAssignationId(enseignant.getId(), affectationId)
+                .orElseThrow(NotFoundException::new);
+
+        affectation.setCommentaire(commentaire);
+        affectationRepository.save(affectation);
+
+        return commentaire;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
-import com.fst.il.m2.Projet.enumurators.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
