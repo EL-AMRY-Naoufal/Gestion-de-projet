@@ -2,6 +2,8 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.NiveauService;
 import com.fst.il.m2.Projet.models.Niveau;
+import com.fst.il.m2.Projet.models.Formation;
+import com.fst.il.m2.Projet.models.Niveau;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,19 @@ public class NiveauController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/formation/{formationId}")
+    public List<Niveau> getNiveauxByFormationId(@PathVariable Long formationId) {
+        List<Niveau> niveaux = niveauService.getNiveauxByFormation(Formation.builder().id(formationId).build());
+
+        //emptying "orientations" and "formation" so the json is not too deep
+        niveaux.forEach((n) -> {
+            n.setFormation(null);
+            n.setSemestres(null);
+        });
+
+        return niveaux;
     }
 
     // Add a new Niveau

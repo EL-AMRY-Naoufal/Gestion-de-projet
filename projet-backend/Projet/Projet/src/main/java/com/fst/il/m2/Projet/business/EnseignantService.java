@@ -44,7 +44,7 @@ public class EnseignantService {
         this.userSpecifications = userSpecifications;
         this.enseignantSpecifications = enseignantSpecifications;
     }
-    
+
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
         //affiche l'id de l'enseignant demandé
@@ -73,7 +73,7 @@ public class EnseignantService {
                         affectation.getId(),
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
-                        affectation.getModule() != null ? affectation.getModule().getNom() : null,
+                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null,
                         affectation.getCommentaire()
                 ))
                 .collect(Collectors.toList());

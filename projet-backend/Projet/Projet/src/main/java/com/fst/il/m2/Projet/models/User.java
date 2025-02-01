@@ -40,7 +40,7 @@ public class User {
     private String email;
 
     @Builder.Default()
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "UserRole_id")
     private List<UserRole> roles = new ArrayList<>();
 

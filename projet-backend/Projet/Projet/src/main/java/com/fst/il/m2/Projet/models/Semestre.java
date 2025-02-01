@@ -1,9 +1,11 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 @Entity
 @Table(name="Semestre")
 public class Semestre {
@@ -14,8 +16,8 @@ public class Semestre {
     private String nom;
 
     @ManyToOne
-    @JoinColumn(name = "orientation_id")
-    private Orientation orientation;
+    @JoinColumn(name = "niveau_id")
+    private Niveau niveau;
 
     @OneToMany
     @JoinColumn(name = "module_id")
@@ -24,10 +26,10 @@ public class Semestre {
     public Semestre() {
     }
 
-    public Semestre(Long id, String nom, Orientation orientation, List<Module> modules) {
+    public Semestre(Long id, String nom, Niveau niveau, List<Module> modules) {
         this.id = id;
         this.nom = nom;
-        this.orientation = orientation;
+        this.niveau = niveau;
         this.modules = modules;
     }
 
@@ -47,13 +49,9 @@ public class Semestre {
         this.nom = nom;
     }
 
-    public Orientation getOrientation() {
-        return orientation;
-    }
+    public Niveau getNiveau() {return niveau;}
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
+    public void setNiveau(Niveau niveau) {this.niveau = niveau;}
 
     public List<Module> getModules() {
         return modules;

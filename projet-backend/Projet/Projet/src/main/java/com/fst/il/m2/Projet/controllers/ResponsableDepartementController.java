@@ -86,9 +86,9 @@ public class ResponsableDepartementController {
 
 
     //route pour affecter un enseignant à un module en precisant lheure enseignée
-    @PostMapping("/affectation/{idEnseignant}/{idModule}/{heure}")
-    public ResponseEntity<String> affecterEnseignant(@PathVariable Long idEnseignant, @PathVariable Long idModule, @PathVariable int heure) {
-        responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idModule, heure);
+    @PostMapping("/affectation/{idEnseignant}/{idGroupe}/{heure}")
+    public ResponseEntity<String> affecterEnseignant(@PathVariable Long idEnseignant, @PathVariable Long idGroupe, @PathVariable int heure) {
+        responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idGroupe, heure);
         return ResponseEntity.ok("Enseignant affecté avec succès");
     }
 

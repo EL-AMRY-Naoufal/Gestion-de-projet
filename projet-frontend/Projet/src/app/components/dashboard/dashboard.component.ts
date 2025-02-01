@@ -86,4 +86,8 @@ export class DashboardComponent implements OnInit {
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);
   }
+
+  navigateToModules() {
+    this.router.navigate(['/modules'])
+  }
 }

@@ -9,7 +9,7 @@ import { UserComponent } from './components/user/user.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import {AffectationListComponent} from "./components/affectation/affectation-enseignant/affectation-enseignant.component";
 import {CreateAffectationComponent} from "./components/affectation/create-affectation/create-affectation.component";
-
+import { ModulesComponent } from './components/modules/modules.component';
 
   // Route vers le dashboard
 export const routes: Routes = [
@@ -19,6 +19,8 @@ export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
+  // Route pour les modules
+  { path: 'modules', component: ModulesComponent},
   // Route pour les profil d'utilisateur
   { path: 'users', component: ListUsersComponent },
   // Route pour afficher un profil d'utilisateur

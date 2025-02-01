@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,4 +15,6 @@ import lombok.NoArgsConstructor;
 public class ModuleDto {
     private Long id;
     private String nom;
+    private List<GroupeDto> groupes;
+
 }

@@ -23,10 +23,8 @@ import { MenuComponent } from "../../shared/menu/menu.component";
 export class CreateAffectationComponent implements OnInit {
 
   myId!: string
-
   enseignants!: any[]
   modules!: any[]
-
   enseignantId!: string
   moduleId!: string
   heuresAssignees!: string

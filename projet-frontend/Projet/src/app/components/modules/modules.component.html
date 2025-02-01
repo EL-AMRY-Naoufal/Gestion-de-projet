@@ -1,0 +1,100 @@
+Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
+
+
+<div class="button-container">
+  Nouvelle année
+  <button (click)="openAddAnneeDialog()">+</button>
+</div>
+
+<ul class="tree">
+  <li *ngFor="let annee of data.annees; let i = index">
+    <details>
+      <summary (click)="showType('ANNEE', annee)">
+        Année: {{ annee.debut || 'Nouvelle Année' }}
+        <button (click)="openAddDepartementDialog(i)">+</button>
+        <button (click)="removeAnnee(i)">-</button>
+      </summary>
+      <ul>
+        <li *ngFor="let departement of annee.departements; let j = index">
+          <details>
+            <summary (click)="showType('DEPARTEMENT', departement)">
+              Département: {{ departement.nom || 'Nouveau Département' }}
+              <button (click)="openAddFormationDialog(i, j)">+</button>
+              <button (click)="removeDepartement(i, j)">-</button>
+            </summary>
+            <ul>
+              <li *ngFor="let formation of departement.formations; let k = index">
+                <details>
+                  <summary (click)="showType('FORMATION', formation)">
+                    Formation: {{ formation.nom || 'Nouvelle Formation' }}
+                    <button (click)="openAddNiveauDialog(i, j, k)">+</button>
+                    <button (click)="removeFormation(i, j, k)">-</button>
+                  </summary>
+                  <ul>
+                    <li *ngFor="let niveau of formation.niveaux; let l = index">
+                      <details>
+                        <summary (click)="showType('NIVEAU', niveau)">
+                          Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
+                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
+                          <button (click)="removeNiveau(i, j, k, l)">-</button>
+                        </summary>
+                        <ul>
+                          <li *ngFor="let semestre of niveau.semestres; let n = index">
+                            <details>
+                              <summary (click)="showType('SEMESTRE', semestre)">
+                                Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
+                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
+                                <button (click)="removeSemestre(i, j, k, l, n)">-</button>
+                              </summary>
+                              <ul>
+                                <li *ngFor="let module of semestre.modules; let o = index">
+                                  <details>
+                                    <summary (click)="showType('MODULE', module)">
+                                      Module: {{ module.nom || 'Nouveau Module' }}
+                                      <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
+                                      <button (click)="removeModule(i, j, k, l, n, o)">-</button>
+                                    </summary>
+                                    <ul>
+                                    <li *ngFor="let groupe of module.groupes; let p = index">
+                                      <details>
+                                        <summary (click)="showType('GROUPE', groupe)">
+                                          {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heures }} heures)
+                                          <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)">Ajouter une Affectation</button>
+                                          <button (click)="removeGroupe(i, j, k, l, n, o, p)">-</button>
+                                        </summary>
+                                        <ul>
+                                          <li *ngFor="let affectation of groupe.affectations; let q = index">
+                                            <details>
+                                              <summary (click)="showType('AFFECTATION', affectation)">
+                                                {{ affectation.nomEnseignant || 'Nouvelle Affectation' }}
+                                              </summary>
+                                              <div class="affectation-details">
+                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
+                                                <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
+                                                <p><strong>Heures assignées :</strong> {{ affectation.heuresAssignees }}</p>
+                                              </div>
+                                            </details>
+                                          </li>
+                                        </ul>
+                                      </details>
+                                    </li>
+                                  </ul>
+
+                                  </details>
+                                </li>
+                              </ul>
+                            </details>
+                          </li>
+                        </ul>
+                      </details>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </details>
+  </li>
+</ul>

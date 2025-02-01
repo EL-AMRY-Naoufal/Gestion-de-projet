@@ -1,9 +1,15 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="Niveau")
 public class Niveau {
@@ -18,10 +24,7 @@ public class Niveau {
     private Formation formation;
 
     @OneToMany(mappedBy = "niveau", cascade = CascadeType.ALL)
-    private List<Orientation> orientations;
-
-    public Niveau() {
-    }
+    private List<Semestre> semestres;
 
     public Long getId() {
         return id;
@@ -47,11 +50,11 @@ public class Niveau {
         this.formation = formation;
     }
 
-    public List<Orientation> getOrientations() {
-        return orientations;
+    public List<Semestre> getSemestres() {
+        return semestres;
     }
 
-    public void setOrientations(List<Orientation> orientations) {
-        this.orientations = orientations;
+    public void setSemestres(List<Semestre> semestres) {
+        this.semestres = semestres;
     }
 }

@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.SemestreService;
+import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,23 @@ public class SemestreController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/niveau/{niveauId}")
+    public List<Semestre> getSemestresByNiveau(@PathVariable Long niveauId) {
+        List<Semestre> semestres = semestreService.getSemestresByNiveau(Niveau.builder().id(niveauId).build());
+
+        //emptying "orientation" so the json is not too deep
+        semestres.forEach((s) -> {
+            s.setNiveau(null);
+            //emptying "groupes" and "semestre" so the json is not too deep
+            s.getModules().forEach((m) -> {
+                m.setSemestre(null);
+                m.setGroupes(null);
+            });
+        });
+
+        return semestres;
     }
 
     // Add a new Semestre

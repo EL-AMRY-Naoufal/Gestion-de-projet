@@ -41,11 +41,11 @@ public class UserServiceDefault implements UserService {
         this.userRepository = userRepository;
     }
 
-    @PostConstruct
+    /*@PostConstruct
     public void postConstruct() {
-        /*
+        *//*
             Comptes de tests
-         */
+         *//*
 
         // UserRoles
         Map<String, Role> userRoles = Map.of(
@@ -55,9 +55,9 @@ public class UserServiceDefault implements UserService {
                 "sec", Role.SECRETARIAT_PEDAGOGIQUE
         );
 
-        /*for(UserRole ur : userRoles.values()){
+        *//*for(UserRole ur : userRoles.values()){
             userRoleRepository.findAllByRoleAndYear(ur.getRole(), ur.getYear());
-        }*/
+        }*//*
 
         List<Annee> annees = List.of(
                 anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(Annee.builder().id(1L).debut(2024).build())),
@@ -75,7 +75,7 @@ public class UserServiceDefault implements UserService {
             u.addRole(Annee.builder().id(1L).build(), userRoles.get(u.getUsername()));
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
         }
-    }
+    }*/
 
     @Override
     public User authenticate(String email, String password) {  // Return type is User

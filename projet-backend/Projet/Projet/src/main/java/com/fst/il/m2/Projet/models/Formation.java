@@ -1,9 +1,11 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 @Entity
 @Table(name = "Formations")
 public class Formation {
@@ -21,29 +23,17 @@ public class Formation {
     @JoinColumn(name = "responsable_formation_id")
     private ResponsableFormation responsableFormation;
 
-    @OneToMany(mappedBy = "formation")
-    private List<Module> modules;
-
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Niveau> niveaux;
 
     public Formation() {
     }
 
-    public Formation(Long id, String nom, int totalHeures, ResponsableFormation responsableFormation, List<Module> modules) {
+    public Formation(Long id, String nom, int totalHeures, ResponsableFormation responsableFormation, List<Niveau> niveaux) {
         this.id = id;
         this.nom = nom;
         this.totalHeures = totalHeures;
         this.responsableFormation = responsableFormation;
-        this.modules = modules;
-    }
-
-    public Formation(Long id, String nom, int totalHeures, ResponsableFormation responsableFormation, List<Module> modules, List<Niveau> niveaux) {
-        this.id = id;
-        this.nom = nom;
-        this.totalHeures = totalHeures;
-        this.responsableFormation = responsableFormation;
-        this.modules = modules;
         this.niveaux = niveaux;
     }
 
@@ -77,14 +67,6 @@ public class Formation {
 
     public void setResponsableFormation(ResponsableFormation responsableFormation) {
         this.responsableFormation = responsableFormation;
-    }
-
-    public List<Module> getModules() {
-        return modules;
-    }
-
-    public void setModules(List<Module> modules) {
-        this.modules = modules;
     }
 
     public List<Niveau> getNiveaux() {

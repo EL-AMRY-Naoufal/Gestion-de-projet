@@ -4,6 +4,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.*;
+import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private AffectationRepository affectationRepository;
     @Autowired
     private ModuleRepository moduleRepository;
+    @Autowired
+    private GroupeRepository groupeRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
 
@@ -189,31 +192,32 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
 
     @Override
-    public Affectation affecterModuleToEnseignant(Long userId, Long moduleId, int heuresAssignees) {
+    public void affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
-        // Récupérer l'enseignant depius l'ID de l'utilisateur
+        // Récupérer l'id de l'enseignant depuis la table des users
         Long enseignantID = enseignantRepository.findByUserId(userId)
                 .orElseThrow(NotFoundException::new)
                 .getId();
 
-        System.err.println("enseignantID: " + enseignantID);
-
+//        System.err.println("enseignantID: " + enseignantID);
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
                 .orElseThrow(NotFoundException::new);
 
-        // Récupérer le module
-        Module module = moduleRepository.findById(moduleId)
-                .orElseThrow(NotFoundException::new);
+        // Récupérer le groupe
+        Groupe groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new RuntimeException("Groupe not found with id: " + groupeId));
 
         // Vérifier si l'enseignant a des heures disponibles
        /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
             throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
         }*/
 
+
+
         // Créer une nouvelle affectation
         Affectation affectation = new Affectation();
         affectation.setEnseignant(enseignant);
-        affectation.setModule(module);
+        affectation.setGroupe(groupe);
         affectation.setHeuresAssignees(heuresAssignees);
         affectation.setDateAffectation(LocalDate.now());
         affectation.setCommentaire("");
@@ -225,7 +229,6 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
 
-        return savedAffectation;
     }
 
     public List<UserRole> getUsersByRole(Role role) {

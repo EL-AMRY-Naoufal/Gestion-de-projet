@@ -27,17 +27,57 @@ public class Affectation {
     private Enseignant enseignant;
 
     @ManyToOne
-    @JoinColumn(name = "module_id")
-    private Module module;
+    @JoinColumn(name = "groupe_id")
+    private Groupe groupe;
 
     public Affectation() {
     }
 
-    public Affectation(Long id, int heuresAssignees, LocalDate dateAffectation, Enseignant enseignant, Module module) {
+    public Affectation(Long id, int heuresAssignees, LocalDate dateAffectation, Enseignant enseignant, Groupe groupe) {
         this.id = id;
         this.heuresAssignees = heuresAssignees;
         this.dateAffectation = dateAffectation;
         this.enseignant = enseignant;
-        this.module = module;
+        this.groupe = groupe;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getHeuresAssignees() {
+        return heuresAssignees;
+    }
+
+    public void setHeuresAssignees(int heuresAssignees) {
+        this.heuresAssignees = heuresAssignees;
+    }
+
+    public LocalDate getDateAffectation() {
+        return dateAffectation;
+    }
+
+    public void setDateAffectation(LocalDate dateAffectation) {
+        this.dateAffectation = dateAffectation;
+    }
+
+    public Enseignant getEnseignant() {
+        return enseignant;
+    }
+
+    public void setEnseignant(Enseignant enseignant) {
+        this.enseignant = enseignant;
+    }
+
+    public Groupe getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe = groupe;
     }
 }
