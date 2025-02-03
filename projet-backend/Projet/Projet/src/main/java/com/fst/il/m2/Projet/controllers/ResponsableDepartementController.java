@@ -92,5 +92,12 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok("Enseignant affecté avec succès");
     }
 
+    //supprimer une affectation
+    @DeleteMapping("/affectation/{idAffectation}")
+    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
+        responsableDepartementService.deleteAffectation(idAffectation);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

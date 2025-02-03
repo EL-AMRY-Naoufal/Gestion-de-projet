@@ -230,6 +230,16 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         enseignantRepository.save(enseignant);
 
     }
+    
+    @Override
+    public void deleteAffectation(Long id){
+        Affectation affectation = affectationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Affectation not found with id: " + id));
+        Enseignant enseignant = affectation.getEnseignant();
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() - affectation.getHeuresAssignees());
+        enseignantRepository.save(enseignant);
+        affectationRepository.deleteById(id);
+    }
 
     public List<UserRole> getUsersByRole(Role role) {
         return userRoleRepository.findByRole(role);

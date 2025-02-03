@@ -47,9 +47,8 @@
           float: right;
           margin-left: 1rem;
           padding: 0.2rem 0.5rem;
-          font-size: 0.8rem;
+          font-size: 0.5cm;
           border: none;
-          color: #fff;
           border-radius: 3px;
           transition: background-color 0.3s;
 
@@ -61,15 +60,18 @@
             background-color: #28a745;
 
             &:hover {
+
               background-color: #218838;
             }
           }
 
           &:last-child { /* Bouton "-" */
-            background-color: #ff0000;
+            background-color: transparent;
+            color: red;
 
             &:hover {
-              background-color: #b10000;
+              color: #ff0000;
+              background-color: white;
             }
           }
         }
@@ -88,11 +90,12 @@
   }
 }
 
-button {
+
+.new-year{
   background-color: #4CAF50;
   border: none;
-  color: white;
-  padding: 10px 20px;
+  color: black;
+  padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -102,11 +105,23 @@ button {
   border-radius: 4px;
 }
 
+
+
 .button-container {
   font-weight: bold;
   text-align: right;
 }
 
-button:hover {
-  background-color: #45a049;
+
+
+.affectation-info {
+  display: flex;
+  align-items: center;
+
+
+}
+
+.affectation-info p {
+  margin: 0;
+  padding: 0 10px;
 }

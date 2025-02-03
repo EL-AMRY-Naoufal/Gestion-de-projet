@@ -186,6 +186,19 @@ export class UserService {
       );
   }
 
+
+
+  deleteAffectation(affectationId: number): Observable<string> {
+    return this._http
+      .delete<string>(`${this._backendURL.allUsers}/affectation/${affectationId}`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this._loginService.authToken}`,
+        }),
+      })
+      .pipe(map((response) => response));
+  }
+
+
   searchUsers(username: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;
     return this._http.get<any[]>(url);

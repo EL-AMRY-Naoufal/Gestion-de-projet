@@ -11,7 +11,7 @@ import {LoginService} from "../../../../services/login.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {group} from "@angular/animations";
-import {Module} from "../../../shared/types/modules.types";
+import {Affectation, Module} from "../../../shared/types/modules.types";
 
 
 @Component({
