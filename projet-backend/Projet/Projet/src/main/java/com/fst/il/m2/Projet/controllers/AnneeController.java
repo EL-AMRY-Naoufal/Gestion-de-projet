@@ -24,6 +24,8 @@ public class AnneeController {
     @PostMapping
     public ResponseEntity<Annee> createAnnee(@RequestBody Annee annee) {
         Annee savedAnnee = anneeService.saveAnnee(annee);
+        System.out.println("data received : " + annee);
+        System.out.println("data saved : " + savedAnnee);
         return new ResponseEntity<>(savedAnnee, HttpStatus.CREATED);
     }
 

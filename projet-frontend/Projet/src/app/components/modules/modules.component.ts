@@ -298,4 +298,11 @@ export class ModulesComponent implements OnInit {
     });
 
   }
+
+  saveAnnee() {
+    console.log("saving data");
+    let data_to_send = this.data.annees;
+
+    data_to_send.forEach(annee => this.anneeService.saveAnnee(annee).subscribe(response => console.log(response)));
+  }
 }

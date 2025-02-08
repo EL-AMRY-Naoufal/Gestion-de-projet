@@ -26,12 +26,17 @@ export class AnneeService {
       (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
     );
   }
-  
+
   getAllAnnees(): Observable<any> {
     return this.http.get<any>(`${this._backendURL.annees}`);
   }
 
   getAnneeById(id: number): Observable<any> {
     return this.http.get<Annee>(`${this._backendURL.annees}/${id}`)
+  }
+
+  saveAnnee(annee: Annee): Observable<Annee> {
+    annee.departements = [];
+    return this.http.post<Annee>(`${this._backendURL.annees}`, annee);
   }
 }
