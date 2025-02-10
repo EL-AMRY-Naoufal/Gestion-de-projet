@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.EnseignantService;
+import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -22,6 +24,7 @@ import java.util.List;
 @Validated
 public class EnseignantController {
     private final EnseignantService enseignantService;
+    private final UserService userService;
 
     @GetMapping("/{id}/affectations")
     public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
@@ -41,21 +44,43 @@ public class EnseignantController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/finduser")
+    public ResponseEntity<List<User>> getUsersWithSameEnseignantNameAndFirstName(
+            @RequestParam String name,
+            @RequestParam String firstname) {
+        List<User> users = userService.findUsersByEnseignantNameAndFirstName(name, firstname);
+
+        return ResponseEntity.ok(users);
+    }
     @GetMapping()
-    public List<User> getEnseignants(){
-        return enseignantService.getEnseignants();
+    public List<EnseignantDto> getEnseignants(){
+        return enseignantService.getEnseignants().stream().map(
+                EnseignantMapper::enseignantToEnseignantDto
+        ).collect(Collectors.toList());
     }
 
     @PostMapping()
     public EnseignantDto createEnseignant(@RequestBody EnseignantDto enseignant) {
-        return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
-                enseignant.getId(),
-                enseignant.getMaxHeuresService(),
-                enseignant.getHeuresAssignees(),
-                enseignant.getCategorieEnseignant(),
-                enseignant.getNbHeureCategorie(),
-                1L)
-        );
+        if(enseignant.isHasAccount()) {
+            return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
+                    enseignant.getUser(),
+                    enseignant.getMaxHeuresService(),
+                    enseignant.getHeuresAssignees(),
+                    enseignant.getCategorieEnseignant(),
+                    enseignant.getNbHeureCategorie(),
+                    1L)
+            );
+        }
+        else {
+            return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignantWithoutAccount(
+                    enseignant.getName(),
+                    enseignant.getFirstname(),
+                    enseignant.getMaxHeuresService(),
+                    enseignant.getHeuresAssignees(),
+                    enseignant.getCategorieEnseignant(),
+                    enseignant.getNbHeureCategorie()
+            ));
+        }
     }
 
     @GetMapping("{id}")
@@ -65,25 +90,30 @@ public class EnseignantController {
 
     @PutMapping()
     public  EnseignantDto updateEnseignant(@RequestBody EnseignantDto enseignant) {
-        if(enseignant.getId() == null) {
+        if(enseignant.getUser() != null && enseignant.isHasAccount())
+        {
+            System.out.println("updateEnseignant 1");
             return EnseignantMapper.enseignantToEnseignantDto(
-                    this.enseignantService.createEnseignant(
-                            enseignant.getUser().getId(),
+                    this.enseignantService.updateEnseignant(
+                            enseignant.getId(),
                             enseignant.getMaxHeuresService(),
-                            enseignant.getHeuresAssignees(),
                             enseignant.getCategorieEnseignant(),
                             enseignant.getNbHeureCategorie(),
-                            1L
-
+                            enseignant.getUser(),
+                            enseignant.isHasAccount()
                     )
             );
         }
-        return EnseignantMapper.enseignantToEnseignantDto(
+        System.out.println("updateEnseignant 2");
+       return EnseignantMapper.enseignantToEnseignantDto(
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),
                         enseignant.getMaxHeuresService(),
                         enseignant.getCategorieEnseignant(),
-                        enseignant.getNbHeureCategorie()
+                        enseignant.getNbHeureCategorie(),
+                        enseignant.getName(),
+                        enseignant.getFirstname(),
+                        enseignant.isHasAccount()
                 )
         );
     }

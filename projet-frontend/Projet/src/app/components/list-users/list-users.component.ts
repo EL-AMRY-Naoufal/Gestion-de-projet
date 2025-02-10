@@ -56,6 +56,9 @@ export class ListUsersComponent implements OnInit {
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
+    name: '',
+    firstname: '',
+    hasAccount: false,
     categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,

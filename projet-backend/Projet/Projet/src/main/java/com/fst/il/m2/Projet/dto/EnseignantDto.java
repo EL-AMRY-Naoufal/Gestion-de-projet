@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EnseignantDto {
     private Long id;
+    private String name;
+    private String firstname;
+    private boolean hasAccount;
     private CategorieEnseignant categorieEnseignant;
     private int nbHeureCategorie;
     private int maxHeuresService;

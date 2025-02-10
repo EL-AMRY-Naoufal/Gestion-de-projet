@@ -109,6 +109,11 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
+    public List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname) {
+        return this.userRepository.findUsersByNameAndFirstname(name, firstname);
+    }
+
+    @Override
     public void modifyPassword(Long id,String password) {
         var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + "not found"));
         user.setPassword(password);

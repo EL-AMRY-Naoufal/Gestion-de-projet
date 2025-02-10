@@ -423,6 +423,9 @@ private _buildForm(): FormGroup {
   defaultHeures = 192;
   categories: string[] = [];
   enseignant: EnseignantDto = {
+    name: '',
+    firstname: '',
+    hasAccount: false,
     maxHeuresService: 192,
     categorieEnseignant: CategorieEnseignant.ATER,
     heuresAssignees: 0,

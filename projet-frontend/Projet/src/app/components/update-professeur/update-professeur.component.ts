@@ -12,6 +12,7 @@ import { UserService } from '../../services/user.service';
 import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.type';
 import { EnseignantService } from '../../services/enseignant.service';
 import { User } from '../shared/types/user.type';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-update-professeur',
@@ -24,6 +25,7 @@ import { User } from '../shared/types/user.type';
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
+    MatCheckboxModule,
   ],
   providers: [EnseignantService],
   templateUrl: './update-professeur.component.html',
@@ -34,15 +36,20 @@ export class UpdateProfesseurComponent {
   categories: string[] = [];
   enseignant: EnseignantDto = {
     maxHeuresService: -1,
+    name: '',
+    firstname: '',
+    hasAccount: false,
     categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
     heuresAssignees: 0,
     nbHeureCategorie: 0
   };
   categoriesEnseignant = Object.values(CategorieEnseignant);
-  userName: string = '';
+  userFullName: string = '';
   utilisateurs: User[] = [];
 
   isEdit = false;
+
+  isEditandUserNull = false;
 
   constructor(
     private dialogRef: MatDialogRef<UpdateProfesseurComponent>,
@@ -52,15 +59,22 @@ export class UpdateProfesseurComponent {
   ) {
     if (data) {
       this.isEdit = true;
-      this.userName = data.username;
+      if(data.user){
+        this.userFullName = `${data.user.firstname} ${data.user.name}`;
+      }
+      else{
+        this.isEditandUserNull = true;
+      }
       this.enseignantService.getEnseignant(data.id).subscribe({
         next: (enseignant) => {
-          console.log(enseignant);
           this.enseignant = enseignant;
         },
         error: (error) => {
           console.error('Error fetching enseignant:', error);
           this.enseignant = {
+            name: '',
+            firstname: '',
+            hasAccount: false,
             maxHeuresService: this.defaultHeures,
             categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
             heuresAssignees: 0,
@@ -71,6 +85,9 @@ export class UpdateProfesseurComponent {
     }
     else {
       this.enseignant = {
+        name: '',
+        firstname: '',
+        hasAccount: false,
         maxHeuresService: this.defaultHeures || 0,
         categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
         heuresAssignees: 0,
@@ -79,11 +96,19 @@ export class UpdateProfesseurComponent {
     }
   }
 
+  get selectedUser(): any {
+    return this.isEdit ? this.enseignant.user : this.enseignant.id;
+  }
+
   ngOnInit(): void {
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
     !this.isEdit && this.enseignantService.getEnseignantsNotInEnseignantTable().subscribe(data => {
+      this.utilisateurs = data;
+    });
+
+    this.isEditandUserNull && this.enseignantService.getUserWithSameEnseignantNameAndFirstName(this.data).subscribe(data => {
       this.utilisateurs = data;
     });
   }

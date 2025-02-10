@@ -3,15 +3,15 @@
     <!-- Titre avec le nom d'utilisateur -->
     <mat-card-title>
       <a href="javascript:void(0);">
-        <span>{{ user.name }} </span>
-        <span>{{ user.firstname }}</span><br/>
+        <span>{{ enseignant.name }} </span>
+        <span>{{ enseignant.firstname }}</span><br/>
       </a>
     </mat-card-title>
 
     <!-- Sous-titre pour afficher les rôles de l'utilisateur -->
     <mat-card-subtitle>
-      <ng-container *ngIf="user.roles?.length; else noRoles">
-        <span *ngFor="let roleDto of user.roles; let last = last">
+      <ng-container *ngIf="enseignant?.user?.roles?.length; else noRoles">
+        <span *ngFor="let roleDto of enseignant?.user?.roles; let last = last">
           {{ roleDto.role }} <!-- Affichage du rôle et de l'année -->
           <span *ngIf="!last"><br></span>
         </span>
@@ -21,6 +21,16 @@
       </ng-template>
     </mat-card-subtitle>
 
+    <mat-card-content class="custom-description">
+      <div *ngIf="enseignant.categorieEnseignant">
+        <span>{{ enseignant.categorieEnseignant }}</span>
+      </div>
+  
+      <div>Heures assignées: {{ enseignant.heuresAssignees }}h</div>
+      <div>Décharge: {{ enseignant.nbHeureCategorie }}h</div>
+      <div>Heures maximales de service: {{ enseignant.maxHeuresService }}h</div>
+    </mat-card-content>
+
 
 <!-- Actions (modification et suppression avec icônes personnalisées) -->
 <mat-card-actions class="custom-actions">
@@ -28,7 +38,7 @@
   <div
     class="custom-icon edit-icon"
     *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-    [routerLink]="['/edit', user.id]"
+    (click)="openDialog(enseignant)"
     title="Edit user"
   >
     ✏️
@@ -38,7 +48,7 @@
   <div
     class="custom-icon delete-icon"
     *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-    (click)="delete(user)"
+    (click)="delete(enseignant)"
     title="Delete user"
   >
     🗑️

@@ -9,6 +9,9 @@ public class EnseignantMapper {
         CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
         return EnseignantDto.builder()
                 .id(enseignant.getId())
+                .name(enseignant.getName())
+                .firstname(enseignant.getFirstname())
+                .hasAccount(enseignant.isHasAccount())
                 .categorieEnseignant(categorie)
                 .nbHeureCategorie(enseignant.getNbHeureCategorie(categorie))
                 .maxHeuresService(enseignant.getMaxHeuresService())

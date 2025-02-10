@@ -10,19 +10,35 @@
     </h1>
 
     <div mat-dialog-content>
-        <form>
-            <mat-form-field appearance="fill" class="form-field">
+        <form #form="ngForm">
+            <mat-checkbox class="custom-checkbox" [(ngModel)]="enseignant.hasAccount" name="hasAccount" >
+                L'utilisateur a un compte
+            </mat-checkbox>
+
+            <mat-form-field appearance="fill" class="form-field" *ngIf="!enseignant.hasAccount">
+                <mat-label>Nom</mat-label>
+                <input matInput [(ngModel)]="enseignant.name" name="name" [required]="!enseignant.hasAccount" [disabled]="enseignant.hasAccount"/>
+                <mat-error *ngIf="form.submitted && !enseignant.name">Le nom est requis.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field" *ngIf="!enseignant.hasAccount">
+                <mat-label>Prénom</mat-label>
+                <input matInput [(ngModel)]="enseignant.firstname" name="firstname" [required]="!enseignant.hasAccount" [disabled]="enseignant.hasAccount"/>
+                <mat-error *ngIf="form.submitted && !enseignant.firstname">Le prénom est requis.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="form-field" *ngIf="enseignant.hasAccount">
                 <mat-label>Utilisateur</mat-label>
-                <ng-container *ngIf="isEdit; else selectUser">
-                    <input matInput [value]="userName" disabled />
+                <ng-container *ngIf="isEdit && !isEditandUserNull else selectUser">
+                    <input matInput [value]="userFullName" disabled />
                 </ng-container>
                 <ng-template #selectUser>
-                    <mat-select [(ngModel)]="enseignant.id" name="utilisateur" required>
-                        <mat-option *ngFor="let utilisateur of utilisateurs" [value]="utilisateur.id">
-                            {{ utilisateur.username }}
+                    <mat-select [(ngModel)]="enseignant.user" name="utilisateur" [required]="enseignant.hasAccount">
+                        <mat-option *ngFor="let utilisateur of utilisateurs" [value]="utilisateur">
+                            {{ utilisateur.firstname }} {{ utilisateur.name }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="!enseignant.id">L'utilisateur est requis.</mat-error>
+                    <mat-error *ngIf="form.submitted && !enseignant.id && enseignant.hasAccount">L'utilisateur est requis.</mat-error>
                 </ng-template>
             </mat-form-field>
 
@@ -30,7 +46,7 @@
                 <mat-label>Nombre d'heures</mat-label>
                 <input matInput [(ngModel)]="enseignant.maxHeuresService" name="nombreHeures" type="number"
                     [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
-                <mat-error *ngIf="!enseignant.maxHeuresService">Le nombre d'heures est requis.</mat-error>
+                <mat-error *ngIf="form.submitted && !enseignant.maxHeuresService">Le nombre d'heures est requis.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="form-field">
@@ -40,20 +56,20 @@
                         {{ category }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!enseignant.categorieEnseignant">La categorie est requise.</mat-error>
+                <mat-error *ngIf="form.submitted && !enseignant.categorieEnseignant">La categorie est requise.</mat-error>
             </mat-form-field>
 
             <div *ngIf="enseignant.categorieEnseignant">
                 <mat-form-field appearance="fill" class="form-field">
                     <mat-label>Heures pour {{ enseignant.categorieEnseignant }}</mat-label>
                     <input matInput type="number" [(ngModel)]="enseignant.nbHeureCategorie" name="nbHeureCategorie" required />
-                    <mat-error *ngIf="!enseignant.nbHeureCategorie">Les heures pour cette catégorie sont requises.</mat-error>
+                    <mat-error *ngIf="form.submitted && !enseignant.nbHeureCategorie">Les heures pour cette catégorie sont requises.</mat-error>
                 </mat-form-field>
             </div>
         </form>
     </div>
     <div mat-dialog-actions>
-        <button mat-flat-button (click)="save()">Enregistrer</button>
+        <button mat-flat-button [disabled]="form.invalid"  (click)="save()">Enregistrer</button>
         <button mat-flat-button class="cancel" (click)="close()">Fermer</button>
     </div>
 </div>

@@ -151,7 +151,7 @@ body {
 .user-grid {
   margin: 1em;
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 colonnes fixes */
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes fixes */
   column-gap: 2em; /* Espacement horizontal entre les cartes */
   row-gap: 1em; /* Espacement vertical entre les cartes */
   padding: 1em;

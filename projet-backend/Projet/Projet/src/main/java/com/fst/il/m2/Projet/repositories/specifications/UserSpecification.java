@@ -42,7 +42,8 @@ public class UserSpecification {
 
             CriteriaQuery<Long> subQuery = criteriaBuilder.createQuery(Long.class);
             Root<Enseignant> enseignantRoot = subQuery.from(Enseignant.class);
-            subQuery.select(enseignantRoot.get("user").get("id"));
+            subQuery.select(enseignantRoot.get("user").get("id"))
+                    .where(criteriaBuilder.isNotNull(enseignantRoot.get("user")));
             List<Long> ids = entityManager.createQuery(subQuery).getResultList();
 
             return criteriaBuilder.not(root.get("id").in(ids));

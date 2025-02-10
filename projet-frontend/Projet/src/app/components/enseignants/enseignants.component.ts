@@ -8,6 +8,7 @@ import { UpdateProfesseurComponent } from '../update-professeur/update-professeu
 import { MenuComponent } from '../shared/menu/menu.component';
 import { ProfilCardComponent } from "../shared/profil-card/profil-card.component";
 import { UserCardComponent } from '../shared/user-card/user-card.component';
+import { EnseignantDto } from '../shared/types/enseignant.type';
 
 @Component({
   selector: 'app-enseignants',
@@ -19,7 +20,7 @@ import { UserCardComponent } from '../shared/user-card/user-card.component';
 })
 
 export class EnseignantsComponent  implements OnInit{
- users: any[] = [];
+ enseignants: EnseignantDto[] = [];
  private _view: string;
   constructor(private userService: UserService,
     private _usersService: UserService,
@@ -31,10 +32,10 @@ export class EnseignantsComponent  implements OnInit{
 
   ngOnInit(): void {
     this.enseignantService.getEnseignants().subscribe(data => {
-      this.users = data;
+      this.enseignants = data;
     });  }
 
-    openDialog(enseignant?: any) {
+    openDialog(enseignant?: EnseignantDto): void {
       const dialogRef = this.dialog.open(UpdateProfesseurComponent, {
         data: enseignant,
         width: '500px',
@@ -43,7 +44,7 @@ export class EnseignantsComponent  implements OnInit{
 
       dialogRef.afterClosed().subscribe(result => {
         this.enseignantService.getEnseignants().subscribe(data => {
-          this.users = data;
+          this.enseignants = data;
         });
         if (result) {
           console.log('Données reçues du modal:', result);
