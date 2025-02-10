@@ -51,6 +51,8 @@ export class ListUsersComponent implements OnInit {
   private _view: string;
 
   searchQuery: string = '';
+  filteredUsers: User[] = [];
+  searchPerformed: boolean = false;
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
@@ -112,7 +114,6 @@ export class ListUsersComponent implements OnInit {
    * OnInit implementation
    */
   ngOnInit(): void {
-    
     this.selectedYear = {
       id: this._yearService.currentYearId,
       debut: 2021,
@@ -168,7 +169,7 @@ export class ListUsersComponent implements OnInit {
       return {
         ...user,
         roles: user.roles.filter((role) => role.year === this.selectedYear?.id),
-      } 
+      };
     });
   }
 
@@ -281,7 +282,7 @@ export class ListUsersComponent implements OnInit {
       }),
     };
 
-    console.log(this._listUsers)
+    console.log(this._listUsers);
 
     return this._usersService.create(userToSend);
   }
@@ -292,12 +293,12 @@ export class ListUsersComponent implements OnInit {
 
   searchTeachers(): void {
     const normalizedQuery = this.normalizeString(this.searchQuery.trim());
-
     if (normalizedQuery) {
       this._usersService.searchUsers(normalizedQuery).subscribe({
         next: (data: User[]) => {
           if (Array.isArray(data)) {
             this._listUsers = data;
+            this.filteredUsers = data;
           } else {
             console.error(
               "La réponse de la recherche n'est pas un tableau:",
@@ -311,8 +312,10 @@ export class ListUsersComponent implements OnInit {
           this._listUsers = [];
         },
       });
+      this.searchPerformed = true;
     } else {
       this.ngOnInit();
+      this.searchPerformed = false;
     }
   }
   private normalizeString(str: string): string {
