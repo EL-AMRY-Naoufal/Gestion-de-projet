@@ -126,26 +126,17 @@ export class UserService {
   delete(id: number): Observable<number> {
     return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
-        body: { responsableId: this._responsableId },
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${this._loginService.authToken}`, // Utilisation du token du LoginService
-        }),
+        body: { responsableId: this._responsableId }
       })
       .pipe(map(() => id));
   }
 
   private _options(headerList: object = {}): any {
-    const token = this._loginService.authToken; // Récupère le token depuis LoginService
 
     // Crée un objet pour les en-têtes
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
     };
-
-    // Si le token est disponible, ajoute l'en-tête Authorization
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
 
     // Fusionne les en-têtes supplémentaires (headerList) avec ceux déjà définis
     return {

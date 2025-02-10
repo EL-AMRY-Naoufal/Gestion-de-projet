@@ -24,7 +24,6 @@ public class UserMapper {
                 .firstname(user.getFirstname())
                 .name(user.getName())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .roles(user.getRoles().stream().map(
                         userRole -> UserRoleDto.builder()
                                 .role(userRole.getRole())

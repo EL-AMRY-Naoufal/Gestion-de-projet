@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
@@ -123,5 +124,9 @@ public class UserServiceDefault implements UserService {
         
     public List<User> getAllUsersNotTeachers() {
         return this.userRepository.findUsersByRolesNotLike(Role.ENSEIGNANT);
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.findOneUserByUsername(username).orElseThrow(NotFoundException::new);
     }
 }
