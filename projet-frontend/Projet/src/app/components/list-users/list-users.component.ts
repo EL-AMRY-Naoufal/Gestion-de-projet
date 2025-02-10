@@ -244,7 +244,7 @@ export class ListUsersComponent implements OnInit {
               this._yearService.currentYearId
             )
           ) {
-            this.enseignantDto.id = user.id;
+            this.enseignantDto.user = user;
             this._addTeacher(this.enseignantDto);
           }
         },

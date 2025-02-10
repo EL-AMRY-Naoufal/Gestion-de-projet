@@ -13,6 +13,7 @@ import { CategorieEnseignant, EnseignantDto } from '../shared/types/enseignant.t
 import { EnseignantService } from '../../services/enseignant.service';
 import { User } from '../shared/types/user.type';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-update-professeur',
@@ -26,6 +27,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatOptionModule,
     MatCheckboxModule,
+    ReactiveFormsModule,
   ],
   providers: [EnseignantService],
   templateUrl: './update-professeur.component.html',
@@ -34,29 +36,35 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 export class UpdateProfesseurComponent {
   defaultHeures = 192;
   categories: string[] = [];
-  enseignant: EnseignantDto = {
-    maxHeuresService: -1,
-    name: '',
-    firstname: '',
-    hasAccount: false,
-    categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
-    heuresAssignees: 0,
-    nbHeureCategorie: 0
-  };
   categoriesEnseignant = Object.values(CategorieEnseignant);
   userFullName: string = '';
   utilisateurs: User[] = [];
 
   isEdit = false;
-
   isEditandUserNull = false;
+  form: FormGroup;
 
   constructor(
     private dialogRef: MatDialogRef<UpdateProfesseurComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: EnseignantDto,
     private enseignantService: EnseignantService,
     private categorieService: CategorieEnseignantService,
+    private fb: FormBuilder,
   ) {
+
+    // Initialisation du formulaire
+    this.form = this.fb.group({
+      id: [data?.id || null],
+      hasAccount: [data?.hasAccount || false],
+      name: [data?.name || '', Validators.required],
+      firstname: [data?.firstname || '', Validators.required],
+      user: [data?.user || null],
+      maxHeuresService: [data?.maxHeuresService || this.defaultHeures , [Validators.required, Validators.min(0)]],
+      categorieEnseignant: [data?.categorieEnseignant || null, Validators.required],
+      nbHeureCategorie: [data?.nbHeureCategorie || 0, [Validators.required, Validators.min(0)]],
+    });
+  this.setupConditionalValidation();
+
     if (data) {
       this.isEdit = true;
       if(data.user){
@@ -65,40 +73,59 @@ export class UpdateProfesseurComponent {
       else{
         this.isEditandUserNull = true;
       }
-      this.enseignantService.getEnseignant(data.id).subscribe({
-        next: (enseignant) => {
-          this.enseignant = enseignant;
-        },
-        error: (error) => {
-          console.error('Error fetching enseignant:', error);
-          this.enseignant = {
-            name: '',
-            firstname: '',
-            hasAccount: false,
-            maxHeuresService: this.defaultHeures,
-            categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
-            heuresAssignees: 0,
-            nbHeureCategorie: 0
-          };
-        }
-      });
-    }
-    else {
-      this.enseignant = {
-        name: '',
-        firstname: '',
-        hasAccount: false,
-        maxHeuresService: this.defaultHeures || 0,
-        categorieEnseignant: CategorieEnseignant.EnseignantChercheur,
-        heuresAssignees: 0,
-        nbHeureCategorie: 0
-      };
     }
   }
 
-  get selectedUser(): any {
-    return this.isEdit ? this.enseignant.user : this.enseignant.id;
+  setupConditionalValidation() {
+    const hasAccountControl = this.form.get('hasAccount');
+    const nameControl = this.form.get('name');
+    const firstnameControl = this.form.get('firstname');
+    const userControl = this.form.get('user');
+  
+    // Appliquer les validations au chargement initial
+    this.toggleValidators(hasAccountControl?.value);
+  
+    // Écoute des changements sur hasAccount
+    hasAccountControl?.valueChanges.subscribe((hasAccount) => {
+      this.toggleValidators(hasAccount);
+    });
   }
+  
+  toggleValidators(hasAccount: boolean) {
+    const nameControl = this.form.get('name');
+    const firstnameControl = this.form.get('firstname');
+    const userControl = this.form.get('user');
+  
+    if (hasAccount) {
+      // Si l'utilisateur a un compte, "name" et "firstname" ne sont pas requis, mais "user" l'est
+      nameControl?.clearValidators();
+      firstnameControl?.clearValidators();
+      userControl?.setValidators([Validators.required]);
+    } else {
+      // Sinon, "name" et "firstname" sont requis, et "user" ne l'est pas
+      nameControl?.setValidators([Validators.required, Validators.minLength(2)]);
+      firstnameControl?.setValidators([Validators.required, Validators.minLength(2)]);
+      userControl?.clearValidators();
+    }
+  
+    // Mise à jour des validations
+    nameControl?.updateValueAndValidity();
+    firstnameControl?.updateValueAndValidity();
+    userControl?.updateValueAndValidity();
+  }
+
+  populateForm(enseignant: EnseignantDto) {
+    this.form.patchValue({
+      hasAccount: enseignant.hasAccount,
+      name: enseignant.name,
+      firstname: enseignant.firstname,
+      user: enseignant.user,
+      maxHeuresService: enseignant.maxHeuresService,
+      categorieEnseignant: enseignant.categorieEnseignant,
+      nbHeureCategorie: enseignant.nbHeureCategorie,
+    });
+  }
+  
 
   ngOnInit(): void {
     this.categorieService.getCategories().subscribe(data => {
@@ -115,24 +142,23 @@ export class UpdateProfesseurComponent {
 
 
   save() {
-    if (this.isEdit) {
-      this.enseignantService.updateEnseignant(this.enseignant).subscribe(
-        (response) => {
-          this.dialogRef.close(this.enseignant);
-        },
-        (error) => {
-        }
-      );
-    } else {
-      this.enseignantService.createEnseignant(this.enseignant).subscribe(
-        (response) => {
-          this.dialogRef.close(this.enseignant);
-        },
-        (error) => {
-        }
-      );
+    console.log('Form:', this.form);
+    if (this.form.valid) {
+      const enseignantData = this.form.value;
+      if (this.isEdit) {
+        this.enseignantService.updateEnseignant(enseignantData).subscribe(
+          (response) => this.dialogRef.close(enseignantData),
+          (error) => console.error('Error updating enseignant:', error)
+        );
+      } else {
+        this.enseignantService.createEnseignant(enseignantData).subscribe(
+          (response) => this.dialogRef.close(enseignantData),
+          (error) => console.error('Error creating enseignant:', error)
+        );
+      }
     }
   }
+  
 
   close() {
     this.dialogRef.close();

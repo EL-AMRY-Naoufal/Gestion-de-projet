@@ -88,11 +88,30 @@ public class EnseignantController {
         return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
     }
 
+    @GetMapping("/userId/{id}")
+    public EnseignantDto getEnseignantByUserId(@PathVariable Long id) {
+        return EnseignantMapper.enseignantToEnseignantDto(
+                this.enseignantService.getEnseignantByUser(id)
+        );
+    }
+
     @PutMapping()
     public  EnseignantDto updateEnseignant(@RequestBody EnseignantDto enseignant) {
+
         if(enseignant.getUser() != null && enseignant.isHasAccount())
         {
-            System.out.println("updateEnseignant 1");
+            if(enseignant.getId() == null){
+                return EnseignantMapper.enseignantToEnseignantDto(
+                        this.enseignantService.createEnseignant(
+                                enseignant.getUser(),
+                                enseignant.getMaxHeuresService(),
+                                enseignant.getHeuresAssignees(),
+                                enseignant.getCategorieEnseignant(),
+                                enseignant.getNbHeureCategorie(),
+                                1L
+                        )
+                );
+            }
             return EnseignantMapper.enseignantToEnseignantDto(
                     this.enseignantService.updateEnseignant(
                             enseignant.getId(),
@@ -104,7 +123,6 @@ public class EnseignantController {
                     )
             );
         }
-        System.out.println("updateEnseignant 2");
        return EnseignantMapper.enseignantToEnseignantDto(
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),

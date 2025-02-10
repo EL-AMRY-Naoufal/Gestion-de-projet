@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,20 +39,22 @@ public class EnseignantService {
     private final UserSpecification userSpecifications;
     private final EnseignantSpecification enseignantSpecifications;
     private final AnneeRepository anneeRepository;
-
+    private final UserRoleRepository userRoleRepository;
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository,
                              AffectationRepository affectationRepository,
                              UserRepository userRepository,
                              UserSpecification userSpecifications,
                              EnseignantSpecification enseignantSpecifications,
-                             AnneeRepository anneeRepository) {
+                             AnneeRepository anneeRepository,
+                             UserRoleRepository userRoleRepository) {
         this.enseignantRepository = enseignantRepository;
         this.affectationRepository = affectationRepository;
         this.userRepository = userRepository;
         this.userSpecifications = userSpecifications;
         this.enseignantSpecifications = enseignantSpecifications;
         this.anneeRepository = anneeRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
@@ -160,15 +163,21 @@ public class EnseignantService {
     }
 
 
-    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie,
-                                        String name, String firstname, boolean hasAccount) {
+    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie,
+                                       String name, String firstname, boolean hasAccount) {
 
-
+        // Mise à jour des données de l'enseignant
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
+
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant()
+                .keySet()
+                .stream()
+                .findFirst()
+                .orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
         nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
+
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
         enseignant.setName(name);
@@ -176,34 +185,38 @@ public class EnseignantService {
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         enseignant.setHasAccount(hasAccount);
 
-        if(!hasAccount){
-            if(enseignant.getUser() != null){
+        if (!hasAccount) {
+            if (enseignant.getUser() != null) {
+                // Récupérer l'utilisateur associé
                 User user = userRepository.findById(enseignant.getUser().getId())
                         .orElseThrow(() -> new RuntimeException("User not found with id: " + enseignant.getUser().getId()));
 
-                user.getRoles().forEach(role -> {
-                    System.out.println("Role: " + role.getRole());
-                    System.out.println("Year: " + role.getYear());
-                });
-                System.out.println("Current Year: " + anneeRepository.getCurrentYear().get().getId());
+                // Récupération des rôles existants pour l'utilisateur et l'année courante
+                List<UserRole> existingRoles = this.userRoleRepository.findByUserIdAndYear(
+                        user.getId(),
+                        this.anneeRepository.getCurrentYear()
+                                .orElseThrow(() -> new RuntimeException("Current year not found"))
+                                .getId()
+                );
 
-                List<UserRole> roles = user.getRoles().stream().filter(userRole ->
-                        Objects.equals(userRole.getYear(), this.anneeRepository.getCurrentYear().get().getId()) &&
-                        userRole.getRole() == Role.ENSEIGNANT).toList();
+                // Supprimer les rôles ENSEIGNANT côté UserRole
+                List<UserRole> rolesToDelete = existingRoles.stream()
+                        .filter(role -> role.getRole() == Role.ENSEIGNANT)
+                        .toList();
+                userRoleRepository.deleteAll(rolesToDelete);
 
-                for (UserRole role : roles) {
-                    System.out.println("Role: 1");
-                    user.getRoles().remove(role);
-                }
-                if(!user.getRoles().isEmpty()){
-                    System.out.println("Current Year: " + anneeRepository.getCurrentYear().get().getId());
-                }
+                // Mettre à jour les rôles côté utilisateur, en excluant ENSEIGNANT
+                List<UserRole> updatedRoles = existingRoles.stream()
+                        .filter(role -> role.getRole() != Role.ENSEIGNANT)
+                        .collect(Collectors.toList());
+
+                user.setRoles(updatedRoles);
+
+                // Sauvegarde des modifications pour l'utilisateur
                 this.userRepository.save(user);
             }
             enseignant.setUser(null);
         }
-
-
         return this.enseignantRepository.save(enseignant);
     }
 
@@ -213,10 +226,8 @@ public class EnseignantService {
         user = userRepository.findById(user.getId())
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + finalUser.getId()));
 
-        // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if(!user.hasRoleForYear(this.anneeRepository.getCurrentYear().get().getId(), Role.ENSEIGNANT)){
             user.addRole(this.anneeRepository.getCurrentYear().get().getId(), Role.ENSEIGNANT);
-            // Save the updated user with the new role
             user = userRepository.save(user);
         }
 
@@ -234,7 +245,6 @@ public class EnseignantService {
     }
 
     public Enseignant getEnseignantById(Long id) {
-        //Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
         return this.enseignantRepository.getReferenceById(id);
     }
 
@@ -251,6 +261,10 @@ public class EnseignantService {
         affectationRepository.save(affectation);
 
         return commentaire;
+    }
+    public Enseignant getEnseignantByUser(Long userId) {
+        Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(userId);
+        return this.enseignantRepository.findOne(spec).orElse(null);
     }
 
 }
