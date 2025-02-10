@@ -125,8 +125,10 @@ public class InitDevServiceDefault implements InitDevService {
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
         heuresRequises.put(CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 100);
-        Enseignant enseignant1 = new Enseignant(1L, heuresRequises, 100, 70, null, users.get(4));
-        Enseignant enseignant2 = new Enseignant(2L, heuresRequises, 100, 30, null, users.get(5));
+        Enseignant enseignant1 = new Enseignant(1L, users.get(4).getName(), users.get(4).getFirstname()
+        , heuresRequises, 100, 70, null, users.get(4),true) ;
+        Enseignant enseignant2 = new Enseignant(2L,users.get(4).getName(), users.get(4).getFirstname()
+                ,  heuresRequises, 100, 30, null, users.get(5), true);
 
         ///********TYPES D'HEURES
         Map<TypeHeure, Integer> heuresParTypesM1 = new HashMap<>(Map.of());

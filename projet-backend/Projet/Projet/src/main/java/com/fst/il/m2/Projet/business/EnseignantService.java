@@ -192,7 +192,7 @@ public class EnseignantService {
                         .orElseThrow(() -> new RuntimeException("User not found with id: " + enseignant.getUser().getId()));
 
                 // Récupération des rôles existants pour l'utilisateur et l'année courante
-                List<UserRole> existingRoles = this.userRoleRepository.findByUserIdAndYear(
+                List<UserRole> existingRoles = this.userRoleRepository.findByUserIdAndYearId(
                         user.getId(),
                         this.anneeRepository.getCurrentYear()
                                 .orElseThrow(() -> new RuntimeException("Current year not found"))
@@ -227,7 +227,7 @@ public class EnseignantService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + finalUser.getId()));
 
         if(!user.hasRoleForYear(this.anneeRepository.getCurrentYear().get().getId(), Role.ENSEIGNANT)){
-            user.addRole(this.anneeRepository.getCurrentYear().get().getId(), Role.ENSEIGNANT);
+            user.addRole(this.anneeRepository.getCurrentYear().get(), Role.ENSEIGNANT);
             user = userRepository.save(user);
         }
 
