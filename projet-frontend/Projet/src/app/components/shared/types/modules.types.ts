@@ -19,8 +19,9 @@ export type Affectation = {
 export interface Groupe {
   id?: number;
   nom: string;
-  heures: number;
   type: TypeHeure;
+  heuresAffectees: number;
+  totalHeuresDuGroupe: number;
   affectations: Affectation[];
 }
 
