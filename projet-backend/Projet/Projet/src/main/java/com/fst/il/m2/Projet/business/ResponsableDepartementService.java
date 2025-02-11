@@ -21,4 +21,5 @@ public interface ResponsableDepartementService {
      List<UserRole> getUsersByRole(Role role);
      List<UserRole> getUsersByRoleAndYear(Role role, Long year);
      void deleteAffectation(Long id);
+     void updateAffectationHours(Long id, int heuresAssignees);
 }

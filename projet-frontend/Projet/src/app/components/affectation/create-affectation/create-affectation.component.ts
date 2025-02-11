@@ -67,7 +67,7 @@ export class CreateAffectationComponent implements OnInit {
   }
 
 
-  onSubmit(): void {
+   onSubmit(): void {
     if (this.enseignantId && this.moduleId && this.heuresAssignees) {
       this.affectationService
         .createAffectation(this.enseignantId, this.moduleId, this.heuresAssignees)

@@ -230,7 +230,24 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         enseignantRepository.save(enseignant);
 
     }
-    
+
+    //mise a jour des heures enseignées d'une affectation
+    public void updateAffectationHours(Long idAffectation, int heuresAssignees) {
+        Affectation affectation = affectationRepository.findById(idAffectation)
+                .orElseThrow(() -> new RuntimeException("Affectation not found with id: " + idAffectation));
+
+
+        // Mis à jour des heures assignées de l'enseignant
+        Enseignant enseignant = affectation.getEnseignant();
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() - affectation.getHeuresAssignees() + heuresAssignees);
+        enseignantRepository.save(enseignant);
+
+        // Mis à jour des heures assignées de l'affectation
+        affectation.setHeuresAssignees(heuresAssignees);
+        affectationRepository.save(affectation);
+    }
+
+
     @Override
     public void deleteAffectation(Long id){
         Affectation affectation = affectationRepository.findById(id)
