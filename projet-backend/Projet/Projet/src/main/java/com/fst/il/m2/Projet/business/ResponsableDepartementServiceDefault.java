@@ -212,6 +212,10 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
         }*/
 
+        //mettre a jour les heures restantes du groupe
+        groupe.setHeuresAffectees(groupe.getHeuresAffectees() + heuresAssignees);
+
+        groupeRepository.save(groupe);
 
 
         // Créer une nouvelle affectation
@@ -241,6 +245,10 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         Enseignant enseignant = affectation.getEnseignant();
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() - affectation.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
+
+        // Mis à jour des heures assignées du groupe
+        Groupe groupe = affectation.getGroupe();
+        groupe.setHeuresAffectees(groupe.getHeuresAffectees() - affectation.getHeuresAssignees() + heuresAssignees);
 
         // Mis à jour des heures assignées de l'affectation
         affectation.setHeuresAssignees(heuresAssignees);

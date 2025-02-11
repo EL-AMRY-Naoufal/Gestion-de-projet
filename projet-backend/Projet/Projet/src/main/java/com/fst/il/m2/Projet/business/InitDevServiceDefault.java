@@ -140,13 +140,13 @@ public class InitDevServiceDefault implements InitDevService {
 
         ///********MODULES
         List<com.fst.il.m2.Projet.models.Module> modules1 = List.of(
-                Module.builder().nom("Service Web").totalHeuresRequises(60).heuresParType(heuresParTypesM1).semestre(S1).build(),
-                Module.builder().nom("Concept Web").totalHeuresRequises(50).heuresParType(heuresParTypesM1).semestre(S1).build()
+                Module.builder().nom("Service Web")./*totalHeuresRequises(60).*/heuresParType(heuresParTypesM1).semestre(S1).build(),
+                Module.builder().nom("Concept Web")./*totalHeuresRequises(50).*/heuresParType(heuresParTypesM1).semestre(S1).build()
 
                 );
         List<com.fst.il.m2.Projet.models.Module> modules2 = List.of(
-                Module.builder().nom("Verification").totalHeuresRequises(40).heuresParType(heuresParTypesM2).semestre(S2).build(),
-                Module.builder().nom("Modélisation").totalHeuresRequises(30).heuresParType(heuresParTypesM2).semestre(S2).build()
+                Module.builder().nom("Verification")./*totalHeuresRequises(40).heuresParType(heuresParTypesM2).semestre(S2).*/build(),
+                Module.builder().nom("Modélisation")./*totalHeuresRequises(30).heuresParType(heuresParTypesM2).*/semestre(S2).build()
                 );
 
         ///********GROUPES
@@ -154,9 +154,9 @@ public class InitDevServiceDefault implements InitDevService {
 //        Groupe groupe2 = Groupe.builder().nom("groupe 2").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).build();
 //        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
 
-        Groupe groupe1 = new Groupe(1L, "Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null, null);
-        Groupe groupe2 = new Groupe(2L, "Groupe 2", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.TD, null, null);
-        Groupe groupe3 = new Groupe(3L, "Groupe 3", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null, null);
+        Groupe groupe1 = new Groupe(1L, "Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
+        Groupe groupe2 = new Groupe(2L, "Groupe 2", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.TD, null,80, null);
+        Groupe groupe3 = new Groupe(3L, "Groupe 3", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
         ArrayList<Groupe> groupes1 = new ArrayList<>();
         groupes1.add(groupe1);
         groupes1.add(groupe2);

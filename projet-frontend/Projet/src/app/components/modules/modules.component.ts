@@ -45,7 +45,7 @@ export class ModulesComponent implements OnInit {
     private semestreService: SemestreService,
     private groupeService: GroupeService,
     private userService: UserService
-    ) {
+  ) {
   }
 
 
@@ -244,6 +244,25 @@ export class ModulesComponent implements OnInit {
   addAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, newAffectation: any) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].affectations.push(newAffectation);
   }
+
+  updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
+    const affectationId = this.data.annees[anneeIndex]
+      .departements[departementIndex].formations[formationIndex]
+      .niveaux[niveauIndex].semestres[semestreIndex]
+      .modules[moduleIndex].groupes[groupeIndex]
+      .affectations[affectationIndex].id;
+
+    // @ts-ignore
+    this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
+      next: () => {
+        alert('Heures affectées mis à jour');
+      },
+      error: (error) => {
+        console.error('Error updating affectation:', error);
+      }
+    });
+  }
+
 
   removeAnnee(index: number) {
     this.data.annees.splice(index, 1);

@@ -18,7 +18,7 @@ public class Module {
 
     private String nom;
 
-    private int totalHeuresRequises;
+   /* private int totalHeuresRequises;*/
 
 
     @ElementCollection
@@ -35,10 +35,10 @@ public class Module {
     public Module() {
     }
 
-    public Module(Long id, String nom, int totalHeuresRequises, Map<TypeHeure, Integer> heuresParType, Semestre semestre, List<Groupe> groupes) {
+    public Module(Long id, String nom,/* int totalHeuresRequises,*/ Map<TypeHeure, Integer> heuresParType, Semestre semestre, List<Groupe> groupes) {
         this.id = id;
         this.nom = nom;
-        this.totalHeuresRequises = totalHeuresRequises;
+        /*this.totalHeuresRequises = totalHeuresRequises;*/
         this.heuresParType = heuresParType;
         this.semestre = semestre;
         this.groupes = groupes;
@@ -60,13 +60,15 @@ public class Module {
         this.nom = nom;
     }
 
-    public int getTotalHeuresRequises() {
+   /* public int getTotalHeuresRequises() {
         return totalHeuresRequises;
-    }
+    }*/
 
+/*
     public void setTotalHeuresRequises(int totalHeuresRequises) {
         this.totalHeuresRequises = totalHeuresRequises;
     }
+*/
 
     public Map<TypeHeure, Integer> getHeuresParType() {
         return heuresParType;
