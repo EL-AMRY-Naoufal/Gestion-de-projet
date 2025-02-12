@@ -113,8 +113,8 @@ export class LoginService {
         localStorage.removeItem('currentYearId');
         this.isAuthenticated = false;
       }
+      this.router.navigate(['/login']);
     });
-    this.router.navigate(['/login']);
   }
 
   /**
