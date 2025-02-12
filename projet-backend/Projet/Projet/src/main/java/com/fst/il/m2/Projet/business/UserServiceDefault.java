@@ -9,9 +9,11 @@ import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AnneeRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.UserRoleRepository;
+import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import com.fst.il.m2.Projet.security.JWTUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ public class UserServiceDefault implements UserService {
 
     @Autowired
     private JWTUtil jwtUtil;  // Inject JWT utility
+    @Autowired
+    private UserSpecification userSpecification;
 
     public UserServiceDefault() {
     }
@@ -106,6 +110,15 @@ public class UserServiceDefault implements UserService {
         }
 
         return roles;
+    }
+
+    @Override
+    public List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname) {
+        Specification<User> spec = this.userSpecification.byNameandFirstnameAndNotInEnseignant(name, firstname);
+        //users.addAll(this.userRepository.findAll(spec));
+        //return users;
+        return this.userRepository.findAll(spec);
+        //return this.userRepository.findUsersByNameAndFirstname(name, firstname);
     }
 
     @Override

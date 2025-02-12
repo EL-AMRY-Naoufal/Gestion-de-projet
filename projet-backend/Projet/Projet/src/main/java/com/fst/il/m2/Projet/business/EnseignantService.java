@@ -1,5 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.EnseignantDto;
+import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
@@ -11,6 +13,9 @@ import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
+import com.fst.il.m2.Projet.models.UserRole;
+import com.fst.il.m2.Projet.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
@@ -21,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,18 +38,23 @@ public class EnseignantService {
     private final UserRepository userRepository;
     private final UserSpecification userSpecifications;
     private final EnseignantSpecification enseignantSpecifications;
-
+    private final AnneeRepository anneeRepository;
+    private final UserRoleRepository userRoleRepository;
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository,
                              AffectationRepository affectationRepository,
                              UserRepository userRepository,
                              UserSpecification userSpecifications,
-                             EnseignantSpecification enseignantSpecifications) {
+                             EnseignantSpecification enseignantSpecifications,
+                             AnneeRepository anneeRepository,
+                             UserRoleRepository userRoleRepository) {
         this.enseignantRepository = enseignantRepository;
         this.affectationRepository = affectationRepository;
         this.userRepository = userRepository;
         this.userSpecifications = userSpecifications;
         this.enseignantSpecifications = enseignantSpecifications;
+        this.anneeRepository = anneeRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
@@ -92,17 +104,17 @@ public class EnseignantService {
         return this.userRepository.findAll(spec);
     }
 
-    public List<User> getEnseignants(){
-        Specification<User> spec = userSpecifications.withRoleEnseignant();
-        return this.userRepository.findAll(spec);
+    public List<Enseignant> getEnseignants(){
+        //Specification<User> spec = userSpecifications.withRoleEnseignant();
+        return this.enseignantRepository.findAll();
     }
 
-    public Enseignant createEnseignant(long id, int nmaxHeuresService, int heuresAssignees,
+    public Enseignant createEnseignant(User u, int nmaxHeuresService, int heuresAssignees,
                                        CategorieEnseignant categorieEnseignant, int nbHeureCategorie, Long currentYear) {
 
         // Find the user by ID
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        User user = userRepository.findById(u.getId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + u.getId()));
 
         // If the current year doesn't have the role of 'ENSEIGNANT', add it
         if(!user.hasRoleForYear(currentYear, Role.ENSEIGNANT)){
@@ -119,6 +131,9 @@ public class EnseignantService {
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
                 .user(user)
+                .name(user.getName())
+                .firstname(user.getFirstname())
+                .hasAccount(true)
                 .maxHeuresService(nmaxHeuresService)
                 .heuresAssignees(heuresAssignees)
                 .build();
@@ -127,8 +142,94 @@ public class EnseignantService {
         return enseignantRepository.save(enseignant);
     }
 
+    public Enseignant createEnseignantWithoutAccount(String name, String firstname, int nmaxHeuresService, int heuresAssignees,
+                                                     CategorieEnseignant categorieEnseignant, int nbHeureCategorie) {
 
-    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie ) {
+        Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
+        categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
+
+        heuresAssignees += nbHeureCategorie;
+
+        Enseignant enseignant = Enseignant.builder()
+                .hasAccount(false)
+                .maxHeuresService(nmaxHeuresService)
+                .heuresAssignees(heuresAssignees)
+                .firstname(firstname)
+                .name(name)
+                .categorieEnseignant(categorieHeuresMap)
+                .build();
+
+        return enseignantRepository.save(enseignant);
+    }
+
+
+    public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie,
+                                       String name, String firstname, boolean hasAccount) {
+
+        // Mise à jour des données de l'enseignant
+        Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
+        categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
+
+        Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
+        CategorieEnseignant categorie = enseignant.getCategorieEnseignant()
+                .keySet()
+                .stream()
+                .findFirst()
+                .orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
+        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
+
+        enseignant.setCategorieEnseignant(categorieHeuresMap);
+        enseignant.setMaxHeuresService(nmaxHeuresService);
+        enseignant.setName(name);
+        enseignant.setFirstname(firstname);
+        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
+        enseignant.setHasAccount(hasAccount);
+
+        if (!hasAccount) {
+            if (enseignant.getUser() != null) {
+                // Récupérer l'utilisateur associé
+                User user = userRepository.findById(enseignant.getUser().getId())
+                        .orElseThrow(() -> new RuntimeException("User not found with id: " + enseignant.getUser().getId()));
+
+                // Récupération des rôles existants pour l'utilisateur et l'année courante
+                List<UserRole> existingRoles = this.userRoleRepository.findByUserIdAndYearId(
+                        user.getId(),
+                        this.anneeRepository.getCurrentYear()
+                                .orElseThrow(() -> new RuntimeException("Current year not found"))
+                                .getId()
+                );
+
+                // Supprimer les rôles ENSEIGNANT côté UserRole
+                List<UserRole> rolesToDelete = existingRoles.stream()
+                        .filter(role -> role.getRole() == Role.ENSEIGNANT)
+                        .toList();
+                userRoleRepository.deleteAll(rolesToDelete);
+
+                // Mettre à jour les rôles côté utilisateur, en excluant ENSEIGNANT
+                List<UserRole> updatedRoles = existingRoles.stream()
+                        .filter(role -> role.getRole() != Role.ENSEIGNANT)
+                        .collect(Collectors.toList());
+
+                user.setRoles(updatedRoles);
+
+                // Sauvegarde des modifications pour l'utilisateur
+                this.userRepository.save(user);
+            }
+            enseignant.setUser(null);
+        }
+        return this.enseignantRepository.save(enseignant);
+    }
+
+    public  Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie, User user, boolean hasAccount ) {
+
+        User finalUser = user;
+        user = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + finalUser.getId()));
+
+        if(!user.hasRoleForYear(this.anneeRepository.getCurrentYear().get().getId(), Role.ENSEIGNANT)){
+            user.addRole(this.anneeRepository.getCurrentYear().get(), Role.ENSEIGNANT);
+            user = userRepository.save(user);
+        }
 
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
@@ -138,12 +239,13 @@ public class EnseignantService {
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
+        enseignant.setUser(user);
+        enseignant.setHasAccount(hasAccount);
         return this.enseignantRepository.save(enseignant);
     }
 
     public Enseignant getEnseignantById(Long id) {
-        Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(id);
-        return this.enseignantRepository.findOne(spec).orElseThrow(() -> new RuntimeException("Enseignant not found with id: " + id));
+        return this.enseignantRepository.getReferenceById(id);
     }
 
 
@@ -159,6 +261,10 @@ public class EnseignantService {
         affectationRepository.save(affectation);
 
         return commentaire;
+    }
+    public Enseignant getEnseignantByUser(Long userId) {
+        Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(userId);
+        return this.enseignantRepository.findOne(spec).orElse(null);
     }
 
 }

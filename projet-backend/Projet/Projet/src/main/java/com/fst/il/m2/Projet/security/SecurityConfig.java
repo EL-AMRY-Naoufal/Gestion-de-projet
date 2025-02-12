@@ -41,8 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/user/**").permitAll() //TODO temporarily
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/users/authenticate").anonymous() // Open login endpoint
-                        .requestMatchers("/api/enseignants/enseignants-non-enregistres").permitAll()
-                        .requestMatchers("/api/enseignants/**").permitAll()
+                        .requestMatchers("/api/enseignants/enseignants-non-enregistres").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/enseignants/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/annees").permitAll()

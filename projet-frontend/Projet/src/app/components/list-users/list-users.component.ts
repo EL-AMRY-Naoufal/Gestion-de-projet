@@ -56,6 +56,9 @@ export class ListUsersComponent implements OnInit {
   selectedRole: string = '';
   _user!: User;
   enseignantDto: EnseignantDto = {
+    name: '',
+    firstname: '',
+    hasAccount: false,
     categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
@@ -241,7 +244,7 @@ export class ListUsersComponent implements OnInit {
               this._yearService.currentYearId
             )
           ) {
-            this.enseignantDto.id = user.id;
+            this.enseignantDto.user = user;
             this._addTeacher(this.enseignantDto);
           }
         },

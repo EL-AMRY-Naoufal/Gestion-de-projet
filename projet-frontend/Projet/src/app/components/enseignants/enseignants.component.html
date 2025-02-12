@@ -22,7 +22,7 @@
 
 <div class="header-container">
   <h1 class="page-header">Liste des profils</h1>
-  <div class="custom-button plus-button"  title="Show more">
+  <div class="custom-button plus-button"  title="Show more" (click)="openDialog()">
     +
   </div>
 </div>
@@ -41,8 +41,9 @@
 <section [ngSwitch]="view" class="card-content">
   <div *ngSwitchCase="'card'" class="user-grid">
     <app-profil-card
-      [user]="user"
-      *ngFor="let user of users"
+      [enseignant]="enseignant"
+      [openDialog]="openDialog.bind(this)"
+      *ngFor="let enseignant of enseignants"
     >
     </app-profil-card>
   </div>

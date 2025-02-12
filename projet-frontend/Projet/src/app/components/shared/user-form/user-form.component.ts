@@ -223,7 +223,7 @@ private updateNbHeureCategorie(): void {
 
 
   private fetchEnseignantDetails(userId: number): void {
-    this.enseignantService.getEnseignant(userId).subscribe({
+    this.enseignantService.getEnseignantByUserId(userId).subscribe({
       next: (enseignant) => {
         this.enseignant = enseignant;
         this._form.patchValue({
@@ -293,6 +293,7 @@ submit(user: User): void {
     this.enseignant.categorieEnseignant = user.categorieEnseignant as CategorieEnseignant;
     this.enseignant.nbHeureCategorie = user.nbHeureCategorie as number;
     this.enseignant.maxHeuresService = user.maxHeuresService as number;
+    this.enseignant.user = user;
 
     const userToSend: User = {
           ...user,
@@ -423,10 +424,13 @@ private _buildForm(): FormGroup {
   defaultHeures = 192;
   categories: string[] = [];
   enseignant: EnseignantDto = {
+    name: '',
+    firstname: '',
+    hasAccount: true,
     maxHeuresService: 192,
     categorieEnseignant: CategorieEnseignant.ATER,
     heuresAssignees: 0,
-    nbHeureCategorie: 192
+    nbHeureCategorie: 0
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);

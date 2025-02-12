@@ -6,7 +6,7 @@ mat-list-item {
   border-radius: 8px; /* Bordure arrondie */
   margin: 5px;
   width: 100%;
-  max-width: 360px; /* Limiter la largeur maximale */
+  max-width: 460px; /* Limiter la largeur maximale */
   height: 180px; /* Hauteur fixe pour les cards */
   padding: 1.5em;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour la carte */
@@ -14,6 +14,12 @@ mat-list-item {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Assure que l'email et les actions sont bien espacés */
+}
+
+.custom-description {
+  font-size: 0.9rem; /* Taille de la description */
+  color: #777777; /* Couleur grise pour la description */
+  margin-top: 30px; /* Espacement avec le titre */
 }
 
 /* Style pour les titres des cards */

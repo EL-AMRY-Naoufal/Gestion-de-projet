@@ -156,6 +156,18 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
             }
         }).collect(Collectors.toList());
 
+        // Suppression des anciens rôles qui ne sont plus présents
+        List<UserRole> rolesToDelete = existingRoles.stream()
+                .filter(existingRole -> user.getRoles().stream()
+                        .noneMatch(newRole -> newRole.getRole() == existingRole.getRole()))
+                .collect(Collectors.toList());
+
+        // Supprimer les rôles inutilisés dans UserRole
+        userRoleRepository.deleteAll(rolesToDelete);
+
+        // Sauvegarde ou mise à jour des rôles dans UserRole
+        userRoleRepository.saveAll(newRoles);
+
         existingUser.setRoles(newRoles);
         return userRepository.save(existingUser);
     }
