@@ -1,7 +1,6 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.NiveauService;
-import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.models.Niveau;
 import org.springframework.beans.factory.annotation.Autowired;
