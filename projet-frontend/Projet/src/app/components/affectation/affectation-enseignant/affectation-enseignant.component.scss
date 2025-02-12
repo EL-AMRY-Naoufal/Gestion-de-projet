@@ -7,6 +7,10 @@
 .main-content {
   padding: 20px;
   margin-top: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .title {
@@ -93,4 +97,16 @@
 
 .commentaire-text-input {
   flex: 1;
+}
+
+#add-affectation {
+  background-color: #bbd7f1;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+
+#add-affectation:hover {
+  scale: 1.05;
 }

@@ -1,10 +1,9 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
 import { isPlatformBrowser } from '@angular/common';
 import { YearService } from './year-service';
+import { ApiService } from './api-service';
 
 type UserRole = {
   role: string;
@@ -15,44 +14,45 @@ type UserRole = {
   providedIn: 'root',
 })
 export class LoginService {
-  private readonly _backendURL: any;
-
   private readonly isBrowser!: boolean;
 
+  // Is a internal state of the authentification (true if connected else false)
+  private isLoggedState: boolean = true;
+
+  // Observable for another component who depends of the auth status 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: Object, private _yearService: YearService) {
-    this._backendURL = {};
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private _yearService: YearService,
+    private _apiService: ApiService
+  ) {
 
+    console.log("test render");
     this.isBrowser = isPlatformBrowser(this.platformId);
 
-    this.isAuthenticatedSubject.next(this.isLoggedIn());
-
-    // build backend base url
-    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
-    if (environment.backend.port) {
-      baseUrl += `:${environment.backend.port}`;
-    }
-
-    // build all backend urls
-    // @ts-ignore
-    Object.keys(environment.backend.endpoints).forEach(
-      (k) =>
-        // @ts-ignore
-        (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
-    );
+    // Test if user is authenticated on app reload
+    /*this._apiService.me().subscribe(
+      {
+        complete: () => {
+          this.isAuthenticated = true;
+        },
+        error: () => {
+          this.isAuthenticated = false;
+        }
+      }
+    );*/
   }
 
   login(formData: any): Observable<any> {
-    return this.http.post(this._backendURL.authenticate, formData);
+    return this._apiService.login(formData);
   }
 
   handleLoginSuccess(response: any) {
-    // Verify response is correct
     if (
       !response.user ||
-      !response.token ||
       !response.currentYearId ||
       isNaN(response.currentYearId)
     ) {
@@ -61,21 +61,20 @@ export class LoginService {
       return;
     }
 
+    // Reformatage des rôles
     const userRoles = response.user.roles.map((ur: any) => ({
       role: ur.role,
       year: ur.year,
     }));
-    const authToken = response.token;
     const currentYearId = response.currentYearId;
 
-    //l'enregistrement de l'id de l'utilisateur connecté dans un local storage
+    // L'enregistrement de l'id de l'utilisateur connecté dans un local storage
     if (this.isBrowser) {
       localStorage.setItem('userId', response.user.id);
 
       this._yearService.currentYearId = currentYearId;
 
       localStorage.setItem('userRoles', JSON.stringify(userRoles));
-      if(authToken) localStorage.setItem('token', authToken);
 
       this.isAuthenticatedSubject.next(true);
     }
@@ -96,7 +95,7 @@ export class LoginService {
    * Returns private property _connectUserID
    */
   connectUser(): number {
-    if(!this.isBrowser) return 0; // Server environment
+    if (!this.isBrowser) return 0; // Server environment
 
     return parseInt(localStorage.getItem('userId') || '0');
   }
@@ -104,18 +103,18 @@ export class LoginService {
   isLoggedIn(): boolean {
     if (!this.isBrowser) return false; // Server environment
 
-    return (
-      !!localStorage.getItem('userRoles') && !!localStorage.getItem('token')
-    );
+    return this.isLoggedState;
   }
 
   logout() {
-    if(this.isBrowser) {
-      localStorage.removeItem('userRoles');
-      localStorage.removeItem('token');
-      this.isAuthenticatedSubject.next(false);
-    }
-    this.router.navigate(['/login']);
+    this._apiService.logout().subscribe(() => {
+      if (this.isBrowser) {
+        localStorage.removeItem('userRoles');
+        localStorage.removeItem('currentYearId');
+        this.isAuthenticated = false;
+      }
+      this.router.navigate(['/login']);
+    });
   }
 
   /**
@@ -123,8 +122,10 @@ export class LoginService {
    */
   get userRoles(): string[] {
     if (this.isBrowser) {
-      return (JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[])
-        .filter((ur: any) => ur.year=== this.currentYearId)
+      return (
+        JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[]
+      )
+        .filter((ur: any) => ur.year === this.currentYearId)
         .map((ur: any) => ur.role);
     }
     return [];
@@ -137,10 +138,8 @@ export class LoginService {
     return null;
   }
 
-  get authToken(): string | null {
-    if (this.isBrowser) {
-      return localStorage.getItem('token');
-    }
-    return null;
+  set isAuthenticated(isAuthenticated: boolean) {
+    this.isLoggedState = isAuthenticated;
+    this.isAuthenticatedSubject.next(this.isLoggedState);
   }
 }

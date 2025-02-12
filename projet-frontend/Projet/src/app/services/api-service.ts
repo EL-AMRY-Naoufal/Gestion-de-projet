@@ -39,4 +39,22 @@ export class ApiService {
         });
     }
 
+    /*
+    *
+    *       AUTHENTIFICATION
+    * 
+    */
+
+    logout(): Observable<any> {
+        return this._http.post<any>(this._backendURL.logout, {});
+    }
+
+    me(): Observable<any> {
+        return this._http.get<any>(this._backendURL.me);
+    }
+
+    login(formData: any): Observable<any> {
+        return this._http.post(this._backendURL.authenticate, formData);
+    }
+
 }

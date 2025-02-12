@@ -17,6 +17,8 @@ export const environment = {
       niveaux: '/api/niveaux',
       semestres: '/api/semestres',
       groupes: '/api/groupes',
+      logout: '/api/users/user/logout',
+      me: '/api/users/user/me'
     },
   },
 };
