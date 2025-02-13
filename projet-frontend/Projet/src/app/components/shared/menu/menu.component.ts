@@ -50,18 +50,19 @@ export class MenuComponent {
   ) {
     this.userRoles = this.loginService.userRoles;
     this._listUsers = [];
+    console.log('render');
   }
 
   ngOnInit(): void {
-      this._yearService.getAllYears().subscribe((years) => {
-        this.years = years;
-        this.selectedYearId = this._yearService.currentYearId ?? null;
-      });
+    this._yearService.getAllYears().subscribe((years) => {
+      this.years = years;
+      this.selectedYearId = this._yearService.currentYearId ?? null;
+    });
 
-      this._yearService.selectedYear$.subscribe((year) => {
-        this.selectedYear = year;
-        this.selectedYearId = year?.id ?? null;
-      });
+    this._yearService.selectedYear$.subscribe((year) => {
+      this.selectedYear = year;
+      this.selectedYearId = year?.id ?? null;
+    });
   }
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);
@@ -73,6 +74,10 @@ export class MenuComponent {
 
   navigateToUsers() {
     this.router.navigate(['/users']);
+  }
+
+  navigateToModules() {
+    this.router.navigate(['/modules']);
   }
 
   logout() {

@@ -15,7 +15,12 @@
       class="navbar-link"
       >Gestion du personnels</a
     >
-    <a href="/modules" class="navbar-link">Gestion des modules</a>
+    <a
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="navigateToModules()"
+      class="navbar-link"
+      >Gestion des modules</a
+    >
     <a
       *ngIf="
         userRoles.includes('CHEF_DE_DEPARTEMENT') ||
