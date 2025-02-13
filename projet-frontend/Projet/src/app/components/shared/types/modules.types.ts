@@ -1,4 +1,5 @@
 import {EnseignantDto} from "./enseignant.type";
+import { User } from "./user.type";
 
 export enum TypeHeure {
   CM = "CM",
@@ -47,19 +48,23 @@ export interface Niveau {
 export interface Formation {
   id?: number;
   nom: string;
-  responsableFormation: string;
-  niveaux: Niveau[];
+  responsableFormationId: number;
+  departementId: number;
 }
 
 export interface Departement {
   id?: number;
   nom: string;
-  formations: Formation[];
-  responsableDeDepartement: string;
+  responsableDepartementId: number;
+  anneeId: number;
 }
 
 export interface Annee {
   id?: number;
   debut: number;
-  departements: Departement[];
+}
+
+export interface ResponsableDepartement {
+  id?: number;
+  user?: User;
 }

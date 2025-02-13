@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment.prod";
-import { Departement } from "../components/shared/types/modules.types";
+import { Departement, ResponsableDepartement } from "../components/shared/types/modules.types";
 @Injectable({
   providedIn: 'root'
 })
@@ -28,5 +28,18 @@ export class DepartementService {
 
   getDepartementsByYear(yearId: number): Observable<Departement[]> {
     return this.http.get<Departement[]>(`${this._backendURL.departements}/year/${yearId}`);
+  }
+
+  getAllDepartements(): Observable<Departement[]> {
+    return this.http.get<Departement[]>(`${this._backendURL.departements}`);
+  }
+ 
+  getRDDById(id: number): Observable<ResponsableDepartement> {
+    return this.http.get<ResponsableDepartement>(`${this._backendURL.responsableDepartement}/id/${id}`)
+  }
+
+  saveDepartement(departement: Departement): Observable<Departement> {
+    console.log(departement);
+    return this.http.post<Departement>(`${this._backendURL.departements}`, departement);
   }
 }

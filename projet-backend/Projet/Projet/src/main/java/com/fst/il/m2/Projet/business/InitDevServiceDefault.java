@@ -100,9 +100,15 @@ public class InitDevServiceDefault implements InitDevService {
         ResponsableFormation responsableFormation1 = new ResponsableFormation(1L, users.get(6));
         ResponsableFormation responsableFormation2 = new ResponsableFormation(2L, users.get(7));
 
+        ///*******RESPONSABLE DEPARTEMENT
+        ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
+
+        ///*******DEPARTEMENTS
+        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).responsableDepartement(responsableDepartement).build();
+
         ///********FORMATIONS
-        Formation formation1 = new Formation(1L, "Licence", 200, responsableFormation1,null);
-        Formation formation2 = new Formation(2L, "Master", 200, responsableFormation2,null);
+        Formation formation1 = Formation.builder().id(1L).nom("Licence").totalHeures(200).responsableFormation(responsableFormation1).departement(departement).build();
+        Formation formation2 = Formation.builder().id(2L).nom("Master").totalHeures(200).responsableFormation(responsableFormation2).departement(departement).build();
         ArrayList<Formation> formations = new ArrayList<>();
         formations.add(formation1);
         formations.add(formation2);
@@ -115,12 +121,6 @@ public class InitDevServiceDefault implements InitDevService {
         ///********SEMESTRE
         Semestre S1 = Semestre.builder().nom("S1").niveau(M2IL).build(); //add modules
         Semestre S2 = Semestre.builder().nom("S2").niveau(M2IL).build(); //add modules
-
-        ///*******RESPONSABLE DEPARTEMENT
-        ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
-
-        ///*******DEPARTEMENTS
-        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).formations(formations).responsableDepartement(responsableDepartement).build();
 
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
@@ -196,9 +196,18 @@ public class InitDevServiceDefault implements InitDevService {
         responsableFormationRepository.save(responsableFormation1);
         responsableFormationRepository.save(responsableFormation2);
 
+        //save RDD
+        responsableDepartementRepository.save(responsableDepartement);
+
+        //save Departement
+        departementRepository.save(departement);
+
         //save formations
         formationRepository.save(formation1);
         formationRepository.save(formation2);
+
+        departement.setFormations(formations);
+        departementRepository.save(departement);
 
         //save niveau
         niveauRepository.save(M1);
@@ -207,12 +216,6 @@ public class InitDevServiceDefault implements InitDevService {
         //save semestres
         semestreRepository.save(S1);
         semestreRepository.save(S2);
-
-        //save RDD
-        responsableDepartementRepository.save(responsableDepartement);
-
-        //save Departement
-        departementRepository.save(departement);
 
         //save enseignants
         enseignantRepository.save(enseignant1);

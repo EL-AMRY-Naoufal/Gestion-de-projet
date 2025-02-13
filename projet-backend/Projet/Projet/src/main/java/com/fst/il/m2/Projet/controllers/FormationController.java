@@ -1,7 +1,13 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.FormationService;
+import com.fst.il.m2.Projet.business.ResponsableDepartementService;
+import com.fst.il.m2.Projet.business.ResponsableFormationService;
+import com.fst.il.m2.Projet.dto.FormationDto;
+import com.fst.il.m2.Projet.mapper.DepartementMapper;
+import com.fst.il.m2.Projet.mapper.FormationMapper;
 import com.fst.il.m2.Projet.models.Formation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +20,12 @@ import java.util.List;
 public class FormationController {
 
     private final FormationService formationService;
+    private final ResponsableFormationService responsableFormationService;
 
     @Autowired
-    public FormationController(FormationService formationService) {
+    public FormationController(FormationService formationService, ResponsableFormationService responsableFormationService) {
         this.formationService = formationService;
+        this.responsableFormationService = responsableFormationService;
     }
 
     // Create a new Formation
@@ -29,9 +37,11 @@ public class FormationController {
 
     // Get all Formations
     @GetMapping
-    public ResponseEntity<List<Formation>> getAllFormations() {
+    public ResponseEntity<List<FormationDto>> getAllFormations() {
         List<Formation> formations = formationService.getAllFormations();
-        return new ResponseEntity<>(formations, HttpStatus.OK);
+        List<FormationDto> formationDtos = formations.stream().map(new FormationMapper(responsableFormationService)::toDto).toList();
+
+        return new ResponseEntity<>(formationDtos, HttpStatus.OK);
     }
 
     // Get Formation by ID

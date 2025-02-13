@@ -96,6 +96,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public ResponsableDepartement getResponsableDepartementById(Long id) {
+        return responsableDepartementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Responsable de Departement not found"));
+    }
+
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();

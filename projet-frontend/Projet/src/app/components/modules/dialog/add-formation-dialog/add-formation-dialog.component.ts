@@ -14,7 +14,7 @@ import { Formation } from '../../../shared/types/modules.types';
 })
 export class AddFormationDialogComponent {
 
-  newFormation : Formation = { nom: '', responsableFormation: '',  niveaux: [] };
+  newFormation : Formation = { nom: '', responsableFormationId: -1, departementId: -1 };
 
   constructor(public dialogRef: MatDialogRef<AddFormationDialogComponent>) {}
 

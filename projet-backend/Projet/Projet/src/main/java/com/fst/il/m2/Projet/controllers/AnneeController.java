@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.AnneeService;
 import com.fst.il.m2.Projet.dto.AnneeDto;
+import com.fst.il.m2.Projet.mapper.AnneeMapper;
 import com.fst.il.m2.Projet.models.Annee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,11 @@ public class AnneeController {
     }
 
     @PostMapping
-    public ResponseEntity<Annee> createAnnee(@RequestBody Annee annee) {
-        Annee savedAnnee = anneeService.saveAnnee(annee);
-        System.out.println("data received : " + annee);
-        System.out.println("data saved : " + savedAnnee);
-        return new ResponseEntity<>(savedAnnee, HttpStatus.CREATED);
+    public ResponseEntity<AnneeDto> createAnnee(@RequestBody AnneeDto annee) {
+        System.out.println("annee received : " + annee);
+        Annee anneeToSave = AnneeMapper.toEntity(annee);
+        AnneeDto savedAnneeDto = AnneeMapper.toDto(anneeService.saveAnnee(anneeToSave));
+        return new ResponseEntity<>(savedAnneeDto, HttpStatus.CREATED);
     }
 
     @GetMapping

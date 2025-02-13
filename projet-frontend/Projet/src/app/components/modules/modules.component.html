@@ -9,30 +9,30 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
 </div>
 
 <ul class="tree">
-  <li *ngFor="let annee of data.annees; let i = index">
+  <li *ngFor="let annee of annees; let i = index">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <button (click)="openAddDepartementDialog(i)">+</button>
+        <!-- <button (click)="openAddDepartementDialog(i)">+</button> -->
         <button (click)="removeAnnee(i)"><i class="fa fa-trash-o"></i></button>
       </summary>
       <ul>
-        <li *ngFor="let departement of annee.departements; let j = index">
+        <li *ngFor="let departement of getDepartementsByAnneeIndex(i); let j = index">
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <button (click)="openAddFormationDialog(i, j)">+</button>
-              <button (click)="removeDepartement(i, j)"><i class="fa fa-trash-o"></i></button>
+              <!-- <button (click)="openAddFormationDialog(j)">+</button> -->
+              <button (click)="removeDepartement(j)"><i class="fa fa-trash-o"></i></button>
             </summary>
             <ul>
-              <li *ngFor="let formation of departement.formations; let k = index">
+              <li *ngFor="let formation of getFormationsByDepartement(j); let k = index">
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <button (click)="openAddNiveauDialog(i, j, k)">+</button>
-                    <button (click)="removeFormation(i, j, k)"><i class="fa fa-trash-o"></i></button>
+                    <!-- <button (click)="openAddNiveauDialog(i, j, k)">+</button> -->
+                    <button (click)="removeFormation(k)"><i class="fa fa-trash-o"></i></button>
                   </summary>
-                  <ul>
+                  <!-- <ul>
                     <li *ngFor="let niveau of formation.niveaux; let l = index">
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
@@ -90,7 +90,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                         </ul>
                       </details>
                     </li>
-                  </ul>
+                  </ul> -->
                 </details>
               </li>
             </ul>
@@ -101,4 +101,4 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
   </li>
 </ul>
 
-<button (click)="saveAnnee()">Save</button>
+<!-- <button (click)="saveAnnee()">Save</button> -->

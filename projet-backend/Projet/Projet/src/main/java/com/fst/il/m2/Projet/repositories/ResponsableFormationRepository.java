@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface ResponsableFormationRepository extends JpaRepository<ResponsableFormation, Integer> {
+public interface ResponsableFormationRepository extends JpaRepository<ResponsableFormation, Long> {
     @Modifying
     @Query("DELETE FROM ResponsableFormation r WHERE r.user = :user")
     void deleteByUser(@Param("user") User user);

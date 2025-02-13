@@ -13,7 +13,7 @@ import { Annee } from '../../../shared/types/modules.types';
   standalone: true
 })
 export class AddAnneeDialogComponent {
-  newAnnee: Annee = { debut: new Date().getFullYear(), departements: [] };
+  newAnnee: Annee = { debut: new Date().getFullYear() };
 
   constructor(public dialogRef: MatDialogRef<AddAnneeDialogComponent>) {}
 
