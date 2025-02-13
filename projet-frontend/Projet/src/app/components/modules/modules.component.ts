@@ -177,6 +177,8 @@ export class ModulesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         result.responsableDepartementId = 1;
+        //update anneeId according to the tree structure
+        result.anneeId = this.annees[anneeIndex].id;
         this.addDepartement(result);
       }
     });
@@ -184,13 +186,15 @@ export class ModulesComponent implements OnInit {
 
   addDepartement(newDepartement: Departement) {
     this.departements.push(newDepartement);
+    console.log(this.departements);
   }
 
-  openAddFormationDialog(anneeIndex: number, departementIndex: number): void {
+  openAddFormationDialog(departementIndex: number): void {
     const dialogRef = this.dialog.open(AddFormationDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        result.departementId = this.departements[departementIndex].id;
         this.addFormation(result);
       }
     });

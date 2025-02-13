@@ -13,7 +13,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <!-- <button (click)="openAddDepartementDialog(i)">+</button> -->
+        <button (click)="openAddDepartementDialog(i)">+</button>
         <button (click)="removeAnnee(i)"><i class="fa fa-trash-o"></i></button>
       </summary>
       <ul>
@@ -21,7 +21,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <!-- <button (click)="openAddFormationDialog(j)">+</button> -->
+              <button (click)="openAddFormationDialog(j)">+</button>
               <button (click)="removeDepartement(j)"><i class="fa fa-trash-o"></i></button>
             </summary>
             <ul>

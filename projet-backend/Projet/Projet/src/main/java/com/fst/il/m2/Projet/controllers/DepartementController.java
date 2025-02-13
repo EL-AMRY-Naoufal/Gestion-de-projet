@@ -5,14 +5,12 @@ import com.fst.il.m2.Projet.business.DepartementService;
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.DepartementDto;
 import com.fst.il.m2.Projet.mapper.DepartementMapper;
-import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Departement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

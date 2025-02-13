@@ -4,7 +4,7 @@
     <label for="nom">Nom:</label>
     <input id="nom" [(ngModel)]="newDepartement.nom" name="nom" required>
     <label for="responsableDepartement">Chef de département:</label>
-    <input id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartement" name="chef" required>
+    <input id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartementId" name="chef" required>
     <button type="submit">Ajouter</button>
     <button type="button" (click)="onCancel()">Annuler</button>
   </form>
