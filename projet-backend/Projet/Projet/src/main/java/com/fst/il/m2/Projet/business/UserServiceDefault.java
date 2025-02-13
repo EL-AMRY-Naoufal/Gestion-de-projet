@@ -132,7 +132,6 @@ public class UserServiceDefault implements UserService {
     public User getUserByEmail(String email) {
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         return optionalUser.orElse(null);
-
     }
         
     public List<User> getAllUsersNotTeachers() {
