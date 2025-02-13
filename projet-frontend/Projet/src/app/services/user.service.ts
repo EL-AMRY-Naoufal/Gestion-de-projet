@@ -1,11 +1,12 @@
 import { LoginService } from './login.service';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import { defaultIfEmpty, filter, map, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../components/shared/types/user.type';
 import { YearService } from './year-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -17,18 +18,24 @@ export class UserService {
   private readonly _defaultUser: User;
   private readonly _responsableId: number = 1;
 
+  private readonly isBrowser!: boolean;
+
   constructor(
     private _http: HttpClient,
     private _loginService: LoginService,
-    private _yearService: YearService
+    private _yearService: YearService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+
+    this.isBrowser = isPlatformBrowser(this.platformId);
+
     this._defaultUser = {
       username: 'username',
       firstname: 'firstname',
       name: 'lastname',
       email: 'email@etu.univ-lorraine.fr',
       roles: [],
-      password: 'Ed*lZ%0qiA',
+      password: ""
     };
     this._backendURL = {};
 
@@ -197,5 +204,11 @@ export class UserService {
     return (
       user.roles.filter((r) => r.role === role && r.year == year).length > 0
     );
+  }
+
+  get authentifiedUser(): Observable<User> {
+    const authentifiedId = this._loginService.connectUser();
+
+    return this.fetchOne(authentifiedId+"");
   }
 }

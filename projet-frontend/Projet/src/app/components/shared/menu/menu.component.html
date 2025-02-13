@@ -13,13 +13,13 @@
       class="menu-item vert"
       (click)="navigateToUsers()"
       class="navbar-link"
-      >Gestion du personnels</a
+      >Personnels</a
     >
     <a
       *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
       (click)="navigateToModules()"
       class="navbar-link"
-      >Gestion des modules</a
+      >Modules</a
     >
     <a
       *ngIf="
@@ -29,7 +29,7 @@
       "
       (click)="navigateToAffectations()"
       class="navbar-link"
-      >Gestion des affectations</a
+      >Affectations</a
     >
     <div class="year">
       <select

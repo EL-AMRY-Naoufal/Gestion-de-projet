@@ -15,6 +15,8 @@ import { MenuComponent } from '../shared/menu/menu.component';
 import { Year } from '../shared/types/year.type';
 import { YearService } from '../../services/year-service';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
+import { User } from '../shared/types/user.type';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,10 +43,13 @@ export class DashboardComponent implements OnInit {
   years: Year[] = [];
   selectedYearId: number | undefined;
 
+  username: string | null = null;
+
   constructor(
     private router: Router,
     private loginService: LoginService,
-    private yearService: YearService
+    private yearService: YearService,
+    private userService: UserService
   ) {
     this.userRoles = this.loginService.userRoles;
   }
@@ -59,6 +64,11 @@ export class DashboardComponent implements OnInit {
       this.selectedYearId = years.find((year) => year.id === currentYearId)?.id;
       console.log('ID de l’année courante :', this.selectedYearId);
     });
+
+
+    this.userService.authentifiedUser.subscribe((user: User) => {
+      this.username = user.username;
+    })
   }
 
   navigateToUsers() {
