@@ -38,7 +38,7 @@ export class AffectationListComponent implements OnInit {
   editingId: number | null = null;
   editedComment: string = '';
 
-  constructor(private enseignantService: EnseignantService, 
+  constructor(private enseignantService: EnseignantService,
     private loginService: LoginService,
     private router: Router,
     private _api: ApiService) {

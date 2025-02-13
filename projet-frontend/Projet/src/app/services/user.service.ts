@@ -186,6 +186,28 @@ export class UserService {
       );
   }
 
+  updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
+    return this._http
+      .put(
+        `${this._backendURL.allUsers}/affectation/${affectationId}/${nombreHeure}`,
+        null,
+        { responseType: 'text' }
+      )
+      .pipe(
+        map((response) => {
+          try {
+            return JSON.parse(response);
+          } catch (e) {
+            return response;
+          }
+        }),
+        catchError((error) => {
+          console.error("Erreur lors de la mise à jour de l'affectation :", error);
+          return throwError(() => new Error('Une erreur est survenue.'));
+        })
+      );
+  }
+
 
 
   deleteAffectation(affectationId: number): Observable<string> {

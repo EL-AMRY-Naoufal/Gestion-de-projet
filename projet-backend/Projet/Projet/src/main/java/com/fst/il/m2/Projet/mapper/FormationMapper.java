@@ -1,12 +1,9 @@
 package com.fst.il.m2.Projet.mapper;
 
-import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.business.ResponsableFormationService;
-import com.fst.il.m2.Projet.dto.DepartementDto;
 import com.fst.il.m2.Projet.dto.FormationDto;
 import com.fst.il.m2.Projet.models.Departement;
 import com.fst.il.m2.Projet.models.Formation;
-import com.fst.il.m2.Projet.models.ResponsableFormation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

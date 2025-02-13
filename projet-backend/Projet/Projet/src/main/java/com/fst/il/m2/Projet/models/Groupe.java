@@ -20,6 +20,12 @@ public class Groupe {
 
     private String nom;
 
+    private int totalHeuresDuGroupe;
+
+    @Setter
+    private int heuresAffectees;
+
+
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -34,16 +40,27 @@ public class Groupe {
     @JoinColumn(name = "module_id")
     private Module module;
 
+
+
     public Groupe() {
     }
 
-    public Groupe(Long id, String nom, Date date, TypeHeure type, Module module, List<Affectation> affectations) {
+    public Groupe(Long id, String nom, Date date, TypeHeure type, Module module,int totalHeuresDuGroupe, List<Affectation> affectations) {
         this.id = id;
         this.nom = nom;
         this.date = date;
         this.type = type;
         this.module = module;
         this.affectations = affectations;
+        this.totalHeuresDuGroupe = totalHeuresDuGroupe;
+        this.heuresAffectees = 0;
+    }
+
+    public void setAffectations(List<Affectation> affectations) {
+        this.affectations = affectations;
+        for (Affectation a : affectations) {
+            this.heuresAffectees += a.getHeuresAssignees();
+        }
     }
 
 }

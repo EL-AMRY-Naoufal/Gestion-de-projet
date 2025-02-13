@@ -1,13 +1,10 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.FormationService;
-import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.business.ResponsableFormationService;
 import com.fst.il.m2.Projet.dto.FormationDto;
-import com.fst.il.m2.Projet.mapper.DepartementMapper;
 import com.fst.il.m2.Projet.mapper.FormationMapper;
 import com.fst.il.m2.Projet.models.Formation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

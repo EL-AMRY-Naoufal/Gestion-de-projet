@@ -100,6 +100,13 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok("Enseignant affecté avec succès");
     }
 
+    //mettre a jour le nombre d'heures enseignées d'une affectation
+    @PutMapping("/affectation/{idAffectation}/{heure}")
+    public ResponseEntity<String> updateAffectation(@PathVariable Long idAffectation, @PathVariable int heure) {
+        responsableDepartementService.updateAffectationHours(idAffectation, heure);
+        return ResponseEntity.ok("Affectation mise à jour avec succès");
+    }
+
     //supprimer une affectation
     @DeleteMapping("/affectation/{idAffectation}")
     public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {

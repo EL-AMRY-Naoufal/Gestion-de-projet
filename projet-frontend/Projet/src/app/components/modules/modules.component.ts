@@ -79,7 +79,7 @@ export class ModulesComponent implements OnInit {
 
     //           //for each departement, get all formations (skip)
     //           annee.departements.forEach((departement, departementIndex) => {
-                
+
     //             if (departement.formations != null) {
 
     //               //for each formations, get all niveaux
@@ -242,7 +242,19 @@ export class ModulesComponent implements OnInit {
   // addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, newModule: Module) {
   //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules.push(newModule);
   // }
+  updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
+    const affectationId = this.affectations[affectationIndex].id;
 
+    // @ts-ignore
+    this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
+      next: () => {
+        alert('Heures affectées mis à jour');
+      },
+      error: (error) => {
+        console.error('Error updating affectation:', error);
+      }
+    });
+  }
 
   // openAddGroupeDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number): void {
   //   const dialogRef = this.dialog.open(AddGroupeDialogComponent);
