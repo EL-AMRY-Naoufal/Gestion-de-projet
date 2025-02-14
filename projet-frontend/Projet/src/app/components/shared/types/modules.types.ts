@@ -43,7 +43,7 @@ export interface Semestre {
 export interface Niveau {
   id?: number;
   nom?: string;
-  semestres: Semestre[];
+  formationId: number;
 }
 
 export interface Formation {

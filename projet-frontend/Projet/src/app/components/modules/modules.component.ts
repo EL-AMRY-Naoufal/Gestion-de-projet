@@ -61,6 +61,7 @@ export class ModulesComponent implements OnInit {
     this.getAllAnnees();
     this.getAllDepartements();
     this.getAllFormations();
+    this.getAllNiveaux();
     //get all annees
     // this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
     //   this.data.annees = data;
@@ -152,6 +153,13 @@ export class ModulesComponent implements OnInit {
     return this.formations.filter((formation) => formation.departementId === this.departements[departementIndex].id);
   }
 
+  getAllNiveaux() {
+    return this.niveauService.getAllNiveaux().subscribe((niveauResult) => this.niveaux = niveauResult);
+  }
+
+  getNiveauxByFormation(formationIndex: number) {
+    return this.niveaux.filter((niveau) => niveau.formationId === this.formations[formationIndex].id);
+  }
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
   }
@@ -205,19 +213,19 @@ export class ModulesComponent implements OnInit {
   }
 
 
-  // openAddNiveauDialog(anneeIndex: number, departementIndex: number, formationIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddNiveauDialogComponent);
+  openAddNiveauDialog(): void {
+    const dialogRef = this.dialog.open(AddNiveauDialogComponent);
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.addNiveau(anneeIndex, departementIndex, formationIndex, result);
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addNiveau(result);
+      }
+    });
+  }
 
-  // addNiveau(anneeIndex: number, departementIndex: number, formationIndex: number, newNiveau: Niveau) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.push(newNiveau);
-  // }
+  addNiveau(newNiveau: Niveau) {
+    this.niveaux.push(newNiveau);
+  }
 
   // openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
   //   const dialogRef = this.dialog.open(AddSemestreDialogComponent);
@@ -307,9 +315,9 @@ export class ModulesComponent implements OnInit {
     this.formations.splice(formationIndex, 1);
   }
 
-  // removeNiveau(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux.splice(niveauIndex, 1);
-  // }
+  removeNiveau(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
+    this.niveaux.splice(niveauIndex, 1);
+  }
 
 
   // removeSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number) {

@@ -29,18 +29,18 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <!-- <button (click)="openAddNiveauDialog(i, j, k)">+</button> -->
+                    <button (click)="openAddNiveauDialog()">+</button>
                     <button (click)="removeFormation(k)"><i class="fa fa-trash-o"></i></button>
                   </summary>
-                  <!-- <ul>
-                    <li *ngFor="let niveau of formation.niveaux; let l = index">
+                  <ul>
+                    <li *ngFor="let niveau of getNiveauxByFormation(k); let l = index">
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
+                          <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">+</button> -->
                           <button (click)="removeNiveau(i, j, k, l)"><i class="fa fa-trash-o"></i></button>
                         </summary>
-                        <ul>
+                        <!-- <ul>
                           <li *ngFor="let semestre of niveau.semestres; let n = index">
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
@@ -97,10 +97,10 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                               </ul>
                             </details>
                           </li>
-                        </ul>
+                        </ul> -->
                       </details>
                     </li>
-                  </ul> -->
+                  </ul>
                 </details>
               </li>
             </ul>

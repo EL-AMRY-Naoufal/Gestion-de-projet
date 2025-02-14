@@ -1,7 +1,8 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.NiveauService;
-import com.fst.il.m2.Projet.models.Niveau;
+import com.fst.il.m2.Projet.dto.NiveauDto;
+import com.fst.il.m2.Projet.mapper.NiveauMapper;
 import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.models.Niveau;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,13 @@ public class NiveauController {
 
     // Get all Niveaux
     @GetMapping
-    public ResponseEntity<List<Niveau>> getAllNiveaux() {
+    public ResponseEntity<List<NiveauDto>> getAllNiveaux() {
         List<Niveau> niveaux = niveauService.getAllNiveaux();
-        return new ResponseEntity<>(niveaux, HttpStatus.OK);
+        return new ResponseEntity<>(niveaux.stream().map(NiveauMapper::toDto).toList(), HttpStatus.OK);
     }
 
     // Get a Niveau by ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Niveau> getNiveauById(@PathVariable Long id) {
         try {
             Niveau niveau = niveauService.getNiveauById(id);

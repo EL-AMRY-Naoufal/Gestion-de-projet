@@ -28,6 +28,10 @@ export class NiveauService {
         );
     }
     
+    getAllNiveaux(): Observable<Niveau[]> {
+        return this.http.get<Niveau[]>(`${this._backendURL.niveaux}`);
+    }
+
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {
         return this.http.get<Niveau[]>(`${this._backendURL.niveaux}/formation/${formationId}`);
     }
