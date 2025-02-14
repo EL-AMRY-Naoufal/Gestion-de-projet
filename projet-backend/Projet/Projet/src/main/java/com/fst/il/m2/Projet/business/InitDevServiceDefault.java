@@ -121,6 +121,9 @@ public class InitDevServiceDefault implements InitDevService {
         ///********SEMESTRE
         Semestre S1 = Semestre.builder().nom("S1").niveau(M2IL).build(); //add modules
         Semestre S2 = Semestre.builder().nom("S2").niveau(M2IL).build(); //add modules
+        List<Semestre> semestres =new ArrayList<>();
+        semestres.add(S1);
+        semestres.add(S2);
 
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
@@ -216,6 +219,10 @@ public class InitDevServiceDefault implements InitDevService {
         //save semestres
         semestreRepository.save(S1);
         semestreRepository.save(S2);
+
+        M1.setSemestres(semestres);
+
+        niveauRepository.save(M1);
 
         //save enseignants
         enseignantRepository.save(enseignant1);

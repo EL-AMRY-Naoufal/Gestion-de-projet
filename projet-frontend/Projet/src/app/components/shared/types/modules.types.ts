@@ -37,7 +37,7 @@ export interface Module {
 export interface Semestre {
   id?: number;
   nom?: string;
-  modules: Module[];
+  niveauId: number;
 }
 
 export interface Niveau {

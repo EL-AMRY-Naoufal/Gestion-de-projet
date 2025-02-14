@@ -38,17 +38,17 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
                           <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">+</button> -->
-                          <button (click)="removeNiveau(i, j, k, l)"><i class="fa fa-trash-o"></i></button>
+                          <button (click)="removeNiveau(l)"><i class="fa fa-trash-o"></i></button>
                         </summary>
-                        <!-- <ul>
-                          <li *ngFor="let semestre of niveau.semestres; let n = index">
+                        <ul>
+                          <li *ngFor="let semestre of getSemestreByNiveau(l); let n = index">
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
-                                <button (click)="removeSemestre(i, j, k, l, n)"><i class="fa fa-trash-o"></i></button>
+                                <!-- <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button> -->
+                                <button (click)="removeSemestre(n)"><i class="fa fa-trash-o"></i></button>
                               </summary>
-                              <ul>
+                              <!-- <ul>
                                 <li *ngFor="let module of semestre.modules; let o = index">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
@@ -94,10 +94,10 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
 
                                   </details>
                                 </li>
-                              </ul>
+                              </ul> -->
                             </details>
                           </li>
-                        </ul> -->
+                        </ul>
                       </details>
                     </li>
                   </ul>

@@ -1,6 +1,8 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.SemestreService;
+import com.fst.il.m2.Projet.dto.SemestreDto;
+import com.fst.il.m2.Projet.mapper.SemestreMapper;
 import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +25,13 @@ public class SemestreController {
 
     // Get all Semestres
     @GetMapping
-    public ResponseEntity<List<Semestre>> getAllSemestres() {
+    public ResponseEntity<List<SemestreDto>> getAllSemestres() {
         List<Semestre> semestres = semestreService.getAllSemestres();
-        return new ResponseEntity<>(semestres, HttpStatus.OK);
+        return new ResponseEntity<>(semestres.stream().map(SemestreMapper::toDto).toList(), HttpStatus.OK);
     }
 
     // Get a Semestre by ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Semestre> getSemestreById(@PathVariable Long id) {
         try {
             Semestre semestre = semestreService.getSemestreById(id);

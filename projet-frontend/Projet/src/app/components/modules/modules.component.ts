@@ -62,6 +62,7 @@ export class ModulesComponent implements OnInit {
     this.getAllDepartements();
     this.getAllFormations();
     this.getAllNiveaux();
+    this.getAllSemestres();
     //get all annees
     // this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
     //   this.data.annees = data;
@@ -160,6 +161,15 @@ export class ModulesComponent implements OnInit {
   getNiveauxByFormation(formationIndex: number) {
     return this.niveaux.filter((niveau) => niveau.formationId === this.formations[formationIndex].id);
   }
+
+  getAllSemestres() {
+    return this.semestreService.getAllSemestres().subscribe((semestreResult) => this.semestres = semestreResult);
+  }
+
+  getSemestreByNiveau(niveauIndex: number) {
+    return this.semestres.filter((semestre) => semestre.niveauId === this.niveaux[niveauIndex].id);
+  }
+
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
   }
@@ -227,19 +237,19 @@ export class ModulesComponent implements OnInit {
     this.niveaux.push(newNiveau);
   }
 
-  // openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddSemestreDialogComponent);
+  openAddSemestreDialog(): void {
+    const dialogRef = this.dialog.open(AddSemestreDialogComponent);
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.addSemestre(anneeIndex, departementIndex, formationIndex, niveauIndex, result);
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addSemestre(result);
+      }
+    });
+  }
 
-  // addSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, newSemestre: Semestre) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres.push(newSemestre);
-  // }
+  addSemestre(newSemestre: Semestre) {
+    this.semestres.push(newSemestre);
+  }
 
   // openAddModuleDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number): void {
   //   const dialogRef = this.dialog.open(AddModulesDialogComponent);
@@ -315,14 +325,13 @@ export class ModulesComponent implements OnInit {
     this.formations.splice(formationIndex, 1);
   }
 
-  removeNiveau(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number) {
+  removeNiveau(niveauIndex: number) {
     this.niveaux.splice(niveauIndex, 1);
   }
 
-
-  // removeSemestre(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres.splice(semestreIndex, 1);
-  // }
+  removeSemestre(semestreIndex: number) {
+    this.semestres.splice(semestreIndex, 1);
+  }
 
   // removeModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number) {
   //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules.splice(moduleIndex, 1);
