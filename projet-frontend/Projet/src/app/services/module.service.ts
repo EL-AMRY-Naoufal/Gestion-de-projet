@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment.prod";
 import {Observable} from "rxjs";
-import {LoginService} from "./login.service";
+import { Module } from "../components/shared/types/modules.types";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import {LoginService} from "./login.service";
 export class ModuleService {
   private readonly _backendURL: any;
 
-  constructor(private http: HttpClient, private _loginService: LoginService) {
+  constructor(private http: HttpClient) {
     this._backendURL = {};
 
     // build backend base url
@@ -28,8 +28,7 @@ export class ModuleService {
     );
   }
 
-  getModules(): Observable<any> {
-    return this.http.get<any[]>(this._backendURL.allmodules);
+  getAllModules(): Observable<any> {
+    return this.http.get<Module[]>(`${this._backendURL.modules}`);
   }
-
 }

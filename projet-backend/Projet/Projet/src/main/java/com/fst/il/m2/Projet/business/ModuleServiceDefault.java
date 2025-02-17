@@ -18,20 +18,8 @@ public class ModuleServiceDefault implements ModuleService{
 
     // Get all modules
     @Override
-    public List<ModuleDto> getAllModules() {
-        List<Module> modules = moduleRepository.findAll();
-        return modules.stream().map(
-                module -> new ModuleDto(
-                        module.getId(),
-                        module.getNom(),
-                        module.getGroupes().stream().map(
-                                groupe -> new GroupeDto(
-                                        groupe.getId(),
-                                        groupe.getNom()
-                                )
-                        ).collect(Collectors.toList())
-                )
-        ).collect(Collectors.toList());
+    public List<Module> getAllModules() {
+        return moduleRepository.findAll();
     }
 
 

@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.ModuleService;
 import com.fst.il.m2.Projet.dto.ModuleDto;
+import com.fst.il.m2.Projet.mapper.ModuleMapper;
 import com.fst.il.m2.Projet.models.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,12 @@ public class ModuleController {
     // Get all Modules
     @GetMapping
     public ResponseEntity<List<ModuleDto>> getAllModules() {
-        List<ModuleDto> modules = moduleService.getAllModules();
-        return new ResponseEntity<>(modules, HttpStatus.OK);
+        List<Module> modules = moduleService.getAllModules();
+        return new ResponseEntity<>(modules.stream().map(ModuleMapper::toDto).toList(), HttpStatus.OK);
     }
 
     // Get a Module by ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Module> getModuleById(@PathVariable Long id) {
         try {
             Module module = moduleService.getModuleById(id);

@@ -29,9 +29,8 @@ export interface Groupe {
 export interface Module {
   id?: number;
   nom: string;
-  groupes: Groupe[];
   heuresParType: Map<string, number>;
-  nombreGroupes: number;
+  semestreId: number;
 }
 
 export interface Semestre {

@@ -20,6 +20,7 @@ import {GroupeService} from '../../services/groupe.service';
 import {Annee, Departement, Formation, Niveau, Semestre, Groupe, Module, Affectation} from '../shared/types/modules.types';
 import {UserService} from "../../services/user.service";
 import { FormationService } from '../../services/formation.service';
+import { ModuleService } from '../../services/module.service';
 
 @Component({
   selector: 'app-modules',
@@ -50,6 +51,7 @@ export class ModulesComponent implements OnInit {
     private anneeService: AnneeService,
     private niveauService: NiveauService,
     private semestreService: SemestreService,
+    private moduleService: ModuleService,
     private groupeService: GroupeService,
     private userService: UserService,
     private formationService: FormationService,
@@ -170,6 +172,14 @@ export class ModulesComponent implements OnInit {
     return this.semestres.filter((semestre) => semestre.niveauId === this.niveaux[niveauIndex].id);
   }
 
+  getAllModules() {
+    return this.moduleService.getAllModules().subscribe((modulesResult) => this.modules = modulesResult);
+  }
+
+  getModulesBySemestre(semestreIndex: number) {
+    return this.modules.filter((module) => module.semestreId === this.semestres[semestreIndex].id);
+  }
+
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
   }
@@ -251,19 +261,20 @@ export class ModulesComponent implements OnInit {
     this.semestres.push(newSemestre);
   }
 
-  // openAddModuleDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddModulesDialogComponent);
+  openAddModuleDialog(): void {
+    const dialogRef = this.dialog.open(AddModulesDialogComponent);
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.addModule(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, result);
-  //     }
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addModule(result);
+      }
+    });
+  }
 
-  // addModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, newModule: Module) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules.push(newModule);
-  // }
+  addModule(newModule: Module) {
+    this.modules.push(newModule);
+  }
+
   updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
     const affectationId = this.affectations[affectationIndex].id;
 
@@ -333,9 +344,9 @@ export class ModulesComponent implements OnInit {
     this.semestres.splice(semestreIndex, 1);
   }
 
-  // removeModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules.splice(moduleIndex, 1);
-  // }
+  removeModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number) {
+    this.modules.splice(moduleIndex, 1);
+  }
 
   // removeGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number) {
   //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.splice(groupeIndex, 1);

@@ -16,7 +16,8 @@ import { TypeHeure, Module, Groupe } from '../../../shared/types/modules.types';
 })
 export class AddModulesDialogComponent {
 
-  newModule: Module = { nom: '', groupes: [], heuresParType: new Map<string, number>() , nombreGroupes: 0 };
+  //Utilisation d'un objet non typé à cause de la création des groupes (absents du type "Module")
+  newModule: any = { nom: '', heuresParType: new Map<string, number>(), };
   types = Object.values(TypeHeure);
 
   heuresList = this.types.map(type => ({ type, heures: 0, groupes: 0 }));

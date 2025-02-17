@@ -37,7 +37,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">+</button> -->
+                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
                           <button (click)="removeNiveau(l)"><i class="fa fa-trash-o"></i></button>
                         </summary>
                         <ul>
@@ -45,10 +45,10 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                <!-- <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button> -->
+                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
                                 <button (click)="removeSemestre(n)"><i class="fa fa-trash-o"></i></button>
                               </summary>
-                              <!-- <ul>
+                              <ul>
                                 <li *ngFor="let module of semestre.modules; let o = index">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
@@ -56,7 +56,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                       <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
                                       <button (click)="removeModule(i, j, k, l, n, o)"><i class="fa fa-trash-o"></i></button>
                                     </summary>
-                                    <ul>
+                                    <!-- <ul>
                                       <li *ngFor="let groupe of module.groupes; let p = index">
                                         <details>
                                           <summary (click)="showType('GROUPE', groupe)">
@@ -89,12 +89,10 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
 
                                         </details>
                                       </li>
-                                    </ul>
-
-
+                                    </ul> -->
                                   </details>
                                 </li>
-                              </ul> -->
+                              </ul>
                             </details>
                           </li>
                         </ul>
