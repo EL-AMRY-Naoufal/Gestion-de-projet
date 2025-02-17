@@ -150,17 +150,14 @@ body {
 /* Grille des utilisateurs */
 .user-grid {
   margin: 1em;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 4 colonnes fixes */
+  display: flex;
+  flex-wrap: wrap;
   column-gap: 2em; /* Espacement horizontal entre les cartes */
   row-gap: 1em; /* Espacement vertical entre les cartes */
-  padding: 1em;
+  padding: 1em 2em;
   padding-right: 1.5em;
   justify-content: center;
-  max-height: calc(3 * 200px + 2 * 0.75em); /* Hauteur maximale pour 3 cartes */
-  overflow-y: auto; /* Barre de défilement si nécessaire */
   width: 100%; /* Utilisation complète de la largeur disponible */
-  max-width: 1750px; /* Largeur maximale */
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
