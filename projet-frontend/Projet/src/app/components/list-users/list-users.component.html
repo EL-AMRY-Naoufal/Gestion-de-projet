@@ -29,7 +29,6 @@
 
     <div class="role" *ngIf="isYearSelected()">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
-        <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
       </select>
     </div>
