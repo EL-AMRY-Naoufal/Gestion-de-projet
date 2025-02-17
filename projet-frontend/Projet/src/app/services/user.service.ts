@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { User } from '../components/shared/types/user.type';
 import { YearService } from './year-service';
 import { isPlatformBrowser } from '@angular/common';
+import { ApiService } from './api-service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class UserService {
     private _http: HttpClient,
     private _loginService: LoginService,
     private _yearService: YearService,
+    private _api: ApiService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
 
@@ -207,8 +209,6 @@ export class UserService {
   }
 
   get authentifiedUser(): Observable<User> {
-    const authentifiedId = this._loginService.connectUser();
-
-    return this.fetchOne(authentifiedId+"");
+    return this._api.me();
   }
 }

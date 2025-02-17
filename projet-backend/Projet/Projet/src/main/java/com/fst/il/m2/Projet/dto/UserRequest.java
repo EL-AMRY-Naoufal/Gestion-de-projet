@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class UserRequest {
-    private UserDto user;
+    private UserWithPasswordDto user;
     private Long responsableId;
     private boolean associateEnseignantWithUser; // New field
 
