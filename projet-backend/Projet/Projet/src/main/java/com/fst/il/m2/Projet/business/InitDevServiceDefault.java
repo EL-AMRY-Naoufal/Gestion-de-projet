@@ -157,9 +157,9 @@ public class InitDevServiceDefault implements InitDevService {
 //        Groupe groupe2 = Groupe.builder().nom("groupe 2").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).build();
 //        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
 
-        Groupe groupe1 = new Groupe(1L, "Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
-        Groupe groupe2 = new Groupe(2L, "Groupe 2", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.TD, null,80, null);
-        Groupe groupe3 = new Groupe(3L, "Groupe 3", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
+        Groupe groupe1 = new Groupe(1L, "CM Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
+        Groupe groupe2 = new Groupe(2L, "TD Groupe 2", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.TD, null,80, null);
+        Groupe groupe3 = new Groupe(3L, "CM Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
         ArrayList<Groupe> groupes1 = new ArrayList<>();
         groupes1.add(groupe1);
         groupes1.add(groupe2);

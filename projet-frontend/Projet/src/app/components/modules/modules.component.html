@@ -68,8 +68,8 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                           <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
                                             <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
                                               <div class="affectation-info">
-                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant || 'Inconnu' }}</p>
-                                                <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>
+                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
+                                              <!--  <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>-->
 
                                                     <p><strong>Heures assignées : </strong>
                                                       <input type="number" [(ngModel)]="affectation.heuresAssignees" min="0">

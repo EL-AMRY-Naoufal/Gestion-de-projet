@@ -195,14 +195,13 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
 
 
     @Override
-    public void affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
+    public  Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
         // Récupérer l'id de l'enseignant depuis la table des users
         Long enseignantID = enseignantRepository.findByUserId(userId)
                 .orElseThrow(NotFoundException::new)
                 .getId();
 
-//        System.err.println("enseignantID: " + enseignantID);
         Enseignant enseignant = enseignantRepository.findById(enseignantID)
                 .orElseThrow(NotFoundException::new);
 
@@ -210,16 +209,14 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         Groupe groupe = groupeRepository.findById(groupeId)
                 .orElseThrow(() -> new RuntimeException("Groupe not found with id: " + groupeId));
 
-        // Vérifier si l'enseignant a des heures disponibles
-       /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
-            throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
-        }*/
+        // Vérifier si l'enseignant est déjà affecté à ce groupe
+        if (affectationRepository.existsByEnseignantAndGroupe(enseignant, groupe)) {
+            throw new RuntimeException("Affectation already exists");
+        }
 
-        //mettre a jour les heures restantes du groupe
+        // Mettre à jour les heures restantes du groupe
         groupe.setHeuresAffectees(groupe.getHeuresAffectees() + heuresAssignees);
-
         groupeRepository.save(groupe);
-
 
         // Créer une nouvelle affectation
         Affectation affectation = new Affectation();
@@ -230,13 +227,15 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         affectation.setCommentaire("");
 
         // Sauvegarder l'affectation
-        Affectation savedAffectation = affectationRepository.save(affectation);
+        affectationRepository.save(affectation);
 
         // Mettre à jour les heures assignées de l'enseignant
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
 
+        return affectation;
     }
+
 
     //mise a jour des heures enseignées d'une affectation
     public void updateAffectationHours(Long idAffectation, int heuresAssignees) {
@@ -263,8 +262,14 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public void deleteAffectation(Long id){
         Affectation affectation = affectationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Affectation not found with id: " + id));
+
+
         Enseignant enseignant = affectation.getEnseignant();
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() - affectation.getHeuresAssignees());
+
+        Groupe groupe = affectation.getGroupe();
+        groupe.setHeuresAffectees(groupe.getHeuresAffectees() - affectation.getHeuresAssignees());
+        groupeRepository.save(groupe);
         enseignantRepository.save(enseignant);
         affectationRepository.deleteById(id);
     }

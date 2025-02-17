@@ -162,12 +162,12 @@ export class UserService {
 
   createAffectation(
     EnseignantId: string,
-    idModule: string,
+    idGroupe: string,
     nombreHeure: string
   ): Observable<any> {
     return this._http
       .post(
-        `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,
+        `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idGroupe}/${nombreHeure}`,
         null,
         { responseType: 'text' }
       )
