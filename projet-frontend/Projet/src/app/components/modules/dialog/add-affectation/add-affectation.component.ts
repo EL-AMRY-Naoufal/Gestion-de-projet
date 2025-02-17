@@ -54,26 +54,26 @@ export class AddAffectationComponent implements OnInit {
   ngOnInit(): void {
     this.myId = this.loginService.connectUser() + '';
 
-    // Remplir les modules si nécessaire (si pas déjà préchargés)
-    this.moduleService.getModules().subscribe(
-      (response: any[]) => {
-        this.modules = response;
-        this.onModuleChange();
-      },
-      (error: any) => {
-        console.log('error', error);
-      }
-    );
+    // // Remplir les modules si nécessaire (si pas déjà préchargés)
+    // this.moduleService.getModules().subscribe(
+    //   (response: any[]) => {
+    //     this.modules = response;
+    //     this.onModuleChange();
+    //   },
+    //   (error: any) => {
+    //     console.log('error', error);
+    //   }
+    // );
 
     // Remplir les enseignants
     this.enseignantService.getEnseignants().subscribe(
       (response: any[]) => {
         this.enseignants = response;
          console.log('enseignants', this.enseignants);
-      },
-      (error: any) => {
-        console.log('error', error);
-      }
+      }//,
+      // (error: any) => {
+      //   console.log('error', error);
+      // }
     );
 
     // Préremplir le module et le groupe
@@ -84,8 +84,9 @@ export class AddAffectationComponent implements OnInit {
   }
 
   onModuleChange(): void {
-    const selectedModule = this.modules.find(module => module.id === Number(this.moduleId));
-    this.groupes = selectedModule ? selectedModule.groupes : [];
+    console.log("on module change");
+    // const selectedModule = this.modules.find(module => module.id === Number(this.moduleId));
+    // this.groupes = selectedModule ? selectedModule.groupes : [];
   }
 
   onSubmit(): void {

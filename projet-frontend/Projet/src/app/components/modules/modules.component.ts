@@ -65,6 +65,7 @@ export class ModulesComponent implements OnInit {
     this.getAllFormations();
     this.getAllNiveaux();
     this.getAllSemestres();
+    this.getAllModules();
     //get all annees
     // this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
     //   this.data.annees = data;
@@ -261,12 +262,14 @@ export class ModulesComponent implements OnInit {
     this.semestres.push(newSemestre);
   }
 
-  openAddModuleDialog(): void {
+  openAddModuleDialog(semestreIndex: number): void {
     const dialogRef = this.dialog.open(AddModulesDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addModule(result);
+        let module: Module = { nom: result.nom, heuresParType: result.heuresParType, semestreId: semestreIndex};
+        this.addModule(module);
+        //TODO groupes
       }
     });
   }

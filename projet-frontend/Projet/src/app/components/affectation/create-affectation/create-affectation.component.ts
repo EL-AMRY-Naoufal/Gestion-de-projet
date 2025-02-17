@@ -43,15 +43,15 @@ export class CreateAffectationComponent implements OnInit {
 
     this.myId = this.loginService.connectUser() + '';
 
-    this.moduleService.getModules().subscribe(
-      (response) => {
-        this.modules = response;
-        console.log("modules", this.modules);
-      },
-      catchError => {
-        console.log("error", catchError);
-      }
-    );
+    // this.moduleService.getModules().subscribe(
+    //   (response) => {
+    //     this.modules = response;
+    //     console.log("modules", this.modules);
+    //   },
+    //   catchError => {
+    //     console.log("error", catchError);
+    //   }
+    // );
 
 
     this.enseinganntServices.getEnseignants().subscribe(

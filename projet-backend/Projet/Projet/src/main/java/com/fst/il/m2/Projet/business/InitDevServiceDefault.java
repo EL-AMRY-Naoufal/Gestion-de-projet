@@ -148,8 +148,8 @@ public class InitDevServiceDefault implements InitDevService {
 
                 );
         List<com.fst.il.m2.Projet.models.Module> modules2 = List.of(
-                Module.builder().nom("Verification")./*totalHeuresRequises(40).heuresParType(heuresParTypesM2).semestre(S2).*/build(),
-                Module.builder().nom("Modélisation")./*totalHeuresRequises(30).heuresParType(heuresParTypesM2).*/semestre(S2).build()
+                Module.builder().nom("Verification")./*totalHeuresRequises(40).*/heuresParType(heuresParTypesM2).semestre(S2).build(),
+                Module.builder().nom("Modélisation")./*totalHeuresRequises(30).*/heuresParType(heuresParTypesM2).semestre(S2).build()
                 );
 
         ///********GROUPES

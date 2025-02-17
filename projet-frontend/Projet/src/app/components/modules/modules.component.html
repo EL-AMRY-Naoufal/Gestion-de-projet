@@ -37,7 +37,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
+                          <button (click)="openAddSemestreDialog()">+</button>
                           <button (click)="removeNiveau(l)"><i class="fa fa-trash-o"></i></button>
                         </summary>
                         <ul>
@@ -45,15 +45,15 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
+                                <button (click)="openAddModuleDialog(n)">+</button>
                                 <button (click)="removeSemestre(n)"><i class="fa fa-trash-o"></i></button>
                               </summary>
                               <ul>
-                                <li *ngFor="let module of semestre.modules; let o = index">
+                                <li *ngFor="let module of getModulesBySemestre(n); let o = index">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
                                       Module: {{ module.nom || 'Nouveau Module' }}
-                                      <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
+                                      <!-- <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button> -->
                                       <button (click)="removeModule(i, j, k, l, n, o)"><i class="fa fa-trash-o"></i></button>
                                     </summary>
                                     <!-- <ul>
@@ -68,9 +68,9 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                           <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
                                             <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
                                               <div class="affectation-info">
-                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>
-                                              <!--  <p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>-->
-
+                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p>-->
+                                              <!--<p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>-->
+                                              <!--
                                                     <p><strong>Heures assignées : </strong>
                                                       <input type="number" [(ngModel)]="affectation.heuresAssignees" min="0">
                                                     </p>
