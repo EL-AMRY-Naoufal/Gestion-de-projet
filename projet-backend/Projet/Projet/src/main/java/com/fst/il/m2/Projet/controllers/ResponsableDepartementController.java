@@ -100,7 +100,7 @@ public class ResponsableDepartementController {
     }
 
     //supprimer une affectation
-    @DeleteMapping("/affectation/00{idAffectation}")
+    @DeleteMapping("/affectation/{idAffectation}")
     public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
         responsableDepartementService.deleteAffectation(idAffectation);
         return ResponseEntity.noContent().build();
