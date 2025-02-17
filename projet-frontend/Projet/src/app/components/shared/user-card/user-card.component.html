@@ -59,5 +59,13 @@
     >
       🗑️
     </div>
+    <div *ngIf="hasRoleEnseignant()">
+      <button mat-button color="primary" (click)="showAffectations(user.id)">
+        Voir Affectations
+      </button>
+    </div>
+    
   </mat-card-actions>
+
+  
 </mat-card>

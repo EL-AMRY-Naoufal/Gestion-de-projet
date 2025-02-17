@@ -23,6 +23,7 @@ import { YearService } from '../../services/year-service';
 import { Year } from '../shared/types/year.type';
 import { LoginService } from '../../services/login.service';
 import { EnseignantsComponent } from '../enseignants/enseignants.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-users',
@@ -75,6 +76,9 @@ export class ListUsersComponent implements OnInit {
   years: Year[] = [];
   selectedYear: Year | null = null;
 
+  isModalOpen = false;
+  affectations: any[] = [];
+
   /**
    * Component constructor
    */
@@ -84,7 +88,8 @@ export class ListUsersComponent implements OnInit {
     private _dialog: MatDialog,
     private _enseignantService: EnseignantService,
     private loginService: LoginService,
-    private _yearService: YearService
+    private _yearService: YearService,
+    private http: HttpClient
   ) {
     this.userRoles = this.loginService.userRoles;
     this._listUsers = [];
@@ -339,5 +344,21 @@ export class ListUsersComponent implements OnInit {
     } else {
       this._listUsers = [];
     }
+  }
+
+  openAffectationModal(userId: number) {
+    console.log("sss");
+    this.http.get<any[]>(`http://localhost:8080/api/responsableDepartement/${userId}/affectations`).subscribe(
+      (data) => {
+        this.affectations = data;
+        this.isModalOpen = true;
+        console.log("hello ooo ", data);
+      },
+      (error) => console.error('Erreur lors de la récupération des affectations:', error)
+    );
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }

@@ -28,6 +28,8 @@ export class UserCardComponent {
   private readonly _delete$: EventEmitter<User>;
   userRoles: string[] = [];
 
+  @Output() viewAffectations = new EventEmitter<number>();
+
   /**
    * Component constructor
    */
@@ -75,5 +77,14 @@ export class UserCardComponent {
    */
   delete(user: User): void {
     this._delete$.emit(user);
+  }
+
+  showAffectations(userId: any) {
+    console.log("ss")
+    this.viewAffectations.emit(userId);
+  }
+
+  hasRoleEnseignant(): boolean {
+    return this.user.roles.some(roleDto => roleDto.role === 'ENSEIGNANT');
   }
 }

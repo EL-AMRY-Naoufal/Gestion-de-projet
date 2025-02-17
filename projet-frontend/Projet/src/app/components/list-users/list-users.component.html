@@ -43,6 +43,7 @@
         [selectedYear]="getSelectedYear()"
         [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
+        (viewAffectations)="openAffectationModal($event)"
         *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
       >
       </app-user-card>
@@ -57,4 +58,38 @@
       <p>Aucun utilisateur trouvé</p>
     </div>
   </section>
+</div>
+
+<div *ngIf="isModalOpen" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Affectations de l'utilisateur</h2>
+      <button class="close-button" (click)="closeModal()">✖</button>
+    </div>
+
+    <div class="modal-body">
+      <ul *ngIf="affectations.length > 0; else noAffectations">
+        <li *ngFor="let affectation of affectations" class="affectation-item">
+          <span class="affectation-title">
+            <strong>{{ affectation.nomModule || "Module inconnu" }}</strong>
+          </span>
+          <span class="affectation-desc">
+            {{ affectation.commentaire ? affectation.commentaire : "Aucun commentaire" }}
+          </span>
+          <span class="affectation-info">
+            ⏳ {{ affectation.heuresAssignees }} heures | 📅 {{ affectation.dateAffectation }}
+          </span>
+        </li>
+      </ul>
+
+      <!-- Message si aucune affectation -->
+      <ng-template #noAffectations>
+        <p class="no-data">Aucune affectation trouvée pour cet utilisateur.</p>
+      </ng-template>
+    </div>
+
+    <div class="modal-footer">
+      <button class="close-modal-button" (click)="closeModal()">Fermer</button>
+    </div>
+  </div>
 </div>
