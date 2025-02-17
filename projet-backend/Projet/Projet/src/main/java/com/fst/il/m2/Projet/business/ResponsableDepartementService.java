@@ -20,4 +20,6 @@ public interface ResponsableDepartementService {
     void affecterModuleToEnseignant(Long enseignantId, Long moduleId, int heuresAssignees);
      List<UserRole> getUsersByRole(Role role);
      List<UserRole> getUsersByRoleAndYear(Role role, Long year);
+
+    public List<Affectation> getAffectationsByUserId(Long userId);
 }

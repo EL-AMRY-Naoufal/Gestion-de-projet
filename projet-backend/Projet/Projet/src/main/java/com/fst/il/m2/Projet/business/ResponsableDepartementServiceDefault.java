@@ -7,13 +7,16 @@ import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -254,4 +257,14 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return userRoleRepository.findByRoleAndYearId(role, year);
     }
 
+    @Override
+    public List<Affectation> getAffectationsByUserId(Long userId) {
+
+        Enseignant enseignant = enseignantRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Enseignant not found for the user"));
+
+        return enseignant.getAffectations();
     }
+
+
+}

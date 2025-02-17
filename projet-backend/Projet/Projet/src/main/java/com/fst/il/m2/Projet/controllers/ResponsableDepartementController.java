@@ -4,6 +4,7 @@ import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
+import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,9 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok("Enseignant affecté avec succès");
     }
 
-
+    @GetMapping("/{id}/affectations")
+    public ResponseEntity<List<Affectation>> getAffectationsByUserId(@PathVariable Long id) {
+        List<Affectation> affectations = responsableDepartementService.getAffectationsByUserId(id);
+        return ResponseEntity.ok(affectations);
+    }
 }
