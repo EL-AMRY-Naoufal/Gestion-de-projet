@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/departements/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/niveaux/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/groupes/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/affectation/**").hasAuthority("CHEF_DE_DEPARTEMENT")
 
 
 

@@ -86,25 +86,7 @@ public class ResponsableDepartementController {
     }
 
 
-    //route pour affecter un enseignant à un module en precisant lheure enseignée
-    @PostMapping("/affectation/{idEnseignant}/{idGroupe}/{heure}")
-    public ResponseEntity<Affectation> affecterEnseignant(@PathVariable Long idEnseignant, @PathVariable Long idGroupe, @PathVariable int heure) {
-        Affectation affectation = responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idGroupe, heure);
-        return ResponseEntity.ok(affectation);
-    }
-    //mettre a jour le nombre d'heures enseignées d'une affectation
-    @PutMapping("/affectation/{idAffectation}/{heure}")
-    public ResponseEntity<String> updateAffectation(@PathVariable Long idAffectation, @PathVariable int heure) {
-        responsableDepartementService.updateAffectationHours(idAffectation, heure);
-        return ResponseEntity.ok("Affectation mise à jour avec succès");
-    }
 
-    //supprimer une affectation
-    @DeleteMapping("/affectation/{idAffectation}")
-    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
-        responsableDepartementService.deleteAffectation(idAffectation);
-        return ResponseEntity.noContent().build();
-    }
 
 
 }

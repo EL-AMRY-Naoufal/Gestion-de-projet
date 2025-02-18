@@ -167,7 +167,7 @@ export class UserService {
   ): Observable<any> {
     return this._http
       .post(
-        `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idGroupe}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${EnseignantId}/${idGroupe}/${nombreHeure}`,
         null,
         { responseType: 'text' }
       )
@@ -189,7 +189,7 @@ export class UserService {
   updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
     return this._http
       .put(
-        `${this._backendURL.allUsers}/affectation/${affectationId}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}/${nombreHeure}`,
         null,
         { responseType: 'text' }
       )
@@ -212,7 +212,7 @@ export class UserService {
 
   deleteAffectation(affectationId: number): Observable<string> {
     return this._http
-      .delete<string>(`${this._backendURL.allUsers}/affectation/${affectationId}`, {
+      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`, {
         headers: new HttpHeaders({
           Authorization: `Bearer ${this._loginService.authToken}`,
         }),

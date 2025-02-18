@@ -76,7 +76,7 @@ export class ModulesComponent implements OnInit {
                         this.data.annees[anneeIndex].departements[departementIndex]
                           .formations[formationIndex].niveaux = data;
 
-                        //TODO
+
                         //for each niveau, get all semestres
                         formation.niveaux.forEach((niveau, niveauIndex) => {
                           if (niveau.id != undefined) {
