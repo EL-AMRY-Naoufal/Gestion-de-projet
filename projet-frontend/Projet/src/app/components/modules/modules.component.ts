@@ -19,6 +19,7 @@ import {SemestreService} from '../../services/semestre.service';
 import {GroupeService} from '../../services/groupe.service';
 import {Annee, Departement, Formation, Niveau, Semestre, Groupe, Module} from '../shared/types/modules.types';
 import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-modules',
@@ -44,7 +45,8 @@ export class ModulesComponent implements OnInit {
     private niveauService: NiveauService,
     private semestreService: SemestreService,
     private groupeService: GroupeService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
   }
 
@@ -96,10 +98,19 @@ export class ModulesComponent implements OnInit {
                                         .niveaux[niveauIndex].semestres[semestreIndex]
                                         .modules[moduleIndex].groupes = data;
 
-                                      //TODO username utilisé temporairement
+                                      // Formater le nom sous la forme par exemple "E. Jeandel"
                                       module.groupes.forEach((groupe, groupeId) => {
-                                        groupe.affectations.forEach(affectation => affectation.nomEnseignant = affectation.enseignant?.user?.username)
-                                      })
+                                        groupe.affectations.forEach(affectation => {
+                                          if (affectation.enseignant?.user?.firstname && affectation.enseignant?.user?.name) {
+                                            const firstInitial = affectation.enseignant.user.firstname.charAt(0).toUpperCase(); // Première lettre du prénom
+                                            const lastName = affectation.enseignant.user.name.charAt(0).toUpperCase() + affectation.enseignant.user.name.slice(1).toLowerCase(); // Nom avec la première lettre en majuscule
+                                            affectation.nomEnseignant = `${firstInitial}. ${lastName}`;
+                                          } else {
+                                            affectation.nomEnseignant = ''; // Si les données sont absentes, éviter les erreurs
+                                          }
+                                        });
+                                      });
+
                                     })
                                   }
                                 })
@@ -118,6 +129,13 @@ export class ModulesComponent implements OnInit {
       })
     })
   }
+
+  navigateToAffectations(id: number ) {
+    this.router.navigate(['/enseignants/affectations/' + id]);
+
+
+  }
+
 
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);

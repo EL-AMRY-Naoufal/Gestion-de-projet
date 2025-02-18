@@ -72,10 +72,10 @@ public class InitDevServiceDefault implements InitDevService {
                 User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username1").password(passwordEncoder.encode("password1")).email("email1@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username2").password(passwordEncoder.encode("password2")).email("email2@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username3").password(passwordEncoder.encode("password3")).email("email3@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username4").password(passwordEncoder.encode("password4")).email("email4@email.fr").roles(new ArrayList<>()).build()
+                User.builder().username("username1").firstname("Emmanuel").name("Jeandel").password(passwordEncoder.encode("password1")).email("email1@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username2").firstname("Horatiu").name("Cirstea").password(passwordEncoder.encode("password2")).email("email2@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username3").firstname("Sokolov").name("Dmitry").password(passwordEncoder.encode("password3")).email("email3@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username4").firstname("Marie").name("Duflot Kremer").password(passwordEncoder.encode("password4")).email("email4@email.fr").roles(new ArrayList<>()).build()
                 );
         Annee annee = Annee.builder().id(1L).debut(2024).build();
         anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));

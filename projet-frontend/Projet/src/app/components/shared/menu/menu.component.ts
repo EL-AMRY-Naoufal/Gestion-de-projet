@@ -80,7 +80,7 @@ export class MenuComponent {
     this.router.navigate(['']);
   }
   navigateToAffectations() {
-    this.router.navigate(['/enseignant/MesAffectations']);
+    this.router.navigate(['/enseignants/affectations']);
   }
 
   onYearSelected(): void {
