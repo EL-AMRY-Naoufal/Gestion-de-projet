@@ -142,4 +142,16 @@ public class EnseignantController {
 
         return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
     }
+
+    @GetMapping("/findenseignant")
+    public ResponseEntity<List<EnseignantDto>> getEnseignantsWithSameUserNameAndFirstName(
+            @RequestParam String name,
+            @RequestParam String firstname){
+        return ResponseEntity.ok(
+                this.enseignantService.getEnseignantsWithSameUserNameAndFirstName(
+                        name,
+                        firstname
+                ).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList())
+        );
+    }
 }

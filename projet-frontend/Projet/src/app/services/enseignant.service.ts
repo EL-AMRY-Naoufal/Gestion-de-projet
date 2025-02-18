@@ -46,6 +46,10 @@ export class EnseignantService {
     return this.http.get<User[]>(`${this._backendURL.allEnseignants}/finduser?name=${enseignant.name}&firstname=${enseignant.firstname}`);
   }
 
+  getEnseignantWithSameUserNameAndFirstName(firstname: string, name: string): Observable<EnseignantDto[]> {
+    return this.http.get<EnseignantDto[]>(`${this._backendURL.allEnseignants}/findenseignant?name=${name}&firstname=${firstname}`);
+  }
+
   getEnseignants(): Observable<EnseignantDto[]> {
     return this.http.get<EnseignantDto[]>(`${this._backendURL.allEnseignants}`);
   }

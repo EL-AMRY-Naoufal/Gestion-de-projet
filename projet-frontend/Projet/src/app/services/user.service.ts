@@ -100,7 +100,7 @@ export class UserService {
     const body = {
       responsableId: this._responsableId, // Ajoute le responsableId
       user: newUser, // Ajoute l'objet user
-      associateEnseignantWithUser: false,
+      associateEnseignantWithUser: user.hasProfile,
       year: 1,
     };
 

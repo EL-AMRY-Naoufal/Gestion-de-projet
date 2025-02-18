@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,5 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, Long>, J
     @Transactional
     @Query("DELETE FROM Enseignant e WHERE e.user = :user")
     void deleteByUser(@Param("user") User user);
+    List<Enseignant> findEnseignantByNameAndFirstname(String name, String firstname);
 }

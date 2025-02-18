@@ -90,6 +90,37 @@ export class UpdateProfesseurComponent {
       this.toggleValidators(hasAccount);
     });
   }
+
+  private updateNbHeureCategorie(): void {
+    const categorie = this.form.get('categorieEnseignant')?.value;
+  
+    let nbHeureCategorie = 0;
+  
+    // Définir le nombre d'heures selon la catégorie
+    switch (categorie) {
+      case 'ENSEIGNANT_CHERCHEUR':
+        nbHeureCategorie = 192;
+        break;
+      case 'PRAG':
+        nbHeureCategorie = 384;
+        break;
+      case 'ATER':
+        nbHeureCategorie = 192;
+        break;
+      case 'DCCE':
+        nbHeureCategorie = 64;
+        break;
+      case 'VACATAIRE':
+        nbHeureCategorie = 32;
+        break;
+      default:
+        console.warn(`Catégorie non reconnue : ${categorie}`);
+        break;
+    }
+  
+    // Mettre à jour le champ 'nbHeureCategorie' avec la valeur correspondante
+    this.form.get('nbHeureCategorie')?.setValue(nbHeureCategorie, { emitEvent: false });
+  }
   
   toggleValidators(hasAccount: boolean) {
     const nameControl = this.form.get('name');
@@ -138,6 +169,7 @@ export class UpdateProfesseurComponent {
     this.isEditandUserNull && this.enseignantService.getUserWithSameEnseignantNameAndFirstName(this.data).subscribe(data => {
       this.utilisateurs = data;
     });
+    this.form.get('categorieEnseignant')?.valueChanges.subscribe(_categorieEnseignant => this.updateNbHeureCategorie())
   }
 
 

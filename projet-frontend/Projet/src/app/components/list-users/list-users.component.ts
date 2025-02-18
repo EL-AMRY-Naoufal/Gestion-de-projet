@@ -243,8 +243,10 @@ export class ListUsersComponent implements OnInit {
               'ENSEIGNANT',
               this._yearService.currentYearId
             )
+            && !user.hasProfile
           ) {
             this.enseignantDto.user = user;
+            this.enseignantDto.hasAccount =true;
             this._addTeacher(this.enseignantDto);
           }
         },
