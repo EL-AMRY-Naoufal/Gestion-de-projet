@@ -119,9 +119,8 @@ export class UserService {
       responsableId: this._responsableId, // Ajoute le responsableId
       user: user, // Ajoute l'objet user
       associateEnseignantWithUser: false,
-      year: 1,
+      year: this._yearService.currentYearId,
     };
-    console.log(user);
     return this._http.put<User>(
       this._backendURL.oneUser.replace(':id', id),
       body,
