@@ -6,7 +6,8 @@
       <label for="enseignant">Enseignant :</label>
       <select id="enseignant" [(ngModel)]="enseignantId" name="enseignant" required>
         <option *ngFor="let enseignant of enseignants" [value]="enseignant.id">
-          {{ enseignant.username }}
+          {{ enseignant.firstname }} {{ enseignant.name }}
+
         </option>
       </select>
     </div>
