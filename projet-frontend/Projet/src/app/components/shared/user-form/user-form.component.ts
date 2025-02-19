@@ -15,6 +15,7 @@ import { CategorieEnseignantService } from '../../../services/categorie-enseigna
 import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
 import { YearService } from '../../../services/year-service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-user-form',
@@ -43,6 +44,7 @@ export class UserFormComponent {
     @Inject(MAT_DIALOG_DATA) public dataTeacher: any,
     private enseignantService: EnseignantService,
     private categorieService: CategorieEnseignantService,
+    private _usersService: UserService,
     private _yearService: YearService,) {
 
     this._model = {} as User;
@@ -101,6 +103,12 @@ export class UserFormComponent {
    * OnInit implementation
    */
   ngOnInit(): void {
+
+    // Donner a constom calidateur la liste des utilisateur
+    this._usersService.fetch().subscribe((users: User[]) => {
+      UserCustomValidators.setUsersList(users);
+    });
+
     // Récupération des catégories depuis le service
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
@@ -114,11 +122,11 @@ export class UserFormComponent {
 
     console.log('liste des roles', this._model.roles);
     console.log('liste des roles', this._model.roles.filter(role => role.year === this._yearService.currentYearId).map(role => role.role));
-    
+
     this._form.patchValue({ roles: this._model
       .roles
       .filter(role => role.year === this._yearService.currentYearId)
-      .map(role => role.role) 
+      .map(role => role.role)
     });
 
      // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
@@ -297,7 +305,7 @@ submit(user: User): void {
 
     const userToSend: User = {
           ...user,
-          roles: user.roles.map((role) => { 
+          roles: user.roles.map((role) => {
             return {year: this._yearService.currentYearId, role: role as unknown as Roles}
           }),
         }
@@ -323,7 +331,7 @@ private _buildForm(): FormGroup {
     id: new FormControl(),
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(2)])
+      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername])
     ),
     name: new FormControl(
       '',
@@ -335,7 +343,7 @@ private _buildForm(): FormGroup {
     ),
     email: new FormControl(
       '',
-      Validators.compose([Validators.required, UserCustomValidators.googleEmail])
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail])
     ),
     roles: new FormControl([], Validators.required),
     password: new FormControl(
@@ -418,8 +426,6 @@ private _buildForm(): FormGroup {
       formGroup.addControl(controlName, control); // Add new control
     }
   }
-
-
 
   defaultHeures = 192;
   categories: string[] = [];

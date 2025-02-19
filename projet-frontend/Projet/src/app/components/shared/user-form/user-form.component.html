@@ -34,6 +34,9 @@
       <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('minlength')">
         Le pseudo d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
       </mat-error>
+      <mat-error *ngIf="form.get('username')?.dirty &&!form.get('username')?.hasError('required') && form.get('username')?.hasError('utiliseUsername')">
+        Ce pseudo est déjà utilisé par un autre utilisateur
+      </mat-error>
     </mat-form-field>
 
     <!-- Email -->
@@ -45,6 +48,10 @@
       <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
         Format d'email invalide (name.lastname&#64;etu.univ-lorraine.fr )
       </mat-error>
+      <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('utiliseEmail')">
+        Cette email est déjà utilisÉ par un autre utilisateur
+      </mat-error>
+
     </mat-form-field>
 
     <!-- Role Selection -->

@@ -1,6 +1,20 @@
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { User } from '../types/user.type';
+import { UserService } from '../../../services/user.service';
+import { OnInit } from '@angular/core';
 
-export class UserCustomValidators {
+export class UserCustomValidators{
+  private static _listUsers: User[] = [];
+
+
+    /**
+   * Met à jour la liste des utilisateurs avant validation
+   */
+    static setUsersList(users: User[]) {
+      this._listUsers = users;
+      console.log("setUsersList",this._listUsers)
+    }
+
     /**
      * Validates if the password is strong enough
      * Password should have at least:
@@ -42,6 +56,40 @@ export class UserCustomValidators {
       }
       return null;
     }
+
+
+/**
+ * Vérifie si le surname est déjà utilisé
+ */
+static utiliseUsername(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null; // Pas de validation si le champ est vide
+  }
+
+  console.log("Username:", control.value);
+  console.log("List of users:", UserCustomValidators._listUsers);
+
+  const usernameExists = UserCustomValidators._listUsers.some((user) => user.username === control.value);
+
+  return usernameExists ? { utiliseUsername: true } : null;
+}
+
+/**
+ * Vérifie si l'email est déjà utilisé
+ */
+static utiliseEmail(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null; // Pas de validation si le champ est vide
+  }
+
+  const emailExists = UserCustomValidators._listUsers.some((user) => user.email === control.value);
+
+  return emailExists ? { utiliseEmail: true } : null;
+}
+
+
+
+
 
 
 
