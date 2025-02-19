@@ -4,7 +4,7 @@ export type AffectationType = {
   heuresAssignees: string;
   nomModule: string;
   nomGroupe: string;
-  coAffecte: string;
+  coAffecte: string[];
   commentaire: string | null;
   dateAffectation: string;
 };

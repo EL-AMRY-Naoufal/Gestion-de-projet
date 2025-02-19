@@ -4,10 +4,12 @@ package com.fst.il.m2.Projet.controllers;
 import com.fst.il.m2.Projet.business.AffectationService;
 import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.models.Affectation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,6 +65,13 @@ public class AffectationController {
     public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
         affectationService.deleteAffectation(idAffectation);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/{idAffectation}/commentaire")
+    public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
+        enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
+        System.err.println(commentaireDto.getCommentaire());
+        return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
     }
 
 }
