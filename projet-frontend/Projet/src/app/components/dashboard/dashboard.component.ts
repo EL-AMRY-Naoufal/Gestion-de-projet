@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAffectations() {
-    this.router.navigate(['/enseignant/MesAffectations']);
+    this.router.navigate(['/enseignants/affectations']);
   }
 
   // Navigate to the component to create affectations by the admin

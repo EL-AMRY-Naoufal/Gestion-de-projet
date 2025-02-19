@@ -3,8 +3,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "express";
 import { environment } from "../../environments/environment.prod";
 import { Observable } from "rxjs/internal/Observable";
-import Module from "module";
-import { ModuleType } from "../types/module.type";
+import { Module } from "../components/shared/types/modules.types";
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +32,6 @@ export class LoginService {
     }
 
     getAllModules(): Observable<any> {
-        return this.http.get<ModuleType[]>(`${this._backendURL.modules}`);
+        return this.http.get<Module[]>(`${this._backendURL.modules}`);
     }
 }

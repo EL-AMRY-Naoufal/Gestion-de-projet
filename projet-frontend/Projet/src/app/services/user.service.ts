@@ -162,12 +162,12 @@ export class UserService {
 
   createAffectation(
     EnseignantId: string,
-    idModule: string,
+    idGroupe: string,
     nombreHeure: string
   ): Observable<any> {
     return this._http
       .post(
-        `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${EnseignantId}/${idGroupe}/${nombreHeure}`,
         null,
         { responseType: 'text' }
       )
@@ -185,6 +185,41 @@ export class UserService {
         })
       );
   }
+
+  updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
+    return this._http
+      .put(
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}/${nombreHeure}`,
+        null,
+        { responseType: 'text' }
+      )
+      .pipe(
+        map((response) => {
+          try {
+            return JSON.parse(response);
+          } catch (e) {
+            return response;
+          }
+        }),
+        catchError((error) => {
+          console.error("Erreur lors de la mise à jour de l'affectation :", error);
+          return throwError(() => new Error('Une erreur est survenue.'));
+        })
+      );
+  }
+
+
+
+  deleteAffectation(affectationId: number): Observable<string> {
+    return this._http
+      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this._loginService.authToken}`,
+        }),
+      })
+      .pipe(map((response) => response));
+  }
+
 
   searchUsers(username: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;

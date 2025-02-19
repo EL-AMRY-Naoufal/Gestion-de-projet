@@ -26,11 +26,10 @@ export const routes: Routes = [
   // Route pour afficher un profil d'utilisateur
   { path: 'user/:id', component: UserComponent },
   { path: 'edit/:id', component: UserUpdateComponent },
-  // Route pour les Affections des enseignants
-  {path: 'enseignant/MesAffectations', component: AffectationListComponent},
   { path: 'enseignants', component: EnseignantsComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   //route for my consulte-enseignant componentw
+  { path: 'enseignants/affectations/:id', component: AffectationListComponent },
   { path: 'enseignants/affectations', component: AffectationListComponent },
   //Route pour les affectations des enseignants par l'admin
   {path: 'admin/affectations', component: CreateAffectationComponent}

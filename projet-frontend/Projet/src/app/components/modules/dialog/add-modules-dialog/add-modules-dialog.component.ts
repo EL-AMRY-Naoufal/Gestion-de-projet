@@ -31,9 +31,10 @@ export class AddModulesDialogComponent {
       // Créer les groupes en fonction du nombre de groupes spécifié pour chaque type
       for (let i = 0; i < entry.groupes; i++) {
         const newGroupe: Groupe = {
-          nom: `${entry.type} Groupe ${i + 1}`, // Exemple de nom de groupe
-          heures: entry.heures,
+          nom: `${entry.type} Groupe ${i + 1}`,
           type: entry.type,
+          heuresAffectees: 0,
+          totalHeuresDuGroupe: entry.heures,
           affectations: []
         };
         console.log(newGroupe);

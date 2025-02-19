@@ -5,6 +5,7 @@ export const environment = {
     host: 'localhost',
     port: '8080',
     endpoints: {
+      allAffectation: '/api/affectation',
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',

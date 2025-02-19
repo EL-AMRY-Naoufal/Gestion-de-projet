@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {MenuComponent} from '../shared/menu/menu.component';
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
-import { AnneeService } from '../../services/annee.service';
-import { CommonModule } from '@angular/common';
+import {AnneeService} from '../../services/annee.service';
+import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {AddAnneeDialogComponent} from "./dialog/add-annee-dialog/add-annee-dialog.component";
 import {AddAffectationComponent} from "./dialog/add-affectation/add-affectation.component";
@@ -14,10 +14,12 @@ import {AddNiveauDialogComponent} from "./dialog/add-niveau-dialog/add-niveau-di
 import {AddSemestreDialogComponent} from "./dialog/add-semestre-dialog/add-semestre-dialog.component";
 import {AddModulesDialogComponent} from "./dialog/add-modules-dialog/add-modules-dialog.component";
 import {AddGroupeDialogComponent} from "./dialog/add-groupe-dialog/add-groupe-dialog.component";
-import { NiveauService } from '../../services/niveau.service';
-import { SemestreService } from '../../services/semestre.service';
-import { GroupeService } from '../../services/groupe.service';
-import { Annee, Departement, Formation, Niveau, Semestre, Groupe, Module } from '../shared/types/modules.types';
+import {NiveauService} from '../../services/niveau.service';
+import {SemestreService} from '../../services/semestre.service';
+import {GroupeService} from '../../services/groupe.service';
+import {Annee, Departement, Formation, Niveau, Semestre, Groupe, Module} from '../shared/types/modules.types';
+import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-modules',
@@ -34,17 +36,19 @@ import { Annee, Departement, Formation, Niveau, Semestre, Groupe, Module } from 
 export class ModulesComponent implements OnInit {
 
 
-  data: { annees: Annee[] } = { annees: [] }
+  data: { annees: Annee[] } = {annees: []}
 
   constructor(
     public dialog: MatDialog,
     private departementService: DepartementService,
-    private anneeService : AnneeService,
-    private niveauService : NiveauService,
-    private semestreService : SemestreService,
-    private groupeService : GroupeService
-  ) {}
-
+    private anneeService: AnneeService,
+    private niveauService: NiveauService,
+    private semestreService: SemestreService,
+    private groupeService: GroupeService,
+    private userService: UserService,
+    private router: Router
+  ) {
+  }
 
 
   ngOnInit(): void {
@@ -55,56 +59,65 @@ export class ModulesComponent implements OnInit {
       //for each annee, get all departements
       this.data.annees.forEach((annee, anneeIndex) => {
         //send request to backend
-        if(annee.id != undefined) {
+        if (annee.id != undefined) {
           let annee_id = annee.id;
           this.departementService.getDepartementsByYear(annee_id).subscribe(data => {
             //reassign departements to each annee
             this.data.annees[anneeIndex].departements = data;
 
-            if(annee.departements != null) {
+            if (annee.departements != null) {
 
               //for each departement, get all formations (skip)
               annee.departements.forEach((departement, departementIndex) => {
-                if(departement.formations != null) {
+                if (departement.formations != null) {
 
                   //for each formations, get all niveaux
                   departement.formations.forEach((formation, formationIndex) => {
-                    if(formation.id != undefined) {
+                    if (formation.id != undefined) {
                       this.niveauService.getNiveauxByFormation(formation.id).subscribe(data => {
-                          this.data.annees[anneeIndex].departements[departementIndex]
+                        this.data.annees[anneeIndex].departements[departementIndex]
                           .formations[formationIndex].niveaux = data;
 
-                          //TODO
-                          //for each niveau, get all semestres
-                          formation.niveaux.forEach((niveau, niveauIndex) => {
-                            if(niveau.id != undefined) {
 
-                              this.semestreService.getSemestresByNiveau(niveau.id).subscribe(data => {
-                                this.data.annees[anneeIndex]
+                        //for each niveau, get all semestres
+                        formation.niveaux.forEach((niveau, niveauIndex) => {
+                          if (niveau.id != undefined) {
+
+                            this.semestreService.getSemestresByNiveau(niveau.id).subscribe(data => {
+                              this.data.annees[anneeIndex]
                                 .departements[departementIndex].formations[formationIndex]
                                 .niveaux[niveauIndex].semestres = data;
-                                //for each semestre, get all modules (skip)
-                                niveau.semestres.forEach((semestre, semestreIndex) => {
-                                  //for each module, get all groupes
-                                  semestre.modules.forEach((module, moduleIndex) => {
-                                    if(module.id != undefined) {
-                                      this.groupeService.getGroupesByModule(module.id).subscribe(data => {
-                                        this.data.annees[anneeIndex]
+                              //for each semestre, get all modules (skip)
+                              niveau.semestres.forEach((semestre, semestreIndex) => {
+                                //for each module, get all groupes
+                                semestre.modules.forEach((module, moduleIndex) => {
+                                  if (module.id != undefined) {
+                                    this.groupeService.getGroupesByModule(module.id).subscribe(data => {
+                                      this.data.annees[anneeIndex]
                                         .departements[departementIndex].formations[formationIndex]
                                         .niveaux[niveauIndex].semestres[semestreIndex]
                                         .modules[moduleIndex].groupes = data;
 
-                                        //TODO username utilisé temporairement
-                                        module.groupes.forEach((groupe, groupeId) => {
-                                          groupe.affectations.forEach(affectation => affectation.nomEnseignant = affectation.enseignant?.user?.username)
-                                        })
-                                      })
-                                    }
-                                  })
+                                      // Formater le nom sous la forme par exemple "E. Jeandel"
+                                      module.groupes.forEach((groupe, groupeId) => {
+                                        groupe.affectations.forEach(affectation => {
+                                          if (affectation.enseignant?.user?.firstname && affectation.enseignant?.user?.name) {
+                                            const firstInitial = affectation.enseignant.user.firstname.charAt(0).toUpperCase(); // Première lettre du prénom
+                                            const lastName = affectation.enseignant.user.name.charAt(0).toUpperCase() + affectation.enseignant.user.name.slice(1).toLowerCase(); // Nom avec la première lettre en majuscule
+                                            affectation.nomEnseignant = `${firstInitial}. ${lastName}`;
+                                          } else {
+                                            affectation.nomEnseignant = ''; // Si les données sont absentes, éviter les erreurs
+                                          }
+                                        });
+                                      });
+
+                                    })
+                                  }
                                 })
                               })
-                            }
-                          })
+                            })
+                          }
+                        })
                       })
                     }
                   });
@@ -116,6 +129,13 @@ export class ModulesComponent implements OnInit {
       })
     })
   }
+
+  navigateToAffectations(id: number ) {
+    this.router.navigate(['/enseignants/affectations/' + id]);
+
+
+  }
+
 
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
@@ -132,7 +152,7 @@ export class ModulesComponent implements OnInit {
     });
   }
 
-  addAnnee(newAnnee : Annee): void {
+  addAnnee(newAnnee: Annee): void {
     this.data.annees.push(newAnnee);
   }
 
@@ -141,7 +161,7 @@ export class ModulesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addDepartement(anneeIndex,result);
+        this.addDepartement(anneeIndex, result);
       }
     });
   }
@@ -155,7 +175,7 @@ export class ModulesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-       this.addFormation(anneeIndex,departementIndex,result);
+        this.addFormation(anneeIndex, departementIndex, result);
       }
     });
   }
@@ -218,8 +238,7 @@ export class ModulesComponent implements OnInit {
     });
   }
 
-  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, newGroupe: Groupe)
-  {
+  addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, newGroupe: Groupe) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push(newGroupe);
   }
 
@@ -243,6 +262,25 @@ export class ModulesComponent implements OnInit {
   addAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, newAffectation: any) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].affectations.push(newAffectation);
   }
+
+  updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
+    const affectationId = this.data.annees[anneeIndex]
+      .departements[departementIndex].formations[formationIndex]
+      .niveaux[niveauIndex].semestres[semestreIndex]
+      .modules[moduleIndex].groupes[groupeIndex]
+      .affectations[affectationIndex].id;
+
+    // @ts-ignore
+    this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
+      next: () => {
+        alert('Heures affectées mis à jour');
+      },
+      error: (error) => {
+        console.error('Error updating affectation:', error);
+      }
+    });
+  }
+
 
   removeAnnee(index: number) {
     this.data.annees.splice(index, 1);
@@ -271,5 +309,30 @@ export class ModulesComponent implements OnInit {
 
   removeGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number) {
     this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.splice(groupeIndex, 1);
+  }
+
+  removeAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number) {
+    const affectationId = this.data.annees[anneeIndex]
+      .departements[departementIndex].formations[formationIndex]
+      .niveaux[niveauIndex].semestres[semestreIndex]
+      .modules[moduleIndex].groupes[groupeIndex]
+      .affectations[affectationIndex].id;
+
+    // @ts-ignore
+    this.userService.deleteAffectation(affectationId).subscribe({
+      next: () => {
+        console.log('Affectation deleted');
+        this.data.annees[anneeIndex]
+          .departements[departementIndex].formations[formationIndex]
+          .niveaux[niveauIndex].semestres[semestreIndex]
+          .modules[moduleIndex].groupes[groupeIndex]
+          .affectations.splice(affectationIndex, 1);
+
+      },
+      error: (error) => {
+        console.error('Error deleting affectation:', error);
+      }
+    });
+
   }
 }

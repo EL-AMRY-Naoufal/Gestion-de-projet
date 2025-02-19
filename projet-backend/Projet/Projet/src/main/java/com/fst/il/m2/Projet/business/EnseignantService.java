@@ -59,18 +59,8 @@ public class EnseignantService {
 
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
-        //affiche l'id de l'enseignant demandé
-        //System.err.println("userId: " + userId);
-
-      /* //afficvhe tous les enseignants
-        List<Enseignant> enseignants = enseignantRepository.findAll();
-        for (Enseignant enseignant : enseignants) {
-            System.err.println("enseignant: " + enseignant);
-        }
-*/
         // Get the enseignant id from the user id
 
-        System.out.println(userId);
 
         Enseignant enseignant = enseignantRepository.findByUserId(userId)
                 .orElseThrow(NotFoundException::new);
