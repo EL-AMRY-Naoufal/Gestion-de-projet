@@ -57,9 +57,8 @@ public class InitDevServiceDefault implements InitDevService {
                 "sec", Role.SECRETARIAT_PEDAGOGIQUE,
                 "username1", Role.ENSEIGNANT,
                 "username2", Role.ENSEIGNANT,
-                "username3", Role.RESPONSABLE_DE_FORMATION,
+                "username3", Role.ENSEIGNANT,
                 "username4", Role.RESPONSABLE_DE_FORMATION
-
         );
 
         /*for(UserRole ur : userRoles.values()){
@@ -129,6 +128,8 @@ public class InitDevServiceDefault implements InitDevService {
         , heuresRequises, 100, 70, null, users.get(4),true) ;
         Enseignant enseignant2 = new Enseignant(2L,users.get(5).getName(), users.get(5).getFirstname()
                 ,  heuresRequises, 100, 30, null, users.get(5), true);
+        Enseignant enseignant3 = new Enseignant(3L, users.get(6).getName(), users.get(6).getFirstname()
+                ,  heuresRequises, 100, 50, null, users.get(6), true);
 
         ///********TYPES D'HEURES
         Map<TypeHeure, Integer> heuresParTypesM1 = new HashMap<>(Map.of());
@@ -219,6 +220,7 @@ public class InitDevServiceDefault implements InitDevService {
         //save enseignants
         enseignantRepository.save(enseignant1);
         enseignantRepository.save(enseignant2);
+        enseignantRepository.save(enseignant3);
 
         //save modules
         modules1.forEach(m -> moduleRepository.save(m));

@@ -8,7 +8,6 @@ import { ListUsersComponent } from './components/list-users/list-users.component
 import { UserComponent } from './components/user/user.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import {AffectationListComponent} from "./components/affectation/affectation-enseignant/affectation-enseignant.component";
-import {CreateAffectationComponent} from "./components/affectation/create-affectation/create-affectation.component";
 import { ModulesComponent } from './components/modules/modules.component';
 
   // Route vers le dashboard
@@ -31,8 +30,6 @@ export const routes: Routes = [
   //route for my consulte-enseignant componentw
   { path: 'enseignants/affectations/:id', component: AffectationListComponent },
   { path: 'enseignants/affectations', component: AffectationListComponent },
-  //Route pour les affectations des enseignants par l'admin
-  {path: 'admin/affectations', component: CreateAffectationComponent}
 ];
 
 @NgModule({
