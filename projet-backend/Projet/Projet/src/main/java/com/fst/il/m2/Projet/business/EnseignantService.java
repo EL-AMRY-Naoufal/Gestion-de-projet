@@ -1,9 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.EnseignantDto;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
-import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
@@ -19,15 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -240,7 +235,7 @@ public class EnseignantService {
     }
 
 
-    public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
+    public void updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
 
         User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
         Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new);
@@ -251,7 +246,6 @@ public class EnseignantService {
         affectation.setCommentaire(commentaire);
         affectationRepository.save(affectation);
 
-        return commentaire;
     }
     public Enseignant getEnseignantByUser(Long userId) {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(userId);
