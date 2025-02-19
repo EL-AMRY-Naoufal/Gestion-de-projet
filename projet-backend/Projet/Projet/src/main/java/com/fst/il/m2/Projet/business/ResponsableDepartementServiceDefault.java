@@ -201,46 +201,6 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     }
 
 
-    @Override
-    public void affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
-
-        // Récupérer l'id de l'enseignant depuis la table des users
-        Long enseignantID = enseignantRepository.findByUserId(userId)
-                .orElseThrow(NotFoundException::new)
-                .getId();
-
-//        System.err.println("enseignantID: " + enseignantID);
-        Enseignant enseignant = enseignantRepository.findById(enseignantID)
-                .orElseThrow(NotFoundException::new);
-
-        // Récupérer le groupe
-        Groupe groupe = groupeRepository.findById(groupeId)
-                .orElseThrow(() -> new RuntimeException("Groupe not found with id: " + groupeId));
-
-        // Vérifier si l'enseignant a des heures disponibles
-       /* if (enseignant.getHeuresAssignees() + heuresAssignees > enseignant.getMaxHeuresService()) {
-            throw new RuntimeException("Heures assignées dépassent le maximum autorisé pour cet enseignant.");
-        }*/
-
-
-
-        // Créer une nouvelle affectation
-        Affectation affectation = new Affectation();
-        affectation.setEnseignant(enseignant);
-        affectation.setGroupe(groupe);
-        affectation.setHeuresAssignees(heuresAssignees);
-        affectation.setDateAffectation(LocalDate.now());
-        affectation.setCommentaire("");
-
-        // Sauvegarder l'affectation
-        Affectation savedAffectation = affectationRepository.save(affectation);
-
-        // Mettre à jour les heures assignées de l'enseignant
-        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
-        enseignantRepository.save(enseignant);
-
-    }
-
     public List<UserRole> getUsersByRole(Role role) {
         return userRoleRepository.findByRole(role);
     }
