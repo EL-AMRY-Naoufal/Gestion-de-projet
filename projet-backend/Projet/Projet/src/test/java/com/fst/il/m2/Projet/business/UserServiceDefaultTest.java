@@ -61,7 +61,7 @@ public class UserServiceDefaultTest {
  */
 
     // A corriger
-    */
+
 /*
     @Test
     public void shouldAuthenticateWithSuccess() {
@@ -104,8 +104,5 @@ public class UserServiceDefaultTest {
         assertNull(authenticatedUser, "Authentication should fail for a non-existing user");
     }
 
-     */
 
-
-}
-*/
+}*/

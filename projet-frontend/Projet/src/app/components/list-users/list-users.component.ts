@@ -53,7 +53,7 @@ export class ListUsersComponent implements OnInit {
   searchQuery: string = '';
   filteredUsers: User[] = [];
   searchPerformed: boolean = false;
-  selectedRole: string = '';
+  selectedRole: string = 'TOUS';
   _user!: User;
   enseignantDto: EnseignantDto = {
     name: '',
@@ -65,6 +65,7 @@ export class ListUsersComponent implements OnInit {
     heuresAssignees: 0,
   };
   roles: string[] = [
+    'TOUS',
     'CHEF_DE_DEPARTEMENT',
     'RESPONSABLE_DE_FORMATION',
     'SECRETARIAT_PEDAGOGIQUE',
@@ -167,7 +168,7 @@ export class ListUsersComponent implements OnInit {
     }*/
   }
 
-  getListUsersWithRolesOfSelectedYear(): User[] {
+  get listUsersWithRolesOfSelectedYear(): User[] {
     return this.listUsers.map((user) => {
       return {
         ...user,
@@ -331,11 +332,18 @@ export class ListUsersComponent implements OnInit {
 
   filterByRole() {
     if (this.selectedRole && this.selectedYear) {
-      this._usersService
+      if(this.selectedRole === 'TOUS'){
+        this._usersService.getUsers()
+        .subscribe((data) => {
+          this._listUsers = data
+        });
+      }else{
+        this._usersService
         .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
         });
+      }
     } else {
       this._listUsers = [];
     }

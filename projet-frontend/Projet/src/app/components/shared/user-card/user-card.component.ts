@@ -62,15 +62,6 @@ export class UserCardComponent {
   }
 
   /**
-   * OnInit implementation
-   */
-  ngOnInit(): void {
-    console.log([
-      this.isYearSelected, this.user, this.selectedYear
-    ])
-  }
-
-  /**
    * Function to emit event to delete current user
    */
   delete(user: User): void {
