@@ -12,12 +12,15 @@ public class AffectationDTO {
     private String nomModule;
     private LocalDate dateAffectation;
     private String commentaire;
+    private String nomGroupe;
 
-    public AffectationDTO(Long id, int heuresAssignees, LocalDate dateAffectation, String nomModule, String commentaire) {
+
+    public AffectationDTO(Long id, int heuresAssignees, LocalDate dateAffectation, String nomModule, String commentaire, String nomGroupe) {
         this.id = id;
         this.heuresAssignees = heuresAssignees;
         this.nomModule = nomModule;
         this.dateAffectation = dateAffectation;
         this.commentaire = commentaire;
+        this.nomGroupe = nomGroupe;
     }
 }

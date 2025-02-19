@@ -3,6 +3,7 @@ export type AffectationType = {
   description: string | null;
   heuresAssignees: string;
   nomModule: string;
+  nomGroupe: string;
   coAffecte: string;
   commentaire: string | null;
   dateAffectation: string;

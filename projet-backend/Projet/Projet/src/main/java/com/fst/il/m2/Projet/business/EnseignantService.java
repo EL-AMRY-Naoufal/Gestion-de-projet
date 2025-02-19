@@ -76,7 +76,8 @@ public class EnseignantService {
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
                         affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null,
-                        affectation.getCommentaire()
+                        affectation.getCommentaire(),
+                        affectation.getGroupe() != null && affectation.getGroupe().getModule() != null ? affectation.getGroupe().getModule().getNom() : null
                 ))
                 .collect(Collectors.toList());
     }
