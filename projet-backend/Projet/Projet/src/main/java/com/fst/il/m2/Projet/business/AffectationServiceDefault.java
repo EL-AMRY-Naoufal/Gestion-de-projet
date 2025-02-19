@@ -24,14 +24,10 @@ public class AffectationServiceDefault implements AffectationService{
     private AffectationRepository affectationRepository;
 
     @Override
+    @Transactional
     public  Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
-        // Récupérer l'id de l'enseignant depuis la table des users
-        Long enseignantID = enseignantRepository.findByUserId(userId)
-                .orElseThrow(NotFoundException::new)
-                .getId();
-
-        Enseignant enseignant = enseignantRepository.findById(enseignantID)
+        Enseignant enseignant = enseignantRepository.findById(userId)
                 .orElseThrow(NotFoundException::new);
 
         // Récupérer le groupe
@@ -55,12 +51,17 @@ public class AffectationServiceDefault implements AffectationService{
         affectation.setDateAffectation(LocalDate.now());
         affectation.setCommentaire("");
 
+
+
+
         // Sauvegarder l'affectation
         affectationRepository.save(affectation);
 
         // Mettre à jour les heures assignées de l'enseignant
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
+
+
 
         return affectation;
     }
