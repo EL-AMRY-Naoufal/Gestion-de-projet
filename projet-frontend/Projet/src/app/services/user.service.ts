@@ -212,11 +212,7 @@ export class UserService {
 
   deleteAffectation(affectationId: number): Observable<string> {
     return this._http
-      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`, {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${this._loginService.authToken}`,
-        }),
-      })
+      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`)
       .pipe(map((response) => response));
   }
 
