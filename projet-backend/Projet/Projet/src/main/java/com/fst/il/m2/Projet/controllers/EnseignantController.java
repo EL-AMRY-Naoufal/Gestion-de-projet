@@ -26,17 +26,7 @@ public class EnseignantController {
     private final EnseignantService enseignantService;
     private final UserService userService;
 
-    @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
 
-        List<AffectationDTO> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
-
-        if (affectations.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(affectations, HttpStatus.OK);
-    }
     
     @GetMapping("/enseignants-non-enregistres")
     public ResponseEntity<List<User>> getEnseignantsNotInEnseignantTable() {
