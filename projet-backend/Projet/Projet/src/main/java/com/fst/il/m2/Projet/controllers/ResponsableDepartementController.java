@@ -23,12 +23,14 @@ public class ResponsableDepartementController {
     private ResponsableDepartementService responsableDepartementService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
-        User createdUser = responsableDepartementService.createUser(
-                userRequest.getUser().toUser(),
-                userRequest.getResponsableId(),
-                userRequest.isAssociateEnseignantWithUser(), // Pass the new parameter,
-                userRequest.getYear()
+    public ResponseEntity<UserRequest.UserDto> createUser(@RequestBody UserRequest userRequest) {
+        UserRequest.UserDto createdUser = UserMapper.userToUserDto(
+                responsableDepartementService.createUser(
+                    userRequest.getUser().toUser(),
+                    userRequest.getResponsableId(),
+                    userRequest.isAssociateEnseignantWithUser(), // Pass the new parameter,
+                    userRequest.getYear()
+                )
         );
         return ResponseEntity.ok(createdUser);
     }

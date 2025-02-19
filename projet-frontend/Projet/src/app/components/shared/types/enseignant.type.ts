@@ -4,6 +4,9 @@ import { User } from "./user.type";
 export interface EnseignantDto {
     id?: number;
     user?: User;
+    firstname: string;
+    name: string;
+    hasAccount: boolean;
     categorieEnseignant: CategorieEnseignant;
     nbHeureCategorie: number;
     maxHeuresService: number;
@@ -12,7 +15,7 @@ export interface EnseignantDto {
 
 
 export enum CategorieEnseignant {
-    EnseignantChercheur = 'Enseignant_Chercheur',
+    EnseignantChercheur = 'ENSEIGNANT_CHERCHEUR',
     PRAG = 'PRAG',
     ATER = 'ATER',
     DCCE = 'DCCE',

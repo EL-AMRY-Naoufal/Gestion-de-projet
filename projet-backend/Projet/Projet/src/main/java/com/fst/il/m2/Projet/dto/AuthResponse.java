@@ -11,7 +11,6 @@ import lombok.Data;
 @Builder
 public class AuthResponse {
     private String message;
-    private String token;  // Add token field
-    private User user;
+    private UserRequest.UserDto user;
     private Long currentYearId;
 }

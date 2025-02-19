@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class UserRequest {
-    private UserDto user;
+    private UserWithPasswordDto user;
     private Long responsableId;
     private boolean associateEnseignantWithUser; // New field
 
@@ -33,7 +33,6 @@ public class UserRequest {
         private String username;
         private String name;
         private String firstname;
-        private String password;
         private String email;
         private List<UserRoleDto> roles;
         private Long id;
@@ -45,7 +44,6 @@ public class UserRequest {
                     .firstname(firstname)
                     .username(username)
                     .email(email)
-                    .password(password)
                     .id(id)
                     .build();
 

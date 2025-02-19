@@ -12,4 +12,7 @@ public interface UserService {
     User getUserByEmail(String email);
     List<User> getAllUsersNotTeachers();
     List<Role> getCurrentRoles(User user);
+
+    User getUserByUsername(String username);
+    List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname);
 }

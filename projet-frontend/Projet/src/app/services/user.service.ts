@@ -1,11 +1,13 @@
 import { LoginService } from './login.service';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
 import { defaultIfEmpty, filter, map, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../components/shared/types/user.type';
 import { YearService } from './year-service';
+import { isPlatformBrowser } from '@angular/common';
+import { ApiService } from './api-service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,18 +19,25 @@ export class UserService {
   private readonly _defaultUser: User;
   private readonly _responsableId: number = 1;
 
+  private readonly isBrowser!: boolean;
+
   constructor(
     private _http: HttpClient,
     private _loginService: LoginService,
-    private _yearService: YearService
+    private _yearService: YearService,
+    private _api: ApiService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+
+    this.isBrowser = isPlatformBrowser(this.platformId);
+
     this._defaultUser = {
       username: 'username',
       firstname: 'firstname',
       name: 'lastname',
       email: 'email@etu.univ-lorraine.fr',
       roles: [],
-      password: 'Ed*lZ%0qiA',
+      password: ""
     };
     this._backendURL = {};
 
@@ -126,26 +135,17 @@ export class UserService {
   delete(id: number): Observable<number> {
     return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
-        body: { responsableId: this._responsableId },
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${this._loginService.authToken}`, // Utilisation du token du LoginService
-        }),
+        body: { responsableId: this._responsableId }
       })
       .pipe(map(() => id));
   }
 
   private _options(headerList: object = {}): any {
-    const token = this._loginService.authToken; // Récupère le token depuis LoginService
 
     // Crée un objet pour les en-têtes
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
     };
-
-    // Si le token est disponible, ajoute l'en-tête Authorization
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
 
     // Fusionne les en-têtes supplémentaires (headerList) avec ceux déjà définis
     return {
@@ -241,5 +241,9 @@ export class UserService {
     return (
       user.roles.filter((r) => r.role === role && r.year == year).length > 0
     );
+  }
+
+  get authentifiedUser(): Observable<User> {
+    return this._api.me();
   }
 }

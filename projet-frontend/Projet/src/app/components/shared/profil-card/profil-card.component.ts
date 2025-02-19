@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';  // Pour les icônes
 import { MatButtonModule } from '@angular/material/button';  // Pour les boutons
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
-import { User } from '../types/user.type';
+import { EnseignantDto } from '../types/enseignant.type';
 
 
 @Component({
@@ -24,18 +24,20 @@ import { User } from '../types/user.type';
 })
 export class ProfilCardComponent {
     // private property to store user value
-    private _user: User;
+    private _enseignant: EnseignantDto;
     // private property to store delete$ value
-    private readonly _delete$: EventEmitter<User>;
+    private readonly _delete$: EventEmitter<EnseignantDto>;
     userRoles: string[] = [];
+    @Input() openDialog!: (teacher?: EnseignantDto)=> void;
 
 
     /**
      * Component constructor
      */
-    constructor(private loginService: LoginService) {
-      this._user = {} as User;
-      this._delete$ = new EventEmitter<User>();
+    constructor(private loginService: LoginService
+    ) {
+      this._enseignant = {} as EnseignantDto;
+      this._delete$ = new EventEmitter<EnseignantDto>();
       this.userRoles = this.loginService.userRoles;
 
     }
@@ -43,23 +45,23 @@ export class ProfilCardComponent {
     /**
      * Returns private property _person
      */
-    get user(): User {
+    get enseignant(): EnseignantDto {
 
-      return this._user;
+      return this._enseignant;
     }
 
     /**
      * Sets private property _user
      */
     @Input()
-    set user(user: User) {
-      this._user = user;
+    set enseignant(enseignant: EnseignantDto) {
+      this._enseignant = enseignant;
     }
 
     /**
      * Returns private property _delete$
      */
-    @Output('deleteProfil') get delete$(): EventEmitter<User> {
+    @Output('deleteProfil') get delete$(): EventEmitter<EnseignantDto> {
       return this._delete$;
     }
 
@@ -71,10 +73,8 @@ export class ProfilCardComponent {
     /**
      * Function to emit event to delete current user
      */
-    delete(user: User): void {
-      this._delete$.emit(user);
+    delete(enseignant: EnseignantDto): void {
+      this._delete$.emit(enseignant);
     }
-
-
 
 }

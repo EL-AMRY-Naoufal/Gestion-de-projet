@@ -16,6 +16,8 @@ export const environment = {
       categories: '/api/categories',
       role: '/api/responsableDepartement/users/by-role-and-year',
       allYears: '/api/annees',
+      logout: '/api/users/user/logout',
+      me: '/api/users/user/me'
     },
   },
 };

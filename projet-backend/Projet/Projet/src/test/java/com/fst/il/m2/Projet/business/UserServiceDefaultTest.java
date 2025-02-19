@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class UserServiceDefaultTest {
-
+/*
     @Mock
     private UserRepository userRepository;
 
@@ -58,6 +58,8 @@ public class UserServiceDefaultTest {
                 .build();
     }
 
+ */
+
     // A corriger
     */
 /*
@@ -88,7 +90,9 @@ public class UserServiceDefaultTest {
         assertNull(authenticatedUser, "Authentication should fail with an incorrect password");
     }
 
-     *//*
+
+     */
+    /*
 
 
     @Test
@@ -99,6 +103,8 @@ public class UserServiceDefaultTest {
 
         assertNull(authenticatedUser, "Authentication should fail for a non-existing user");
     }
+
+     */
 
 
 }

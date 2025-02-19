@@ -20,26 +20,21 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = this.loginService.authToken;
-
-    if (token && !req.url.includes('authenticate')) {
-      // Si c'est une requête d'authentification, on ne fourni pas le token
+      
       const cloned = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${token}`),
+        withCredentials: true,
       });
+
       return next.handle(cloned).pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
             // Si le serveur retourne une erreur 401, on déconnecte l'utilisateur et on le redirige vers la page de connexion car son token n'est plus valide
-            this.loginService.logout();
-            this.router.navigate(['/login']);
+            //this.loginService.isAuthenticated = false;
+            //this.router.navigate(['/login']);
           }
           return throwError(error);
         })
       );
-    } else {
-      return next.handle(req);
-    }
   }
 }
 

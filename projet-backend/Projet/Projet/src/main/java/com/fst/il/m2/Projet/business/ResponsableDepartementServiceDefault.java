@@ -7,6 +7,7 @@ import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,9 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
             throw new RuntimeException("Only Responsable de Département can create users");
         }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User newUser = null;
 
@@ -155,6 +159,18 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
                 return role;
             }
         }).collect(Collectors.toList());
+
+        // Suppression des anciens rôles qui ne sont plus présents
+        List<UserRole> rolesToDelete = existingRoles.stream()
+                .filter(existingRole -> user.getRoles().stream()
+                        .noneMatch(newRole -> newRole.getRole() == existingRole.getRole()))
+                .collect(Collectors.toList());
+
+        // Supprimer les rôles inutilisés dans UserRole
+        userRoleRepository.deleteAll(rolesToDelete);
+
+        // Sauvegarde ou mise à jour des rôles dans UserRole
+        userRoleRepository.saveAll(newRoles);
 
         existingUser.setRoles(newRoles);
         return userRepository.save(existingUser);
