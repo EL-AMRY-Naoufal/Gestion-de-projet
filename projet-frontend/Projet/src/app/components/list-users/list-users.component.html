@@ -42,12 +42,12 @@
         [selectedYear]="getSelectedYear()"
         [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
-        *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
+        *ngFor="let user of listUsersWithRolesOfSelectedYear"
       >
       </app-user-card>
       <div
         class="no-user-message"
-        *ngIf="searchPerformed && filteredUsers.length === 0"
+        *ngIf="listUsersWithRolesOfSelectedYear.length === 0"
       >
         <p>Aucun utilisateur trouvé</p>
       </div>

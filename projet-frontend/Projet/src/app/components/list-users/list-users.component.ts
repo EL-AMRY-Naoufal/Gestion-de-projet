@@ -168,7 +168,7 @@ export class ListUsersComponent implements OnInit {
     }*/
   }
 
-  getListUsersWithRolesOfSelectedYear(): User[] {
+  get listUsersWithRolesOfSelectedYear(): User[] {
     return this.listUsers.map((user) => {
       return {
         ...user,
