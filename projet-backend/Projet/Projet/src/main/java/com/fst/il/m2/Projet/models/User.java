@@ -41,7 +41,7 @@ public class User {
 
     @Builder.Default()
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "UserRole_id")
+    //@JoinColumn(name = "UserRole_id")
     private List<UserRole> roles = new ArrayList<>();
 
     // Getters and setters

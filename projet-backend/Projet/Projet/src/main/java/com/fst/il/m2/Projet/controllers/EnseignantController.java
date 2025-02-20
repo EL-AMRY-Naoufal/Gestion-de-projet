@@ -126,4 +126,22 @@ public class EnseignantController {
         );
     }
 
+    @PutMapping("/{id}/affectations/{idAffectation}/commentaire")
+    public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
+        enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
+
+        return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
+    }
+
+    @GetMapping("/findenseignant")
+    public ResponseEntity<List<EnseignantDto>> getEnseignantsWithSameUserNameAndFirstName(
+            @RequestParam String name,
+            @RequestParam String firstname){
+        return ResponseEntity.ok(
+                this.enseignantService.getEnseignantsWithSameUserNameAndFirstName(
+                        name,
+                        firstname
+                ).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList())
+        );
+    }
 }

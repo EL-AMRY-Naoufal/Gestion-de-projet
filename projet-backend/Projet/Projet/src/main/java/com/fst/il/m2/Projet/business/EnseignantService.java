@@ -19,6 +19,8 @@ import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -140,8 +142,8 @@ public class EnseignantService {
                 .hasAccount(false)
                 .maxHeuresService(nmaxHeuresService)
                 .heuresAssignees(heuresAssignees)
-                .firstname(firstname)
-                .name(name)
+                .firstname(StringUtils.capitalize(firstname))
+                .name(StringUtils.capitalize(name))
                 .categorieEnseignant(categorieHeuresMap)
                 .build();
 
@@ -149,6 +151,7 @@ public class EnseignantService {
     }
 
 
+    @Transactional
     public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie,
                                        String name, String firstname, boolean hasAccount) {
 
@@ -189,7 +192,10 @@ public class EnseignantService {
                 List<UserRole> rolesToDelete = existingRoles.stream()
                         .filter(role -> role.getRole() == Role.ENSEIGNANT)
                         .toList();
-                userRoleRepository.deleteAll(rolesToDelete);
+                rolesToDelete.forEach(userRole ->
+                        this.userRoleRepository.deleteByUserIdAndYearId(userRole.getUser().getId(),
+                                userRole.getYear().getId())
+                );
 
                 // Mettre à jour les rôles côté utilisateur, en excluant ENSEIGNANT
                 List<UserRole> updatedRoles = existingRoles.stream()
@@ -252,4 +258,8 @@ public class EnseignantService {
         return this.enseignantRepository.findOne(spec).orElse(null);
     }
 
+    public List<Enseignant> getEnseignantsWithSameUserNameAndFirstName(String name, String firstname) {
+        Specification<Enseignant> spec = this.enseignantSpecifications.byNameandFirstname(name, firstname);
+        return this.enseignantRepository.findAll(spec);
+    }
 }
