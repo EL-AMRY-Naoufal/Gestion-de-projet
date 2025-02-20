@@ -26,6 +26,11 @@
   transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
 }
 
+
+mat-dialog-content {
+  min-height: 450px; /* Largeur du formulaire */
+}
+
 /* Espacement général entre les champs */
 .form-container mat-form-field {
   width: 100%;
@@ -47,8 +52,6 @@
 .form-container.no-checkbox .selec {
   margin-bottom: 25px; /* Appliquer l'espacement sous le champ "Rôles" uniquement si la case à cocher est absente */
 }
-
-
 
 /* Styliser les erreurs de validation */
 mat-error {
@@ -82,15 +85,6 @@ button[mat-button]:hover {
 
 }
 
-button[color="primary"] {
-  background-color: #d8e7f5;
-  color: #333;
-}
-
-button[color="primary"]:disabled {
-  background-color: #eaf1f870;
-  color: #333;
-}
 
 
 

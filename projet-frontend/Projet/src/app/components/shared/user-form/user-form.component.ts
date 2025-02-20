@@ -203,31 +203,37 @@ getEnseignantWithSameUserNameAndFirstName(){
   /**
  * Met à jour automatiquement l'email et le pseudo d'utilisateur.
  */
-private updateEmailAndUsername(): void {
-  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
-  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+  private updateEmailAndUsername(): void {
+    const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+    const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
 
-  const normalizedFirstname = this.normalizeString(firstname);
-  const normalizedName = this.normalizeString(name);
+    const normalizedFirstname = this.normalizeString(firstname);
+    const normalizedName = this.normalizeString(name);
 
+    if (firstname && name) {
+      const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
+      const formattedUsername = `${name}1u`;
 
-  if (firstname && name) {
-    const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
-    const formattedUsername = `${name}1u`;
+      // Mise à jour des champs email et username
+      const emailControl = this._form.get('email');
+      const usernameControl = this._form.get('username');
 
-    // Mise à jour des champs email et username
-    this._form.get('email')?.setValue(formattedEmail, { emitEvent: false });
-    this._form.get('username')?.setValue(formattedUsername, { emitEvent: false });
-  }
+      // On met à jour les champs sans émettre d'événements
+      emailControl?.setValue(formattedEmail, { emitEvent: false });
+      usernameControl?.setValue(formattedUsername, { emitEvent: false });
 
-    // Update firstname and name with the capitalized versions
+    }
+
+    // Mise à jour des champs firstname et name avec la version capitalisée
     if (firstname) {
       this._form.get('firstname')?.setValue(this.capitalizeFirstLetter(firstname), { emitEvent: false });
     }
     if (name) {
       this._form.get('name')?.setValue(this.capitalizeFirstLetter(name), { emitEvent: false });
     }
-}
+
+
+  }
 
 
 private updateNbHeureCategorie(): void {
@@ -325,6 +331,14 @@ cancel(): void {
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
+
+
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();  // Marque tous les champs comme "touchés" pour afficher les erreurs
+    return; // Empêche la soumission si le formulaire est invalide
+  }
+
+
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
 
