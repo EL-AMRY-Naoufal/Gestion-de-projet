@@ -39,6 +39,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private GroupeRepository groupeRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
+    @Autowired
+    private EnseignantService enseignantService;
 
     @Override
     public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
@@ -69,6 +71,16 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
                 ResponsableFormation responsableFormation = new ResponsableFormation();
                 responsableFormation.setUser(newUser);
                 responsableFormationRepository.save(responsableFormation);
+            }
+
+            if (associateEnseignantWithUser) {
+                // Create and associate User with Enseignant
+                newUser = userRepository.save(user);
+
+                Enseignant enseignant = this.enseignantService.getEnseignantsWithSameUserNameAndFirstName(newUser.getName(), newUser.getFirstname()).get(0);
+                enseignant.setUser(newUser);
+                enseignant.setHasAccount(true);
+                enseignantRepository.save(enseignant);
             }
         } else {
             // Special handling for ENSEIGNANT role

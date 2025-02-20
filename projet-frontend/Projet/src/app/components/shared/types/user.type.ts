@@ -11,6 +11,7 @@ export interface User {
     categorieEnseignant?: CategorieEnseignant;
     nbHeureCategorie?: number;
     maxHeuresService?: number;
+    hasProfile?: boolean;
 }
 
 

@@ -16,11 +16,14 @@ import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
 import { YearService } from '../../../services/year-service';
 import { UserService } from '../../../services/user.service';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, ReactiveFormsModule, MatDialogActions, MatDialogModule, NgIf, CommonModule, FormsModule, MatIconModule,
+      MatCheckboxModule,
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss'
@@ -36,6 +39,9 @@ export class UserFormComponent {
   private readonly _submit$: EventEmitter<User>;
   // private property to store form value
   private readonly _form: FormGroup;
+
+  thereAreProfileSimilars: boolean = false;
+  enseignants: EnseignantDto[] = [];
 
   /**
    * Component constructor
@@ -135,6 +141,8 @@ export class UserFormComponent {
 
     // Ajout de la logique pour surveiller les changements de 'nbHeureCategorie '
     this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateNbHeureCategorie())
+
+    this.listenToNameAndFirstnameChanges();
   }
 
 
@@ -165,6 +173,31 @@ private normalizeString(value: string): string {
     .trim(); // Supprimer les tirets en début et en fin
 }
 
+
+listenToNameAndFirstnameChanges() {
+  this.form.valueChanges
+    .pipe(
+      debounceTime(500), // Attend 500ms après la dernière saisie
+      distinctUntilChanged(), // Évite d'appeler avec la même valeur
+      filter(values => values.name?.length > 1 && values.firstname?.length > 1) // Vérifie que les champs ne sont pas vides
+    )
+    .subscribe(values => {
+      this.getEnseignantWithSameUserNameAndFirstName();
+    });
+}
+
+getEnseignantWithSameUserNameAndFirstName(){
+  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+
+  this.enseignantService.getEnseignantWithSameUserNameAndFirstName(firstname, name).subscribe(data => {
+      this.enseignants = data;
+      this.thereAreProfileSimilars = data.length > 0;
+    },
+    error => console.error('Erreur lors de la récupération des enseignants avec le même nom et prénom :', error)
+  )
+  this.thereAreProfileSimilars = this.enseignants.length > 0;
+}
 
 
   /**
@@ -362,6 +395,7 @@ private _buildForm(): FormGroup {
         ? null
         : Validators.compose([Validators.required, Validators.minLength(6)])
     ),
+    hasProfile: new FormControl(false)
   });
 
   // Appliquer la validation personnalisée si ce n'est pas un mode de mise à jour
@@ -382,7 +416,7 @@ private _buildForm(): FormGroup {
   };
 
   // Vérification si le rôle 'ENSEIGNANT' est présent
-  const isEnseignant = this.model?.roles?.some(role => role.role == 'ENSEIGNANT')
+  const isEnseignant = this.model?.roles?.some(role => role.role == 'ENSEIGNANT');
 
   // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
   addControl(
@@ -402,6 +436,7 @@ private _buildForm(): FormGroup {
     isEnseignant ? [Validators.required] : [],
     Validators.min(0)
   );
+
 
   return _formGroup;
 }

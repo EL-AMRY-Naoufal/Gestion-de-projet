@@ -65,14 +65,20 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+    
+    <mat-checkbox class="custom-checkbox" formControlName="hasProfile" 
+  *ngIf="thereAreProfileSimilars && form.get('roles')?.value.includes('ENSEIGNANT') && !isUpdateMode">
+  <span>Nous avons détecté un profil similaire avec <strong>{{ enseignants[0].name }} {{ enseignants[0].firstname }}</strong>, enseignant <strong>{{ enseignants[0].categorieEnseignant }}</strong>. Voulez-vous le lier ?</span>
+</mat-checkbox>
+
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
       <mat-label>Nombre d'heures</mat-label>
       <input matInput formControlName="maxHeuresService" name="nombreHeures" type="number"
           [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
       <mat-error *ngIf="form.get('nombreHeures')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value" >
       <mat-label>Categorie d'Enseignant</mat-label>
       <mat-select formControlName="categorieEnseignant" required>
         <mat-option *ngFor="let category of categories" [value]="category">
@@ -84,9 +90,9 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT')">
+    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
       <mat-label>Heures pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
-      <input matInput type="number" formControlName="nbHeureCategorie" required />
+      <input matInput type="number" formControlName="nbHeureCategorie" required/>
       <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">
         Les heures pour cette catégorie sont requises.
       </mat-error>

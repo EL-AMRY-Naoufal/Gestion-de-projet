@@ -51,7 +51,44 @@ mat-form-field.full-width {
 /* Ajoute des marges au texte d'erreur pour éviter l'encombrement */
 .mat-error {
   margin-top: 4px;
+  margin-bottom: 4px;
   font-size: 13px;
 }
 
 
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  padding: 4px 8px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.custom-checkbox mat-checkbox {
+  margin: 0; /* Suppression des marges par défaut */
+  padding: 0;
+}
+
+.custom-checkbox:hover {
+  background-color: rgba(30, 136, 229, 0.1);
+  cursor: pointer;
+}
+
+.mat-checkbox-layout {
+  align-items: center;
+}
+
+.mat-checkbox-label {
+  font-size: 1rem;
+  color: #1e88e5;
+  font-weight: 500;
+}
+
+/* Ajustement pour mobiles */
+@media (max-width: 768px) {
+  .custom-checkbox {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
