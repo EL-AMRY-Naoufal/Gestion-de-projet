@@ -42,9 +42,9 @@ public class ModuleController {
 
     // Add a new Module
     @PostMapping
-    public ResponseEntity<Module> addModule(@RequestBody Module module) {
-        Module savedModule = moduleService.addModule(module);
-        return new ResponseEntity<>(savedModule, HttpStatus.CREATED);
+    public ResponseEntity<ModuleDto> addModule(@RequestBody ModuleDto moduleDto) {
+        Module savedModule = moduleService.addModule(ModuleMapper.toEntity(moduleDto));
+        return new ResponseEntity<>(ModuleMapper.toDto(savedModule), HttpStatus.CREATED);
     }
 
     // Delete a Module by ID

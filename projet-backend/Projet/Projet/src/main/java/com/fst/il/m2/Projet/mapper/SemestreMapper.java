@@ -3,11 +3,7 @@ package com.fst.il.m2.Projet.mapper;
 import com.fst.il.m2.Projet.dto.SemestreDto;
 import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
-@AllArgsConstructor
 public class SemestreMapper {
     public static Semestre toEntity(SemestreDto semestreDto) {
         return Semestre.builder()

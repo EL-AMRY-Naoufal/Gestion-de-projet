@@ -18,7 +18,7 @@ public class FormationMapper {
                 .id(formationDto.getId())
                 .nom(formationDto.getNom())
                 .departement(Departement.builder().id(formationDto.getDepartementId()).build())
-                .responsableFormation(responsableDepartementService.getResponsableFormationById(formationDto.getId()))
+                .responsableFormation(responsableDepartementService.getResponsableFormationById(formationDto.getResponsableFormationId()))
                 .build();
     }
 

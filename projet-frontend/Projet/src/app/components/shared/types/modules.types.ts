@@ -23,7 +23,7 @@ export interface Groupe {
   type: TypeHeure;
   heuresAffectees: number;
   totalHeuresDuGroupe: number;
-  affectations: Affectation[];
+  moduleId: number;
 }
 
 export interface Module {

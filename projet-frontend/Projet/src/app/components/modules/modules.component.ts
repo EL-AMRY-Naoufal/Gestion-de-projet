@@ -55,6 +55,7 @@ export class ModulesComponent implements OnInit {
     private groupeService: GroupeService,
     private userService: UserService,
     private formationService: FormationService,
+    // private affectationService: AffectationService
     ) {
   }
 
@@ -66,6 +67,7 @@ export class ModulesComponent implements OnInit {
     this.getAllNiveaux();
     this.getAllSemestres();
     this.getAllModules();
+    this.getAllGroupes();
     //get all annees
     // this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
     //   this.data.annees = data;
@@ -145,40 +147,73 @@ export class ModulesComponent implements OnInit {
     this.departementService.getAllDepartements().subscribe((departementsResult) => this.departements = departementsResult);
   }
 
-  getDepartementsByAnneeIndex(anneeIndex : number) {
-    return this.departements.filter((departement) => departement.anneeId === this.annees[anneeIndex].id);
+  getDepartementsByAnneeIndex(anneeId : number | undefined) {
+    // console.log(this.departements);
+    if(anneeId != undefined) {
+      return this.departements.filter((departement) => departement.anneeId === anneeId);
+    }
+    console.log("année non sauvegardée");
+    return [];
   }
 
   getAllFormations() {
     this.formationService.getAllFormations().subscribe((formationsResult) => this.formations = formationsResult);
   }
 
-  getFormationsByDepartement(departementIndex : number) {
-    return this.formations.filter((formation) => formation.departementId === this.departements[departementIndex].id);
+  getFormationsByDepartement(departementId : number | undefined) {
+    if(departementId != undefined) {
+      return this.formations.filter((formation) => formation.departementId === departementId);
+    }
+    console.log("departement non sauvegardé");
+    return [];
   }
 
   getAllNiveaux() {
     return this.niveauService.getAllNiveaux().subscribe((niveauResult) => this.niveaux = niveauResult);
   }
 
-  getNiveauxByFormation(formationIndex: number) {
-    return this.niveaux.filter((niveau) => niveau.formationId === this.formations[formationIndex].id);
+  getNiveauxByFormation(formationId: number | undefined) {
+    if(formationId != undefined) {
+      return this.niveaux.filter((niveau) => niveau.formationId === formationId);
+    }
+    console.log("formation non sauvegardée");
+    return [];
   }
 
   getAllSemestres() {
     return this.semestreService.getAllSemestres().subscribe((semestreResult) => this.semestres = semestreResult);
   }
 
-  getSemestreByNiveau(niveauIndex: number) {
-    return this.semestres.filter((semestre) => semestre.niveauId === this.niveaux[niveauIndex].id);
+  getSemestreByNiveau(niveauId: number | undefined) {
+    if(niveauId != undefined) {
+      return this.semestres.filter((semestre) => semestre.niveauId === niveauId);
+    }
+    console.log("niveau non sauvegardé");
+    return [];
   }
 
   getAllModules() {
     return this.moduleService.getAllModules().subscribe((modulesResult) => this.modules = modulesResult);
   }
 
-  getModulesBySemestre(semestreIndex: number) {
-    return this.modules.filter((module) => module.semestreId === this.semestres[semestreIndex].id);
+  getModulesBySemestre(semestreId: number | undefined) {
+    if(semestreId != undefined) {
+      return this.modules.filter((module) => module.semestreId === semestreId);
+    }
+    console.log("semestre non sauvegardé");
+    return [];
+  }
+
+  getAllGroupes() {
+    return this.groupeService.getAllGroupes().subscribe((groupesResult) => this.groupes = groupesResult);
+  }
+
+  getGroupesByModule(moduleId: number | undefined) {
+    if(moduleId != undefined) {
+      return this.groupes.filter((groupe) => groupe.moduleId === moduleId);
+    }
+    console.log("module non sauvegardé");
+    return  [];
   }
 
   showType(type: string, item: any) {
@@ -191,7 +226,7 @@ export class ModulesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addAnnee(result);
+        this.anneeService.saveAnnee(result).subscribe((anneeResult: Annee) => this.addAnnee(anneeResult));
       }
     });
   }
@@ -200,31 +235,43 @@ export class ModulesComponent implements OnInit {
     this.annees.push(newAnnee);
   }
 
-  openAddDepartementDialog(anneeIndex: number): void {
+  openAddDepartementDialog(anneeId: number | undefined): void {
     const dialogRef = this.dialog.open(AddDepartementDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        result.responsableDepartementId = 1;
-        //update anneeId according to the tree structure
-        result.anneeId = this.annees[anneeIndex].id;
-        this.addDepartement(result);
+        if(anneeId == undefined) {
+          console.error("parent 'Annee' non sauvegardé");
+        }
+
+        //update parent id
+        result.anneeId = anneeId;
+        
+        //save in db and update with id
+        this.departementService.saveDepartement(result).subscribe((departementResult: Departement) => this.addDepartement(departementResult));
       }
     });
   }
 
   addDepartement(newDepartement: Departement) {
     this.departements.push(newDepartement);
-    console.log(this.departements);
   }
 
-  openAddFormationDialog(departementIndex: number): void {
+  openAddFormationDialog(departementId: number | undefined): void {
     const dialogRef = this.dialog.open(AddFormationDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        result.departementId = this.departements[departementIndex].id;
-        this.addFormation(result);
+
+        if(departementId == undefined) {
+          console.error("parent 'Departement' non sauvegardé");
+        }
+        //update parent id
+        result.departementId = departementId;
+        
+        console.log(result);
+        //save in db and update with id
+        this.formationService.saveFormation(result).subscribe((formationResult: Formation) => this.addFormation(formationResult));
       }
     });
   }
@@ -234,12 +281,20 @@ export class ModulesComponent implements OnInit {
   }
 
 
-  openAddNiveauDialog(): void {
+  openAddNiveauDialog(formationId: number | undefined): void {
     const dialogRef = this.dialog.open(AddNiveauDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addNiveau(result);
+        if(formationId == undefined) {
+          console.error("parent 'Formation' non sauvegardé");
+        }
+
+        //update parent id
+        result.formationId = formationId;
+        
+        //save in db and update with id
+        this.niveauService.saveNiveau(result).subscribe((niveauResult: Niveau) => this.addNiveau(niveauResult));
       }
     });
   }
@@ -248,13 +303,22 @@ export class ModulesComponent implements OnInit {
     this.niveaux.push(newNiveau);
   }
 
-  openAddSemestreDialog(): void {
+  openAddSemestreDialog(niveauId: number | undefined): void {
     const dialogRef = this.dialog.open(AddSemestreDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.addSemestre(result);
+        if(niveauId == undefined) {
+          console.error("parent 'Niveau' non sauvegardé");
+        }
+  
+        //update parent id
+        result.niveauId = niveauId;
+        
+        //save in db and update with id
+        this.semestreService.saveSemestre(result).subscribe((semestreResult: Semestre) => this.addSemestre(semestreResult));
       }
+
     });
   }
 
@@ -262,14 +326,27 @@ export class ModulesComponent implements OnInit {
     this.semestres.push(newSemestre);
   }
 
-  openAddModuleDialog(semestreIndex: number): void {
+  openAddModuleDialog(semestreId: number | undefined): void {
     const dialogRef = this.dialog.open(AddModulesDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let module: Module = { nom: result.nom, heuresParType: result.heuresParType, semestreId: semestreIndex};
-        this.addModule(module);
-        //TODO groupes
+        if(semestreId != undefined) {
+          //result contains module + groupes so we have to parse it
+          let module: Module = { nom: result.nom, heuresParType: result.heuresParType, semestreId: semestreId};
+          this.moduleService.saveModule(module).subscribe((moduleResult: Module) => {
+            if(moduleResult.id != undefined) { 
+              this.addModule(moduleResult);
+              result.groupes.forEach((groupe: Groupe) => {
+                groupe.moduleId = moduleResult.id!;
+                this.groupeService.saveGroupe(groupe).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
+              });
+            }
+            else {
+              console.error("Le module n'existe pas");
+            }
+          })
+        }
       }
     });
   }
@@ -278,44 +355,51 @@ export class ModulesComponent implements OnInit {
     this.modules.push(newModule);
   }
 
-  updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
-    const affectationId = this.affectations[affectationIndex].id;
+  
+  openAddGroupeDialog(moduleId: number | undefined): void {
+    const dialogRef = this.dialog.open(AddGroupeDialogComponent);
 
-    // @ts-ignore
-    this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
-      next: () => {
-        alert('Heures affectées mis à jour');
-      },
-      error: (error) => {
-        console.error('Error updating affectation:', error);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if(moduleId == undefined) {
+          console.error("parent 'Module' non sauvegardé");
+        }
+  
+        //update parent id
+        result.moduleId = moduleId;
+        
+        //save in db and update with id
+        this.groupeService.saveGroupe(result).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
       }
     });
   }
 
-  // openAddGroupeDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddGroupeDialogComponent);
+  addGroupe(newGroupe: Groupe) {
+    this.groupes.push(newGroupe);
+  }
+
+
+  // openAddAffectationDialog(groupeId: number | undefined): void {
+  //   const dialogRef = this.dialog.open(AddAffectationComponent, {
+  //     data: {
+  //       // moduleId: groupe.moduleId,
+  //       groupeId: groupeId
+  //     }
+  //   });
 
   //   dialogRef.afterClosed().subscribe(result => {
   //     if (result) {
-  //       this.addGroupe(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, moduleIndex, result);
+  //       if(groupeId == undefined) {
+  //         console.error("parent 'Groupe' non sauvegardé");
+  //       }
+  
+  //       //update parent id
+  //       result.groupeId = groupeId;
+        
+  //       //save in db and update with id
+  //       this.affectationSer.saveGroupe(result).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
   //     }
-  //   });
-  // }
 
-  // addGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, newGroupe: Groupe) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.push(newGroupe);
-  // }
-
-
-  // openAddAffectationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number): void {
-  //   const dialogRef = this.dialog.open(AddAffectationComponent, {
-  //     data: {
-  //       moduleId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].id,
-  //       groupeId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].id
-  //     }
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(result => {
   //     if (result) {
   //       this.addAffectation(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, moduleIndex, groupeIndex, result);
   //     }
@@ -327,33 +411,55 @@ export class ModulesComponent implements OnInit {
   //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].affectations.push(newAffectation);
   // }
 
-  removeAnnee(anneeIndex: number) {
-    this.annees.splice(anneeIndex, 1);
+  // updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
+  //   const affectationId = this.affectations[affectationIndex].id;
+
+  //   // @ts-ignore
+  //   this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
+  //     next: () => {
+  //       alert('Heures affectées mis à jour');
+  //     },
+  //     error: (error) => {
+  //       console.error('Error updating affectation:', error);
+  //     }
+  //   });
+  // }
+
+
+  removeAnnee(annee: Annee) {
+    let anneeIndex = this.annees.findIndex((currentAnnee) => currentAnnee === annee);
+    this.annees.splice(anneeIndex!, 1);
   }
 
-  removeDepartement(departementIndex: number) {
-    this.departements.splice(departementIndex, 1);
+  removeDepartement(departement: Departement) {
+    let departementIndex = this.departements.findIndex((currentDepartement) => currentDepartement === departement);
+    this.departements.splice(departementIndex!, 1);
   }
 
-  removeFormation(formationIndex: number) {
+  removeFormation(formation: Formation) {
+    let formationIndex = this.formations.findIndex((currentFormation) => currentFormation === formation);
     this.formations.splice(formationIndex, 1);
   }
 
-  removeNiveau(niveauIndex: number) {
+  removeNiveau(niveau: Niveau) {
+    let niveauIndex = this.niveaux.findIndex((currentNiveau) => currentNiveau === niveau);
     this.niveaux.splice(niveauIndex, 1);
   }
 
-  removeSemestre(semestreIndex: number) {
+  removeSemestre(semestre : Semestre) {
+    let semestreIndex = this.semestres.findIndex((currentSemestre) => currentSemestre === semestre);
     this.semestres.splice(semestreIndex, 1);
   }
 
-  removeModule(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number) {
+  removeModule(module: Module) {
+    let moduleIndex = this.modules.findIndex((currentModule) => currentModule === module);
     this.modules.splice(moduleIndex, 1);
   }
 
-  // removeGroupe(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes.splice(groupeIndex, 1);
-  // }
+  removeGroupe(groupe: Groupe) {
+    let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe == groupe);
+    this.groupes.splice(groupeIndex, 1);
+  }
 
   // removeAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number) {
   //   const affectationId = this.data.annees[anneeIndex]

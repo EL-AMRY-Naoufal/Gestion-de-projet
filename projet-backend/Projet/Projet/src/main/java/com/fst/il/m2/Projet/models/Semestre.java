@@ -19,8 +19,7 @@ public class Semestre {
     @JoinColumn(name = "niveau_id")
     private Niveau niveau;
 
-    @OneToMany
-    @JoinColumn(name = "module_id")
+    @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL)
     private List<Module> modules;
 
     public Semestre() {

@@ -36,7 +36,7 @@ export class AddModulesDialogComponent {
           type: entry.type,
           heuresAffectees: 0,
           totalHeuresDuGroupe: entry.heures,
-          affectations: []
+          moduleId: -1
         };
         console.log(newGroupe);
         this.newModule.groupes.push(newGroupe);

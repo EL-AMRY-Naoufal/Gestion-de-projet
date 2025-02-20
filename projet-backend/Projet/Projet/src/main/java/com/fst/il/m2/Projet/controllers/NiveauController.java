@@ -56,9 +56,9 @@ public class NiveauController {
 
     // Add a new Niveau
     @PostMapping
-    public ResponseEntity<Niveau> saveNiveau(@RequestBody Niveau niveau) {
-        Niveau savedNiveau = niveauService.saveNiveau(niveau);
-        return new ResponseEntity<>(savedNiveau, HttpStatus.CREATED);
+    public ResponseEntity<NiveauDto> saveNiveau(@RequestBody NiveauDto niveauDto) {
+        Niveau savedNiveau = niveauService.saveNiveau(NiveauMapper.toEntity(niveauDto));
+        return new ResponseEntity<>(NiveauMapper.toDto(savedNiveau), HttpStatus.CREATED);
     }
 
     // Delete a Niveau by ID

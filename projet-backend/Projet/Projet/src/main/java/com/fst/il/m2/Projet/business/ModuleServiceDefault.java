@@ -1,15 +1,11 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.GroupeDto;
-import com.fst.il.m2.Projet.dto.ModuleDto;
+import com.fst.il.m2.Projet.models.Module;
+import com.fst.il.m2.Projet.repositories.ModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fst.il.m2.Projet.repositories.ModuleRepository;
-import com.fst.il.m2.Projet.models.Module;
-
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ModuleServiceDefault implements ModuleService{

@@ -3,11 +3,6 @@ package com.fst.il.m2.Projet.mapper;
 import com.fst.il.m2.Projet.dto.NiveauDto;
 import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.models.Niveau;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
-
-@Component
-@AllArgsConstructor
 public class NiveauMapper {
 
     public static Niveau toEntity(NiveauDto niveauDto) {

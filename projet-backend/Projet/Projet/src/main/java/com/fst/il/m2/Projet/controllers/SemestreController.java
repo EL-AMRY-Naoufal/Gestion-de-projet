@@ -60,9 +60,9 @@ public class SemestreController {
 
     // Add a new Semestre
     @PostMapping
-    public ResponseEntity<Semestre> addSemestre(@RequestBody Semestre semestre) {
-        Semestre savedSemestre = semestreService.addSemestre(semestre);
-        return new ResponseEntity<>(savedSemestre, HttpStatus.CREATED);
+    public ResponseEntity<SemestreDto> saveSemestre(@RequestBody SemestreDto semestreDto) {
+        Semestre savedSemestre = semestreService.addSemestre(SemestreMapper.toEntity(semestreDto));
+        return new ResponseEntity<>(SemestreMapper.toDto(savedSemestre), HttpStatus.CREATED);
     }
 
     // Delete a Semestre by ID

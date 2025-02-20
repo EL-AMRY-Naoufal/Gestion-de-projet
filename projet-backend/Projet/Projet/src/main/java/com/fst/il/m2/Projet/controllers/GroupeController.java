@@ -1,6 +1,8 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.GroupeService;
+import com.fst.il.m2.Projet.dto.GroupeDto;
+import com.fst.il.m2.Projet.mapper.GroupeMapper;
 import com.fst.il.m2.Projet.models.Groupe;
 import com.fst.il.m2.Projet.models.Module;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +25,20 @@ public class GroupeController {
 
     // Create a new Groupe
     @PostMapping
-    public ResponseEntity<Groupe> createGroupe(@RequestBody Groupe groupe) {
-        Groupe savedGroupe = groupeService.saveGroupe(groupe);
-        return new ResponseEntity<>(savedGroupe, HttpStatus.CREATED);
+    public ResponseEntity<GroupeDto> createGroupe(@RequestBody GroupeDto groupeDto) {
+        Groupe savedGroupe = groupeService.saveGroupe(GroupeMapper.toEntity(groupeDto));
+        return new ResponseEntity<>(GroupeMapper.toDto(savedGroupe), HttpStatus.CREATED);
     }
 
     // Get all Groupes
     @GetMapping
-    public ResponseEntity<List<Groupe>> getAllGroupes() {
+    public ResponseEntity<List<GroupeDto>> getAllGroupes() {
         List<Groupe> groupes = groupeService.getAllGroupes();
-        return new ResponseEntity<>(groupes, HttpStatus.OK);
+        return new ResponseEntity<>(groupes.stream().map(GroupeMapper::toDto).toList(), HttpStatus.OK);
     }
 
     // Get a Groupe by ID
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Groupe> getGroupeById(@PathVariable Long id) {
         try {
             Groupe groupe = groupeService.getGroupeById(id);

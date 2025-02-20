@@ -28,7 +28,15 @@ export class GroupeService {
         );
     }
     
+    getAllGroupes(): Observable<Groupe[]> {
+        return this.http.get<Groupe[]>(`${this._backendURL.groupes}`);
+    }
+
     getGroupesByModule(moduleId: number): Observable<Groupe[]> {
         return this.http.get<Groupe[]>(`${this._backendURL.groupes}/module/${moduleId}`);
+    }
+
+    saveGroupe(groupe: Groupe): Observable<Groupe> {
+        return this.http.post<Groupe>(`${this._backendURL.groupes}`, groupe);
     }
 }

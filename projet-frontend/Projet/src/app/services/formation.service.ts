@@ -31,4 +31,8 @@ export class FormationService {
     getAllFormations(): Observable<Formation[]> {
         return this.http.get<Formation[]>(`${this._backendURL.formations}`);
     }
+
+    saveFormation(formation : Formation): Observable<Formation> {
+        return this.http.post<Formation>(`${this._backendURL.formations}`, formation);
+    }
 }

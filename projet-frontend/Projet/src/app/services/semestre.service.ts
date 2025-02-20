@@ -29,11 +29,15 @@ export class SemestreService {
     }
     
     getAllSemestres(): Observable<Semestre[]> {
-        return this.http.get<Semestre[]>(`${this._backendURL.semestres}`)
+        return this.http.get<Semestre[]>(`${this._backendURL.semestres}`);
     }
 
     getSemestresByNiveau(niveauId: number): Observable<Semestre[]> {
-        return this.http.get<Semestre[]>(`${this._backendURL.semestres}/niveau/${niveauId}`)
+        return this.http.get<Semestre[]>(`${this._backendURL.semestres}/niveau/${niveauId}`);
+    }
+
+    saveSemestre(semestre : Semestre) : Observable<Semestre> {
+        return this.http.post<Semestre>(`${this._backendURL.semestres}`, semestre);
     }
 
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {

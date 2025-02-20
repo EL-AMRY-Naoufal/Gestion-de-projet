@@ -31,4 +31,8 @@ export class ModuleService {
   getAllModules(): Observable<any> {
     return this.http.get<Module[]>(`${this._backendURL.modules}`);
   }
+
+  saveModule(module: Module): Observable<Module> {
+          return this.http.post<Module>(`${this._backendURL.modules}`, module);
+      }
 }

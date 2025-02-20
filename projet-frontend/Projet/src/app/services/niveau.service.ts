@@ -35,4 +35,8 @@ export class NiveauService {
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {
         return this.http.get<Niveau[]>(`${this._backendURL.niveaux}/formation/${formationId}`);
     }
+
+    saveNiveau(niveau: Niveau): Observable<Niveau> {
+        return this.http.post<Niveau>(`${this._backendURL.niveaux}`, niveau);
+    }
 }

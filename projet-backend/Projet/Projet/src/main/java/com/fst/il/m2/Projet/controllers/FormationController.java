@@ -18,25 +18,27 @@ public class FormationController {
 
     private final FormationService formationService;
     private final ResponsableFormationService responsableFormationService;
+    private final FormationMapper formationMapper;
 
     @Autowired
     public FormationController(FormationService formationService, ResponsableFormationService responsableFormationService) {
         this.formationService = formationService;
         this.responsableFormationService = responsableFormationService;
+        this.formationMapper = new FormationMapper(responsableFormationService);
     }
 
     // Create a new Formation
     @PostMapping
-    public ResponseEntity<Formation> createFormation(@RequestBody Formation formation) {
-        Formation savedFormation = formationService.saveFormation(formation);
-        return new ResponseEntity<>(savedFormation, HttpStatus.CREATED);
+    public ResponseEntity<FormationDto> createFormation(@RequestBody FormationDto formationDto) {
+        Formation savedFormation = formationService.saveFormation(this.formationMapper.toEntity(formationDto));
+        return new ResponseEntity<>(this.formationMapper.toDto(savedFormation), HttpStatus.CREATED);
     }
 
     // Get all Formations
     @GetMapping
     public ResponseEntity<List<FormationDto>> getAllFormations() {
         List<Formation> formations = formationService.getAllFormations();
-        List<FormationDto> formationDtos = formations.stream().map(new FormationMapper(responsableFormationService)::toDto).toList();
+        List<FormationDto> formationDtos = formations.stream().map(this.formationMapper::toDto).toList();
 
         return new ResponseEntity<>(formationDtos, HttpStatus.OK);
     }
