@@ -12,9 +12,10 @@
     <form [formGroup]="form" class="form-container">
 
       <!-- Checkbox pour définir si l'utilisateur a un compte -->
-      <mat-checkbox class="custom-checkbox" formControlName="hasAccount">
+      <mat-checkbox class="custom-checkbox" formControlName="hasAccount" [disabled]="isEdit">
         L'utilisateur a un compte
       </mat-checkbox>
+
 
       <div class="flex-container">
 
@@ -22,14 +23,14 @@
         <mat-form-field appearance="fill" class="full-width mgb20" *ngIf="!form.get('hasAccount')?.value">
           <mat-label>Nom</mat-label>
           <input matInput formControlName="name" />
-          <mat-error *ngIf="form.get('name')?.hasError('required')">Le nom est requis.</mat-error>
+          <mat-error *ngIf="form.get('name')?.hasError('required')">Le nom est  <strong>obligatoire</strong>.</mat-error>
           <mat-error *ngIf="form.get('name')?.hasError('minlength')">Au moins 2 caractères.</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width mgb20" *ngIf="!form.get('hasAccount')?.value">
           <mat-label>Prénom</mat-label>
           <input matInput formControlName="firstname" />
-          <mat-error *ngIf="form.get('firstname')?.hasError('required')">Le prénom est requis.</mat-error>
+          <mat-error *ngIf="form.get('firstname')?.hasError('required')">Le prénom est  <strong>obligatoire</strong>.</mat-error>
           <mat-error *ngIf="form.get('firstname')?.hasError('minlength')">Au moins 2 caractères.</mat-error>
         </mat-form-field>
       </div>
@@ -49,7 +50,7 @@
               </mat-option>
             </mat-select>
           </ng-template>
-          <mat-error *ngIf="form.get('user')?.invalid">L'utilisateur est requis.</mat-error>
+          <mat-error *ngIf="form.get('user')?.invalid">L'utilisateur est  <strong>obligatoire</strong>.</mat-error>
         </mat-form-field>
 
       </div>
@@ -60,7 +61,7 @@
         <mat-form-field appearance="fill" class="full-width mgb20">
           <mat-label>Nombre d'heures</mat-label>
           <input matInput formControlName="maxHeuresService" type="number" />
-          <mat-error *ngIf="form.get('maxHeuresService')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
+          <mat-error *ngIf="form.get('maxHeuresService')?.hasError('required')">Le nombre d'heures est  <strong>obligatoire</strong>.</mat-error>
           <mat-error *ngIf="form.get('maxHeuresService')?.hasError('min')">Le nombre d'heures doit être supérieur à 0.</mat-error>
         </mat-form-field>
 
@@ -72,14 +73,14 @@
               {{ category }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="form.get('categorieEnseignant')?.invalid">La catégorie est requise.</mat-error>
+          <mat-error *ngIf="form.get('categorieEnseignant')?.invalid">La catégorie est  <strong>obligatoire</strong>.</mat-error>
         </mat-form-field>
 
         <!-- Décharge selon la catégorie -->
         <mat-form-field appearance="fill" class="full-width mgb20">
           <mat-label>Décharge pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
           <input matInput type="number" formControlName="nbHeureCategorie" />
-          <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">Les heures pour cette catégorie sont requises.</mat-error>
+          <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">Les heures pour cette catégorie sont  <strong>obligatoire</strong>.</mat-error>
           <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('min')">Le nombre d'heures doit être supérieur à 0.</mat-error>
         </mat-form-field>
 

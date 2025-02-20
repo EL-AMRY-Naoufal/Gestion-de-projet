@@ -175,6 +175,11 @@ export class UpdateProfesseurComponent {
       this.utilisateurs = data;
     });
     this.form.get('categorieEnseignant')?.valueChanges.subscribe(_categorieEnseignant => this.updateNbHeureCategorie())
+
+        // Si en mode édition, on force la désactivation de la checkbox
+    if (this.isEdit) {
+      this.form.get('hasAccount')?.disable();
+    }
   }
 
 
