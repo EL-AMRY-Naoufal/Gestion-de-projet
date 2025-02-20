@@ -5,9 +5,9 @@
 
 <ng-template #formTemplate>
 <div class="form">
-    <h1>
+    <h2>
         {{ isEdit ? 'Modifier' : 'Crée' }} un Enseignant
-    </h1>
+    </h2>
 
     <div mat-dialog-content>
         <form [formGroup]="form">
@@ -39,6 +39,7 @@
               </mat-form-field>
             </div>
 
+            <div class="flex-container">
             <mat-form-field appearance="fill" class="form-field" *ngIf="form.get('hasAccount')?.value">
                 <mat-label>Utilisateur</mat-label>
                 <ng-container *ngIf="isEdit && !isEditandUserNull else selectUser">
@@ -52,7 +53,9 @@
                     </mat-select>
                     <mat-error *ngIf="form.get('user')?.invalid">L'utilisateur est requis.</mat-error>
                 </ng-template>
+
             </mat-form-field>
+            </div>
 
             <div class="flex-container">
               <mat-form-field appearance="fill" class="form-field">
