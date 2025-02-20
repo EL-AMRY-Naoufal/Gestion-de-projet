@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -26,7 +26,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
       MatCheckboxModule,
   ],
   templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss'
+  styleUrl: './user-form.component.scss',
+  encapsulation: ViewEncapsulation.None, // Désactive l'encapsulation pour appliquer les styles globaux
+
 })
 export class UserFormComponent {
   // private property to store update mode flag
