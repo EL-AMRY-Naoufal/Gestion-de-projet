@@ -1,12 +1,12 @@
 <div *ngIf="data == undefined && isEdit ; else formTemplate">
     <p>Chargement des informations de l'enseignant...</p>
 </div>
+
+
 <ng-template #formTemplate>
 <div class="form">
     <h1>
-        <mat-icon>{{ isEdit ? 'person_edit' : 'person_add' }}</mat-icon>
-
-        {{ isEdit ? 'Modifier' : 'Ajouter' }} un Enseignant
+        {{ isEdit ? 'Modifier' : 'Crée' }} un Enseignant
     </h1>
 
     <div mat-dialog-content>
@@ -15,27 +15,29 @@
                 L'utilisateur a un compte
             </mat-checkbox>
 
-            <mat-form-field appearance="fill" class="form-field" *ngIf="!form.get('hasAccount')?.value">
-                <mat-label>Nom</mat-label>
-                <input matInput  formControlName="name" />
-                <mat-error *ngIf="form.get('name')?.hasError('required')">
-                    Le nom est requis.
-                </mat-error>
-                <mat-error *ngIf="form.get('name')?.hasError('minlength')">
-                    Au moins 2 caractères.
-                </mat-error>
-            </mat-form-field>
+            <div class="flex-container">
+              <mat-form-field appearance="fill" class="form-field" *ngIf="!form.get('hasAccount')?.value">
+                  <mat-label>Nom</mat-label>
+                  <input matInput  formControlName="name" />
+                  <mat-error *ngIf="form.get('name')?.hasError('required')">
+                      Le nom est requis.
+                  </mat-error>
+                  <mat-error *ngIf="form.get('name')?.hasError('minlength')">
+                      Au moins 2 caractères.
+                  </mat-error>
+              </mat-form-field>
 
-            <mat-form-field appearance="fill" class="form-field" *ngIf="!form.get('hasAccount')?.value">
-                <mat-label>Prénom</mat-label>
-                <input matInput formControlName="firstname" />
-                <mat-error *ngIf="form.get('firstname')?.hasError('required')">
-                    Le prénom est requis.
-                </mat-error>
-                <mat-error *ngIf="form.get('firstname')?.hasError('minlength')">
-                    Au moins 2 caractères.
-                </mat-error>
-            </mat-form-field>
+              <mat-form-field appearance="fill" class="form-field" *ngIf="!form.get('hasAccount')?.value">
+                  <mat-label>Prénom</mat-label>
+                  <input matInput formControlName="firstname" />
+                  <mat-error *ngIf="form.get('firstname')?.hasError('required')">
+                      Le prénom est requis.
+                  </mat-error>
+                  <mat-error *ngIf="form.get('firstname')?.hasError('minlength')">
+                      Au moins 2 caractères.
+                  </mat-error>
+              </mat-form-field>
+            </div>
 
             <mat-form-field appearance="fill" class="form-field" *ngIf="form.get('hasAccount')?.value">
                 <mat-label>Utilisateur</mat-label>
@@ -52,39 +54,42 @@
                 </ng-template>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Nombre d'heures</mat-label>
-                <input matInput formControlName="maxHeuresService" type="number"/>
-                <mat-error *ngIf="form.get('maxHeuresService')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
-                
-                <mat-error *ngIf="form.get('maxHeuresService')?.hasError('min')">
-                    Le nombre d'heures doit être supérieur à 0.
-                </mat-error>
-            </mat-form-field>
+            <div class="flex-container">
+              <mat-form-field appearance="fill" class="form-field">
+                  <mat-label>Nombre d'heures</mat-label>
+                  <input matInput formControlName="maxHeuresService" type="number"/>
+                  <mat-error *ngIf="form.get('maxHeuresService')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
 
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>Categorie d'Enseignant</mat-label>
-                <mat-select formControlName="categorieEnseignant">
-                    <mat-option *ngFor="let category of categories" [value]="category">
-                        {{ category }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('categorieEnseignant')?.invalid">La categorie est requise.</mat-error>
-            </mat-form-field>
+                  <mat-error *ngIf="form.get('maxHeuresService')?.hasError('min')">
+                      Le nombre d'heures doit être supérieur à 0.
+                  </mat-error>
+              </mat-form-field>
 
-            <mat-form-field appearance="fill" class="form-field" *ngIf="form.get('categorieEnseignant')?.value">
-                <mat-label>Décharge pour  {{ form.get('categorieEnseignant')?.value }}</mat-label>
-                <input matInput type="number"  formControlName="nbHeureCategorie" />
-                <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required') ">Les heures pour cette catégorie sont requises.</mat-error>
-                <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('min')">
-                    Le nombre d'heures doit être supérieur à 0.
-                </mat-error>
-            </mat-form-field>
+              <mat-form-field appearance="fill" class="form-field">
+                  <mat-label>Categorie d'Enseignant</mat-label>
+                  <mat-select formControlName="categorieEnseignant">
+                      <mat-option *ngFor="let category of categories" [value]="category">
+                          {{ category }}
+                      </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="form.get('categorieEnseignant')?.invalid">La categorie est requise.</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                  <mat-label>Décharge pour  {{ form.get('categorieEnseignant')?.value }}</mat-label>
+                  <input matInput type="number"  formControlName="nbHeureCategorie" />
+                  <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required') ">Les heures pour cette catégorie sont requises.</mat-error>
+                  <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('min')">
+                      Le nombre d'heures doit être supérieur à 0.
+                  </mat-error>
+              </mat-form-field>
+
+            </div>
         </form>
     </div>
     <div mat-dialog-actions>
-        <button mat-flat-button [disabled]="form.invalid"  (click)="save()">Enregistrer</button>
-        <button mat-flat-button class="cancel" (click)="close()">Fermer</button>
+        <button mat-flat-button class="cancel" (click)="close()">Annuler</button>
+        <button mat-flat-button [disabled]="form.invalid"  (click)="save()">Sauvegarde</button>
     </div>
 </div>
 </ng-template>

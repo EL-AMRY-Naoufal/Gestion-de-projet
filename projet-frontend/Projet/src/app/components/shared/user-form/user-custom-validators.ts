@@ -66,8 +66,6 @@ static utiliseUsername(control: AbstractControl): ValidationErrors | null {
     return null; // Pas de validation si le champ est vide
   }
 
-  console.log("Username:", control.value);
-  console.log("List of users:", UserCustomValidators._listUsers);
 
   const usernameExists = UserCustomValidators._listUsers.some((user) => user.username === control.value);
 

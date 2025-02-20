@@ -38,8 +38,9 @@ export class EnseignantsComponent  implements OnInit{
     openDialog(enseignant?: EnseignantDto): void {
       const dialogRef = this.dialog.open(UpdateProfesseurComponent, {
         data: enseignant,
-        width: '500px',
-        autoFocus: true
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+
+        //autoFocus: true
       });
 
       dialogRef.afterClosed().subscribe(result => {
