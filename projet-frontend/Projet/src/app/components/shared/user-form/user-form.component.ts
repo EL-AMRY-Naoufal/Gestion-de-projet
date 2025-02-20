@@ -239,7 +239,7 @@ getEnseignantWithSameUserNameAndFirstName(){
 private updateNbHeureCategorie(): void {
   const categorie = this._form.get('categorieEnseignant')?.value;
 
-  let nbHeureCategorie = 0;
+  let nbHeureCategorie = 192;
 
   // Définir le nombre d'heures selon la catégorie
   switch (categorie) {
@@ -485,7 +485,7 @@ private _buildForm(): FormGroup {
     maxHeuresService: 192,
     categorieEnseignant: CategorieEnseignant.ATER,
     heuresAssignees: 0,
-    nbHeureCategorie: 0
+    nbHeureCategorie: 192
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);
