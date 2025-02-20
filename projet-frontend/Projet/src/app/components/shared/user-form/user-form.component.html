@@ -9,7 +9,7 @@
       <!-- Conteneur pour aligner nom et prenom côte à côte -->
       <div class="flex-container">
         <!-- Name -->
-        <mat-form-field>
+        <mat-form-field class="full-width mgb20">
           <input matInput placeholder="Nom" formControlName="name" required name="name"/>
           <mat-error *ngIf="form.get('name')?.dirty && form.get('name')?.hasError('required')">
             Le nom d'utilisateur est <strong>obligatoire</strong>
@@ -20,7 +20,7 @@
         </mat-form-field>
 
         <!-- Firstname -->
-        <mat-form-field>
+        <mat-form-field class="full-width mgb20">
           <input matInput placeholder="Prénom " formControlName="firstname" required name="firstname"/>
           <mat-error *ngIf="form.get('firstname')?.dirty && form.get('firstname')?.hasError('required')">
             Le prénom d'utilisateur est <strong>obligatoire</strong>
@@ -36,7 +36,7 @@
     <div class="flex-container">
 
       <!-- Username -->
-      <mat-form-field>
+      <mat-form-field class="autre">
         <input matInput placeholder="Pseudo " formControlName="username" required name="username"/>
         <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('required')">
           Le pseudo d'utilisateur est <strong>obligatoire</strong>
@@ -50,7 +50,7 @@
       </mat-form-field>
 
       <!-- Email -->
-      <mat-form-field>
+      <mat-form-field class="autre">
         <input matInput placeholder="Email" formControlName="email" required name="email"/>
         <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
           L'email est <strong>obligatoire</strong>
@@ -65,8 +65,8 @@
       </mat-form-field>
     </div>
 
-      <!-- Role Selection -->
-      <mat-form-field>
+    <div class="form-container" [ngClass]="{'no-checkbox': !thereAreProfileSimilars || isUpdateMode}">
+      <mat-form-field class="selec">
         <mat-label>Rôles</mat-label>
         <mat-select formControlName="roles" multiple name="roles">
           <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
@@ -76,22 +76,25 @@
         </mat-select>
       </mat-form-field>
 
+      <!-- La case à cocher -->
+      <mat-checkbox *ngIf="thereAreProfileSimilars && form.get('roles')?.value.includes('ENSEIGNANT') && !isUpdateMode"
+        class="custom-checkbox" formControlName="hasProfile">
+        <span>Nous avons détecté un profil similaire avec <strong>{{ enseignants[0].name }} {{ enseignants[0].firstname }}</strong>, enseignant <strong>{{ enseignants[0].categorieEnseignant }}</strong>. Voulez-vous le lier ?</span>
+      </mat-checkbox>
+    </div>
 
-      <mat-checkbox class="custom-checkbox" formControlName="hasProfile"
-    *ngIf="thereAreProfileSimilars && form.get('roles')?.value.includes('ENSEIGNANT') && !isUpdateMode">
-    <span>Nous avons détecté un profil similaire avec <strong>{{ enseignants[0].name }} {{ enseignants[0].firstname }}</strong>, enseignant <strong>{{ enseignants[0].categorieEnseignant }}</strong>. Voulez-vous le lier ?</span>
-  </mat-checkbox>
+
 
   <div class="flex-container">
 
-      <mat-form-field *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
+      <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
         <mat-label>Nombre d'heures</mat-label>
         <input matInput formControlName="maxHeuresService" name="nombreHeures" type="number"
             [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
         <mat-error *ngIf="form.get('nombreHeures')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
       </mat-form-field>
 
-      <mat-form-field *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value" >
+      <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value" >
         <mat-label>Categorie d'Enseignant</mat-label>
         <mat-select formControlName="categorieEnseignant" required>
           <mat-option *ngFor="let category of categories" [value]="category">
@@ -103,7 +106,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
+      <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
         <mat-label>Heures pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
         <input matInput type="number" formControlName="nbHeureCategorie" required/>
         <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">
@@ -114,7 +117,7 @@
 
     <div class="flex-container">
       <!-- Password Field -->
-      <mat-form-field *ngIf="!isUpdateMode">
+      <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
         <input matInput type="password" placeholder="Mot de passe" formControlName="password" required />
         <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
           Le mot de passe est <strong>obligatoire</strong>
@@ -128,7 +131,7 @@
       </mat-form-field>
 
       <!-- Confirm Password Field -->
-      <mat-form-field *ngIf="!isUpdateMode">
+      <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
         <input matInput type="password" placeholder="Confirmer le mot de passe" formControlName="confirmPassword" required />
         <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
           La confirmation du mot de passe est <strong>obligatoire</strong>

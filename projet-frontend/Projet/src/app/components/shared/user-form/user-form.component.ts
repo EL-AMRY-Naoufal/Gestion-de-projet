@@ -128,8 +128,6 @@ export class UserFormComponent {
       this.fetchEnseignantDetails(this._model.id!);
     }
 
-    console.log('liste des roles', this._model.roles);
-    console.log('liste des roles', this._model.roles.filter(role => role.year === this._yearService.currentYearId).map(role => role.role));
 
     this._form.patchValue({ roles: this._model
       .roles

@@ -3,6 +3,7 @@
   background-color: #ffffff; /* Couleur de fond bleu clair */
 }
 
+
 .global-header h2 {
   text-align: center; /* Centrer le titre horizontalement */
   padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
@@ -18,12 +19,33 @@
   position: absolute;
   bottom: -5px; /* Placer la ligne juste en dessous du titre */
   left: 50%; /* Centrer la ligne par rapport au titre */
-  width: 50%; /* Longueur de la ligne */
+  width: 500px; /* Longueur de la ligne */
   height: 2px; /* Épaisseur de la ligne */
   background-color: #333; /* Couleur de la ligne */
   transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
 }
 
+/* Espacement général entre les champs */
+.form-container mat-form-field {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+/* Pas d'espacement sous le champ "Rôles" si la case à cocher est visible */
+.form-container .selec {
+  margin-bottom: 0;  /* Aucune marge après "Rôles" */
+}
+
+/* Espacement sous la case à cocher, uniquement si elle est visible */
+.form-container mat-checkbox {
+  margin-top: 0px !important;
+  margin-bottom: 25px;  /* Appliquer la marge après la checkbox */
+}
+
+/* Appliquer l'espacement sous le champ "Rôles" seulement si la case à cocher n'est pas présente */
+.form-container.no-checkbox .selec {
+  margin-bottom: 25px; /* Appliquer l'espacement sous le champ "Rôles" uniquement si la case à cocher est absente */
+}
 
 
 
@@ -55,7 +77,7 @@ button[mat-button]:hover {
 }
 
 button[color="primary"] {
-  background-color: #333;
+  background-color: #007bff;
   color: white;
 }
 
@@ -100,4 +122,3 @@ button[color="primary"]:disabled {
     transform: scale(1);
   }
 }
-
