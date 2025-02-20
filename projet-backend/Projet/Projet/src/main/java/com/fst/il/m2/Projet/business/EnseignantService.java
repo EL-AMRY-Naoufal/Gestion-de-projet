@@ -114,7 +114,6 @@ public class EnseignantService {
         // Create a map for the categories and hours
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
-        heuresAssignees += nbHeureCategorie;
         // Create the Enseignant entity
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
@@ -123,7 +122,7 @@ public class EnseignantService {
                 .firstname(user.getFirstname())
                 .hasAccount(true)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(heuresAssignees)
+                .heuresAssignees(0)
                 .build();
 
         // Save and return the Enseignant entity
@@ -136,12 +135,10 @@ public class EnseignantService {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
 
-        heuresAssignees += nbHeureCategorie;
-
         Enseignant enseignant = Enseignant.builder()
                 .hasAccount(false)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(heuresAssignees)
+                .heuresAssignees(0)
                 .firstname(StringUtils.capitalize(firstname))
                 .name(StringUtils.capitalize(name))
                 .categorieEnseignant(categorieHeuresMap)
@@ -160,18 +157,11 @@ public class EnseignantService {
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
 
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant()
-                .keySet()
-                .stream()
-                .findFirst()
-                .orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
-        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
 
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
         enseignant.setName(name);
         enseignant.setFirstname(firstname);
-        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         enseignant.setHasAccount(hasAccount);
 
         if (!hasAccount) {
@@ -226,11 +216,8 @@ public class EnseignantService {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
-        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
-        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         enseignant.setUser(user);
         enseignant.setHasAccount(hasAccount);
         return this.enseignantRepository.save(enseignant);
