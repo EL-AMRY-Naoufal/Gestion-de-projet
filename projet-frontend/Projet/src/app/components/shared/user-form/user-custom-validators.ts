@@ -57,35 +57,43 @@ export class UserCustomValidators{
       return null;
     }
 
-
 /**
- * Vérifie si le surname est déjà utilisé
+ * Vérifie si le username est déjà utilisé, sauf si on est en mode update
  */
-static utiliseUsername(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) {
-    return null; // Pas de validation si le champ est vide
-  }
+static utiliseUsername(isUpdate: boolean = false, model?: User) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) {
+      return null; // Pas de validation si le champ est vide
+    }
+    if (isUpdate && model?.username == control.value.username){
+      return null; // Pas de validation si le username est pareil en mode upadate
+    }
 
+    const usernameExists = UserCustomValidators._listUsers.some((user) => user.username === control.value);
 
-  const usernameExists = UserCustomValidators._listUsers.some((user) => user.username === control.value);
-
-  return usernameExists ? { utiliseUsername: true } : null;
+    return usernameExists ? { utiliseUsername: true } : null;
+  };
 }
 
 /**
- * Vérifie si l'email est déjà utilisé
+ * Vérifie si l'email est déjà utilisé, sauf si on est en mode update
  */
-static utiliseEmail(control: AbstractControl): ValidationErrors | null {
-  if (!control.value) {
-    return null; // Pas de validation si le champ est vide
-  }
+static utiliseEmail(isUpdate: boolean = false, model?: User) {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value ) {
+      return null; // Pas de validation si le champ est vide ou si on est en mode update
+    }
 
-  const emailExists = UserCustomValidators._listUsers.some((user) => user.email === control.value);
+    if (isUpdate && model?.email == control.value.email){
+      return null; // Pas de validation si le email et pareil a mode update
+    }
 
-  return emailExists ? { utiliseEmail: true } : null;
+
+    const emailExists = UserCustomValidators._listUsers.some((user) => user.email === control.value);
+
+    return emailExists ? { utiliseEmail: true } : null;
+  };
 }
-
-
 
 
 

@@ -2,7 +2,7 @@ import { Roles } from './../shared/types/user.type';
 import { CommonModule } from '@angular/common';
 import { Component, Inject, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +29,8 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
     MatOptionModule,
     MatCheckboxModule,
     ReactiveFormsModule,
+    MatDialogModule, // ✅ Ajout du module MatDialog
+
   ],
   providers: [EnseignantService],
   templateUrl: './update-professeur.component.html',
@@ -176,7 +178,14 @@ export class UpdateProfesseurComponent {
   }
 
 
-  save() {
+save() {
+
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();  // Marque tous les champs comme "touchés" pour afficher les erreurs
+    return; // Empêche la soumission si le formulaire est invalide
+  }
+
+
     console.log('Form:', this.form);
     if (this.form.valid) {
       const enseignantData = this.form.value;

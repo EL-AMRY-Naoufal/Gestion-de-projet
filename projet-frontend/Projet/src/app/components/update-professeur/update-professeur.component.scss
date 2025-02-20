@@ -15,7 +15,7 @@
   font-size: 24px; /* Ajuster la taille du texte */
   color: #333; /* Ajuster la couleur du titre */
   position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
-  margin-bottom: 50px;
+  margin-bottom: 5px;
 }
 
 .form h2::after {
@@ -30,19 +30,39 @@
 }
 
 
+mat-dialog-content {
+  min-height: 250px; /* Largeur du formulaire */
+}
+
+/* Espacement général entre les champs */
+.form-container mat-form-field {
+  width: 100%;
+  margin-bottom: 25px !important;
+}
+
+.form-container mat-checkbox{
+  margin-bottom: 25px;
+
+
+}
+
 
 .form {
   background-color: #ffffff; /* Couleur de fond bleu clair */
-  padding: 25px;
+  padding: 25px !important;
 
 }
 
 /* Espacement général entre les champs */
 .mat-dialog-content mat-form-field {
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 25px !important;
 }
 
+
+.mat-dialog-content mat-checkbox{
+  margin-bottom: 2500px; /* Appliquer l'espacement sous le champ "Rôles" uniquement si la case à cocher est absente */
+}
 /* Styliser les erreurs de validation */
 mat-error {
   font-size: 0.8rem;
@@ -70,31 +90,30 @@ button[mat-flat-button] {
 
 }
 
-/* Effet au survol */
-button[mat-flat-button]:hover {
+/* Boutons */
+button[mat-button] {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #d8e7f5;
+
+}
+
+button[mat-button]:hover {
   opacity: 0.9;
   background-color: #80bbf1;
   color: #ffffff;
-}
-
-/* Bouton Fermer */
-button.cancel {
-  background-color: #d8e7f5;
-  color: #333;
-}
-
-/* Effet au survol du bouton Fermer */
-button.cancel:hover {
-  background-color: #80bbf1;
-  color: #ffffff;
 
 }
+
 
 
 /* Conteneur pour aligner les champs côte à côte */
 .flex-container {
   display: flex;
-  gap: 15px; /* Espacement entre les champs */
+  gap: 25px; /* Espacement entre les champs */
 }
 
 /* Chaque champ prend 50% de la largeur */

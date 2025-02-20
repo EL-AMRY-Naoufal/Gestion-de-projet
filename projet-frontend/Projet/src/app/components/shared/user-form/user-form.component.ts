@@ -378,7 +378,7 @@ private _buildForm(): FormGroup {
     id: new FormControl(),
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername])
+      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode,this._model)])
     ),
     name: new FormControl(
       '',
@@ -390,7 +390,7 @@ private _buildForm(): FormGroup {
     ),
     email: new FormControl(
       '',
-      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail])
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,this._model)])
     ),
     roles: new FormControl([], Validators.required),
     password: new FormControl(
