@@ -209,9 +209,10 @@ export class ListUsersComponent implements OnInit {
 
     // open modal
     this._listUsersDialog = this._dialog.open(UserDialogComponent, {
-      width: '500px',
       disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
     });
+
 
     // subscribe to afterClosed observable to set dialog status and do process
     this._listUsersDialog
