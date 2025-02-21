@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 
@@ -18,5 +19,4 @@ public interface ResponsableDepartementService {
     void deleteUser(Long id, Long responsableId);
      List<UserRole> getUsersByRole(Role role);
      List<UserRole> getUsersByRoleAndYear(Role role, Long year);
-
 }

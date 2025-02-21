@@ -220,4 +220,4 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return userRoleRepository.findByRoleAndYearId(role, year);
     }
 
-    }
+}
