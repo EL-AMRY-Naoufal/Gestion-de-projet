@@ -68,12 +68,8 @@ static utiliseUsername(isUpdate: boolean = false,  getModel: () => string | null
 
     const model = getModel(); // Récupération dynamique de la valeur
 
-    // Logique de comparaison de l'username
-    console.log("user", control.value);
-    console.log("model", model);
-
     // Si nous sommes en mode "update" et que le modèle (username) est égal à la valeur, pas besoin de validation
-    if (isUpdate) {
+    if (isUpdate && model?.trim().toLowerCase() === control.value.trim().toLowerCase()) {
       console.log("update");
       return null;
     }

@@ -41,6 +41,8 @@ export class UserFormComponent {
   private readonly _submit$: EventEmitter<User>;
   // private property to store form value
   private readonly _form: FormGroup;
+  private username: string;
+  private email: string;
 
 
   thereAreProfileSimilars: boolean = false;
@@ -62,6 +64,8 @@ export class UserFormComponent {
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
 
+    this.username = "";
+    this.email="";
 
 
   }
@@ -130,6 +134,12 @@ export class UserFormComponent {
     if (this._isUpdateMode && this.model.roles.some(role => role.role === 'ENSEIGNANT')) {
       // Si l'utilisateur a le rôle 'ENSEIGNANT', récupérer ses détails
       this.fetchEnseignantDetails(this._model.id!);
+    }
+
+    if ( this._isUpdateMode){ // si on  est en mode modif
+      this.username = this._form.get('username')?.value;
+      this.email = this._form.get("email")?.value;
+
     }
 
 
@@ -390,8 +400,7 @@ private _buildForm(): FormGroup {
 
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode,() => this._form.get('usurname')?.value
-      )])
+      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode, () => this.username)])
     ),
     name: new FormControl(
       '',
@@ -403,7 +412,7 @@ private _buildForm(): FormGroup {
     ),
     email: new FormControl(
       '',
-      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,() => this._form.get('email')?.value)])
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,() => this.email)])
     ),
     roles: new FormControl([], Validators.required),
     password: new FormControl(
