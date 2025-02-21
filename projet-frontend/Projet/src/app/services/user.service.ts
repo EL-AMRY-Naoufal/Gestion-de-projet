@@ -8,6 +8,7 @@ import { User } from '../components/shared/types/user.type';
 import { YearService } from './year-service';
 import { isPlatformBrowser } from '@angular/common';
 import { ApiService } from './api-service';
+import { EnseignantDto } from '../components/shared/types/enseignant.type';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +27,8 @@ export class UserService {
     private _loginService: LoginService,
     private _yearService: YearService,
     private _api: ApiService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-
     this.isBrowser = isPlatformBrowser(this.platformId);
 
     this._defaultUser = {
@@ -37,7 +37,7 @@ export class UserService {
       name: 'lastname',
       email: 'email@etu.univ-lorraine.fr',
       roles: [],
-      password: ""
+      password: '',
     };
     this._backendURL = {};
 
@@ -134,13 +134,12 @@ export class UserService {
   delete(id: number): Observable<number> {
     return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
-        body: { responsableId: this._responsableId }
+        body: { responsableId: this._responsableId },
       })
       .pipe(map(() => id));
   }
 
   private _options(headerList: object = {}): any {
-
     // Crée un objet pour les en-têtes
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
@@ -185,7 +184,10 @@ export class UserService {
       );
   }
 
-  updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
+  updateAffectation(
+    affectationId: number,
+    nombreHeure: number
+  ): Observable<any> {
     return this._http
       .put(
         `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}/${nombreHeure}`,
@@ -201,20 +203,22 @@ export class UserService {
           }
         }),
         catchError((error) => {
-          console.error("Erreur lors de la mise à jour de l'affectation :", error);
+          console.error(
+            "Erreur lors de la mise à jour de l'affectation :",
+            error
+          );
           return throwError(() => new Error('Une erreur est survenue.'));
         })
       );
   }
 
-
-
   deleteAffectation(affectationId: number): Observable<string> {
     return this._http
-      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`, )
+      .delete<string>(
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`
+      )
       .pipe(map((response) => response));
   }
-
 
   searchUsers(username: string): Observable<any[]> {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;

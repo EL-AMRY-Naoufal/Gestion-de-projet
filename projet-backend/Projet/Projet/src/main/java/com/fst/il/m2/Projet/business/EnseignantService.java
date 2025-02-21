@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -249,4 +250,14 @@ public class EnseignantService {
         Specification<Enseignant> spec = this.enseignantSpecifications.byNameandFirstname(name, firstname);
         return this.enseignantRepository.findAll(spec);
     }
+
+    public Optional<Enseignant> getEnseignantByFirstname(String firstname) {
+        return enseignantRepository.findByFirstname(firstname);
+    }
+
+
+    public Optional<Enseignant> getEnseignantByName(String name) {
+        return enseignantRepository.findByName(name);
+    }
+    
 }
