@@ -60,31 +60,44 @@ export class UserCustomValidators{
 /**
  * Vérifie si le username est déjà utilisé, sauf si on est en mode update
  */
-static utiliseUsername(isUpdate: boolean = false, model?: User) {
+static utiliseUsername(isUpdate: boolean = false,  getModel: () => string | null) {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control.value) {
       return null; // Pas de validation si le champ est vide
     }
-    if (isUpdate && model?.username == control.value.username){
-      return null; // Pas de validation si le username est pareil en mode upadate
+
+    const model = getModel(); // Récupération dynamique de la valeur
+
+    // Logique de comparaison de l'username
+    console.log("user", control.value);
+    console.log("model", model);
+
+    // Si nous sommes en mode "update" et que le modèle (username) est égal à la valeur, pas besoin de validation
+    if (isUpdate) {
+      console.log("update");
+      return null;
     }
 
+    // Vérification de l'existence du nom d'utilisateur dans la liste des utilisateurs
     const usernameExists = UserCustomValidators._listUsers.some((user) => user.username === control.value);
 
     return usernameExists ? { utiliseUsername: true } : null;
   };
 }
 
+
 /**
  * Vérifie si l'email est déjà utilisé, sauf si on est en mode update
  */
-static utiliseEmail(isUpdate: boolean = false, model?: User) {
+static utiliseEmail(isUpdate: boolean = false,  getModel: () => string | null) {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!control.value ) {
       return null; // Pas de validation si le champ est vide ou si on est en mode update
     }
 
-    if (isUpdate && model?.email == control.value.email){
+    const model = getModel(); // Récupération dynamique de la valeur
+
+    if (isUpdate && model?.trim().toLowerCase() === control.value.trim().toLowerCase()) {
       return null; // Pas de validation si le email et pareil a mode update
     }
 

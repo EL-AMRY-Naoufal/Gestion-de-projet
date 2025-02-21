@@ -42,6 +42,7 @@ export class UserFormComponent {
   // private property to store form value
   private readonly _form: FormGroup;
 
+
   thereAreProfileSimilars: boolean = false;
   enseignants: EnseignantDto[] = [];
 
@@ -60,6 +61,9 @@ export class UserFormComponent {
     this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
+
+
+
   }
 
   /**
@@ -136,8 +140,12 @@ export class UserFormComponent {
     });
 
      // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
-    this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
-    this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
+
+    if(!this._isUpdateMode){
+      this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
+      this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
+
+    }
 
     // Ajout de la logique pour surveiller les changements de 'nbHeureCategorie '
     this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateNbHeureCategorie())
@@ -204,6 +212,7 @@ getEnseignantWithSameUserNameAndFirstName(){
  * Met à jour automatiquement l'email et le pseudo d'utilisateur.
  */
   private updateEmailAndUsername(): void {
+
     const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
     const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
 
@@ -374,11 +383,15 @@ submit(user: User): void {
  * Function to build our form
  */
 private _buildForm(): FormGroup {
+
+
   const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
     id: new FormControl(),
+
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode,this._model)])
+      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode,() => this._form.get('usurname')?.value
+      )])
     ),
     name: new FormControl(
       '',
@@ -390,7 +403,7 @@ private _buildForm(): FormGroup {
     ),
     email: new FormControl(
       '',
-      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,this._model)])
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,() => this._form.get('email')?.value)])
     ),
     roles: new FormControl([], Validators.required),
     password: new FormControl(
