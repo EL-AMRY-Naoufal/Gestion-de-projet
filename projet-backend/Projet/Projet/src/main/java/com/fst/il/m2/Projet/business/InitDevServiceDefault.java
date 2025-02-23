@@ -57,9 +57,8 @@ public class InitDevServiceDefault implements InitDevService {
                 "sec", Role.SECRETARIAT_PEDAGOGIQUE,
                 "username1", Role.ENSEIGNANT,
                 "username2", Role.ENSEIGNANT,
-                "username3", Role.RESPONSABLE_DE_FORMATION,
+                "username3", Role.ENSEIGNANT,
                 "username4", Role.RESPONSABLE_DE_FORMATION
-
         );
 
         /*for(UserRole ur : userRoles.values()){
@@ -72,10 +71,10 @@ public class InitDevServiceDefault implements InitDevService {
                 User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username1").password(passwordEncoder.encode("password1")).email("email1@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username2").password(passwordEncoder.encode("password2")).email("email2@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username3").password(passwordEncoder.encode("password3")).email("email3@email.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("username4").password(passwordEncoder.encode("password4")).email("email4@email.fr").roles(new ArrayList<>()).build()
+                User.builder().username("username1").firstname("Emmanuel").name("Jeandel").password(passwordEncoder.encode("password1")).email("email1@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username2").firstname("Horatiu").name("Cirstea").password(passwordEncoder.encode("password2")).email("email2@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username3").firstname("Sokolov").name("Dmitry").password(passwordEncoder.encode("password3")).email("email3@email.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("username4").firstname("Marie").name("Duflot Kremer").password(passwordEncoder.encode("password4")).email("email4@email.fr").roles(new ArrayList<>()).build()
                 );
         Annee annee = Annee.builder().id(1L).debut(2024).build();
         anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));
@@ -85,12 +84,6 @@ public class InitDevServiceDefault implements InitDevService {
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
         }
 
-//        //WAIT FOR USERS TO BE SAVED
-//        while(userRepository.findById(8L).isEmpty())
-//            if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
-//                break;
-//        //NOW USERS SHOULD BE SAVED
-
 
         //TODO frontend user roles do not work when we add a year. (in "get userRoles()" function from login.service.ts)
 //        Annee annee2025 = Annee.builder().debut(2025).build();
@@ -99,6 +92,8 @@ public class InitDevServiceDefault implements InitDevService {
 
 
         //data to create : Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
+
+
 
         ///********RESPONSABLE FORMATIONS
         ResponsableFormation responsableFormation1 = new ResponsableFormation(1L, users.get(6));
@@ -156,8 +151,13 @@ public class InitDevServiceDefault implements InitDevService {
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
         heuresRequises.put(CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 100);
-        Enseignant enseignant1 = new Enseignant(1L, heuresRequises, 100, 70, null, users.get(4));
-        Enseignant enseignant2 = new Enseignant(2L, heuresRequises, 100, 30, null, users.get(5));
+        Enseignant enseignant1 = new Enseignant(1L, users.get(4).getName(), users.get(4).getFirstname()
+                , heuresRequises, 100, 70, null, users.get(4),true) ;
+        Enseignant enseignant2 = new Enseignant(2L,users.get(5).getName(), users.get(5).getFirstname()
+                ,  heuresRequises, 100, 30, null, users.get(5), true);
+        Enseignant enseignant3 = new Enseignant(3L, users.get(6).getName(), users.get(6).getFirstname()
+                ,  heuresRequises, 100, 50, null, users.get(6), true);
+
 
         enseignantRepository.save(enseignant1);
         enseignantRepository.save(enseignant2);
@@ -177,11 +177,11 @@ public class InitDevServiceDefault implements InitDevService {
                 Module.builder().nom("Service Web")./*totalHeuresRequises(60).*/heuresParType(heuresParTypesM1).semestre(S1).build(),
                 Module.builder().nom("Concept Web")./*totalHeuresRequises(50).*/heuresParType(heuresParTypesM1).semestre(S1).build()
 
-                );
+        );
         List<com.fst.il.m2.Projet.models.Module> modules2 = List.of(
                 Module.builder().nom("Verification")./*totalHeuresRequises(40).*/heuresParType(heuresParTypesM2).semestre(S2).build(),
                 Module.builder().nom("Modélisation")./*totalHeuresRequises(30).*/heuresParType(heuresParTypesM2).semestre(S2).build()
-                );
+        );
 
         modules1.forEach(m -> moduleRepository.save(m));
         modules2.forEach(m -> moduleRepository.save(m));

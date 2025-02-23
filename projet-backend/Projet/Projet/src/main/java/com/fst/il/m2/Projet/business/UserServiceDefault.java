@@ -2,15 +2,18 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.AnneeRepository;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.UserRoleRepository;
+import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
 import com.fst.il.m2.Projet.security.JWTUtil;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,8 @@ public class UserServiceDefault implements UserService {
 
     @Autowired
     private JWTUtil jwtUtil;  // Inject JWT utility
+    @Autowired
+    private UserSpecification userSpecification;
 
     public UserServiceDefault() {
     }
@@ -108,6 +113,15 @@ public class UserServiceDefault implements UserService {
     }
 
     @Override
+    public List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname) {
+        Specification<User> spec = this.userSpecification.byNameandFirstnameAndNotInEnseignant(name, firstname);
+        //users.addAll(this.userRepository.findAll(spec));
+        //return users;
+        return this.userRepository.findAll(spec);
+        //return this.userRepository.findUsersByNameAndFirstname(name, firstname);
+    }
+
+    @Override
     public void modifyPassword(Long id,String password) {
         var user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + "not found"));
         user.setPassword(password);
@@ -118,10 +132,13 @@ public class UserServiceDefault implements UserService {
     public User getUserByEmail(String email) {
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         return optionalUser.orElse(null);
-
     }
         
     public List<User> getAllUsersNotTeachers() {
         return this.userRepository.findUsersByRolesNotLike(Role.ENSEIGNANT);
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.findOneUserByUsername(username).orElseThrow(NotFoundException::new);
     }
 }

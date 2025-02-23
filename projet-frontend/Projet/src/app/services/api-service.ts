@@ -19,7 +19,7 @@ export class ApiService {
         if (environment.backend.port) {
             baseUrl += `:${environment.backend.port}`;
         }
-    
+
         // build all backend urls
         // @ts-ignore
         Object.keys(environment.backend.endpoints).forEach(
@@ -34,9 +34,27 @@ export class ApiService {
     }
 
     updateAffectation(idAffectation: number, idEnseignant: number, comment: string): Observable<any> {
-        return this._http.put<any>(`${this._backendURL.allEnseignants}/${idEnseignant}/affectations/${idAffectation}/commentaire`, {
+        return this._http.put<any>(`${this._backendURL.allAffectation}/${idEnseignant}/${idAffectation}/commentaire`, {
             commentaire: comment
         });
+    }
+
+    /*
+    *
+    *       AUTHENTIFICATION
+    *
+    */
+
+    logout(): Observable<any> {
+        return this._http.post<any>(this._backendURL.logout, {});
+    }
+
+    me(): Observable<any> {
+        return this._http.get<any>(this._backendURL.me);
+    }
+
+    login(formData: any): Observable<any> {
+        return this._http.post(this._backendURL.authenticate, formData);
     }
 
 }

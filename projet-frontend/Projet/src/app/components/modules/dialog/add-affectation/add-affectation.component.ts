@@ -99,7 +99,7 @@ export class AddAffectationComponent implements OnInit {
       console.log('enseignantId', this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId)));
 
       const selectedEnseignant = this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
-      const nomEnseignant = selectedEnseignant ? selectedEnseignant.username : '';
+      const nomEnseignant = selectedEnseignant ? selectedEnseignant.firstname : 'nouveaux enseignant';
 
       this.newAffectation = {
         heuresAssignees: this.heuresAssignees,
@@ -115,7 +115,10 @@ export class AddAffectationComponent implements OnInit {
           next: (response) => {
             alert('Affectation créée avec succès.');
             this.errorMessage = '';
+            console.log('response : ', this.newAffectation);
+
             this.dialogRef.close(this.newAffectation);
+
 
           },
           error: (error: any) => {

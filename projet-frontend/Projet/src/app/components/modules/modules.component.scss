@@ -125,3 +125,54 @@
   margin: 0;
   padding: 0 10px;
 }
+
+.affectation-info a {
+  color: #007BFF;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.affectation-info a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Style général pour l'input des heures assignées */
+.heures-input {
+  width: 100px;  /* Largeur de l'input */
+  padding: 10px; /* Espacement interne */
+  border-radius: 8px; /* Coins arrondis */
+  border: 1px solid #ccc; /* Bordure douce */
+  font-size: 14px; /* Taille du texte */
+  background-color: #f9f9f9; /* Fond doux */
+  transition: all 0.3s ease; /* Transition pour un effet doux */
+}
+
+/* Changement de bordure au focus */
+.heures-input:focus {
+  outline: none; /* Retirer l'encadré bleu par défaut */
+  border-color: #007BFF; /* Changer la bordure en bleu */
+  background-color: #fff; /* Fond blanc au focus */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Ajouter une ombre subtile */
+}
+
+/* Style pour les icônes */
+.affectation-info i {
+  transition: transform 0.3s ease, color 0.3s ease; /* Transition douce */
+}
+
+/* Survol des icônes de mise à jour et de suppression */
+.affectation-info i:hover {
+  transform: scale(1.1); /* Agrandir l'icône légèrement */
+  color: #0056b3; /* Changer la couleur lors du survol */
+}
+
+/* Icône de mise à jour spécifique */
+.affectation-info i.fa-repeat:hover {
+  color: #28a745; /* Vert pour l'icône de mise à jour */
+}
+
+/* Icône de suppression spécifique */
+.affectation-info i.fa-trash-o:hover {
+  color: #dc3545; /* Rouge pour l'icône de suppression */
+}

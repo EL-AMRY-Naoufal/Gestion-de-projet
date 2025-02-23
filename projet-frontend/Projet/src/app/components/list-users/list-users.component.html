@@ -1,4 +1,10 @@
 <div class="main-content">
+
+
+  <!-- Affichage des profils -->
+  <app-enseignants></app-enseignants>
+
+
   <div class="header-container">
     <h1 class="page-header">Liste des utilisateurs</h1>
     <div
@@ -13,8 +19,12 @@
   <!-- Conteneur de recherche et rôle -->
   <div class="search-and-role-container">
     <div class="search-bar">
-      <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
-      <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
+      <input
+        type="text"
+        placeholder="Recherche..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="searchTeachers()"
+      />
     </div>
 
     <div class="role" *ngIf="isYearSelected()">
@@ -36,12 +46,15 @@
         *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
       >
       </app-user-card>
+      <div
+        class="no-user-message"
+        *ngIf="searchPerformed && filteredUsers.length === 0"
+      >
+        <p>Aucun utilisateur trouvé</p>
+      </div>
     </div>
     <div *ngSwitchDefault>
       <p>Aucun utilisateur trouvé</p>
     </div>
   </section>
-
-  <!-- Affichage des profils -->
-  <app-enseignants></app-enseignants>
 </div>

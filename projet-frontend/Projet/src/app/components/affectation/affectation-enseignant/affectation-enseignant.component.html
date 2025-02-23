@@ -4,7 +4,7 @@
     <table class="custom-table">
       <thead>
       <tr>
-        <th>Module</th>
+        <th>Module/Groupe</th>
         <th>Heures Assignées</th>
         <th>Date d'Affectation</th>
         <th>Co-Enseignant</th>
@@ -13,7 +13,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let affectation of affectations">
-        <td>{{ affectation.nomModule }}</td>
+        <td>{{ affectation.nomModule }} / {{ affectation.nomGroupe }}</td>
         <td>{{ affectation.heuresAssignees }}</td>
         <td>{{ affectation.dateAffectation }}</td>
         <td>{{ affectation.coAffecte }}</td>
@@ -25,10 +25,10 @@
                 <mat-icon>edit</mat-icon>
               </button>
             </ng-container>
-            
+
             <ng-template #editMode>
               <mat-form-field class="commentaire-text-input"  hintLabel="Max 255 caractères">
-                <textarea matInput 
+                <textarea matInput
                         [(ngModel)]="editedComment"
                         cdkTextareaAutosize
                         cdkAutosizeMinRows="2"
@@ -57,7 +57,4 @@
   </ng-template>
 
 
-  <div *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')" class="menu-item yellow" (click)="navigateToCreateAffectations()">
-    Creer des Affectations
-  </div>
 </div>

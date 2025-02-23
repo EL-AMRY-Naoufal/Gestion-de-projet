@@ -31,7 +31,7 @@ export class EnseignantService {
   }
 
   getAffectationsByEnseignantId(id: string): Observable<any> {
-    return this.http.get<AffectationType>(`${this._backendURL.allEnseignants}/${id}/affectations`);
+    return this.http.get<AffectationType>(`${this._backendURL.allAffectation}/${id}`);
   }
 
   getUserByName(name: string): Observable<any[]> {
@@ -42,8 +42,12 @@ export class EnseignantService {
     return this.http.get<User[]>(`${this._backendURL.allEnseignants}/enseignants-non-enregistres`);
   }
 
-  getEnseignants(): Observable<User[]> {
-    return this.http.get<User[]>(`${this._backendURL.allEnseignants}`);
+  getUserWithSameEnseignantNameAndFirstName(enseignant: EnseignantDto): Observable<User[]> {
+    return this.http.get<User[]>(`${this._backendURL.allEnseignants}/finduser?name=${enseignant.name}&firstname=${enseignant.firstname}`);
+  }
+
+  getEnseignants(): Observable<EnseignantDto[]> {
+    return this.http.get<EnseignantDto[]>(`${this._backendURL.allEnseignants}`);
   }
 
   createEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
@@ -54,5 +58,8 @@ export class EnseignantService {
   }
   getEnseignant(id: number): Observable<EnseignantDto> {
     return this.http.get<EnseignantDto>(`${this._backendURL.allEnseignants}/${id}`);
+  }
+  getEnseignantByUserId(id: number): Observable<EnseignantDto> {
+    return this.http.get<EnseignantDto>(`${this._backendURL.allEnseignants}/userId/${id}`);
   }
 }

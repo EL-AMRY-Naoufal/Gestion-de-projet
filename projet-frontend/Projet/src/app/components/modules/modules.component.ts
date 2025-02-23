@@ -23,6 +23,9 @@ import { FormationService } from '../../services/formation.service';
 import { ModuleService } from '../../services/module.service';
 import { EnseignantService } from '../../services/enseignant.service';
 import { AffectationService } from '../../services/affectation.service';
+import { EnseignantDto } from '../shared/types/enseignant.type';
+import {Router} from "@angular/router";
+
 
 @Component({
   selector: 'app-modules',
@@ -59,6 +62,7 @@ export class ModulesComponent implements OnInit {
     private enseignantService: EnseignantService,
     private userService: UserService,
     private affectationService: AffectationService,
+    private router: Router
     ) {
   }
 
@@ -154,11 +158,30 @@ export class ModulesComponent implements OnInit {
   }
 
   getAffectationsByGroupe(groupeId: number | undefined) {
-    if(groupeId != undefined) {
-      return this.affectations.filter((affectation) => affectation.groupeId === groupeId);
+    let affectationsResult : Affectation[] = [];
+    if(groupeId == undefined) {
+      console.log("groupe non sauvegardé");
     }
-    console.log("groupe non sauvegardé");
-    return [];
+    else {
+      affectationsResult = this.affectations.filter((affectation) => affectation.groupeId === groupeId);
+    }
+
+    return affectationsResult;
+  }
+
+  getNomEnseignantById(enseignantId : number | undefined): string {
+    let nomEnseignant : string = "";
+    nomEnseignant = enseignantId?.toString()!;
+    // if(enseignantId != undefined) {
+    //   this.enseignantService.getEnseignant(enseignantId).subscribe((enseignantResult: EnseignantDto) => {
+    //     if (enseignantResult.firstname && enseignantResult.name) {
+    //       const firstInitial = enseignantResult.firstname.charAt(0).toUpperCase(); // Première lettre du prénom
+    //       const lastName = enseignantResult.name.charAt(0).toUpperCase() + enseignantResult.name.slice(1).toLowerCase(); // Nom avec la première lettre en majuscule
+    //       nomEnseignant = `${firstInitial}. ${lastName}`;
+    //     }
+    //   })
+    // }
+    return nomEnseignant;
   }
 
 
@@ -192,7 +215,7 @@ export class ModulesComponent implements OnInit {
 
         //update parent id
         result.anneeId = anneeId;
-        
+
         //save in db and update with id
         this.departementService.saveDepartement(result).subscribe((departementResult: Departement) => this.addDepartement(departementResult));
       }
@@ -214,7 +237,7 @@ export class ModulesComponent implements OnInit {
         }
         //update parent id
         result.departementId = departementId;
-        
+
         console.log(result);
         //save in db and update with id
         this.formationService.saveFormation(result).subscribe((formationResult: Formation) => this.addFormation(formationResult));
@@ -238,7 +261,7 @@ export class ModulesComponent implements OnInit {
 
         //update parent id
         result.formationId = formationId;
-        
+
         //save in db and update with id
         this.niveauService.saveNiveau(result).subscribe((niveauResult: Niveau) => this.addNiveau(niveauResult));
       }
@@ -257,10 +280,10 @@ export class ModulesComponent implements OnInit {
         if(niveauId == undefined) {
           console.error("parent 'Niveau' non sauvegardé");
         }
-  
+
         //update parent id
         result.niveauId = niveauId;
-        
+
         //save in db and update with id
         this.semestreService.saveSemestre(result).subscribe((semestreResult: Semestre) => this.addSemestre(semestreResult));
       }
@@ -281,7 +304,7 @@ export class ModulesComponent implements OnInit {
           //result contains module + groupes so we have to parse it
           let module: Module = { nom: result.nom, heuresParType: result.heuresParType, semestreId: semestreId};
           this.moduleService.saveModule(module).subscribe((moduleResult: Module) => {
-            if(moduleResult.id != undefined) { 
+            if(moduleResult.id != undefined) {
               this.addModule(moduleResult);
               result.groupes.forEach((groupe: Groupe) => {
                 groupe.moduleId = moduleResult.id!;
@@ -301,7 +324,7 @@ export class ModulesComponent implements OnInit {
     this.modules.push(newModule);
   }
 
-  
+
   openAddGroupeDialog(moduleId: number | undefined): void {
     const dialogRef = this.dialog.open(AddGroupeDialogComponent);
 
@@ -310,10 +333,10 @@ export class ModulesComponent implements OnInit {
         if(moduleId == undefined) {
           console.error("parent 'Module' non sauvegardé");
         }
-  
+
         //update parent id
         result.moduleId = moduleId;
-        
+
         //save in db and update with id
         this.groupeService.saveGroupe(result).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
       }
@@ -338,10 +361,10 @@ export class ModulesComponent implements OnInit {
         if(groupeId == undefined) {
           console.error("parent 'Groupe' non sauvegardé");
         }
-  
+
         //update parent id
         result.groupeId = groupeId;
-        
+
         //save in db and update with id
         this.affectationService.saveAffectation(result).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
       }
@@ -408,5 +431,8 @@ export class ModulesComponent implements OnInit {
         this.affectations.splice(affectationIndex, 1);
       }
     });
+  }
+  navigateToAffectations(id: number ) {
+    this.router.navigate(['/enseignants/affectations/' + id]);
   }
 }

@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.dto.AffectationDto;
+import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
 import com.fst.il.m2.Projet.mapper.EnseignantMapper;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -22,18 +24,7 @@ import java.util.List;
 @Validated
 public class EnseignantController {
     private final EnseignantService enseignantService;
-
-    @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<AffectationDto>> getAffectationsByEnseignantId(@PathVariable Long id) {
-
-        List<AffectationDto> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
-
-        if (affectations.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(affectations, HttpStatus.OK);
-    }
+    private final UserService userService;
     
     @GetMapping("/enseignants-non-enregistres")
     public ResponseEntity<List<User>> getEnseignantsNotInEnseignantTable() {
@@ -41,21 +32,44 @@ public class EnseignantController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/finduser")
+    public ResponseEntity<List<User>> getUsersWithSameEnseignantNameAndFirstName(
+            @RequestParam String name,
+            @RequestParam String firstname) {
+        List<User> users = userService.findUsersByEnseignantNameAndFirstName(name, firstname);
+
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping()
-    public List<User> getEnseignants(){
-        return enseignantService.getEnseignants();
+    public List<EnseignantDto> getEnseignants(){
+        return enseignantService.getEnseignants().stream().map(
+                EnseignantMapper::enseignantToEnseignantDto
+        ).collect(Collectors.toList());
     }
 
     @PostMapping()
     public EnseignantDto createEnseignant(@RequestBody EnseignantDto enseignant) {
-        return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
-                enseignant.getId(),
-                enseignant.getMaxHeuresService(),
-                enseignant.getHeuresAssignees(),
-                enseignant.getCategorieEnseignant(),
-                enseignant.getNbHeureCategorie(),
-                1L)
-        );
+        if(enseignant.isHasAccount()) {
+            return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
+                    enseignant.getUser(),
+                    enseignant.getMaxHeuresService(),
+                    enseignant.getHeuresAssignees(),
+                    enseignant.getCategorieEnseignant(),
+                    enseignant.getNbHeureCategorie(),
+                    1L)
+            );
+        }
+        else {
+            return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignantWithoutAccount(
+                    enseignant.getName(),
+                    enseignant.getFirstname(),
+                    enseignant.getMaxHeuresService(),
+                    enseignant.getHeuresAssignees(),
+                    enseignant.getCategorieEnseignant(),
+                    enseignant.getNbHeureCategorie()
+            ));
+        }
     }
 
     @GetMapping("{id}")
@@ -63,35 +77,52 @@ public class EnseignantController {
         return EnseignantMapper.enseignantToEnseignantDto(enseignantService.getEnseignantById(id));
     }
 
+    @GetMapping("/userId/{id}")
+    public EnseignantDto getEnseignantByUserId(@PathVariable Long id) {
+        return EnseignantMapper.enseignantToEnseignantDto(
+                this.enseignantService.getEnseignantByUser(id)
+        );
+    }
+
     @PutMapping()
     public  EnseignantDto updateEnseignant(@RequestBody EnseignantDto enseignant) {
-        if(enseignant.getId() == null) {
+
+        if(enseignant.getUser() != null && enseignant.isHasAccount())
+        {
+            if(enseignant.getId() == null){
+                return EnseignantMapper.enseignantToEnseignantDto(
+                        this.enseignantService.createEnseignant(
+                                enseignant.getUser(),
+                                enseignant.getMaxHeuresService(),
+                                enseignant.getHeuresAssignees(),
+                                enseignant.getCategorieEnseignant(),
+                                enseignant.getNbHeureCategorie(),
+                                1L
+                        )
+                );
+            }
             return EnseignantMapper.enseignantToEnseignantDto(
-                    this.enseignantService.createEnseignant(
-                            enseignant.getUser().getId(),
+                    this.enseignantService.updateEnseignant(
+                            enseignant.getId(),
                             enseignant.getMaxHeuresService(),
-                            enseignant.getHeuresAssignees(),
                             enseignant.getCategorieEnseignant(),
                             enseignant.getNbHeureCategorie(),
-                            1L
-
+                            enseignant.getUser(),
+                            enseignant.isHasAccount()
                     )
             );
         }
-        return EnseignantMapper.enseignantToEnseignantDto(
+       return EnseignantMapper.enseignantToEnseignantDto(
                 this.enseignantService.updateEnseignant(
                         enseignant.getId(),
                         enseignant.getMaxHeuresService(),
                         enseignant.getCategorieEnseignant(),
-                        enseignant.getNbHeureCategorie()
+                        enseignant.getNbHeureCategorie(),
+                        enseignant.getName(),
+                        enseignant.getFirstname(),
+                        enseignant.isHasAccount()
                 )
         );
     }
 
-    @PutMapping("/{id}/affectations/{idAffectation}/commentaire")
-    public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
-        enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
-
-        return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
-    }
 }

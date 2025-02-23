@@ -4,14 +4,19 @@ import com.fst.il.m2.Projet.business.AnneeService;
 import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.dto.AuthResponse;
 import com.fst.il.m2.Projet.dto.UserAuthentification;
+import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
+import com.fst.il.m2.Projet.mapper.UserMapper;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.security.JWTUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthResponse> authenticate(@RequestBody UserAuthentification user) {
+    public ResponseEntity<AuthResponse> authenticate(HttpServletResponse response, @RequestBody UserAuthentification user) {
         System.out.println(user);
         User authenticatedUser = userService.authenticate(user.getEmail(), user.getPassword());
         System.out.println(authenticatedUser);
@@ -47,12 +52,18 @@ public class UserController {
         String token = jwtUtil.generateToken(authenticatedUser.getUsername(),
                 currentRoles != null ? currentRoles.stream().map(Enum::name).toList() : null); // Only the current role
 
+        Cookie cookie = new Cookie("token", token);
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        //cookie.setSecure(true); // In production
+        response.addCookie(cookie);
+
         return new ResponseEntity<>(
                 AuthResponse.builder()
                         .message("Authentication succeeded")
-                        .token(token)
                         .currentYearId(anneeService.getCurrentYearId())
-                        .user(authenticatedUser)
+                        .user(UserMapper.userToUserDto(authenticatedUser))
                         .build()
                 , HttpStatus.OK);
     }
@@ -76,5 +87,22 @@ public class UserController {
     @GetMapping()
     public List<User> getAllUsersNotTeachers() {
         return this.userService.getAllUsersNotTeachers();
+    }
+
+    /**
+     * Logout the user by deleting the token cookie
+     * @param response : the response object
+     */
+    @PostMapping("/user/logout")
+    public void logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    @GetMapping("/user/me")
+    public UserRequest.UserDto getCurrentUser(@CurrentSecurityContext(expression = "authentication?.name") String username) {
+        return UserMapper.userToUserDto(userService.getUserByUsername(username));
     }
 }

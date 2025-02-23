@@ -22,15 +22,11 @@ public class Enseignant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* pour utiliser l'id d'user comme l'id d'enseignant 
-    @Id
-    private Long id;
+    @Column(name="Name")
+    private String name;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id")
-    private User user;
-    */
+    @Column(name="Firstname")
+    private String firstname;
 
     @ElementCollection
     @CollectionTable(name = "categorie_enseignant_map", joinColumns = @JoinColumn(name = "enseignant_id"))
@@ -47,8 +43,10 @@ public class Enseignant {
     private List<Affectation> affectations;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
+
+    private boolean hasAccount;
 
 
     public int getNbHeureCategorie(CategorieEnseignant categorie) {

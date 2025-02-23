@@ -1,15 +1,6 @@
 /* Le conteneur pour les carrés centré sur la page */
 .menu-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  justify-content: center;
-
-  //min-height: 100vh; /* Prend toute la hauteur de la page */
-  gap: 20px; /* Espace entre chaque carré */
   padding: 50px 100px;
-
-  //margin-top: 200px;
-  //box-sizing: border-box;
 }
 
 /* Style de chaque carré */

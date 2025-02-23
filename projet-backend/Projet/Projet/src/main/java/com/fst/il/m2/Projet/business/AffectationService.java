@@ -12,5 +12,9 @@ public interface AffectationService {
 
     Affectation getAffectationById(Long id);
 
+    Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees);
+
+    void updateAffectationHours(Long idAffectation, int heuresAssignees);
+
     void deleteAffectation(Long id);
 }
