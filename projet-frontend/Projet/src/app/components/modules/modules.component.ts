@@ -21,6 +21,8 @@ import {Annee, Departement, Formation, Niveau, Semestre, Groupe, Module, Affecta
 import {UserService} from "../../services/user.service";
 import { FormationService } from '../../services/formation.service';
 import { ModuleService } from '../../services/module.service';
+import { EnseignantService } from '../../services/enseignant.service';
+import { AffectationService } from '../../services/affectation.service';
 
 @Component({
   selector: 'app-modules',
@@ -53,12 +55,12 @@ export class ModulesComponent implements OnInit {
     private semestreService: SemestreService,
     private moduleService: ModuleService,
     private groupeService: GroupeService,
-    private userService: UserService,
     private formationService: FormationService,
-    // private affectationService: AffectationService
+    private enseignantService: EnseignantService,
+    private userService: UserService,
+    private affectationService: AffectationService,
     ) {
   }
-
 
   ngOnInit(): void {
     this.getAllAnnees();
@@ -68,75 +70,7 @@ export class ModulesComponent implements OnInit {
     this.getAllSemestres();
     this.getAllModules();
     this.getAllGroupes();
-    //get all annees
-    // this.anneeService.getAllAnnees().subscribe(data => { //TODO remove nested subscribes
-    //   this.data.annees = data;
-
-    //   //for each annee, get all departements
-    //   this.data.annees.forEach((annee, anneeIndex) => {
-    //     //send request to backend
-    //     if (annee.id != undefined) {
-    //       let annee_id = annee.id;
-    //       this.departementService.getDepartementsByYear(annee_id).subscribe(data => {
-    //         console.log(data);
-    //         //reassign departements to each annee
-    //         this.data.annees[anneeIndex].departements = data;
-
-    //         if (annee.departements != null) {
-
-    //           //for each departement, get all formations (skip)
-    //           annee.departements.forEach((departement, departementIndex) => {
-
-    //             if (departement.formations != null) {
-
-    //               //for each formations, get all niveaux
-    //               departement.formations.forEach((formation, formationIndex) => {
-    //                 if (formation.id != undefined) {
-    //                   this.niveauService.getNiveauxByFormation(formation.id).subscribe(data => {
-    //                     this.data.annees[anneeIndex].departements[departementIndex]
-    //                       .formations[formationIndex].niveaux = data;
-
-    //                     //TODO
-    //                     //for each niveau, get all semestres
-    //                     formation.niveaux.forEach((niveau, niveauIndex) => {
-    //                       if (niveau.id != undefined) {
-
-    //                         this.semestreService.getSemestresByNiveau(niveau.id).subscribe(data => {
-    //                           this.data.annees[anneeIndex]
-    //                             .departements[departementIndex].formations[formationIndex]
-    //                             .niveaux[niveauIndex].semestres = data;
-    //                           //for each semestre, get all modules (skip)
-    //                           niveau.semestres.forEach((semestre, semestreIndex) => {
-    //                             //for each module, get all groupes
-    //                             semestre.modules.forEach((module, moduleIndex) => {
-    //                               if (module.id != undefined) {
-    //                                 this.groupeService.getGroupesByModule(module.id).subscribe(data => {
-    //                                   this.data.annees[anneeIndex]
-    //                                     .departements[departementIndex].formations[formationIndex]
-    //                                     .niveaux[niveauIndex].semestres[semestreIndex]
-    //                                     .modules[moduleIndex].groupes = data;
-
-    //                                   //TODO username utilisé temporairement
-    //                                   module.groupes.forEach((groupe, groupeId) => {
-    //                                     groupe.affectations.forEach(affectation => affectation.nomEnseignant = affectation.enseignant?.user?.username)
-    //                                   })
-    //                                 })
-    //                               }
-    //                             })
-    //                           })
-    //                         })
-    //                       }
-    //                     })
-    //                   })
-    //                 }
-    //               });
-    //             }
-    //           });
-    //         }
-    //       });
-    //     }
-    //   })
-    // })
+    this.getAllAffectations();
   }
 
   getAllAnnees() {
@@ -148,7 +82,6 @@ export class ModulesComponent implements OnInit {
   }
 
   getDepartementsByAnneeIndex(anneeId : number | undefined) {
-    // console.log(this.departements);
     if(anneeId != undefined) {
       return this.departements.filter((departement) => departement.anneeId === anneeId);
     }
@@ -215,6 +148,19 @@ export class ModulesComponent implements OnInit {
     console.log("module non sauvegardé");
     return  [];
   }
+
+  getAllAffectations() {
+    return this.affectationService.getAllAffectations().subscribe((affectationsResult) => this.affectations = affectationsResult);
+  }
+
+  getAffectationsByGroupe(groupeId: number | undefined) {
+    if(groupeId != undefined) {
+      return this.affectations.filter((affectation) => affectation.groupeId === groupeId);
+    }
+    console.log("groupe non sauvegardé");
+    return [];
+  }
+
 
   showType(type: string, item: any) {
     console.log(`Type: ${type}`, item);
@@ -379,51 +325,42 @@ export class ModulesComponent implements OnInit {
   }
 
 
-  // openAddAffectationDialog(groupeId: number | undefined): void {
-  //   const dialogRef = this.dialog.open(AddAffectationComponent, {
-  //     data: {
-  //       // moduleId: groupe.moduleId,
-  //       groupeId: groupeId
-  //     }
-  //   });
+  openAddAffectationDialog(groupeId: number | undefined): void {
+    const dialogRef = this.dialog.open(AddAffectationComponent, {
+      data: {
+        // moduleId: groupe.moduleId,
+        groupeId: groupeId
+      }
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       if(groupeId == undefined) {
-  //         console.error("parent 'Groupe' non sauvegardé");
-  //       }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if(groupeId == undefined) {
+          console.error("parent 'Groupe' non sauvegardé");
+        }
   
-  //       //update parent id
-  //       result.groupeId = groupeId;
+        //update parent id
+        result.groupeId = groupeId;
         
-  //       //save in db and update with id
-  //       this.affectationSer.saveGroupe(result).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
-  //     }
-
-  //     if (result) {
-  //       this.addAffectation(anneeIndex, departementIndex, formationIndex, niveauIndex, semestreIndex, moduleIndex, groupeIndex, result);
-  //     }
-  //   });
-  // }
+        //save in db and update with id
+        this.affectationService.saveAffectation(result).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
+      }
+    });
+  }
 
 
-  // addAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, newAffectation: any) {
-  //   this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].affectations.push(newAffectation);
-  // }
+  addAffectation(newAffectation: Affectation) {
+    this.affectations.push(newAffectation);
+  }
 
-  // updateAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number, heuresAffectees: number) {
-  //   const affectationId = this.affectations[affectationIndex].id;
-
-  //   // @ts-ignore
-  //   this.userService.updateAffectation(affectationId,heuresAffectees).subscribe({
-  //     next: () => {
-  //       alert('Heures affectées mis à jour');
-  //     },
-  //     error: (error) => {
-  //       console.error('Error updating affectation:', error);
-  //     }
-  //   });
-  // }
+  updateAffectation(affectation: Affectation) {
+    // @ts-ignore
+    this.userService.updateAffectation(affectation.id,affectation.heuresAssignees).subscribe({
+      next: () => {
+        alert('Heures affectées mis à jour');
+      }
+    });
+  }
 
 
   removeAnnee(annee: Annee) {
@@ -457,49 +394,19 @@ export class ModulesComponent implements OnInit {
   }
 
   removeGroupe(groupe: Groupe) {
-    let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe == groupe);
+    let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe === groupe);
     this.groupes.splice(groupeIndex, 1);
   }
 
-  // removeAffectation(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number, affectationIndex: number) {
-  //   const affectationId = this.data.annees[anneeIndex]
-  //     .departements[departementIndex].formations[formationIndex]
-  //     .niveaux[niveauIndex].semestres[semestreIndex]
-  //     .modules[moduleIndex].groupes[groupeIndex]
-  //     .affectations[affectationIndex].id;
+  removeAffectation(affectation: Affectation) {
+    let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
-  //   // @ts-ignore
-  //   this.userService.deleteAffectation(affectationId).subscribe({
-  //     next: () => {
-  //       console.log('Affectation deleted');
-  //       this.data.annees[anneeIndex]
-  //         .departements[departementIndex].formations[formationIndex]
-  //         .niveaux[niveauIndex].semestres[semestreIndex]
-  //         .modules[moduleIndex].groupes[groupeIndex]
-  //         .affectations.splice(affectationIndex, 1);
-
-  //     },
-  //     error: (error) => {
-  //       console.error('Error deleting affectation:', error);
-  //     }
-  //   });
-
-  // }
-
-  // saveAnnee() {
-  //   let annees_to_send = this.data.annees;
-  //   //save each "annee"
-  //   annees_to_send.forEach(annee => {
-  //     //copying departements before it gets deleted
-  //     let departements_to_send = annee.departements;
-  //     this.anneeService.saveAnnee(annee).subscribe(response => console.log(response));
-  //     //save each "departement"
-  //     departements_to_send.forEach(departement => {
-  //       departement.annee = annee;
-  //       console.log("saving departement");
-  //       console.log(departement);
-  //       this.departementService.saveDepartement(departement).subscribe(response => console.log(response));
-  //     })
-  //   })
-  // }
+    // @ts-ignore
+    this.userService.deleteAffectation(affectationId).subscribe({
+      next: () => {
+        console.log('Affectation deleted');
+        this.affectations.splice(affectationIndex, 1);
+      }
+    });
+  }
 }

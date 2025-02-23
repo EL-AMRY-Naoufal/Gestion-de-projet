@@ -33,7 +33,7 @@ public class AnneeServiceDefault implements  AnneeService{
 
     @Override
     public Annee getAnneeById(Long id) {
-        return anneeRepository.findById(id) .orElseThrow(() -> new RuntimeException("Anne not found"));
+        return anneeRepository.findById(id) .orElseThrow(() -> new RuntimeException("Annee not found"));
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.dto.AffectationDto;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
@@ -66,17 +67,9 @@ public class EnseignantService {
         return enseignant.getAffectations();
     }
 
-    public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
+    public List<AffectationDto> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
-        return affectations.stream()
-                .map(affectation -> new AffectationDTO(
-                        affectation.getId(),
-                        affectation.getHeuresAssignees(),
-                        affectation.getDateAffectation(),
-                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null,
-                        affectation.getCommentaire()
-                ))
-                .collect(Collectors.toList());
+        return affectations.stream().map(AffectationMapper::toDto).toList();
     }
 
 

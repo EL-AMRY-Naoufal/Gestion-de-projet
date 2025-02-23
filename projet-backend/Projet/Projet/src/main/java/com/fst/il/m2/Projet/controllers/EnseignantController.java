@@ -1,7 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.EnseignantService;
-import com.fst.il.m2.Projet.dto.AffectationDTO;
+import com.fst.il.m2.Projet.dto.AffectationDto;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
 import com.fst.il.m2.Projet.mapper.EnseignantMapper;
@@ -24,9 +24,9 @@ public class EnseignantController {
     private final EnseignantService enseignantService;
 
     @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
+    public ResponseEntity<List<AffectationDto>> getAffectationsByEnseignantId(@PathVariable Long id) {
 
-        List<AffectationDTO> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
+        List<AffectationDto> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
 
         if (affectations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

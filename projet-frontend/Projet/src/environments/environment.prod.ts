@@ -19,6 +19,7 @@ export const environment = {
       groupes: '/api/groupes',
       responsableDepartement: '/api/responsableDepartement',
       formations:'/api/formations',
+      affectations:'/api/affectations',
     },
   },
 };

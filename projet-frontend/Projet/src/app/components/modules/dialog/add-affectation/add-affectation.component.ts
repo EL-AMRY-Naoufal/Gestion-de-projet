@@ -3,14 +3,10 @@ import {FormsModule} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 import {NgForOf, NgIf} from '@angular/common';
-import {catchError} from 'rxjs/operators';
 import {UserService} from "../../../../services/user.service";
 import {ModuleService} from "../../../../services/module.service";
 import {EnseignantService} from "../../../../services/enseignant.service";
 import {LoginService} from "../../../../services/login.service";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {group} from "@angular/animations";
 import {Affectation, Module} from "../../../shared/types/modules.types";
 
 
@@ -31,10 +27,13 @@ export class AddAffectationComponent implements OnInit {
   enseignants!: any[];
   modules!: Module[];
   groupes!: any[];
-  enseignantId!: string;
-  moduleId!: string;
-  groupeId!: string;
-  heuresAssignees!: string;
+  enseignantId!: number;
+  // moduleId!: string;
+  groupeId!: number;
+  heuresAssignees!: number;
+
+  commentaire: string;
+  dateAffectation: string;
 
   newAffectation!: Affectation;
 
@@ -49,6 +48,10 @@ export class AddAffectationComponent implements OnInit {
     private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.commentaire ="";
+    this.dateAffectation = new Date().toLocaleDateString();
+    Date
+    console.log(this.dateAffectation);
   }
 
   ngOnInit(): void {
@@ -78,7 +81,7 @@ export class AddAffectationComponent implements OnInit {
 
     // Préremplir le module et le groupe
     if (this.data) {
-      this.moduleId = this.data.moduleId;
+      // this.moduleId = this.data.moduleId;
       this.groupeId = this.data.groupeId;
     }
   }
@@ -99,11 +102,15 @@ export class AddAffectationComponent implements OnInit {
       const nomEnseignant = selectedEnseignant ? selectedEnseignant.username : '';
 
       this.newAffectation = {
-        nomEnseignant: nomEnseignant,
-        heuresAssignees: Number(this.heuresAssignees)
+        heuresAssignees: this.heuresAssignees,
+        enseignantId: this.enseignantId,
+        groupeId: this.groupeId,
+        dateAffectation: this.dateAffectation,
+        commentaire: this.commentaire
+        // nomEnseignant: nomEnseignant,
       };
       this.affectationService
-        .createAffectation(this.enseignantId, this.groupeId, this.heuresAssignees)
+        .createAffectation(this.enseignantId.toString(), this.groupeId.toString(), this.heuresAssignees.toString())
         .subscribe({
           next: (response) => {
             alert('Affectation créée avec succès.');

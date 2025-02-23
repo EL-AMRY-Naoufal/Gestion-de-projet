@@ -61,31 +61,29 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                         <details>
                                           <summary (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
-                                            <!-- <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)">+</button> -->
+                                            <button (click)="openAddAffectationDialog(groupe.id)">+</button>
                                             <button (click)="removeGroupe(groupe)"><i class="fa fa-trash-o"></i></button>
                                           </summary>
 
-                                          <!-- <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
-                                            <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
+                                          <div *ngIf="affectations && affectations.length > 0">
+                                            <div *ngFor="let affectation of getAffectationsByGroupe(groupe.id); trackById" class="affectation-row">
                                               <div class="affectation-info">
-                                                <p><strong>Enseignant :</strong> {{ affectation.nomEnseignant }}</p> -->
+                                                <p><strong>Enseignant :</strong> {{ affectation.enseignantId }}</p>
                                               <!--<p><strong>Date d'affectation :</strong> {{ affectation.dateAffectation | date }}</p>-->
-<!--                                               
                                                     <p><strong>Heures assignées : </strong>
                                                       <input type="number" [(ngModel)]="affectation.heuresAssignees" min="0">
                                                     </p>
                                                     <i class="fa-solid fa-repeat"
                                                        style="color: blue; margin-right: 0.4cm; cursor: pointer;"
-                                                       (click)="updateAffectation(i, j, k, l, n, o, p, q,affectation.heuresAssignees)">
+                                                       (click)="updateAffectation(affectation)">
                                                     </i>
                                                   <i class="fa fa-trash-o"
                                                      style="font-size:24px; color:red; cursor: pointer;"
-                                                     (click)="removeAffectation(i, j, k, l, n, o, p, q)">
+                                                     (click)="removeAffectation(affectation)">
                                                   </i>
-
                                               </div>
                                             </div>
-                                          </div> -->
+                                          </div>
                                         </details>
                                       </li>
                                     </ul>
@@ -107,5 +105,3 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
     </details>
   </li>
 </ul>
-
-<!-- <button (click)="saveAnnee()">Save</button> -->

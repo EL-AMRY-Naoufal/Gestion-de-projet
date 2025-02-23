@@ -1,10 +1,15 @@
 package com.fst.il.m2.Projet.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Data
 @Table(name = "Affectations")
@@ -29,55 +34,4 @@ public class Affectation {
     @ManyToOne
     @JoinColumn(name = "groupe_id")
     private Groupe groupe;
-
-    public Affectation() {
-    }
-
-    public Affectation(Long id, int heuresAssignees, LocalDate dateAffectation, Enseignant enseignant, Groupe groupe) {
-        this.id = id;
-        this.heuresAssignees = heuresAssignees;
-        this.dateAffectation = dateAffectation;
-        this.enseignant = enseignant;
-        this.groupe = groupe;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getHeuresAssignees() {
-        return heuresAssignees;
-    }
-
-    public void setHeuresAssignees(int heuresAssignees) {
-        this.heuresAssignees = heuresAssignees;
-    }
-
-    public LocalDate getDateAffectation() {
-        return dateAffectation;
-    }
-
-    public void setDateAffectation(LocalDate dateAffectation) {
-        this.dateAffectation = dateAffectation;
-    }
-
-    public Enseignant getEnseignant() {
-        return enseignant;
-    }
-
-    public void setEnseignant(Enseignant enseignant) {
-        this.enseignant = enseignant;
-    }
-
-    public Groupe getGroupe() {
-        return groupe;
-    }
-
-    public void setGroupe(Groupe groupe) {
-        this.groupe = groupe;
-    }
 }

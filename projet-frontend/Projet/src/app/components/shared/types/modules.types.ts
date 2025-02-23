@@ -11,10 +11,11 @@ export enum TypeHeure {
 
 export type Affectation = {
   id?: number;
-  enseignant?: EnseignantDto;
-  nomEnseignant?: string;
   heuresAssignees: number;
-  dateAffectation?: string;
+  enseignantId: number;
+  groupeId: number;
+  commentaire: string;
+  dateAffectation: string;
 };
 
 export interface Groupe {

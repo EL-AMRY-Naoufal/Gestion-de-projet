@@ -219,60 +219,39 @@ public class InitDevServiceDefault implements InitDevService {
         LocalDate date = LocalDate.of(2024, 1, 1);
 
         List<Affectation> affectations1 = new ArrayList<>();
-        affectations1.add(new Affectation(1L, 40, date, enseignant1, groupe1)); //add groupes
-        affectations1.add(new Affectation(2L, 20, date, enseignant2, groupe1));
+        affectations1.add(Affectation.builder().heuresAssignees(40).dateAffectation(date).enseignant(enseignant1).groupe(groupe1).build()); //add groupes
+        affectations1.add(Affectation.builder().heuresAssignees(20).dateAffectation(date).enseignant(enseignant2).groupe(groupe1).build()); //add groupes
 
         List<Affectation> affectations2 = new ArrayList<>();
-        affectations2.add(new Affectation(3L, 30, date, enseignant1, groupe2));
-        affectations2.add(new Affectation(4L, 10, date, enseignant2, groupe2));
-
-        List<Affectation> affectations3 = new ArrayList<>();
-//        affectations3.add(new Affectation(5L, 60, date, enseignant1, groupe3));
-//        affectations3.add(new Affectation(6L, 20, date, enseignant2, groupe3));
+        affectations2.add(Affectation.builder().heuresAssignees(30).dateAffectation(date).enseignant(enseignant1).groupe(groupe2).build()); //add groupes
+        affectations2.add(Affectation.builder().heuresAssignees(10).dateAffectation(date).enseignant(enseignant2).groupe(groupe2).build()); //add groupes
 
         affectations1.forEach((a) -> affectationRepository.save(a));
         affectations2.forEach((a) -> affectationRepository.save(a));
-        affectations3.forEach((a) -> affectationRepository.save(a));
 
         //update groupes
         groupe1.setModule(modules1.get(0));
         groupe2.setModule(modules1.get(0));
-//        groupe3.setModule(modules2.get(0));
 
         groupeRepository.save(groupe1);
         groupeRepository.save(groupe2);
-//        groupeRepository.save(groupe3);
 
         //update enseignants
         ArrayList<Affectation> affectationsEnseignant1 = new ArrayList<>();
         affectationsEnseignant1.add(affectations1.get(0));
         affectationsEnseignant1.add(affectations2.get(0));
-//        affectationsEnseignant1.add(affectations3.get(0));
         enseignant1.setAffectations(affectationsEnseignant1);
 
         ArrayList<Affectation> affectationsEnseignant2 = new ArrayList<>();
         affectationsEnseignant2.add(affectations1.get(1));
         affectationsEnseignant2.add(affectations2.get(1));
-//        affectationsEnseignant2.add(affectations3.get(1));
         enseignant2.setAffectations(affectationsEnseignant2);
 
         //update Groupe
         groupe1.setAffectations(affectations1);
         groupe2.setAffectations(affectations2);
-//        groupe3.setAffectations(affectations3);
 
         groupeRepository.save(groupe1);
         groupeRepository.save(groupe2);
-//        groupeRepository.save(groupe3);
-
-        long time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-
-//        //WAIT FOR GROUPES TO BE SAVED
-//        time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-//        while(groupeRepository.findById(3L).isEmpty())
-//            if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
-//                break;
-//
-//        //NOW GROUPES SHOULD BE SAVED
     }
 }
