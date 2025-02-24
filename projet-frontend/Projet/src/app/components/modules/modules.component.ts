@@ -424,13 +424,16 @@ export class ModulesComponent implements OnInit {
   removeAffectation(affectation: Affectation) {
     let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
-    // @ts-ignore
-    this.userService.deleteAffectation(affectationId).subscribe({
-      next: () => {
-        console.log('Affectation deleted');
-        this.affectations.splice(affectationIndex, 1);
-      }
-    });
+    if (affectation.id !== undefined) {
+      this.userService.deleteAffectation(affectation.id).subscribe({
+        next: () => {
+          console.log('Affectation deleted');
+          this.affectations.splice(affectationIndex, 1);
+        }
+      });
+    } else {
+      console.error("Affectation ID is undefined");
+    }
   }
   navigateToAffectations(id: number ) {
     this.router.navigate(['/enseignants/affectations/' + id]);
