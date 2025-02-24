@@ -160,31 +160,7 @@ export class UserService {
     return this._http.get<any[]>(this._backendURL.allUsers);
   }
 
-  createAffectation(
-    EnseignantId: string,
-    idGroupe: string,
-    nombreHeure: string
-  ): Observable<any> {
-    return this._http
-      .post(
-        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${EnseignantId}/${idGroupe}/${nombreHeure}`,
-        null,
-        { responseType: 'text' }
-      )
-      .pipe(
-        map((response) => {
-          try {
-            return JSON.parse(response);
-          } catch (e) {
-            return response;
-          }
-        }),
-        catchError((error) => {
-          console.error("Erreur lors de la création de l'affectation :", error);
-          return throwError(() => new Error('Une erreur est survenue.'));
-        })
-      );
-  }
+
 
   updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
     return this._http

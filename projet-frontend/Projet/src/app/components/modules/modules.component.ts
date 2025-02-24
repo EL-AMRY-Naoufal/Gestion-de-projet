@@ -25,6 +25,7 @@ import { EnseignantService } from '../../services/enseignant.service';
 import { AffectationService } from '../../services/affectation.service';
 import { EnseignantDto } from '../shared/types/enseignant.type';
 import {Router} from "@angular/router";
+import {BehaviorSubject} from "rxjs";
 
 
 @Component({
@@ -168,19 +169,26 @@ export class ModulesComponent implements OnInit {
     return affectationsResult;
   }
 
-  getNomEnseignantById(enseignantId : number | undefined): string {
-    let nomEnseignant : string = "";
-    nomEnseignant = enseignantId?.toString()!;
-    // if(enseignantId != undefined) {
-    //   this.enseignantService.getEnseignant(enseignantId).subscribe((enseignantResult: EnseignantDto) => {
-    //     if (enseignantResult.firstname && enseignantResult.name) {
-    //       const firstInitial = enseignantResult.firstname.charAt(0).toUpperCase(); // Première lettre du prénom
-    //       const lastName = enseignantResult.name.charAt(0).toUpperCase() + enseignantResult.name.slice(1).toLowerCase(); // Nom avec la première lettre en majuscule
-    //       nomEnseignant = `${firstInitial}. ${lastName}`;
-    //     }
-    //   })
-    // }
-    return nomEnseignant;
+  nomEnseignantMap: Map<number, string> = new Map();
+
+  getNomEnseignantById(enseignantId: number | undefined): string {
+    if (!enseignantId) return "";
+
+    // Vérifier si l'enseignant est déjà chargé
+    if (this.nomEnseignantMap.has(enseignantId)) {
+      return this.nomEnseignantMap.get(enseignantId)!;
+    }
+
+    // Lancer la requête si l'enseignant n'est pas encore chargé
+    this.enseignantService.getEnseignant(enseignantId).subscribe((enseignantResult: EnseignantDto) => {
+      if (enseignantResult.firstname && enseignantResult.name) {
+        const firstInitial = enseignantResult.firstname.charAt(0).toUpperCase();
+        const lastName = enseignantResult.name.charAt(0).toUpperCase() + enseignantResult.name.slice(1).toLowerCase();
+        this.nomEnseignantMap.set(enseignantId, `${firstInitial}. ${lastName}`);
+      }
+    });
+
+    return "";
   }
 
 
