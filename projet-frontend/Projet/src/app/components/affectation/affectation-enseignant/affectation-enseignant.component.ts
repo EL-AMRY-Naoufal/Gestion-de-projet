@@ -74,10 +74,6 @@ export class AffectationListComponent implements OnInit {
     );
   }*/
 
-  // Navigate to the component to create affectations by the admin
-  navigateToCreateAffectations() {
-    this.router.navigate(['/admin/affectations']);
-  }
 
   startEditing(affectation: any) {
     this.editingId = affectation.id;
