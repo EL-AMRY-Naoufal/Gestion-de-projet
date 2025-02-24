@@ -20,6 +20,7 @@ export const environment = {
       responsableDepartement: '/api/responsableDepartement',
       formations:'/api/formations',
       affectations:'/api/affectations',
+      allAffectation: '/api/affectations',
       logout: '/api/users/user/logout',
       me: '/api/users/user/me'
     },

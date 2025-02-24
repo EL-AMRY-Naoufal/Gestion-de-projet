@@ -193,8 +193,8 @@ public class InitDevServiceDefault implements InitDevService {
         semestreRepository.save(S2);
 
         ///********GROUPES
-        Groupe groupe1 = Groupe.builder().nom("groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).module(modules1.get(0)).build();
-        Groupe groupe2 = Groupe.builder().nom("groupe 2").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).module(modules1.get(0)).build();
+        Groupe groupe1 = Groupe.builder().nom("CM Groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).module(modules1.get(0)).totalHeuresDuGroupe(100).build();
+        Groupe groupe2 = Groupe.builder().nom("TD Groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).module(modules1.get(0)).totalHeuresDuGroupe(120).build();
 //        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).module(modules2.get(0)).build();
 
         ArrayList<Groupe> groupes1 = new ArrayList<>();

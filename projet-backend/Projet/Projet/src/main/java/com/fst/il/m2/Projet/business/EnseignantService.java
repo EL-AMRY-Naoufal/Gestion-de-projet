@@ -59,14 +59,14 @@ public class EnseignantService {
         // Get the enseignant id from the user id
 
 
-        Enseignant enseignant = enseignantRepository.findByUserId(userId)
-                .orElseThrow(NotFoundException::new);
-
+        Enseignant enseignant = enseignantRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Enseignant not found with user id: " + userId));
         return enseignant.getAffectations();
     }
 
     public List<AffectationDto> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
+
         return affectations.stream().map(AffectationMapper::toDto).toList();
     }
 

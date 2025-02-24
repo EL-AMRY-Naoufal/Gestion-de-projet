@@ -89,7 +89,6 @@ public class AffectationController {
     @PutMapping("/{id}/{idAffectation}/commentaire")
     public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
         enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
-        System.err.println(commentaireDto.getCommentaire());
         return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
     }
 

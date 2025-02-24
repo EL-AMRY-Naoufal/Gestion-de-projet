@@ -31,6 +31,8 @@ export class EnseignantService {
   }
 
   getAffectationsByEnseignantId(id: string): Observable<any> {
+
+    console.log('id:', this._backendURL.allAffectation);
     return this.http.get<AffectationType>(`${this._backendURL.allAffectation}/${id}`);
   }
 

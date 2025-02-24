@@ -31,7 +31,6 @@ import {Router} from "@angular/router";
   selector: 'app-modules',
   standalone: true,
   imports: [
-    MenuComponent,
     CommonModule,
     NgForOf,
     FormsModule,
