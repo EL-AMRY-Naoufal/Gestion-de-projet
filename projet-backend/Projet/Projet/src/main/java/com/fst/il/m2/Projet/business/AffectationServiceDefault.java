@@ -34,13 +34,13 @@ public class AffectationServiceDefault implements AffectationService{
 
 
     @Override
+    @Transactional
     public Affectation saveAffectation(Affectation affectation) {
-        return affectationRepository.save(affectation);
+        return affecterGroupeToEnseignant(affectation.getEnseignant().getId(), affectation.getGroupe().getId(), affectation.getHeuresAssignees());
     }
 
     @Override
-    @Transactional
-    public  Affectation affecterModuleToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
+    public  Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
         Enseignant enseignant = enseignantRepository.findById(userId)
                 .orElseThrow(NotFoundException::new);

@@ -46,15 +46,12 @@ public class AffectationController {
         return new ResponseEntity<>(affectations, HttpStatus.OK);
     }
 
-    // Affecter un enseignant à un module avec un nombre d'heures
-    @PostMapping("/{idEnseignant}/{idGroupe}/{heure}")
-    public ResponseEntity<Affectation> affecterEnseignant(
-            @PathVariable Long idEnseignant,
-            @PathVariable Long idGroupe,
-            @PathVariable int heure
-    ) {
-        Affectation affectation = affectationService.affecterModuleToEnseignant(idEnseignant, idGroupe, heure);
-        return ResponseEntity.ok(affectation);
+
+
+    @PostMapping
+    public ResponseEntity<AffectationDto> saveAffectation(@RequestBody AffectationDto affectationDto) {
+        Affectation savedAffectation = affectationService.saveAffectation(AffectationMapper.toEntity(affectationDto));
+        return new ResponseEntity<>(AffectationMapper.toDto(savedAffectation), HttpStatus.CREATED);
     }
 
     // Mettre à jour le nombre d'heures enseignées pour une affectation existante
@@ -74,11 +71,6 @@ public class AffectationController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
-    public ResponseEntity<AffectationDto> saveAffectation(@RequestBody AffectationDto affectationDto) {
-        Affectation savedAffectation = affectationService.saveAffectation(AffectationMapper.toEntity(affectationDto));
-        return new ResponseEntity<>(AffectationMapper.toDto(savedAffectation), HttpStatus.CREATED);
-    }
 
     @GetMapping
     public ResponseEntity<List<AffectationDto>> getAllAffectations() {

@@ -108,29 +108,15 @@ export class AddAffectationComponent implements OnInit {
         dateAffectation: this.dateAffectation,
         commentaire: this.commentaire
         // nomEnseignant: nomEnseignant,
+
+
       };
-      this.affectationService
-        .createAffectation(this.enseignantId.toString(), this.groupeId.toString(), this.heuresAssignees.toString())
-        .subscribe({
-          next: (response) => {
-            alert('Affectation créée avec succès.');
-            this.errorMessage = '';
-            console.log('response : ', this.newAffectation);
-
-            this.dialogRef.close(this.newAffectation);
-
-
-          },
-          error: (error: any) => {
-            alert('Erreur lors de la création de l\'affectation :');
-            this.successMessage = '';
-            console.error('Erreur lors de la création de l\'affectation :', error);
-          }
-        });
     } else {
       this.errorMessage = 'Veuillez remplir tous les champs.';
       this.successMessage = '';
     }
+    //on close le dialog
+    this.dialogRef.close(this.newAffectation);
   }
 
   onCancel(): void {
