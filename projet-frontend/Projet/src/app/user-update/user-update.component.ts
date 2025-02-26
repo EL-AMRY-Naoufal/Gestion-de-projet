@@ -59,6 +59,7 @@ export class UserUpdateComponent {
     this._userDialog = this._dialog.open(UserDialogComponent, {
       width: '500px',
       disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
       data: user,
     });
 

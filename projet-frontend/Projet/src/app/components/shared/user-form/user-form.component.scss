@@ -1,94 +1,129 @@
 
+.global-header{
+  background-color: #ffffff; /* Couleur de fond bleu clair */
 
-.align-right {
-  text-align: right;
 }
 
-.full-width {
+
+.global-header h2 {
+  text-align: center; /* Centrer le titre horizontalement */
+  padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
+  font-size: 24px; /* Ajuster la taille du texte */
+  font-weight: bold; /* Mettre en gras le titre */
+  color: #333; /* Ajuster la couleur du titre */
+  position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
+  margin-bottom: 50px;
+}
+
+.global-header h2::after {
+  content: ''; /* Créer un pseudo-élément */
+  position: absolute;
+  bottom: -5px; /* Placer la ligne juste en dessous du titre */
+  left: 50%; /* Centrer la ligne par rapport au titre */
+  width: 500px; /* Longueur de la ligne */
+  height: 2px; /* Épaisseur de la ligne */
+  background-color: #333; /* Couleur de la ligne */
+  transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
+}
+
+
+mat-dialog-content {
+  min-height: 350px; /* Largeur du formulaire */
+}
+
+/* Espacement général entre les champs */
+.form-container mat-form-field {
   width: 100%;
+  margin-bottom: 25px;
 }
 
-.mgb15 {
-  margin-bottom: 15px;
+/* Pas d'espacement sous le champ "Rôles" si la case à cocher est visible */
+.form-container .selec {
+  margin-bottom: 0;  /* Aucune marge après "Rôles" */
 }
 
-.mat-error {
-  white-space: normal; /* Permet d'utiliser plusieurs lignes */
-  word-break: break-word; /* Coupe les mots trop longs si nécessaire */
-  max-width: 100%; /* Ajuste la largeur pour éviter de déborder */
+/* Espacement sous la case à cocher, uniquement si elle est visible */
+.form-container mat-checkbox {
+  margin-top: 0px !important;
+  margin-bottom: 25px;  /* Appliquer la marge après la checkbox */
 }
 
-.mat-form-field {
-  width: 100%; /* Assure que les champs occupent toute la largeur disponible */
+/* Appliquer l'espacement sous le champ "Rôles" seulement si la case à cocher n'est pas présente */
+.form-container.no-checkbox .selec {
+  margin-bottom: 25px; /* Appliquer l'espacement sous le champ "Rôles" uniquement si la case à cocher est absente */
 }
 
-@media (max-width: 600px) {
-  .mat-form-field {
-    font-size: 12px; /* Réduit la taille des champs et messages pour petits écrans */
-  }
+/* Styliser les erreurs de validation */
+mat-error {
+  font-size: 0.8rem;
+  color: #d32f2f;
 }
 
-/* Ajoute une marge externe autour du formulaire */
-.form-container {
-  margin: 0 24px; /* Marge des côtés pour espacer */
-}
-
-/* Marges entre les champs */
-.mgb20 {
-  margin-bottom: 20px; /* Espace vertical entre les éléments */
-}
-
-/* Style pour les actions en bas */
+/* Style des boutons du dialogue */
 .dialog-actions {
-  padding: 16px 24px; /* Espacement à l'intérieur des boutons */
-}
-
-/* Pour s'assurer que les champs occupent toute la largeur */
-mat-form-field.full-width {
-  width: 100%;
-}
-
-/* Ajoute des marges au texte d'erreur pour éviter l'encombrement */
-.mat-error {
-  margin-top: 4px;
-  margin-bottom: 4px;
-  font-size: 13px;
-}
-
-
-.custom-checkbox {
   display: flex;
-  align-items: center;
-  gap: 10px; 
-  padding: 4px 8px;
-  border-radius: 5px;
-  transition: background-color 0.2s ease-in-out;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
 }
 
-.custom-checkbox mat-checkbox {
-  margin: 0; /* Suppression des marges par défaut */
-  padding: 0;
+/* Boutons */
+button[mat-button] {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #d8e7f5;
+
 }
 
-.custom-checkbox:hover {
-  background-color: rgba(30, 136, 229, 0.1);
-  cursor: pointer;
+button[mat-button]:hover {
+  opacity: 0.9;
+  background-color: #80bbf1;
+  color: #ffffff;
+
 }
 
-.mat-checkbox-layout {
-  align-items: center;
+
+
+
+
+
+/* Conteneur pour aligner les champs côte à côte */
+.flex-container {
+  display: flex;
+  gap: 15px; /* Espacement entre les champs */
 }
 
-.mat-checkbox-label {
-  font-size: 1rem;
-  color: #1e88e5;
-  font-weight: 500;
+/* Chaque champ prend 50% de la largeur */
+.flex-container mat-form-field {
+  flex: 2;
 }
 
-/* Ajustement pour mobiles */
+
+
 @media (max-width: 768px) {
-  .custom-checkbox {
-    flex-direction: column;
-    align-items: flex-start;
+  .mat-form-field.full-width {
+    width: 100%; /* Champs en pleine largeur sur petits écrans */
+    margin-right: 0;
   }
 }
+
+
+/* Animation d'apparition du dialogue */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+
+
+

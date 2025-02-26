@@ -1,126 +1,152 @@
-<h2 mat-dialog-title *ngIf="isUpdateMode">Mettre à jour {{ form.get('username')?.value }}</h2>
-<h2 mat-dialog-title *ngIf="!isUpdateMode">Créer un nouvel utilisateur</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="form" novalidate class="form-container">
-    <!-- Name -->
-    <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Nom d'utilisateur" formControlName="name" required name="name"/>
-      <mat-error *ngIf="form.get('name')?.dirty && form.get('name')?.hasError('required')">
-        Le nom d'utilisateur est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('name')?.dirty && form.get('name')?.hasError('minlength')">
-        Le nom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
-      </mat-error>
-    </mat-form-field>
+<div class="global-header">
+  <h2 mat-dialog-title *ngIf="isUpdateMode">Mettre à jour {{ form.get('username')?.value }}</h2>
+  <h2 mat-dialog-title *ngIf="!isUpdateMode">Créer un nouvel utilisateur</h2>
 
-    <!-- Firstname -->
-    <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Prénom d'utilisateur" formControlName="firstname" required name="firstname"/>
-      <mat-error *ngIf="form.get('firstname')?.dirty && form.get('firstname')?.hasError('required')">
-        Le prénom d'utilisateur est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('firstname')?.dirty && form.get('firstname')?.hasError('minlength')">
-        Le prénom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
-      </mat-error>
-    </mat-form-field>
+  <mat-dialog-content>
+    <form [formGroup]="form" novalidate class="form-container">
 
-    <!-- Username -->
-    <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Pseudo d'utilisateur" formControlName="username" required name="username"/>
-      <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('required')">
-        Le pseudo d'utilisateur est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('username')?.dirty && form.get('username')?.hasError('minlength')">
-        Le pseudo d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
-      </mat-error>
-    </mat-form-field>
+      <!-- Conteneur pour aligner nom et prénom côte à côte -->
+      <div class="flex-container">
+        <!-- Nom -->
+        <mat-form-field class="full-width mgb20">
+          <input matInput placeholder="Nom" formControlName="name" required name="name"/>
+          <mat-error *ngIf="form.get('name')?.touched && form.get('name')?.hasError('required')">
+            Le nom d'utilisateur est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('name')?.touched && form.get('name')?.hasError('minlength')">
+            Le nom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
+          </mat-error>
+        </mat-form-field>
 
-    <!-- Email -->
-    <mat-form-field class="full-width mgb20">
-      <input matInput placeholder="Email" formControlName="email" required name="email"/>
-      <mat-error *ngIf="form.get('email')?.dirty && form.get('email')?.hasError('required')">
-        L'email est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('email')?.dirty && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
-        Format d'email invalide (name.lastname&#64;etu.univ-lorraine.fr )
-      </mat-error>
-    </mat-form-field>
+        <!-- Prénom -->
+        <mat-form-field class="full-width mgb20">
+          <input matInput placeholder="Prénom " formControlName="firstname" required name="firstname"/>
+          <mat-error *ngIf="form.get('firstname')?.touched && form.get('firstname')?.hasError('required')">
+            Le prénom d'utilisateur est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('firstname')?.touched && form.get('firstname')?.hasError('minlength')">
+            Le prénom d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <!-- Role Selection -->
-    <mat-form-field class="full-width mgb20">
-      <mat-label>Rôles</mat-label>
-      <mat-select formControlName="roles" multiple name="roles">
-        <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
-        <mat-option value="RESPONSABLE_DE_FORMATION">Responsable de formation</mat-option>
-        <mat-option value="SECRETARIAT_PEDAGOGIQUE">Secrétariat pédagogique</mat-option>
-        <mat-option value="ENSEIGNANT">Enseignant</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Conteneur pour aligner Pseudo et Email côte à côte -->
+      <div class="flex-container">
 
-    
-    <mat-checkbox class="custom-checkbox" formControlName="hasProfile" 
-  *ngIf="thereAreProfileSimilars && form.get('roles')?.value.includes('ENSEIGNANT') && !isUpdateMode">
-  <span>Nous avons détecté un profil similaire avec <strong>{{ enseignants[0].name }} {{ enseignants[0].firstname }}</strong>, enseignant <strong>{{ enseignants[0].categorieEnseignant }}</strong>. Voulez-vous le lier ?</span>
-</mat-checkbox>
+        <!-- Pseudo -->
+        <mat-form-field class="autre">
+          <input matInput placeholder="Pseudo " formControlName="username" required name="username"/>
+          <mat-error *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')">
+            Le pseudo d'utilisateur est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.touched && form.get('username')?.hasError('minlength')">
+            Le pseudo d'utilisateur doit contenir au <strong>minimum 2 caractères</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.touched && !form.get('username')?.hasError('required') && form.get('username')?.hasError('utiliseUsername') ">
+            Ce pseudo est déjà utilisé par un autre utilisateur
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
-      <mat-label>Nombre d'heures</mat-label>
-      <input matInput formControlName="maxHeuresService" name="nombreHeures" type="number"
-          [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
-      <mat-error *ngIf="form.get('nombreHeures')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
-    </mat-form-field>
+        <!-- Email -->
+        <mat-form-field class="autre">
+          <input matInput placeholder="Email" formControlName="email" required name="email"/>
+          <mat-error *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
+            L'email est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.touched && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
+            Format d'email invalide (name.lastname&#64;etu.univ-lorraine.fr )
+          </mat-error>
+          <mat-error *ngIf="form.get('email')?.touched && !form.get('email')?.hasError('required') && form.get('email')?.hasError('utiliseEmail') ">
+            Cette email est déjà utilisé par un autre utilisateur
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value" >
-      <mat-label>Categorie d'Enseignant</mat-label>
-      <mat-select formControlName="categorieEnseignant" required>
-        <mat-option *ngFor="let category of categories" [value]="category">
-          {{ category }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="form.get('categorieEnseignant')?.hasError('required')">
-        La catégorie est requise.
-      </mat-error>
-    </mat-form-field>
+      <!-- Rôles et case à cocher -->
+      <div class="form-container" [ngClass]="{'no-checkbox': !thereAreProfileSimilars || isUpdateMode}">
+        <mat-form-field class="selec">
+          <mat-label>Rôles</mat-label>
+          <mat-select formControlName="roles" multiple name="roles">
+            <mat-option value="CHEF_DE_DEPARTEMENT">Chef de département</mat-option>
+            <mat-option value="RESPONSABLE_DE_FORMATION">Responsable de formation</mat-option>
+            <mat-option value="SECRETARIAT_PEDAGOGIQUE">Secrétariat pédagogique</mat-option>
+            <mat-option value="ENSEIGNANT">Enseignant</mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('roles')?.touched && form.get('roles')?.hasError('required')">
+            Le rôle de l'utilisateur est <strong>obligatoire</strong>
+          </mat-error>
+        </mat-form-field>
 
-    <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
-      <mat-label>Heures pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
-      <input matInput type="number" formControlName="nbHeureCategorie" required/>
-      <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">
-        Les heures pour cette catégorie sont requises.
-      </mat-error>
-    </mat-form-field>
+        <!-- Case à cocher -->
+        <mat-checkbox *ngIf="thereAreProfileSimilars && form.get('roles')?.value.includes('ENSEIGNANT') && !isUpdateMode"
+          class="custom-checkbox" formControlName="hasProfile">
+          <span>Nous avons détecté un profil similaire avec <strong>{{ enseignants[0].name }} {{ enseignants[0].firstname }}</strong>, enseignant <strong>{{ enseignants[0].categorieEnseignant }}</strong>. Voulez-vous le lier ?</span>
+        </mat-checkbox>
+      </div>
 
+      <!-- Nombre d'heures et catégories pour enseignants -->
+      <div class="flex-container">
+        <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
+          <mat-label>Nombre d'heures</mat-label>
+          <input matInput formControlName="maxHeuresService" name="nombreHeures" type="number"
+            [value]="enseignant ? enseignant.maxHeuresService : defaultHeures" required />
+          <mat-error *ngIf="form.get('nombreHeures')?.hasError('required')">Le nombre d'heures est requis.</mat-error>
+        </mat-form-field>
 
-    <!-- Password Field -->
-    <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
-      <input matInput type="password" placeholder="Mot de passe" formControlName="password" required />
-      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('required')">
-        Le mot de passe est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('minlength')">
-        Le mot de passe doit contenir au <strong>minimum 6 caractères</strong>
-      </mat-error>
-      <mat-error *ngIf="form.get('password')?.dirty && form.get('password')?.hasError('weakPassword')">
-        Le mot de passe doit contenir au moins 1 lettre minuscule, 1 lettre majuscule, 1 chiffre, et 1 caractère spécial.
-      </mat-error>
-    </mat-form-field>
+        <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
+          <mat-label>Categorie d'Enseignant</mat-label>
+          <mat-select formControlName="categorieEnseignant" required>
+            <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('categorieEnseignant')?.hasError('required')">
+            La catégorie est requise.
+          </mat-error>
+        </mat-form-field>
 
-    <!-- Confirm Password Field -->
-    <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
-      <input matInput type="password" placeholder="Confirmer le mot de passe" formControlName="confirmPassword" required />
-      <mat-error *ngIf="form.get('confirmPassword')?.dirty && form.get('confirmPassword')?.hasError('required')">
-        La confirmation du mot de passe est <strong>obligatoire</strong>
-      </mat-error>
-      <mat-error *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.dirty">
-        Les mots de passe ne correspondent pas
-      </mat-error>
-    </mat-form-field>
+        <mat-form-field class="full-width mgb20" *ngIf="form.get('roles')?.value.includes('ENSEIGNANT') && !form.get('hasProfile')?.value">
+          <mat-label>Heures pour {{ form.get('categorieEnseignant')?.value }}</mat-label>
+          <input matInput type="number" formControlName="nbHeureCategorie" required />
+          <mat-error *ngIf="form.get('nbHeureCategorie')?.hasError('required')">
+            Les heures pour cette catégorie sont requises.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-  </form>
-</mat-dialog-content>
-<br>
-<mat-dialog-actions align="end" class="dialog-actions">
-  <button mat-button type="button" (click)="cancel()">Annuler</button>
-  <button mat-button color="primary" type="button" (click)="submit(form.value)" [disabled]="form.invalid">Sauvegarder</button>
-</mat-dialog-actions>
+      <!-- Password Field -->
+      <div class="flex-container">
+        <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
+          <input matInput type="password" placeholder="Mot de passe" formControlName="password" required />
+          <mat-error *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
+            Le mot de passe est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('password')?.touched && form.get('password')?.hasError('minlength')">
+            Le mot de passe doit contenir au <strong>minimum 6 caractères</strong>
+          </mat-error>
+          <mat-error *ngIf="form.get('password')?.touched && form.get('password')?.hasError('weakPassword')">
+            Le mot de passe doit contenir au moins 1 lettre minuscule, 1 lettre majuscule, 1 chiffre, et 1 caractère spécial.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Confirm Password Field -->
+        <mat-form-field class="full-width mgb20" *ngIf="!isUpdateMode">
+          <input matInput type="password" placeholder="Confirmer le mot de passe" formControlName="confirmPassword" required />
+          <mat-error *ngIf="form.get('confirmPassword')?.touched && form.get('confirmPassword')?.hasError('required')">
+            La confirmation du mot de passe est <strong>obligatoire</strong>
+          </mat-error>
+          <mat-error *ngIf="form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched">
+            Les mots de passe ne correspondent pas
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button type="button" (click)="cancel()">Annuler</button>
+    <button mat-button color="primary" type="button" (click)="submit(form.value)" >Sauvegarder</button>
+  </mat-dialog-actions>
+</div>

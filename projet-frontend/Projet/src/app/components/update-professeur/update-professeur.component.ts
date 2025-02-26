@@ -1,7 +1,8 @@
+import { Roles } from './../shared/types/user.type';
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -28,10 +29,14 @@ import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angula
     MatOptionModule,
     MatCheckboxModule,
     ReactiveFormsModule,
+    MatDialogModule, // ✅ Ajout du module MatDialog
+
   ],
   providers: [EnseignantService],
   templateUrl: './update-professeur.component.html',
-  styleUrl: './update-professeur.component.scss'
+  styleUrl: './update-professeur.component.scss',
+  encapsulation: ViewEncapsulation.None, // Désactive l'encapsulation pour appliquer les styles globaux
+
 })
 export class UpdateProfesseurComponent {
   defaultHeures = 192;
@@ -81,10 +86,10 @@ export class UpdateProfesseurComponent {
     const nameControl = this.form.get('name');
     const firstnameControl = this.form.get('firstname');
     const userControl = this.form.get('user');
-  
+
     // Appliquer les validations au chargement initial
     this.toggleValidators(hasAccountControl?.value);
-  
+
     // Écoute des changements sur hasAccount
     hasAccountControl?.valueChanges.subscribe((hasAccount) => {
       this.toggleValidators(hasAccount);
@@ -93,9 +98,9 @@ export class UpdateProfesseurComponent {
 
   private updateNbHeureCategorie(): void {
     const categorie = this.form.get('categorieEnseignant')?.value;
-  
+
     let nbHeureCategorie = 0;
-  
+
     // Définir le nombre d'heures selon la catégorie
     switch (categorie) {
       case 'ENSEIGNANT_CHERCHEUR':
@@ -117,16 +122,16 @@ export class UpdateProfesseurComponent {
         console.warn(`Catégorie non reconnue : ${categorie}`);
         break;
     }
-  
+
     // Mettre à jour le champ 'nbHeureCategorie' avec la valeur correspondante
     this.form.get('nbHeureCategorie')?.setValue(nbHeureCategorie, { emitEvent: false });
   }
-  
+
   toggleValidators(hasAccount: boolean) {
     const nameControl = this.form.get('name');
     const firstnameControl = this.form.get('firstname');
     const userControl = this.form.get('user');
-  
+
     if (hasAccount) {
       // Si l'utilisateur a un compte, "name" et "firstname" ne sont pas requis, mais "user" l'est
       nameControl?.clearValidators();
@@ -138,7 +143,7 @@ export class UpdateProfesseurComponent {
       firstnameControl?.setValidators([Validators.required, Validators.minLength(2)]);
       userControl?.clearValidators();
     }
-  
+
     // Mise à jour des validations
     nameControl?.updateValueAndValidity();
     firstnameControl?.updateValueAndValidity();
@@ -156,7 +161,7 @@ export class UpdateProfesseurComponent {
       nbHeureCategorie: enseignant.nbHeureCategorie,
     });
   }
-  
+
 
   ngOnInit(): void {
     this.categorieService.getCategories().subscribe(data => {
@@ -170,10 +175,22 @@ export class UpdateProfesseurComponent {
       this.utilisateurs = data;
     });
     this.form.get('categorieEnseignant')?.valueChanges.subscribe(_categorieEnseignant => this.updateNbHeureCategorie())
+
+        // Si en mode édition, on force la désactivation de la checkbox
+    if (this.isEdit) {
+      this.form.get('hasAccount')?.disable();
+    }
   }
 
 
-  save() {
+save() {
+
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();  // Marque tous les champs comme "touchés" pour afficher les erreurs
+    return; // Empêche la soumission si le formulaire est invalide
+  }
+
+
     console.log('Form:', this.form);
     if (this.form.valid) {
       const enseignantData = this.form.value;
@@ -190,7 +207,7 @@ export class UpdateProfesseurComponent {
       }
     }
   }
-  
+
 
   close() {
     this.dialogRef.close();

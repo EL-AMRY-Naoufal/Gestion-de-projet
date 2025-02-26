@@ -203,15 +203,17 @@ export class ListUsersComponent implements OnInit {
   /**
    * Function to display modal
    */
+  hasProfile: Boolean = false;
   showDialog(): void {
     // set dialog status
     this._dialogStatus = 'active';
 
     // open modal
     this._listUsersDialog = this._dialog.open(UserDialogComponent, {
-      width: '500px',
       disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
     });
+
 
     // subscribe to afterClosed observable to set dialog status and do process
     this._listUsersDialog
@@ -220,6 +222,7 @@ export class ListUsersComponent implements OnInit {
         filter((user: User | undefined) => !!user),
         map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
+          this.hasProfile = user?.hasProfile || false;
           delete user?.id;
           this.enseignantDto.categorieEnseignant =
             user?.categorieEnseignant as CategorieEnseignant;
@@ -244,7 +247,7 @@ export class ListUsersComponent implements OnInit {
               'ENSEIGNANT',
               this._yearService.currentYearId
             )
-            && !user.hasProfile
+            && !this.hasProfile
           ) {
             this.enseignantDto.user = user;
             this.enseignantDto.hasAccount =true;
