@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Module;
@@ -257,13 +258,21 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return userRoleRepository.findByRoleAndYearId(role, year);
     }
 
-    @Override
-    public List<Affectation> getAffectationsByUserId(Long userId) {
-
+    public List<AffectationDTO> getAffectationsByUserId(Long userId) {
         Enseignant enseignant = enseignantRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found for the user"));
+        System.out.println("dfdfd f ");
 
-        return enseignant.getAffectations();
+        // Map each Affectation to AffectationDTO
+        return enseignant.getAffectations().stream()
+                .map(affectation -> new AffectationDTO(
+                        affectation.getId(),
+                        affectation.getHeuresAssignees(),
+                        affectation.getDateAffectation(),
+                        affectation.getGroupe().getModule().getNom(),  // Assuming getModule() returns a Module entity
+                        affectation.getCommentaire()
+                ))
+                .collect(Collectors.toList());
     }
 
 

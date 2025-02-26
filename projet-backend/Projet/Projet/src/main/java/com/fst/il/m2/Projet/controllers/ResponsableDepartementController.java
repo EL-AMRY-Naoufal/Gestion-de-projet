@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
@@ -96,8 +97,8 @@ public class ResponsableDepartementController {
     }
 
     @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<Affectation>> getAffectationsByUserId(@PathVariable Long id) {
-        List<Affectation> affectations = responsableDepartementService.getAffectationsByUserId(id);
+    public ResponseEntity<List<AffectationDTO>> getAffectationsByUserId(@PathVariable Long id) {
+        List<AffectationDTO> affectations = responsableDepartementService.getAffectationsByUserId(id);
         return ResponseEntity.ok(affectations);
     }
 }

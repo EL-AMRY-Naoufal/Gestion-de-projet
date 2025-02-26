@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.User;
@@ -21,5 +22,5 @@ public interface ResponsableDepartementService {
      List<UserRole> getUsersByRole(Role role);
      List<UserRole> getUsersByRoleAndYear(Role role, Long year);
 
-    public List<Affectation> getAffectationsByUserId(Long userId);
+    public List<AffectationDTO> getAffectationsByUserId(Long userId);
 }
