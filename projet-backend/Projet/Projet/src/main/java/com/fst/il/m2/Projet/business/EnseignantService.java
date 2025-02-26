@@ -259,5 +259,5 @@ public class EnseignantService {
     public Optional<Enseignant> getEnseignantByName(String name) {
         return enseignantRepository.findByName(name);
     }
-    
+
 }
