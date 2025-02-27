@@ -227,18 +227,17 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public List<AffectationDTO> getAffectationsByUserId(Long userId) {
         Enseignant enseignant = enseignantRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Enseignant not found for the user"));
-        System.out.println("dfdfd f ");
 
         // Map each Affectation to AffectationDTO
         return enseignant.getAffectations().stream()
-                .map(affectation -> new AffectationDTO(
-                        affectation.getId(),
-                        affectation.getHeuresAssignees(),
-                        affectation.getDateAffectation(),
-                        affectation.getGroupe().getModule().getNom(),  // Assuming getModule() returns a Module entity
-                        affectation.getCommentaire()
-                ))
-                .collect(Collectors.toList());
+                .map(affectation -> AffectationDTO.builder()
+                        .id(affectation.getId())
+                        .heuresAssignees(affectation.getHeuresAssignees())
+                        .dateAffectation(affectation.getDateAffectation())
+                        .nomGroupe(affectation.getGroupe().getNom())
+                        .commentaire(affectation.getCommentaire())
+                        .build()
+                ).toList();
     }
 
 
