@@ -284,7 +284,8 @@ public class EnseignantService {
             User user = enseignant.getUser();
             if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
                 responsableDepartementRepository.deleteByUser(user);
-            } else if (user.hasRole(Role.RESPONSABLE_DE_FORMATION)) {
+            }
+            if (user.hasRole(Role.RESPONSABLE_DE_FORMATION)) {
                 responsableFormationRepository.deleteByUser(user);
             }
             enseignant.setUser(null);
