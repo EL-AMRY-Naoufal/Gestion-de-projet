@@ -71,7 +71,7 @@ export class UserCardComponent {
   }
 
   showAffectations(userId: any) {
-    console.log("ss")
+    console.log(userId)
     this.viewAffectations.emit(userId);
   }
 

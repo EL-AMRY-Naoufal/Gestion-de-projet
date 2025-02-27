@@ -31,6 +31,9 @@ export class ProfilCardComponent {
     @Input() openDialog!: (teacher?: EnseignantDto)=> void;
 
 
+    @Output() viewAffectations = new EventEmitter<number>();
+
+
     /**
      * Component constructor
      */
@@ -75,6 +78,11 @@ export class ProfilCardComponent {
      */
     delete(enseignant: EnseignantDto): void {
       this._delete$.emit(enseignant);
+    }
+
+    showAffectations(userId: any) {
+      console.log(userId)
+      this.viewAffectations.emit(userId);
     }
 
 }

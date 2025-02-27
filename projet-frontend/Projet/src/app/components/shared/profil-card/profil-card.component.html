@@ -25,7 +25,7 @@
       <div *ngIf="enseignant.categorieEnseignant">
         <span>{{ enseignant.categorieEnseignant }}</span>
       </div>
-  
+
       <div>Heures assignées: {{ enseignant.heuresAssignees }}h</div>
       <div>Décharge: {{ enseignant.nbHeureCategorie }}h</div>
       <div>Heures maximales de service: {{ enseignant.maxHeuresService }}h</div>
@@ -53,4 +53,17 @@
   >
     🗑️
   </div>
+
+  <div
+
+      class="custom-icon delete-icon"
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="showAffectations(5)"
+      title="affiche affectation"
+  >
+  🔍
+  </div>
+
+
+
 </mat-card-actions>
