@@ -50,6 +50,7 @@ export class ListUsersComponent implements OnInit {
   // private property to store view value
   private _view: string;
 
+  selectedList: string = 'enseignants';
   searchQuery: string = '';
   filteredUsers: User[] = [];
   searchPerformed: boolean = false;
