@@ -161,4 +161,11 @@ public class EnseignantController {
     public List<EnseignantDto> getEnseignantByFirstname(@PathVariable String firstname) {
         return this.enseignantService.getEnseignantByFirstname(firstname).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList());
     }
+
+    @DeleteMapping({"/{id}"})
+    public ResponseEntity<EnseignantDto> deleteEnseignant(@PathVariable Long id) {
+        return ResponseEntity.ok(EnseignantMapper.enseignantToEnseignantDto(
+                this.enseignantService.deleteEnseignant(id)
+        ));
+    }
 }

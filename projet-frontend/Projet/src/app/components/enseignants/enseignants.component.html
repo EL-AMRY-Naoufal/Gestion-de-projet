@@ -43,6 +43,7 @@
     <app-profil-card
       [enseignant]="enseignant"
       [openDialog]="openDialog.bind(this)"
+      (deleteProfil)="delete($event)"
       *ngFor="let enseignant of enseignants"
     >
     </app-profil-card>

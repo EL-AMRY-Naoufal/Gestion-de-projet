@@ -22,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +35,11 @@ public class EnseignantService {
     private final EnseignantSpecification enseignantSpecifications;
     private final AnneeRepository anneeRepository;
     private final UserRoleRepository userRoleRepository;
+    private final ResponsableDepartementRepository responsableDepartementRepository;
+    private final ResponsableFormationRepository responsableFormationRepository;
+
+    private static String enseignantDeleted = "Enseignant supprimé";
+
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository,
                              AffectationRepository affectationRepository,
@@ -45,7 +47,9 @@ public class EnseignantService {
                              UserSpecification userSpecifications,
                              EnseignantSpecification enseignantSpecifications,
                              AnneeRepository anneeRepository,
-                             UserRoleRepository userRoleRepository) {
+                             UserRoleRepository userRoleRepository,
+                             ResponsableDepartementRepository responsableDepartementRepository,
+                             ResponsableFormationRepository responsableFormationRepository) {
         this.enseignantRepository = enseignantRepository;
         this.affectationRepository = affectationRepository;
         this.userRepository = userRepository;
@@ -53,6 +57,8 @@ public class EnseignantService {
         this.enseignantSpecifications = enseignantSpecifications;
         this.anneeRepository = anneeRepository;
         this.userRoleRepository = userRoleRepository;
+        this.responsableDepartementRepository = responsableDepartementRepository;
+        this.responsableFormationRepository = responsableFormationRepository;
     }
 
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
@@ -95,7 +101,9 @@ public class EnseignantService {
 
     public List<Enseignant> getEnseignants(){
         //Specification<User> spec = userSpecifications.withRoleEnseignant();
-        return this.enseignantRepository.findAll();
+        return this.enseignantRepository.findAll().stream().filter(enseignant ->
+                !Objects.equals(enseignant.getName(), enseignantDeleted)
+        ).toList();
     }
 
     public Enseignant createEnseignant(User u, int nmaxHeuresService, int heuresAssignees,
@@ -258,6 +266,34 @@ public class EnseignantService {
 
     public Optional<Enseignant> getEnseignantByName(String name) {
         return enseignantRepository.findByName(name);
+    }
+
+    public Enseignant deleteEnseignant(long id) {
+        Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
+        List<Affectation> affectations = this.affectationRepository.findByEnseignant(enseignant);
+        if(affectations.isEmpty()){
+            this.enseignantRepository.deleteById(id);
+        }
+        else {
+            enseignant.setName(this.enseignantDeleted);
+            enseignant.setFirstname("");
+            enseignant = this.enseignantRepository.save(enseignant);
+        }
+
+        if(enseignant.getUser() != null) {
+            User user = enseignant.getUser();
+            if (user.hasRole(Role.CHEF_DE_DEPARTEMENT)) {
+                responsableDepartementRepository.deleteByUser(user);
+            } else if (user.hasRole(Role.RESPONSABLE_DE_FORMATION)) {
+                responsableFormationRepository.deleteByUser(user);
+            }
+            enseignant.setUser(null);
+            enseignant.setHasAccount(false);
+            enseignantRepository.save(enseignant);
+            this.userRepository.delete(user);
+        }
+
+        return enseignant;
     }
 
 }

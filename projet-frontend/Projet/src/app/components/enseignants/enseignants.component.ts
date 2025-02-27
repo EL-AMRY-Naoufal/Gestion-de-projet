@@ -125,4 +125,12 @@ export class EnseignantsComponent implements OnInit {
       return false;
     });
   }
+
+  delete(enseignant: EnseignantDto): void {
+    this.enseignantService.deleteEnseignant(enseignant).subscribe(() => {
+      this.enseignants = this.enseignants.filter(
+        (e) => e.id!== enseignant.id
+      );
+    });
+  }
 }

@@ -6,6 +6,7 @@ import com.fst.il.m2.Projet.models.Groupe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +18,7 @@ public interface AffectationRepository extends JpaRepository<Affectation, Long> 
 
 
     boolean existsByEnseignantAndGroupe(Enseignant enseignant, Groupe groupe);
+
+    List<Affectation> findByEnseignant(Enseignant enseignant);
 
 }

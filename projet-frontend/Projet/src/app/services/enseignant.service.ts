@@ -115,4 +115,8 @@ export class EnseignantService {
         })
       );
   }
+
+  deleteEnseignant(enseignant: EnseignantDto): Observable<EnseignantDto> {
+    return this.http.delete<EnseignantDto>(`${this._backendURL.allEnseignants}/${enseignant.id}`);
+  }
 }
