@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.repositories;
 
+import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +25,8 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, Long>, J
     @Transactional
     @Query("DELETE FROM Enseignant e WHERE e.user = :user")
     void deleteByUser(@Param("user") User user);
+    List<Enseignant> findEnseignantByNameAndFirstname(String name, String firstname);
+    //List<Enseignant> findEnseignantByFirstnameOrLastname(String name, String firstname);
+    Optional <Enseignant> findByName(String name);
+    Optional<Enseignant> findByFirstname(String firstname);
 }

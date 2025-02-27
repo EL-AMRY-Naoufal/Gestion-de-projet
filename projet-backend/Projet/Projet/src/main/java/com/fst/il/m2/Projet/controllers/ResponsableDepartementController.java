@@ -6,6 +6,7 @@ import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,12 +90,7 @@ public class ResponsableDepartementController {
     }
 
 
-    //route pour affecter un enseignant à un module en precisant lheure enseignée
-    @PostMapping("/affectation/{idEnseignant}/{idGroupe}/{heure}")
-    public ResponseEntity<String> affecterEnseignant(@PathVariable Long idEnseignant, @PathVariable Long idGroupe, @PathVariable int heure) {
-        responsableDepartementService.affecterModuleToEnseignant(idEnseignant, idGroupe, heure);
-        return ResponseEntity.ok("Enseignant affecté avec succès");
-    }
+
 
     @GetMapping("/{id}/affectations")
     public ResponseEntity<List<AffectationDTO>> getAffectationsByUserId(@PathVariable Long id) {

@@ -8,6 +8,7 @@ import { User } from '../components/shared/types/user.type';
 import { YearService } from './year-service';
 import { isPlatformBrowser } from '@angular/common';
 import { ApiService } from './api-service';
+import { EnseignantDto } from '../components/shared/types/enseignant.type';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +27,8 @@ export class UserService {
     private _loginService: LoginService,
     private _yearService: YearService,
     private _api: ApiService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-
     this.isBrowser = isPlatformBrowser(this.platformId);
 
     this._defaultUser = {
@@ -37,7 +37,7 @@ export class UserService {
       name: 'lastname',
       email: 'email@etu.univ-lorraine.fr',
       roles: [],
-      password: ""
+      password: '',
     };
     this._backendURL = {};
 
@@ -100,7 +100,7 @@ export class UserService {
     const body = {
       responsableId: this._responsableId, // Ajoute le responsableId
       user: newUser, // Ajoute l'objet user
-      associateEnseignantWithUser: false,
+      associateEnseignantWithUser: user.hasProfile,
       year: 1,
     };
 
@@ -119,9 +119,8 @@ export class UserService {
       responsableId: this._responsableId, // Ajoute le responsableId
       user: user, // Ajoute l'objet user
       associateEnseignantWithUser: false,
-      year: 1,
+      year: this._yearService.currentYearId,
     };
-    console.log(user);
     return this._http.put<User>(
       this._backendURL.oneUser.replace(':id', id),
       body,
@@ -135,13 +134,12 @@ export class UserService {
   delete(id: number): Observable<number> {
     return this._http
       .delete<number>(this._backendURL.oneUser.replace(':id', id.toString()), {
-        body: { responsableId: this._responsableId }
+        body: { responsableId: this._responsableId },
       })
       .pipe(map(() => id));
   }
 
   private _options(headerList: object = {}): any {
-
     // Crée un objet pour les en-têtes
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json',
@@ -162,12 +160,12 @@ export class UserService {
 
   createAffectation(
     EnseignantId: string,
-    idModule: string,
+    idGroupe: string,
     nombreHeure: string
   ): Observable<any> {
     return this._http
       .post(
-        `${this._backendURL.allUsers}/affectation/${EnseignantId}/${idModule}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${EnseignantId}/${idGroupe}/${nombreHeure}`,
         null,
         { responseType: 'text' }
       )
@@ -184,6 +182,42 @@ export class UserService {
           return throwError(() => new Error('Une erreur est survenue.'));
         })
       );
+  }
+
+  updateAffectation(
+    affectationId: number,
+    nombreHeure: number
+  ): Observable<any> {
+    return this._http
+      .put(
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}/${nombreHeure}`,
+        null,
+        { responseType: 'text' }
+      )
+      .pipe(
+        map((response) => {
+          try {
+            return JSON.parse(response);
+          } catch (e) {
+            return response;
+          }
+        }),
+        catchError((error) => {
+          console.error(
+            "Erreur lors de la mise à jour de l'affectation :",
+            error
+          );
+          return throwError(() => new Error('Une erreur est survenue.'));
+        })
+      );
+  }
+
+  deleteAffectation(affectationId: number): Observable<string> {
+    return this._http
+      .delete<string>(
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`
+      )
+      .pipe(map((response) => response));
   }
 
   searchUsers(username: string): Observable<any[]> {

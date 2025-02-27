@@ -1,9 +1,7 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.EnseignantDto;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
-import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
@@ -19,15 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import com.fst.il.m2.Projet.repositories.specifications.EnseignantSpecification;
 import com.fst.il.m2.Projet.repositories.specifications.UserSpecification;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,18 +57,8 @@ public class EnseignantService {
 
     public List<Affectation> getAffectationsByEnseignantById(Long userId) {
 
-        //affiche l'id de l'enseignant demandé
-        //System.err.println("userId: " + userId);
-
-      /* //afficvhe tous les enseignants
-        List<Enseignant> enseignants = enseignantRepository.findAll();
-        for (Enseignant enseignant : enseignants) {
-            System.err.println("enseignant: " + enseignant);
-        }
-*/
         // Get the enseignant id from the user id
 
-        System.out.println(userId);
 
         Enseignant enseignant = enseignantRepository.findByUserId(userId)
                 .orElseThrow(NotFoundException::new);
@@ -85,8 +73,9 @@ public class EnseignantService {
                         affectation.getId(),
                         affectation.getHeuresAssignees(),
                         affectation.getDateAffectation(),
-                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null,
-                        affectation.getCommentaire()
+                        affectation.getGroupe() != null && affectation.getGroupe().getModule() != null ? affectation.getGroupe().getModule().getNom() : null,
+                        affectation.getCommentaire(),
+                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null
                 ))
                 .collect(Collectors.toList());
     }
@@ -126,7 +115,6 @@ public class EnseignantService {
         // Create a map for the categories and hours
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
-        heuresAssignees += nbHeureCategorie;
         // Create the Enseignant entity
         Enseignant enseignant = Enseignant.builder()
                 .categorieEnseignant(categorieHeuresMap)
@@ -135,7 +123,7 @@ public class EnseignantService {
                 .firstname(user.getFirstname())
                 .hasAccount(true)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(heuresAssignees)
+                .heuresAssignees(0)
                 .build();
 
         // Save and return the Enseignant entity
@@ -148,14 +136,12 @@ public class EnseignantService {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
 
-        heuresAssignees += nbHeureCategorie;
-
         Enseignant enseignant = Enseignant.builder()
                 .hasAccount(false)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(heuresAssignees)
-                .firstname(firstname)
-                .name(name)
+                .heuresAssignees(0)
+                .firstname(StringUtils.capitalize(firstname))
+                .name(StringUtils.capitalize(name))
                 .categorieEnseignant(categorieHeuresMap)
                 .build();
 
@@ -163,6 +149,7 @@ public class EnseignantService {
     }
 
 
+    @Transactional
     public Enseignant updateEnseignant(long id, int nmaxHeuresService, CategorieEnseignant categorieEnseignant, int nbHeureCategorie,
                                        String name, String firstname, boolean hasAccount) {
 
@@ -171,18 +158,11 @@ public class EnseignantService {
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
 
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant()
-                .keySet()
-                .stream()
-                .findFirst()
-                .orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
-        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
 
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
-        enseignant.setName(name);
-        enseignant.setFirstname(firstname);
-        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
+        enseignant.setName(StringUtils.capitalize(name));
+        enseignant.setFirstname(StringUtils.capitalize(firstname));
         enseignant.setHasAccount(hasAccount);
 
         if (!hasAccount) {
@@ -203,7 +183,10 @@ public class EnseignantService {
                 List<UserRole> rolesToDelete = existingRoles.stream()
                         .filter(role -> role.getRole() == Role.ENSEIGNANT)
                         .toList();
-                userRoleRepository.deleteAll(rolesToDelete);
+                rolesToDelete.forEach(userRole ->
+                        this.userRoleRepository.deleteByUserIdAndYearId(userRole.getUser().getId(),
+                                userRole.getYear().getId())
+                );
 
                 // Mettre à jour les rôles côté utilisateur, en excluant ENSEIGNANT
                 List<UserRole> updatedRoles = existingRoles.stream()
@@ -234,11 +217,8 @@ public class EnseignantService {
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
         categorieHeuresMap.put(categorieEnseignant, nbHeureCategorie);
         Enseignant enseignant = this.enseignantRepository.getReferenceById(id);
-        CategorieEnseignant categorie = enseignant.getCategorieEnseignant().keySet().stream().findFirst().orElse(CategorieEnseignant.ENSEIGNANT_CHERCHEUR);
-        nbHeureCategorie -= enseignant.getNbHeureCategorie(categorie);
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
-        enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + nbHeureCategorie);
         enseignant.setUser(user);
         enseignant.setHasAccount(hasAccount);
         return this.enseignantRepository.save(enseignant);
@@ -249,7 +229,7 @@ public class EnseignantService {
     }
 
 
-    public String updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
+    public void updateCommentaireAffectation(Long affectationId, String connectedUserName, String commentaire){
 
         User user = userRepository.findOneUserByUsername(connectedUserName).orElseThrow(UnauthorizedException::new);
         Enseignant enseignant = enseignantRepository.findByUserId(user.getId()).orElseThrow(UnauthorizedException::new);
@@ -260,11 +240,24 @@ public class EnseignantService {
         affectation.setCommentaire(commentaire);
         affectationRepository.save(affectation);
 
-        return commentaire;
     }
     public Enseignant getEnseignantByUser(Long userId) {
         Specification<Enseignant> spec = enseignantSpecifications.getEnseignantWithUserId(userId);
         return this.enseignantRepository.findOne(spec).orElse(null);
+    }
+
+    public List<Enseignant> getEnseignantsWithSameUserNameAndFirstName(String name, String firstname) {
+        Specification<Enseignant> spec = this.enseignantSpecifications.byNameandFirstname(name, firstname);
+        return this.enseignantRepository.findAll(spec);
+    }
+
+    public Optional<Enseignant> getEnseignantByFirstname(String firstname) {
+        return enseignantRepository.findByFirstname(firstname);
+    }
+
+
+    public Optional<Enseignant> getEnseignantByName(String name) {
+        return enseignantRepository.findByName(name);
     }
 
 }

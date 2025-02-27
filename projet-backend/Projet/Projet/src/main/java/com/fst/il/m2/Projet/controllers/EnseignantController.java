@@ -5,9 +5,12 @@ import com.fst.il.m2.Projet.business.UserService;
 import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
+import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.mapper.EnseignantMapper;
+import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -15,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -23,20 +27,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Validated
 public class EnseignantController {
-    private final EnseignantService enseignantService;
-    private final UserService userService;
+    @Autowired
+    private  UserService userService;
 
-    @GetMapping("/{id}/affectations")
-    public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
+    @Autowired
+    private  EnseignantService enseignantService;
 
-        List<AffectationDTO> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
 
-        if (affectations.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(affectations, HttpStatus.OK);
-    }
     
     @GetMapping("/enseignants-non-enregistres")
     public ResponseEntity<List<User>> getEnseignantsNotInEnseignantTable() {
@@ -141,5 +138,27 @@ public class EnseignantController {
         enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
 
         return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
+    }
+
+    @GetMapping("/findenseignant")
+    public ResponseEntity<List<EnseignantDto>> getEnseignantsWithSameUserNameAndFirstName(
+            @RequestParam String name,
+            @RequestParam String firstname){
+        return ResponseEntity.ok(
+                this.enseignantService.getEnseignantsWithSameUserNameAndFirstName(
+                        name,
+                        firstname
+                ).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList())
+        );
+    }
+
+    @GetMapping("/by-name/{name}")
+    public List <EnseignantDto> getEnseignantByName(@PathVariable String name) {
+        return this.enseignantService.getEnseignantByName(name).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/by-firstname/{firstname}")
+    public List<EnseignantDto> getEnseignantByFirstname(@PathVariable String firstname) {
+        return this.enseignantService.getEnseignantByFirstname(firstname).stream().map(EnseignantMapper::enseignantToEnseignantDto).collect(Collectors.toList());
     }
 }

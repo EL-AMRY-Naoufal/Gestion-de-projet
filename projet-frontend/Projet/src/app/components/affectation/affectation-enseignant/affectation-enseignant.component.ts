@@ -4,7 +4,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {AffectationType} from "../../shared/types/affectation.type";
 import {LoginService} from "../../../services/login.service";
 import { MenuComponent } from "../../shared/menu/menu.component";
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -38,9 +38,10 @@ export class AffectationListComponent implements OnInit {
   editingId: number | null = null;
   editedComment: string = '';
 
-  constructor(private enseignantService: EnseignantService, 
+  constructor(private enseignantService: EnseignantService,
     private loginService: LoginService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private _api: ApiService) {
     this.userRoles = this.loginService.userRoles;
 
@@ -48,12 +49,13 @@ export class AffectationListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.enseignantId = this.loginService.connectUser() + '';
 
+    //si un paramètre est passé dans l'url on le récupère, sinon on récupère l'id de l'utilisateur connecté
+    this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') || this.loginService.connectUser() + '';
     this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
       (data) => {
         this.affectations = data;
-        console.log('Affectations:', this.affectations);  // Vérifier ici
+        console.log('Affectations:', this.affectations);
       },
       (error) => {
         console.error('Erreur lors de la récupération des affectations', error);
@@ -61,7 +63,7 @@ export class AffectationListComponent implements OnInit {
     );
   }
 
-  getAffectations(): void {
+/*  getAffectations(): void {
     this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
       data => {
         this.affectations = data;
@@ -70,7 +72,7 @@ export class AffectationListComponent implements OnInit {
         console.error('Erreur lors de la récupération des affectations :', error);
       }
     );
-  }
+  }*/
 
   // Navigate to the component to create affectations by the admin
   navigateToCreateAffectations() {

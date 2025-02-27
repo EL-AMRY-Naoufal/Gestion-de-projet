@@ -1,6 +1,3 @@
-
-
-
 <!--<app-search-bar></app-search-bar>
 
 <button class="add-teacher-btn" (click)="openDialog()">
@@ -18,24 +15,27 @@
   <div *ngIf="users.length === 0">Aucun enseignant n'est disponible</div>
 </div>-->
 
-
-
 <div class="header-container">
-  <h1 class="page-header">Liste des profils</h1>
-  <div class="custom-button plus-button"  title="Show more" (click)="openDialog()">
+  <h1 class="page-header">Liste des enseignants</h1>
+  <div
+    class="custom-button plus-button"
+    title="Show more"
+    (click)="openDialog()"
+  >
     +
   </div>
 </div>
 
-
-
- <!-- Conteneur de recherche
- <div class="search-and-role-container">
+<div class="search-and-role-container">
   <div class="search-bar">
-    <input type="text" placeholder="Recherche..." [(ngModel)]="searchQuery" />
-    <i class="fas fa-search search-icon" (click)="searchTeachers()"></i>
+    <input
+      type="text"
+      placeholder="Recherche..."
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchEnseignants()"
+    />
   </div>
-</div>-->
+</div>
 
 <!-- Conteneur des profils -->
 <section [ngSwitch]="view" class="card-content">
@@ -46,9 +46,11 @@
       *ngFor="let enseignant of enseignants"
     >
     </app-profil-card>
+    <div class="no-user-message" *ngIf="enseignants.length === 0">
+      <p>Aucun utilisateur trouvé</p>
+    </div>
   </div>
   <div *ngSwitchDefault>
     <p>Aucun utilisateur trouvé</p>
   </div>
 </section>
-

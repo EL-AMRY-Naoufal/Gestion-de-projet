@@ -29,7 +29,6 @@
 
     <div class="role" *ngIf="isYearSelected()">
       <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
-        <option value="" disabled selected>Choisissez un rôle</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
       </select>
     </div>
@@ -44,12 +43,12 @@
         [isYearSelected]="isYearSelected()"
         (deleteUser)="delete($event)"
         (viewAffectations)="openAffectationModal($event)"
-        *ngFor="let user of getListUsersWithRolesOfSelectedYear()"
+        *ngFor="let user of listUsersWithRolesOfSelectedYear"
       >
       </app-user-card>
       <div
         class="no-user-message"
-        *ngIf="searchPerformed && filteredUsers.length === 0"
+        *ngIf="listUsersWithRolesOfSelectedYear.length === 0"
       >
         <p>Aucun utilisateur trouvé</p>
       </div>

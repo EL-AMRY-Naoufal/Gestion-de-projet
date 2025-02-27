@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,14 +15,20 @@ import { CategorieEnseignantService } from '../../../services/categorie-enseigna
 import { LoginService } from '../../../services/login.service';
 import { MatIconModule } from '@angular/material/icon';
 import { YearService } from '../../../services/year-service';
+import { UserService } from '../../../services/user.service';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatOptionModule, ReactiveFormsModule, MatDialogActions, MatDialogModule, NgIf, CommonModule, FormsModule, MatIconModule,
+      MatCheckboxModule,
   ],
   templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss'
+  styleUrl: './user-form.component.scss',
+  encapsulation: ViewEncapsulation.None, // Désactive l'encapsulation pour appliquer les styles globaux
+
 })
 export class UserFormComponent {
   // private property to store update mode flag
@@ -35,6 +41,12 @@ export class UserFormComponent {
   private readonly _submit$: EventEmitter<User>;
   // private property to store form value
   private readonly _form: FormGroup;
+  private username: string;
+  private email: string;
+
+
+  thereAreProfileSimilars: boolean = false;
+  enseignants: EnseignantDto[] = [];
 
   /**
    * Component constructor
@@ -43,6 +55,7 @@ export class UserFormComponent {
     @Inject(MAT_DIALOG_DATA) public dataTeacher: any,
     private enseignantService: EnseignantService,
     private categorieService: CategorieEnseignantService,
+    private _usersService: UserService,
     private _yearService: YearService,) {
 
     this._model = {} as User;
@@ -50,6 +63,11 @@ export class UserFormComponent {
     this._submit$ = new EventEmitter<User>();
     this._cancel$ = new EventEmitter<void>();
     this._form = this._buildForm();
+
+    this.username = "";
+    this.email="";
+
+
   }
 
   /**
@@ -101,6 +119,12 @@ export class UserFormComponent {
    * OnInit implementation
    */
   ngOnInit(): void {
+
+    // Donner a constom calidateur la liste des utilisateur
+    this._usersService.fetch().subscribe((users: User[]) => {
+      UserCustomValidators.setUsersList(users);
+    });
+
     // Récupération des catégories depuis le service
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
@@ -112,21 +136,31 @@ export class UserFormComponent {
       this.fetchEnseignantDetails(this._model.id!);
     }
 
-    console.log('liste des roles', this._model.roles);
-    console.log('liste des roles', this._model.roles.filter(role => role.year === this._yearService.currentYearId).map(role => role.role));
-    
+    if ( this._isUpdateMode){ // si on  est en mode modif
+      this.username = this._form.get('username')?.value;
+      this.email = this._form.get("email")?.value;
+
+    }
+
+
     this._form.patchValue({ roles: this._model
       .roles
       .filter(role => role.year === this._yearService.currentYearId)
-      .map(role => role.role) 
+      .map(role => role.role)
     });
 
      // Ajout de la logique pour surveiller les changements de 'firstname' et 'name'
-    this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
-    this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
+
+    if(!this._isUpdateMode){
+      this._form.get('firstname')?.valueChanges.subscribe(firstname => this.updateEmailAndUsername());
+      this._form.get('name')?.valueChanges.subscribe(name => this.updateEmailAndUsername());
+
+    }
 
     // Ajout de la logique pour surveiller les changements de 'nbHeureCategorie '
     this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateNbHeureCategorie())
+
+    this.listenToNameAndFirstnameChanges();
   }
 
 
@@ -158,41 +192,73 @@ private normalizeString(value: string): string {
 }
 
 
+listenToNameAndFirstnameChanges() {
+  this.form.valueChanges
+    .pipe(
+      debounceTime(500), // Attend 500ms après la dernière saisie
+      distinctUntilChanged(), // Évite d'appeler avec la même valeur
+      filter(values => values.name?.length > 1 && values.firstname?.length > 1) // Vérifie que les champs ne sont pas vides
+    )
+    .subscribe(values => {
+      this.getEnseignantWithSameUserNameAndFirstName();
+    });
+}
+
+getEnseignantWithSameUserNameAndFirstName(){
+  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+
+  this.enseignantService.getEnseignantWithSameUserNameAndFirstName(firstname, name).subscribe(data => {
+      this.enseignants = data;
+      this.thereAreProfileSimilars = data.length > 0;
+    },
+    error => console.error('Erreur lors de la récupération des enseignants avec le même nom et prénom :', error)
+  )
+  this.thereAreProfileSimilars = this.enseignants.length > 0;
+}
+
 
   /**
  * Met à jour automatiquement l'email et le pseudo d'utilisateur.
  */
-private updateEmailAndUsername(): void {
-  const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
-  const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
+  private updateEmailAndUsername(): void {
 
-  const normalizedFirstname = this.normalizeString(firstname);
-  const normalizedName = this.normalizeString(name);
+    const firstname = this._form.get('firstname')?.value?.trim().toLowerCase() || '';
+    const name = this._form.get('name')?.value?.trim().toLowerCase() || '';
 
+    const normalizedFirstname = this.normalizeString(firstname);
+    const normalizedName = this.normalizeString(name);
 
-  if (firstname && name) {
-    const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
-    const formattedUsername = `${name}1u`;
+    if (firstname && name) {
+      const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
+      const formattedUsername = `${name}1u`;
 
-    // Mise à jour des champs email et username
-    this._form.get('email')?.setValue(formattedEmail, { emitEvent: false });
-    this._form.get('username')?.setValue(formattedUsername, { emitEvent: false });
-  }
+      // Mise à jour des champs email et username
+      const emailControl = this._form.get('email');
+      const usernameControl = this._form.get('username');
 
-    // Update firstname and name with the capitalized versions
+      // On met à jour les champs sans émettre d'événements
+      emailControl?.setValue(formattedEmail, { emitEvent: false });
+      usernameControl?.setValue(formattedUsername, { emitEvent: false });
+
+    }
+
+    // Mise à jour des champs firstname et name avec la version capitalisée
     if (firstname) {
       this._form.get('firstname')?.setValue(this.capitalizeFirstLetter(firstname), { emitEvent: false });
     }
     if (name) {
       this._form.get('name')?.setValue(this.capitalizeFirstLetter(name), { emitEvent: false });
     }
-}
+
+
+  }
 
 
 private updateNbHeureCategorie(): void {
   const categorie = this._form.get('categorieEnseignant')?.value;
 
-  let nbHeureCategorie = 0;
+  let nbHeureCategorie = 192;
 
   // Définir le nombre d'heures selon la catégorie
   switch (categorie) {
@@ -284,6 +350,14 @@ cancel(): void {
  * Function to emit event to submit form and person
  */
 submit(user: User): void {
+
+
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();  // Marque tous les champs comme "touchés" pour afficher les erreurs
+    return; // Empêche la soumission si le formulaire est invalide
+  }
+
+
   // Émettre l'utilisateur via l'événement _submit$
   this._submit$.emit(user);
 
@@ -297,7 +371,7 @@ submit(user: User): void {
 
     const userToSend: User = {
           ...user,
-          roles: user.roles.map((role) => { 
+          roles: user.roles.map((role) => {
             return {year: this._yearService.currentYearId, role: role as unknown as Roles}
           }),
         }
@@ -319,11 +393,14 @@ submit(user: User): void {
  * Function to build our form
  */
 private _buildForm(): FormGroup {
+
+
   const _formGroup = new FormGroup<{ [key: string]: AbstractControl<any, any> }>({
     id: new FormControl(),
+
     username: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(2)])
+      Validators.compose([Validators.required, Validators.minLength(2), UserCustomValidators.utiliseUsername(this.isUpdateMode, () => this.username)])
     ),
     name: new FormControl(
       '',
@@ -335,7 +412,7 @@ private _buildForm(): FormGroup {
     ),
     email: new FormControl(
       '',
-      Validators.compose([Validators.required, UserCustomValidators.googleEmail])
+      Validators.compose([Validators.required, UserCustomValidators.googleEmail, UserCustomValidators.utiliseEmail(this.isUpdateMode,() => this.email)])
     ),
     roles: new FormControl([], Validators.required),
     password: new FormControl(
@@ -354,6 +431,7 @@ private _buildForm(): FormGroup {
         ? null
         : Validators.compose([Validators.required, Validators.minLength(6)])
     ),
+    hasProfile: new FormControl(false)
   });
 
   // Appliquer la validation personnalisée si ce n'est pas un mode de mise à jour
@@ -374,7 +452,7 @@ private _buildForm(): FormGroup {
   };
 
   // Vérification si le rôle 'ENSEIGNANT' est présent
-  const isEnseignant = this.model?.roles?.some(role => role.role == 'ENSEIGNANT')
+  const isEnseignant = this.model?.roles?.some(role => role.role == 'ENSEIGNANT');
 
   // Ajouter des champs spécifiques à 'ENSEIGNANT' si nécessaire
   addControl(
@@ -394,6 +472,7 @@ private _buildForm(): FormGroup {
     isEnseignant ? [Validators.required] : [],
     Validators.min(0)
   );
+
 
   return _formGroup;
 }
@@ -419,8 +498,6 @@ private _buildForm(): FormGroup {
     }
   }
 
-
-
   defaultHeures = 192;
   categories: string[] = [];
   enseignant: EnseignantDto = {
@@ -430,7 +507,7 @@ private _buildForm(): FormGroup {
     maxHeuresService: 192,
     categorieEnseignant: CategorieEnseignant.ATER,
     heuresAssignees: 0,
-    nbHeureCategorie: 0
+    nbHeureCategorie: 192
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);

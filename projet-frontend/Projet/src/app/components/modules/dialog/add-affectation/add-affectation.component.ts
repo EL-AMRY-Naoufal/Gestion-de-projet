@@ -11,7 +11,7 @@ import {LoginService} from "../../../../services/login.service";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {group} from "@angular/animations";
-import {Module} from "../../../shared/types/modules.types";
+import {Affectation, Module} from "../../../shared/types/modules.types";
 
 
 @Component({
@@ -35,6 +35,8 @@ export class AddAffectationComponent implements OnInit {
   moduleId!: string;
   groupeId!: string;
   heuresAssignees!: string;
+
+  newAffectation!: Affectation;
 
   successMessage = '';
   errorMessage = '';
@@ -67,7 +69,7 @@ export class AddAffectationComponent implements OnInit {
     this.enseignantService.getEnseignants().subscribe(
       (response: any[]) => {
         this.enseignants = response;
-        // console.log('enseignants', this.enseignants);
+         console.log('enseignants', this.enseignants);
       },
       (error: any) => {
         console.log('error', error);
@@ -87,14 +89,29 @@ export class AddAffectationComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.enseignantId && this.moduleId && this.heuresAssignees) {
+    if (this.enseignantId && this.groupeId && this.heuresAssignees) {
+
+      //console select enseignant
+      console.log('enseignantId', this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId)));
+
+      const selectedEnseignant = this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
+      const nomEnseignant = selectedEnseignant ? selectedEnseignant.firstname : 'nouveaux enseignant';
+
+      this.newAffectation = {
+        nomEnseignant: nomEnseignant,
+        heuresAssignees: Number(this.heuresAssignees)
+      };
       this.affectationService
-        .createAffectation(this.enseignantId, this.moduleId, this.heuresAssignees)
+        .createAffectation(this.enseignantId, this.groupeId, this.heuresAssignees)
         .subscribe({
           next: (response) => {
             alert('Affectation créée avec succès.');
             this.errorMessage = '';
-            this.dialogRef.close(true);
+            console.log('response : ', this.newAffectation);
+
+            this.dialogRef.close(this.newAffectation);
+
+
           },
           error: (error: any) => {
             alert('Erreur lors de la création de l\'affectation :');
