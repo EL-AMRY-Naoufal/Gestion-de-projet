@@ -333,18 +333,27 @@ export class ModulesComponent implements OnInit {
 
 
   openAddGroupeDialog(moduleId: number | undefined): void {
+    if (moduleId == undefined) {
+      console.error("Parent 'Module' non sauvegardé");
+      return;
+    }
+
+    // Récupérer le module pour obtenir ses heures
+    const module = this.modules.find(m => m.id === moduleId);
+    if (!module) {
+      console.error("Module introuvable");
+      return;
+    }
+
     const dialogRef = this.dialog.open(AddGroupeDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if(moduleId == undefined) {
-          console.error("parent 'Module' non sauvegardé");
-        }
 
         //update parent id
         result.moduleId = moduleId;
-
-        //save in db and update with id
+        // @ts-ignore
+        result.totalHeuresDuGroupe = module.heuresParType[result.type];
         this.groupeService.saveGroupe(result).subscribe((groupeResult: Groupe) => this.addGroupe(groupeResult));
       }
     });
@@ -374,23 +383,34 @@ export class ModulesComponent implements OnInit {
 
         //save in db and update with id
         this.affectationService.saveAffectation(result).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
+
+
       }
     });
   }
 
 
   addAffectation(newAffectation: Affectation) {
+    this.getAllGroupes();
     this.affectations.push(newAffectation);
   }
 
   updateAffectation(affectation: Affectation) {
-    // @ts-ignore
-    this.userService.updateAffectation(affectation.id,affectation.heuresAssignees).subscribe({
+    if (!affectation.id) {
+      console.error("Affectation ID is undefined");
+      return;
+    }
+
+    this.userService.updateAffectation(affectation.id, affectation.heuresAssignees).subscribe({
       next: () => {
-        alert('Heures affectées mis à jour');
+        alert('Heures affectées mises à jour');
+        this.getAllGroupes();
       }
     });
   }
+
+
+
 
 
   removeAnnee(annee: Annee) {

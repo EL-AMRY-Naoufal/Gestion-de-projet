@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {MatDialogRef} from "@angular/material/dialog";
+import {Groupe} from "../../../shared/types/modules.types";
 
 @Component({
   selector: 'app-add-groupe-dialog',
@@ -13,7 +14,8 @@ import {MatDialogRef} from "@angular/material/dialog";
 })
 export class AddGroupeDialogComponent {
 
-      newGroupe = { nom: '', heures: 0, type: '' };
+      // @ts-ignore
+  newGroupe : Groupe = { nom: '', type: "", heuresAffectees: 0, totalHeuresDuGroupe: 0, moduleId: -1};
 
     constructor(public dialogRef: MatDialogRef<AddGroupeDialogComponent>) {}
 
