@@ -19,7 +19,7 @@ export class LoginService {
   // Is a internal state of the authentification (true if connected else false)
   private isLoggedState: boolean = true;
 
-  // Observable for another component who depends of the auth status 
+  // Observable for another component who depends of the auth status
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
@@ -79,7 +79,7 @@ export class LoginService {
       this.isAuthenticatedSubject.next(true);
     }
 
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/enseignants/affectations']);
   }
 
   handleLoginError(error: any) {
