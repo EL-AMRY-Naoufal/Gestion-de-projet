@@ -17,7 +17,7 @@
         </span>
       </ng-container>
       <ng-template #noRoles>
-        <span>No roles assigned</span>
+        <span>Aucun rôle assigné</span>
       </ng-template>
     </mat-card-subtitle>
 
@@ -25,10 +25,10 @@
       <div *ngIf="enseignant.categorieEnseignant">
         <span>{{ enseignant.categorieEnseignant }}</span>
       </div>
-  
-      <div>Heures assignées: {{ enseignant.heuresAssignees }}h</div>
-      <div>Décharge: {{ enseignant.nbHeureCategorie }}h</div>
-      <div>Heures maximales de service: {{ enseignant.maxHeuresService }}h</div>
+
+      <div>Heure Service: {{ enseignant.maxHeuresService }}h</div>
+      <div>Heure Affecté: {{ enseignant.heuresAssignees }}h</div>
+      <div>Heure Décharge: {{ enseignant.nbHeureCategorie }}h</div>
     </mat-card-content>
 
 

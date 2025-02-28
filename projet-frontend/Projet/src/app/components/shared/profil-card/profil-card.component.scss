@@ -5,7 +5,7 @@ mat-list-item {
   background-color: #ffffff; /* Couleur de fond blanche */
   border-radius: 8px; /* Bordure arrondie */
   margin: 5px;
-  width: 26em;
+  width: 30em;
   height: 180px; /* Hauteur fixe pour les cards */
   padding: 1.5em;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour la carte */
@@ -26,6 +26,7 @@ mat-list-item {
 }
 
 .custom-description {
+  min-width: 20em;
   font-size: 0.9rem; /* Taille de la description */
   color: #777777; /* Couleur grise pour la description */
   margin-top: 30px; /* Espacement avec le titre */
@@ -39,11 +40,16 @@ mat-card-title span {
   color: #0a2b46; /* Bleu foncé pour le titre */
 }
 
+
+mat-card-title {
+  min-width: 10em;
+
+}
 /* Style des sous-titres (rôles et email) */
 mat-card-subtitle {
   font-size: 0.9rem;
   color: #777777; /* Gris clair pour les sous-titres */
-  width: 100%;
+  max-width: 10em;
   text-overflow: ellipsis;
 }
 
