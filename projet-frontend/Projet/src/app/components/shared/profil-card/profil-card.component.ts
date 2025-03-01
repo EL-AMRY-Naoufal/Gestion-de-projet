@@ -26,7 +26,6 @@ import { AffectationDialogComponent } from '../../affectation/affectation-dialog
 })
 export class ProfilCardComponent {
 
-    private _listUsersDialog: MatDialogRef<AffectationDialogComponent, User> | undefined;
 
 
 
@@ -84,15 +83,16 @@ export class ProfilCardComponent {
       this._delete$.emit(enseignant);
     }
 
-    showAffectations(arg0: any) {
-      console.log("affectaiton")
+    showAffectations( enseignant: EnseignantDto) {
+      console.log("affectation");
 
       // open modal
-        this._listUsersDialog = this._dialog.open(AffectationDialogComponent, {
-          disableClose: true,
-          panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
-        });
-
+       this._dialog.open(AffectationDialogComponent, {
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+        data: { enseignant: enseignant } // Passer l'enseignant en tant que donnée
+      });
     }
+
 
 }

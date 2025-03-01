@@ -2,6 +2,7 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { AffectationListComponent } from "../affectation-enseignant/affectation-enseignant.component";
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from '../../../services/api-service';
+import { EnseignantDto } from '../../shared/types/enseignant.type';
 
 @Component({
   selector: 'app-affectation-dialog',
@@ -14,12 +15,14 @@ import { ApiService } from '../../../services/api-service';
 })
 export class AffectationDialogComponent {
 
- // editedComment: string;
+  enseignant: EnseignantDto;
+
 
   constructor(
     private dialogRef: MatDialogRef<AffectationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
+    this.enseignant = data.enseignant;
   }
 
 
@@ -29,9 +32,6 @@ export class AffectationDialogComponent {
   }
 
 
-  onSave($event: SubmitEvent) {
-    throw new Error('Method not implemented.');
-    }
 
 
 }
