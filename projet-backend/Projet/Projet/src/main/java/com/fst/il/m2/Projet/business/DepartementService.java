@@ -15,4 +15,6 @@ public interface DepartementService {
     void deleteDepartement(Long id);
 
     List<Departement> getDepartementsByAnnee(Annee annee);
+
+    Boolean hasFormations(Long id);
 }

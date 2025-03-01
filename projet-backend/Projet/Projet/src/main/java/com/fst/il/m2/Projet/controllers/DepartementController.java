@@ -48,5 +48,12 @@ public class DepartementController {
         return departementService.getDepartementById(id);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDepartement(@PathVariable Long id) {
+        if(!departementService.hasFormations(id)) {
+            departementService.deleteDepartement(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
 }

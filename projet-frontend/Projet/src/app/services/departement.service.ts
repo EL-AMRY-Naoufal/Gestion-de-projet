@@ -33,13 +33,16 @@ export class DepartementService {
   getAllDepartements(): Observable<Departement[]> {
     return this.http.get<Departement[]>(`${this._backendURL.departements}`);
   }
- 
+
   getRDDById(id: number): Observable<ResponsableDepartement> {
     return this.http.get<ResponsableDepartement>(`${this._backendURL.responsableDepartement}/id/${id}`)
   }
 
   saveDepartement(departement: Departement): Observable<Departement> {
-    console.log(departement);
     return this.http.post<Departement>(`${this._backendURL.departements}`, departement);
+  }
+
+  deleteDepartement(departement: Departement): Observable<Departement> {
+    return this.http.delete<Departement>(`${this._backendURL.departements}/${departement.id}`);
   }
 }
