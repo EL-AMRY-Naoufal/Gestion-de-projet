@@ -1,6 +1,8 @@
 # Argument pour spécifier la version de Node.js
 ARG NODE_VERSION=22.4
 FROM node:${NODE_VERSION}-alpine AS base
+EXPOSE 4200
+EXPOSE 4000
 
 # Définir le répertoire de travail pour le projet
 WORKDIR /usr/src/app
