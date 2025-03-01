@@ -27,7 +27,7 @@ export class SemestreService {
             (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
         );
     }
-    
+
     getAllSemestres(): Observable<Semestre[]> {
         return this.http.get<Semestre[]>(`${this._backendURL.semestres}`);
     }
@@ -42,5 +42,9 @@ export class SemestreService {
 
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {
         return this.http.get<Niveau[]>(`${this._backendURL.niveaux}/formation/${formationId}`);
+    }
+
+    deleteSemestre(semestre: Semestre): Observable<Semestre> {
+        return this.http.delete<Semestre>(`${this._backendURL.semestres}/${semestre.id}`);
     }
 }

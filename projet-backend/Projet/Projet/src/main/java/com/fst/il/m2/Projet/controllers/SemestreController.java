@@ -68,11 +68,10 @@ public class SemestreController {
     // Delete a Semestre by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSemestre(@PathVariable Long id) {
-        try {
+        if(!semestreService.hasModules(id)) {
             semestreService.deleteSemestre(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }
