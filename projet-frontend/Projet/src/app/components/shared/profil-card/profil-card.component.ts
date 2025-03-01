@@ -1,4 +1,4 @@
-import { UserRoleDto } from './../types/user.type';
+import { User, UserRoleDto } from './../types/user.type';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';  // Pour utiliser les liens de navigation
 import { MatCardModule } from '@angular/material/card';  // Pour le composant mat-card
@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';  // Pour les boutons
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { EnseignantDto } from '../types/enseignant.type';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AffectationDialogComponent } from '../../affectation/affectation-dialog/affectation-dialog.component';
 
 
 @Component({
@@ -23,9 +25,11 @@ import { EnseignantDto } from '../types/enseignant.type';
   styleUrl: './profil-card.component.scss'
 })
 export class ProfilCardComponent {
-showAffectations(arg0: number) {
-throw new Error('Method not implemented.');
-}
+
+    private _listUsersDialog: MatDialogRef<AffectationDialogComponent, User> | undefined;
+
+
+
     // private property to store user value
     private _enseignant: EnseignantDto;
     // private property to store delete$ value
@@ -37,7 +41,7 @@ throw new Error('Method not implemented.');
     /**
      * Component constructor
      */
-    constructor(private loginService: LoginService
+    constructor(private loginService: LoginService,private _dialog: MatDialog,
     ) {
       this._enseignant = {} as EnseignantDto;
       this._delete$ = new EventEmitter<EnseignantDto>();
@@ -78,6 +82,17 @@ throw new Error('Method not implemented.');
      */
     delete(enseignant: EnseignantDto): void {
       this._delete$.emit(enseignant);
+    }
+
+    showAffectations(arg0: any) {
+      console.log("affectaiton")
+
+      // open modal
+        this._listUsersDialog = this._dialog.open(AffectationDialogComponent, {
+          disableClose: true,
+          panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+        });
+
     }
 
 }
