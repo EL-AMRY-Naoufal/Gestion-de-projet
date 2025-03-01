@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { EnseignantDto } from './../../shared/types/enseignant.type';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { EnseignantService } from '../../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
 import {AffectationType} from "../../shared/types/affectation.type";
@@ -11,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../../services/api-service';
+import { User } from '../../shared/types/user.type';
 
 @Component({
   selector: 'app-affectation-list',
@@ -30,9 +32,13 @@ import { ApiService } from '../../../services/api-service';
 })
 export class AffectationListComponent implements OnInit {
 
+  enseignantId!: string;  // Input to receive enseignantId from the parent (dialog)
+  @Input() dialog: boolean = false;  // Input to receive enseignantId from the parent (dialog)
+
+
   affectations: AffectationType[] = [];
 
-  enseignantId!: string;
+  //enseignantId!: string;
   userRoles: string[] = [];
 
   editingId: number | null = null;
@@ -44,15 +50,15 @@ export class AffectationListComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private _api: ApiService) {
     this.userRoles = this.loginService.userRoles;
-
+    console.log("cc")
   }
 
   ngOnInit(): void {
+    if( this.dialog == false ) {
+      this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') || this.loginService.connectUser() + '';
+    }
 
-
-    //si un paramètre est passé dans l'url on le récupère, sinon on récupère l'id de l'utilisateur connecté
-    this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') || this.loginService.connectUser() + '';
-    this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
+    this.enseignantService.getAffectationsByEnseignantId("5").subscribe(
       (data) => {
         this.affectations = data;
         console.log('Affectations:', this.affectations);
@@ -100,4 +106,20 @@ export class AffectationListComponent implements OnInit {
   cancelEditing() {
     this.editingId = null;
   }
+
+
+  @Input()
+  set user(user: User) {
+    console.log("Nouvel user reçu :", user);
+
+    if (user?.id !== undefined) {
+      this.enseignantId = user.id.toString();
+    } else {
+      console.warn("L'utilisateur n'a pas d'ID !");
+      this.enseignantId = ''; // Ou une valeur par défaut
+    }
+  }
+
+
+
 }

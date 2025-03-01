@@ -90,7 +90,7 @@ export class ProfilCardComponent {
        this._dialog.open(AffectationDialogComponent, {
         disableClose: true,
         panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
-        data: { enseignant: enseignant } // Passer l'enseignant en tant que donnée
+        data: { user: enseignant.user } // Passer l'enseignant en tant que donnée
       });
     }
 

@@ -1,6 +1,8 @@
 <div class="main-content">
   <div *ngIf="affectations.length > 0; else noAffectations" class="container">
-    <h2 class="title">Mes Affectations</h2>
+
+
+    <h2 class="title" *ngIf="!dialog">Mes Affectations</h2>
     <table class="custom-table">
       <thead>
       <tr>

@@ -1,8 +1,8 @@
 <div class="global-header">
 
-  <h2 mat-dialog-title>Les Affectations de {{ enseignant?.firstname }} {{enseignant?.name}} </h2>
+  <h2 mat-dialog-title>Les Affectations de {{ user.firstname }} {{user.name}} </h2>
   <section class="dialog-content">
-    <app-affectation-list (cancel)="cancel()"></app-affectation-list>
+    <app-affectation-list [user]="user" [dialog]="true" (cancel)="cancel()"></app-affectation-list>
   </section>
 
 
