@@ -58,7 +58,7 @@ export class AffectationListComponent implements OnInit {
       this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') || this.loginService.connectUser() + '';
     }
 
-    this.enseignantService.getAffectationsByEnseignantId("5").subscribe(
+    this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
       (data) => {
         this.affectations = data;
         console.log('Affectations:', this.affectations);
