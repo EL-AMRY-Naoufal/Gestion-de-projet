@@ -35,4 +35,8 @@ export class FormationService {
     saveFormation(formation : Formation): Observable<Formation> {
         return this.http.post<Formation>(`${this._backendURL.formations}`, formation);
     }
+
+    deleteFormation(formation: Formation): Observable<Formation> {
+        return this.http.delete<Formation>(`${this._backendURL.formations}/${formation.id}`);
+      }
 }

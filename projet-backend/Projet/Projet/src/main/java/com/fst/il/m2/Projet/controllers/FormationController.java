@@ -17,13 +17,11 @@ import java.util.List;
 public class FormationController {
 
     private final FormationService formationService;
-    private final ResponsableFormationService responsableFormationService;
     private final FormationMapper formationMapper;
 
     @Autowired
     public FormationController(FormationService formationService, ResponsableFormationService responsableFormationService) {
         this.formationService = formationService;
-        this.responsableFormationService = responsableFormationService;
         this.formationMapper = new FormationMapper(responsableFormationService);
     }
 
@@ -68,11 +66,10 @@ public class FormationController {
     // Delete Formation
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFormation(@PathVariable Long id) {
-        try {
+        if(!formationService.hasNiveaux(id)) {
             formationService.deleteFormation(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }
