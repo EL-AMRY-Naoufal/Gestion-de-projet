@@ -26,6 +26,7 @@ import { AffectationService } from '../../services/affectation.service';
 import { EnseignantDto } from '../shared/types/enseignant.type';
 import {Router} from "@angular/router";
 import {BehaviorSubject} from "rxjs";
+import { ConfirmDeletionDialogComponent } from './dialog/confirm-deletion-dialog/confirm-deletion-dialog.component';
 
 
 @Component({
@@ -414,28 +415,88 @@ export class ModulesComponent implements OnInit {
 
 
   removeAnnee(annee: Annee) {
-    let anneeIndex = this.annees.findIndex((currentAnnee) => currentAnnee === annee);
-    this.annees.splice(anneeIndex!, 1);
+    let departementsChildren: Departement | undefined = this.departements.find((currentDepartement) => currentDepartement.anneeId === annee.id);
+    if(departementsChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let anneeIndex = this.annees.findIndex((currentAnnee) => currentAnnee === annee);
+          this.annees.splice(anneeIndex!, 1);
+          this.anneeService.deleteAnnee(annee).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer cette année : elle contient encore des départements");
+    }
   }
 
   removeDepartement(departement: Departement) {
-    let departementIndex = this.departements.findIndex((currentDepartement) => currentDepartement === departement);
-    this.departements.splice(departementIndex!, 1);
+    let formationsChildren: Formation | undefined = this.formations.find((currentFormation) => currentFormation.departementId === departement.id);
+    if(formationsChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let departementIndex = this.departements.findIndex((currentDepartement) => currentDepartement === departement);
+          this.departements.splice(departementIndex!, 1);
+          this.departementService.deleteDepartement(departement).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer ce département : il contient encore des formations");
+    }
   }
 
   removeFormation(formation: Formation) {
-    let formationIndex = this.formations.findIndex((currentFormation) => currentFormation === formation);
-    this.formations.splice(formationIndex, 1);
+    let niveauxChildren: Niveau | undefined = this.niveaux.find((currentNiveau) => currentNiveau.formationId === formation.id);
+     if(niveauxChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let formationIndex = this.formations.findIndex((currentFormation) => currentFormation === formation);
+          this.formations.splice(formationIndex, 1);
+          this.formationService.deleteFormation(formation).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer cette formation : elle contient encore des niveaux");
+    }
   }
 
   removeNiveau(niveau: Niveau) {
-    let niveauIndex = this.niveaux.findIndex((currentNiveau) => currentNiveau === niveau);
-    this.niveaux.splice(niveauIndex, 1);
+    let semestresChildren: Semestre | undefined = this.semestres.find((currentSemestre) => currentSemestre.niveauId === niveau.id);
+    if(semestresChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let niveauIndex = this.niveaux.findIndex((currentNiveau) => currentNiveau === niveau);
+          this.niveaux.splice(niveauIndex, 1);
+          this.niveauService.deleteNiveau(niveau).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer ce niveau : il contient encore des semestres");
+    }
   }
 
   removeSemestre(semestre : Semestre) {
-    let semestreIndex = this.semestres.findIndex((currentSemestre) => currentSemestre === semestre);
-    this.semestres.splice(semestreIndex, 1);
+    let modulesChildren: Module | undefined = this.modules.find((currentModule) => currentModule.semestreId === semestre.id);
+    if(modulesChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let semestreIndex = this.semestres.findIndex((currentSemestre) => currentSemestre === semestre);
+          this.semestres.splice(semestreIndex, 1);
+          this.semestreService.deleteSemestre(semestre).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer ce semestre : il contient encore des modules");
+    }
   }
 
   removeModule(module: Module) {
