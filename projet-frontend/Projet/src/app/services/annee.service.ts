@@ -36,7 +36,11 @@ export class AnneeService {
   }
 
   saveAnnee(annee: Annee): Observable<Annee> {
-    // annee.departements = [];
     return this.http.post<Annee>(`${this._backendURL.annees}`, annee);
+  }
+
+  deleteAnnee(annee : Annee): Observable<Annee> {
+    console.log("delete annee");
+    return this.http.delete<Annee>(`${this._backendURL.annees}/${annee.id}`);
   }
 }

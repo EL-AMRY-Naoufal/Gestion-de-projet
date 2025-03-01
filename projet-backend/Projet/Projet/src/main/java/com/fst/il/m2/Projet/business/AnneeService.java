@@ -15,4 +15,6 @@ public interface AnneeService {
 
     Long getCurrentYearId();
 
+    Boolean hasDepartements(Long id);
+
 }
