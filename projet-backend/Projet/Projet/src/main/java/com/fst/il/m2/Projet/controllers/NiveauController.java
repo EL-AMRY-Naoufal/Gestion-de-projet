@@ -64,11 +64,10 @@ public class NiveauController {
     // Delete a Niveau by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNiveau(@PathVariable Long id) {
-        try {
+        if(!niveauService.hasSemestres(id)) {
             niveauService.deleteNiveau(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }
