@@ -34,5 +34,9 @@ export class ModuleService {
 
   saveModule(module: Module): Observable<Module> {
           return this.http.post<Module>(`${this._backendURL.modules}`, module);
-      }
+  }
+
+  deleteModule(module: Module): Observable<Module> {
+    return this.http.delete<Module>(`${this._backendURL.modules}/${module.id}`);
+}
 }

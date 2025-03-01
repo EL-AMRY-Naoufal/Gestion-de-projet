@@ -500,8 +500,22 @@ export class ModulesComponent implements OnInit {
   }
 
   removeModule(module: Module) {
-    let moduleIndex = this.modules.findIndex((currentModule) => currentModule === module);
-    this.modules.splice(moduleIndex, 1);
+    let groupesChildren: Groupe | undefined = this.groupes.find((currentGroupe) => currentGroupe.moduleId === module.id);
+    if(groupesChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let moduleIndex = this.modules.findIndex((currentModule) => currentModule === module);
+          this.modules.splice(moduleIndex, 1);
+          this.moduleService.deleteModule(module).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer ce module : il contient encore des groupes");
+    }
+
+
   }
 
   removeGroupe(groupe: Groupe) {

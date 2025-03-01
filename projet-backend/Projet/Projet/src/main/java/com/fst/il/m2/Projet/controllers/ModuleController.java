@@ -50,11 +50,10 @@ public class ModuleController {
     // Delete a Module by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
-        try {
+        if(!moduleService.hasGroupes(id)) {
             moduleService.deleteModule(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }
