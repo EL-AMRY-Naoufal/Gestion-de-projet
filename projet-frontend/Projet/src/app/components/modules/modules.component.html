@@ -69,7 +69,7 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                             <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
                                               <div class="affectation-info">
                                                 <p><strong></strong>
-                                                  <a (click)="navigateToAffectations(affectation.enseignant?.user?.id!!)">
+                                                  <a *ngIf="affectation.enseignant?.user" (click)="navigateToAffectations(affectation.enseignant?.user)">
                                                     {{ affectation.nomEnseignant }}
                                                   </a>
                                                 </p>
