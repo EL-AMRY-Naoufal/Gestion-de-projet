@@ -156,7 +156,11 @@ export class ModulesComponent implements OnInit {
 
 
   openAddAnneeDialog(): void {
-    const dialogRef = this.dialog.open(AddAnneeDialogComponent);
+    const dialogRef = this.dialog.open(AddAnneeDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -170,7 +174,11 @@ export class ModulesComponent implements OnInit {
   }
 
   openAddDepartementDialog(anneeIndex: number): void {
-    const dialogRef = this.dialog.open(AddDepartementDialogComponent);
+    const dialogRef = this.dialog.open(AddDepartementDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -184,7 +192,11 @@ export class ModulesComponent implements OnInit {
   }
 
   openAddFormationDialog(anneeIndex: number, departementIndex: number): void {
-    const dialogRef = this.dialog.open(AddFormationDialogComponent);
+    const dialogRef = this.dialog.open(AddFormationDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -199,7 +211,11 @@ export class ModulesComponent implements OnInit {
 
 
   openAddNiveauDialog(anneeIndex: number, departementIndex: number, formationIndex: number): void {
-    const dialogRef = this.dialog.open(AddNiveauDialogComponent);
+    const dialogRef = this.dialog.open(AddNiveauDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -213,7 +229,11 @@ export class ModulesComponent implements OnInit {
   }
 
   openAddSemestreDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number): void {
-    const dialogRef = this.dialog.open(AddSemestreDialogComponent);
+    const dialogRef = this.dialog.open(AddSemestreDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -242,7 +262,11 @@ export class ModulesComponent implements OnInit {
 
 
   openAddGroupeDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number): void {
-    const dialogRef = this.dialog.open(AddGroupeDialogComponent);
+    const dialogRef = this.dialog.open(AddGroupeDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    }
+    );
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
