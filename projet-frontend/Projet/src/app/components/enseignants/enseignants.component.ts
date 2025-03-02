@@ -52,9 +52,6 @@ export class EnseignantsComponent implements OnInit {
       this.enseignantService.getEnseignants().subscribe((data) => {
         this.enseignants = data;
       });
-      if (result) {
-        console.log('Données reçues du modal:', result);
-      }
     });
   }
 
@@ -72,36 +69,43 @@ export class EnseignantsComponent implements OnInit {
   }
 
   searchEnseignants(): void {
-    console.log('query', this.searchQuery);
-
     // Si la recherche est vide, recharger tous les enseignants
     if (this.searchQuery.trim() === '') {
       this.getEnseignants();
     } else {
+      // Normalisation de la query
+      const lowercaseQuery = this.searchQuery.toLowerCase();
+      const uppercaseQuery = this.searchQuery.toUpperCase();
+      const capitalizedQuery =
+        this.searchQuery.charAt(0).toUpperCase() +
+        this.searchQuery.slice(1).toLowerCase();
+
       // Tableau pour stocker les résultats combinés
       let allResults: EnseignantDto[] = [];
 
-      // Recherche par prénom (firstname)
-      this.enseignantService
-        .getEnseignantsByFirstname(this.searchQuery) // Recherche par firstname
-        .subscribe((data) => {
-          console.log('by firstname', data);
-          allResults = this.mergeUniqueResults(allResults, data);
+      // Création d'un tableau de requêtes
+      const queries = [
+        this.searchQuery,
+        lowercaseQuery,
+        uppercaseQuery,
+        capitalizedQuery,
+      ];
 
-          // Affiche les résultats combinés après la recherche par prénom
+      queries.forEach((query) => {
+        // Recherche par prénom (firstname)
+        this.enseignantService
+          .getEnseignantsByFirstname(query)
+          .subscribe((data) => {
+            allResults = this.mergeUniqueResults(allResults, data);
+            this.enseignants = allResults;
+          });
+
+        // Recherche par nom (name)
+        this.enseignantService.getEnseignantsByName(query).subscribe((data) => {
+          allResults = this.mergeUniqueResults(allResults, data);
           this.enseignants = allResults;
         });
-
-      // Recherche par nom (name)
-      this.enseignantService
-        .getEnseignantsByName(this.searchQuery) // Recherche par name
-        .subscribe((data) => {
-          console.log('by name', data);
-          allResults = this.mergeUniqueResults(allResults, data);
-
-          // Affiche les résultats combinés après la recherche par nom
-          this.enseignants = allResults;
-        });
+      });
     }
   }
 

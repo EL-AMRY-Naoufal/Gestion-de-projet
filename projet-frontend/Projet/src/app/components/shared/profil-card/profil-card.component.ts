@@ -23,6 +23,9 @@ import { EnseignantDto } from '../types/enseignant.type';
   styleUrl: './profil-card.component.scss'
 })
 export class ProfilCardComponent {
+showAffectations(arg0: number) {
+throw new Error('Method not implemented.');
+}
     // private property to store user value
     private _enseignant: EnseignantDto;
     // private property to store delete$ value

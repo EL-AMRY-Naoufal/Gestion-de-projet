@@ -55,7 +55,7 @@
             L'email est <strong>obligatoire</strong>
           </mat-error>
           <mat-error *ngIf="form.get('email')?.touched && !form.get('email')?.hasError('required') && form.get('email')?.hasError('googleEmail')">
-            Format d'email invalide (name.lastname&#64;etu.univ-lorraine.fr )
+            Format d'email invalide (name.lastname&#64;univ-lorraine.fr )
           </mat-error>
           <mat-error *ngIf="form.get('email')?.touched && !form.get('email')?.hasError('required') && form.get('email')?.hasError('utiliseEmail') ">
             Cette email est déjà utilisé par un autre utilisateur

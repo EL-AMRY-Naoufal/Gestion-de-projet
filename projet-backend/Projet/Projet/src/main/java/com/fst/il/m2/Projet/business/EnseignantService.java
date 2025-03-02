@@ -161,8 +161,8 @@ public class EnseignantService {
 
         enseignant.setCategorieEnseignant(categorieHeuresMap);
         enseignant.setMaxHeuresService(nmaxHeuresService);
-        enseignant.setName(name);
-        enseignant.setFirstname(firstname);
+        enseignant.setName(StringUtils.capitalize(name));
+        enseignant.setFirstname(StringUtils.capitalize(firstname));
         enseignant.setHasAccount(hasAccount);
 
         if (!hasAccount) {
@@ -259,5 +259,5 @@ public class EnseignantService {
     public Optional<Enseignant> getEnseignantByName(String name) {
         return enseignantRepository.findByName(name);
     }
-    
+
 }

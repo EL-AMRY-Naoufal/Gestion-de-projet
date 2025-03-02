@@ -230,7 +230,7 @@ getEnseignantWithSameUserNameAndFirstName(){
     const normalizedName = this.normalizeString(name);
 
     if (firstname && name) {
-      const formattedEmail = `${firstname}.${name}@etu.univ-lorraine.fr`;
+      const formattedEmail = `${firstname}.${name}@univ-lorraine.fr`;
       const formattedUsername = `${name}1u`;
 
       // Mise à jour des champs email et username
