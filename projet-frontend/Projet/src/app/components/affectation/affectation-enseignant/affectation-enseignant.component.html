@@ -1,6 +1,6 @@
 <div class="main-content">
   <div *ngIf="affectations.length > 0; else noAffectations" class="container">
-    <h2 class="title">Mes Affectations</h2>
+    <h2 class="title">Les Affectations de  {{ username}}</h2>
     <table class="custom-table">
       <thead>
       <tr>
@@ -13,10 +13,10 @@
       </thead>
       <tbody>
       <tr *ngFor="let affectation of affectations">
-        <td>{{ affectation.nomModule }} / {{ affectation.nomGroupe }}</td>
+        <td>{{ nomModules[affectation.moduleId!] || 'Chargement...' }} / {{ nomGroupes[affectation.groupeId] || 'Chargement...' }}</td>
         <td>{{ affectation.heuresAssignees }}</td>
         <td>{{ affectation.dateAffectation }}</td>
-        <td>{{ affectation.coAffecte }}</td>
+        <td> <a href=""> afficher </a></td>
         <td>
           <div class="commentaire-case">
             <ng-container *ngIf="editingId !== affectation.id; else editMode">

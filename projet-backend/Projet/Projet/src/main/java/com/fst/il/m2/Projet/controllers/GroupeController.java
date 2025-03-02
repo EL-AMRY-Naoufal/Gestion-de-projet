@@ -37,17 +37,16 @@ public class GroupeController {
         return new ResponseEntity<>(groupes.stream().map(GroupeMapper::toDto).toList(), HttpStatus.OK);
     }
 
-    // Get a Groupe by ID
-    @GetMapping("/id/{id}")
-    public ResponseEntity<Groupe> getGroupeById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupeDto> getGroupeById(@PathVariable Long id) {
         try {
             Groupe groupe = groupeService.getGroupeById(id);
-            return new ResponseEntity<>(groupe, HttpStatus.OK);
+            GroupeDto groupeDto = GroupeMapper.toDto(groupe);
+            return new ResponseEntity<>(groupeDto, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
     @GetMapping("/module/{moduleId}")
     public List<Groupe> getGroupesByModuleId(@PathVariable Long moduleId) {
         List<Groupe> groupes = groupeService.getGroupesByModule(Module.builder().id(moduleId).build());

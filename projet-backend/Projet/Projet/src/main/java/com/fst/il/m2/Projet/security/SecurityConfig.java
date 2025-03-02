@@ -42,21 +42,22 @@ public class SecurityConfig {
                         .requestMatchers("/api/responsableDepartement/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/users/authenticate").anonymous() // Open login endpoint
                         .requestMatchers("/api/enseignants/enseignants-non-enregistres").hasAuthority("CHEF_DE_DEPARTEMENT")
-                        .requestMatchers("/api/enseignants/**").hasAuthority("CHEF_DE_DEPARTEMENT")
+                        .requestMatchers("/api/enseignants/**").permitAll()
                         .requestMatchers("/api/categories").permitAll()
                         .requestMatchers("/api/users").permitAll()
                         .requestMatchers("/api/annees").permitAll()
                         .requestMatchers(("/api/annees/**")).hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/departements/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/niveaux/**").hasAuthority("CHEF_DE_DEPARTEMENT")
-                        .requestMatchers("/api/groupes/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/affectation/**").permitAll()
 
 
 
                         //partie creation des affectations
                         .requestMatchers("/api/modules").permitAll()
+                        .requestMatchers("/api/groupes/**").permitAll()
                         .requestMatchers("/api/responsableDepartement").permitAll()
+                      //  .requestMatchers("/api/enseignants/userId/**").permitAll()
 
                         .requestMatchers("/api/annees").permitAll()
 

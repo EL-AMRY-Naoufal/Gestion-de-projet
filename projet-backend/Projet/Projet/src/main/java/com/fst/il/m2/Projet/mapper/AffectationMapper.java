@@ -30,6 +30,7 @@ public class AffectationMapper {
                 .commentaire(affectation.getCommentaire())
                 .enseignantId(affectation.getEnseignant().getId())
                 .groupeId(affectation.getGroupe().getId())
+                .moduleId(affectation.getGroupe().getModule().getId())
                 .build();
     }
 }

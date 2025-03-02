@@ -36,6 +36,10 @@ export class ModuleService {
           return this.http.post<Module>(`${this._backendURL.modules}`, module);
   }
 
+  getModuleById(id: number): Observable<Module> {
+    return this.http.get<Module>(`${this._backendURL.modules}/${id}`);
+  }
+
   deleteModule(module: Module): Observable<Module> {
     return this.http.delete<Module>(`${this._backendURL.modules}/${module.id}`);
 }

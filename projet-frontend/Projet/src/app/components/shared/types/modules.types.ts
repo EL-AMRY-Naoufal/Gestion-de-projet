@@ -14,6 +14,7 @@ export type Affectation = {
   heuresAssignees: number;
   enseignantId: number;
   groupeId: number;
+  moduleId?: number;
   commentaire: string;
   dateAffectation: string;
 };

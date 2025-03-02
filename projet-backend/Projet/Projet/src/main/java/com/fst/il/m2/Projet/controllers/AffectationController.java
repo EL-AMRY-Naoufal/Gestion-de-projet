@@ -9,6 +9,8 @@ import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Enseignant;
+import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +28,13 @@ public class AffectationController {
     private final AffectationService affectationService;
 
     private final EnseignantService enseignantService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AffectationController(AffectationService affectationService, EnseignantService enseignantService) {
+    public AffectationController(AffectationService affectationService, EnseignantService enseignantService, UserRepository userRepository) {
         this.affectationService = affectationService;
         this.enseignantService = enseignantService;
+        this.userRepository = userRepository;
     }
 
 

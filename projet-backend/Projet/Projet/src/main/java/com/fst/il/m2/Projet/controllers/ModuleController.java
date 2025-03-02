@@ -30,11 +30,12 @@ public class ModuleController {
     }
 
     // Get a Module by ID
-    @GetMapping("/id/{id}")
-    public ResponseEntity<Module> getModuleById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ModuleDto> getModuleById(@PathVariable Long id) {
         try {
             Module module = moduleService.getModuleById(id);
-            return new ResponseEntity<>(module, HttpStatus.OK);
+            ModuleDto moduleDto = ModuleMapper.toDto(module);
+            return new ResponseEntity<>(moduleDto, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -28,4 +28,6 @@ public class AffectationDto {
     private String commentaire;
 
     private String dateAffectation;
+
+    private Long moduleId;
 }
