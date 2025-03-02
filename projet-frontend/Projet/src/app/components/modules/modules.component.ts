@@ -537,13 +537,21 @@ export class ModulesComponent implements OnInit {
   removeAffectation(affectation: Affectation) {
     let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
-    if (affectation.id !== undefined) {
-      this.userService.deleteAffectation(affectation.id).subscribe({
-        next: () => {
-          console.log('Affectation deleted');
-          this.affectations.splice(affectationIndex, 1);
+    if (affectation.id != undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          this.userService.deleteAffectation(affectation.id!).subscribe({
+            next: () => {
+              console.log('Affectation deleted');
+              this.affectations.splice(affectationIndex, 1);
+              let groupeIndex = this.groupes.findIndex((groupe) => groupe.id === affectation.groupeId);
+              this.groupes[groupeIndex].heuresAffectees -= affectation.heuresAssignees;
+            }
+          });
         }
-      });
+      })
+
     } else {
       console.error("Affectation ID is undefined");
     }
