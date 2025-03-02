@@ -258,6 +258,8 @@ export class ModulesComponent implements OnInit {
 
   openAddAffectationDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number, moduleIndex: number, groupeIndex: number): void {
     const dialogRef = this.dialog.open(AddAffectationComponent, {
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
       data: {
         moduleId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].id,
         groupeId: this.data.annees[anneeIndex].departements[departementIndex].formations[formationIndex].niveaux[niveauIndex].semestres[semestreIndex].modules[moduleIndex].groupes[groupeIndex].id

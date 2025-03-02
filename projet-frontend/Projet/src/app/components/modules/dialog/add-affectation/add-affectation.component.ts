@@ -1,17 +1,21 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 
-import {NgForOf, NgIf} from '@angular/common';
+import {CommonModule, NgForOf, NgIf} from '@angular/common';
 import {catchError} from 'rxjs/operators';
 import {UserService} from "../../../../services/user.service";
 import {ModuleService} from "../../../../services/module.service";
 import {EnseignantService} from "../../../../services/enseignant.service";
 import {LoginService} from "../../../../services/login.service";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
+import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
+import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
 import {group} from "@angular/animations";
 import {Affectation, Module} from "../../../shared/types/modules.types";
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatOptionModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 @Component({
@@ -20,11 +24,23 @@ import {Affectation, Module} from "../../../shared/types/modules.types";
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    CommonModule,
+    FormsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatDialogModule, // ✅ Ajout du module MatDialog
   ],
 
   templateUrl: './add-affectation.component.html',
-  styleUrls: ['./add-affectation.component.scss']
+  styleUrls: ['./add-affectation.component.scss'],
+  encapsulation: ViewEncapsulation.None, // Désactive l'encapsulation pour appliquer les styles globaux
+
 })
 export class AddAffectationComponent implements OnInit {
   myId!: string;
@@ -89,6 +105,7 @@ export class AddAffectationComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log("cc"+this.enseignantId+this.groupeId+this.heuresAssignees)
     if (this.enseignantId && this.groupeId && this.heuresAssignees) {
 
       //console select enseignant
