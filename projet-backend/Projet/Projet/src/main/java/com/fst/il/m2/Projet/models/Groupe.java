@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.TypeHeure;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,8 @@ import java.util.Date;
 import java.util.List;
 @Setter
 @Getter
-//@Builder
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "Groupe")
 public class Groupe {
