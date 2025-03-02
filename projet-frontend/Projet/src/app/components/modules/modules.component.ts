@@ -27,6 +27,8 @@ import { EnseignantDto } from '../shared/types/enseignant.type';
 import {Router} from "@angular/router";
 import {BehaviorSubject} from "rxjs";
 import { ConfirmDeletionDialogComponent } from './dialog/confirm-deletion-dialog/confirm-deletion-dialog.component';
+import {User} from "../shared/types/user.type";
+import {AffectationDialogComponent} from "../affectation/affectation-dialog/affectation-dialog.component";
 
 
 @Component({
@@ -51,6 +53,7 @@ export class ModulesComponent implements OnInit {
   groupes: Groupe[] = [];
   affectations: Affectation[] = [];
 
+
   constructor(
     public dialog: MatDialog,
     private departementService: DepartementService,
@@ -63,8 +66,10 @@ export class ModulesComponent implements OnInit {
     private enseignantService: EnseignantService,
     private userService: UserService,
     private affectationService: AffectationService,
-    private router: Router
-    ) {
+    private router: Router,
+  private _dialog: MatDialog
+
+) {
   }
 
   ngOnInit(): void {
@@ -553,7 +558,22 @@ export class ModulesComponent implements OnInit {
       console.error("Affectation ID is undefined");
     }
   }
-  navigateToAffectations(id: number ) {
-    this.router.navigate(['/enseignants/affectations/' + id]);
+  navigateToAffectations(user: number ) {
+    console.log("affectation");
+
+    if (!user) {
+      console.warn('Aucun utilisateur défini');
+      return;
+    }
+
+    // open modal
+    this._dialog.open(AffectationDialogComponent, {
+      disableClose: true,
+      panelClass: 'custom-dialog-container',
+      data: { enseignantId: user },
+      width: '90vw',
+      height: '70vh',
+      maxWidth: '100vw'
+    });
   }
 }

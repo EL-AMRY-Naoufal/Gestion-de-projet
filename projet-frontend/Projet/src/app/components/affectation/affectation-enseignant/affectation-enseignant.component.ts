@@ -1,4 +1,4 @@
-import { Component, input, Input, OnInit } from '@angular/core';
+import {Component, input, Input, OnInit, Output} from '@angular/core';
 import { EnseignantService } from '../../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
 import {LoginService} from "../../../services/login.service";
@@ -41,12 +41,9 @@ export class AffectationListComponent implements OnInit {
   coAffectations: { [key: number]: CoAffectation[] } = {};
   selectedModuleId: number | null = null;
 
-  @Input() dialog: boolean = false;  // Input to receive enseignantId from the parent (dialog)
-  connect : boolean = false; // Si on utilise l'utilisateur connecter
+  @Input() dialog: boolean = false;  // Permet de savoir si le composant est utilisé dans un dialogue
+  @Input() enseignantId!: string;
 
-  affectations: AffectationType[] = [];
-
-  enseignantId!: string;
   username: string = '';
 
   editingId: number | null = null;
@@ -65,17 +62,16 @@ export class AffectationListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initEnseignant();
-  }
-
-  private initEnseignant(): void {
-    const enseignantIdFromRoute = this.activatedRoute.snapshot.paramMap.get('id');
-
-    if (enseignantIdFromRoute) {
-      this.setEnseignantIdAndLoadData(enseignantIdFromRoute);
+    if (this.enseignantId) {
+      this.loadData();
     } else {
       this.fetchEnseignantIdFromUser();
     }
+  }
+
+  private loadData(): void {
+    this.loadAffectations();
+    this.loadEnseignantName(Number(this.enseignantId));
   }
 
 
@@ -183,20 +179,6 @@ export class AffectationListComponent implements OnInit {
   cancelEditing() {
     this.editingId = null;
   }
-
-
-  @Input()
-  set user(user: User) {
-    console.log("Nouvel user reçu :", user);
-
-    if (user?.id !== undefined) {
-      this.enseignantId = user.id.toString();
-    } else {
-      console.warn("L'utilisateur n'a pas d'ID !");
-      this.enseignantId = ''; // Ou une valeur par défaut
-    }
-  }
-
 
 
 }
