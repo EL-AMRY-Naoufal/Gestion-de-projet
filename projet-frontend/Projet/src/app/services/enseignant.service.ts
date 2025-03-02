@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.prod';
 import { EnseignantDto } from '../components/shared/types/enseignant.type';
 import { User } from '../components/shared/types/user.type';
-import {Affectation} from "../components/shared/types/modules.types";
+import {Affectation, CoAffectation} from "../components/shared/types/modules.types";
 
 @Injectable({
   providedIn: 'root'

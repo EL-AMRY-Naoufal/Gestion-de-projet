@@ -9,6 +9,15 @@ export enum TypeHeure {
   TPL = "TPL",
 }
 
+export type CoAffectation = {
+  id: number;
+  enseignantName: string;
+  enseignantFirstName: string;
+  groupeName: string;
+  heuresAssignees: number;
+  dateAffectation: string;
+}
+
 export type Affectation = {
   id?: number;
   heuresAssignees: number;

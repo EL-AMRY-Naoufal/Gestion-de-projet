@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment.prod";
-import { Affectation } from "../components/shared/types/modules.types";
+import {Affectation, CoAffectation} from "../components/shared/types/modules.types";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -30,7 +30,12 @@ export class AffectationService {
   getAllAffectations(): Observable<Affectation[]> {
     return this.http.get<Affectation[]>(`${this._backendURL.affectations}`);
   }
-  
+
+
+  getCoAffectationsByModule(moduleId: number): Observable<CoAffectation[]> {
+    return this.http.get<CoAffectation[]>(`${this._backendURL.allCoAffectations}/module/${moduleId}`);
+  }
+
   saveAffectation(affectation : Affectation): Observable<Affectation> {
     return this.http.post<Affectation>(`${this._backendURL.affectations}`, affectation);
   }

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,5 +20,8 @@ public interface AffectationRepository extends JpaRepository<Affectation, Long> 
     List<Affectation> findGroupeAffectations(Groupe groupe);
 
     boolean existsByEnseignantAndGroupe(Enseignant enseignant, Groupe groupe);
+
+    @Query("SELECT a FROM Affectation a WHERE a.groupe.module.id = :moduleId")
+    List<Affectation> findByModuleId(@Param("moduleId") Long moduleId);
 
 }

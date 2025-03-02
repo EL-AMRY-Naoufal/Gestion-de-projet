@@ -21,6 +21,7 @@ export const environment = {
       formations:'/api/formations',
       affectations:'/api/affectations',
       allAffectation: '/api/affectations',
+      allCoAffectations: '/api/affectations/coAffectations',
       logout: '/api/users/user/logout',
       me: '/api/users/user/me'
     },

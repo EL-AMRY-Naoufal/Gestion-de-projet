@@ -1,6 +1,8 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.CoAffectationDTO;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.Groupe;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AffectationServiceDefault implements AffectationService{
@@ -125,5 +128,14 @@ public class AffectationServiceDefault implements AffectationService{
         groupeRepository.save(groupe);
         enseignantRepository.save(enseignant);
         affectationRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CoAffectationDTO> getCoAffectationsByModuleId(Long moduleId) {
+        List<Affectation> affectations = affectationRepository.findByModuleId(moduleId);
+        
+        return affectations.stream()
+                .map(AffectationMapper::toCoAffectationDTO)
+                .collect(Collectors.toList());
     }
 }

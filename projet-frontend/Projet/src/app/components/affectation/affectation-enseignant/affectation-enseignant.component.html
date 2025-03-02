@@ -16,7 +16,11 @@
         <td>{{ nomModules[affectation.moduleId!] || 'Chargement...' }} / {{ nomGroupes[affectation.groupeId] || 'Chargement...' }}</td>
         <td>{{ affectation.heuresAssignees }}</td>
         <td>{{ affectation.dateAffectation }}</td>
-        <td> <a href=""> afficher </a></td>
+        <td>
+          <a href="#" (click)="loadCoAffectations(affectation.moduleId!); $event.preventDefault();">
+            Afficher
+          </a>
+        </td>
         <td>
           <div class="commentaire-case">
             <ng-container *ngIf="editingId !== affectation.id; else editMode">
@@ -51,6 +55,28 @@
       </tr>
       </tbody>
     </table>
+    <div *ngIf="selectedModuleId !== null">
+      <h3>Co-Affectations pour le module {{ nomModules[selectedModuleId] }}</h3>
+      <table class="custom-table">
+        <thead>
+        <tr>
+          <th>Enseignant</th>
+          <th>Groupe</th>
+          <th>Heures Assignées</th>
+          <th>Date d'Affectation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let coAffectation of coAffectations[selectedModuleId]">
+          <td>{{ coAffectation.enseignantFirstName.charAt(0) + '. ' + coAffectation.enseignantName }}</td>
+          <td>{{ coAffectation.groupeName }}</td>
+          <td>{{ coAffectation.heuresAssignees }}</td>
+          <td>{{ coAffectation.dateAffectation }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
   <ng-template #noAffectations>
     <p class="no-affectations-message">Aucune affectation trouvée pour cet enseignant.</p>

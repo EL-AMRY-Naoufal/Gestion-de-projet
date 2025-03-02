@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.AffectationService;
 import com.fst.il.m2.Projet.dto.AffectationDto;
+import com.fst.il.m2.Projet.dto.CoAffectationDTO;
 import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
@@ -37,6 +38,12 @@ public class AffectationController {
         this.userRepository = userRepository;
     }
 
+    //get coaffectation by the module id
+    @GetMapping("/coAffectations/module/{moduleId}")
+    public ResponseEntity<List<CoAffectationDTO>> getCoAffectationsByModuleId(@PathVariable Long moduleId) {
+        List<CoAffectationDTO> affectations = affectationService.getCoAffectationsByModuleId(moduleId);
+        return new ResponseEntity<>(affectations, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<List<AffectationDto>> getAffectationsByEnseignantId(@PathVariable Long id) {

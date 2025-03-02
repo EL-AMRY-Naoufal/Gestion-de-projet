@@ -10,10 +10,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {ApiService} from '../../../services/api-service';
 
-import {Affectation} from "../../shared/types/modules.types";
+import {Affectation, CoAffectation} from "../../shared/types/modules.types";
 import {EnseignantDto} from "../../shared/types/enseignant.type";
 import {GroupeService} from "../../../services/groupe.service";
 import {ModuleService} from "../../../services/module.service";
+import {AffectationService} from "../../../services/affectation.service";
 
 
 @Component({
@@ -36,11 +37,9 @@ export class AffectationListComponent implements OnInit {
   affectations: Affectation[] = [];
   nomGroupes: { [key: number]: string } = {};
   nomModules: { [key: number]: string } = {};
+  coAffectations: { [key: number]: CoAffectation[] } = {};
+  selectedModuleId: number | null = null;
 
-
-
-
-//  coAffecte   : string[] = '';
 
   enseignantId!: string;
   username: string = '';
@@ -51,6 +50,7 @@ export class AffectationListComponent implements OnInit {
 
   constructor(private enseignantService: EnseignantService,
               private loginService: LoginService,
+              private affectationsService: AffectationService,
               private authService: ApiService,
               private activatedRoute: ActivatedRoute,
               private groupeService: GroupeService,
@@ -110,6 +110,25 @@ export class AffectationListComponent implements OnInit {
       );
   }
 
+  loadCoAffectations(moduleId: number): void {
+    if (!this.coAffectations[moduleId]) {
+      this.affectationsService.getCoAffectationsByModule(moduleId).subscribe(
+        (data: CoAffectation[]) => {
+          this.coAffectations[moduleId] = data.filter(
+            (coAffectation) => coAffectation.id !== Number(this.affectations.find(affectation => affectation.moduleId === moduleId)?.id)
+          );
+
+          this.selectedModuleId = moduleId;
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des co-affectations', error);
+        }
+      );
+    } else {
+      this.selectedModuleId = this.selectedModuleId === moduleId ? null : moduleId; // Permet de masquer au clic
+    }
+  }
+
   private loadModuleName(moduleId: number): void {
     if (!this.nomModules[moduleId]) { // Éviter de charger plusieurs fois le même module
       this.moduleService.getModuleById(moduleId).subscribe((module) => {
@@ -136,11 +155,6 @@ export class AffectationListComponent implements OnInit {
       });
   }
 
-  //Recuperer le nom du groupe depuis le service GroupeService
-  getGroupName(id: number) {
-    this.groupeService.getGroupesByModule(id).subscribe((groupe) => {
-    });
-  }
 
 
   startEditing(affectation: any) {

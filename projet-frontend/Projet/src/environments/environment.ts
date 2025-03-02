@@ -10,6 +10,7 @@ export const environment = {
     port: '8080',
     endpoints: {
       affectations: '/api/affectations',
+      allCoAffectations: '/api/affectations/coAffectations',
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',

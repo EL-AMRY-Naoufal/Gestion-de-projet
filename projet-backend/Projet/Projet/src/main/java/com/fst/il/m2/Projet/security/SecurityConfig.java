@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/departements/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/niveaux/**").hasAuthority("CHEF_DE_DEPARTEMENT")
                         .requestMatchers("/api/affectation/**").permitAll()
+                        .requestMatchers("/api/affectation/coAffectations/**").permitAll()
 
 
 

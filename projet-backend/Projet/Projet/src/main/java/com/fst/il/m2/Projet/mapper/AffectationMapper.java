@@ -1,6 +1,7 @@
 package com.fst.il.m2.Projet.mapper;
 
 import com.fst.il.m2.Projet.dto.AffectationDto;
+import com.fst.il.m2.Projet.dto.CoAffectationDTO;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.Groupe;
@@ -31,6 +32,17 @@ public class AffectationMapper {
                 .enseignantId(affectation.getEnseignant().getId())
                 .groupeId(affectation.getGroupe().getId())
                 .moduleId(affectation.getGroupe().getModule().getId())
+                .build();
+    }
+
+    public static CoAffectationDTO toCoAffectationDTO(Affectation affectation) {
+        return CoAffectationDTO.builder()
+                .id(affectation.getId())
+                .enseignantName(affectation.getEnseignant().getName())
+                .enseignantFirstName(affectation.getEnseignant().getName())
+                .groupeName(affectation.getGroupe().getNom())
+                .heuresAssignees(affectation.getHeuresAssignees())
+                .dateAffectation(affectation.getDateAffectation().toString())
                 .build();
     }
 }
