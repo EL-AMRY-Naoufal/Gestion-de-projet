@@ -1,7 +1,5 @@
 package com.fst.il.m2.Projet.repositories;
 
-import com.fst.il.m2.Projet.models.Departement;
-import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.Semestre;
 import org.springframework.data.jpa.repository.JpaRepository;
