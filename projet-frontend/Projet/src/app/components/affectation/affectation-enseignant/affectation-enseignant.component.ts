@@ -34,7 +34,7 @@ export class AffectationListComponent implements OnInit {
 
   enseignantId!: string;  // Input to receive enseignantId from the parent (dialog)
   @Input() dialog: boolean = false;  // Input to receive enseignantId from the parent (dialog)
-
+  connect : boolean = false; // Si on utilise l'utilisateur connecter
 
   affectations: AffectationType[] = [];
 
@@ -55,7 +55,12 @@ export class AffectationListComponent implements OnInit {
 
   ngOnInit(): void {
     if( this.dialog == false ) {
-      this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') || this.loginService.connectUser() + '';
+      this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') +''
+      if( this.enseignantId == "null" ) {
+
+        this.enseignantId = this.loginService.connectUser() + '';
+        this.connect = true;
+      }
     }
 
     this.enseignantService.getAffectationsByEnseignantId(this.enseignantId).subscribe(
