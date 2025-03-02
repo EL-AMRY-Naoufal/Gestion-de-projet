@@ -57,7 +57,6 @@ export class AffectationListComponent implements OnInit {
     if( this.dialog == false ) {
       this.enseignantId = this.activatedRoute.snapshot.paramMap.get('id') +''
       if( this.enseignantId == "null" ) {
-
         this.enseignantId = this.loginService.connectUser() + '';
         this.connect = true;
       }

@@ -23,9 +23,15 @@
           <div class="commentaire-case">
             <ng-container *ngIf="editingId !== affectation.id; else editMode">
               <div class="commentaire-text">{{ affectation.commentaire }}</div>
-              <button mat-icon-button  *ngIf="connect" (click)="startEditing(affectation)">
-                <mat-icon>edit</mat-icon>
-              </button>
+
+              <div
+                class="custom-icon modif-icon"
+                *ngIf="connect"
+                (click)="startEditing(affectation)"
+                title="modif commentaire"
+              >
+                ✏️
+              </div>
             </ng-container>
 
             <ng-template #editMode>
