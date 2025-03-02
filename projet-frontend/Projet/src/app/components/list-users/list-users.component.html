@@ -1,0 +1,83 @@
+<div class="main-content">
+
+  <!-- Sélecteur pour choisir la liste à afficher -->
+  <div class="list-selector">
+    <div class="list-options">
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'enseignants'"
+        (click)="selectedList = 'enseignants'"
+      >
+        Liste des enseignants
+      </div>
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'utilisateurs'"
+        (click)="selectedList = 'utilisateurs'"
+      >
+        Liste des utilisateurs
+      </div>
+    </div>
+  </div>
+
+  <!-- Affichage des enseignants -->
+  <div *ngIf="selectedList === 'enseignants'">
+    <app-enseignants></app-enseignants>
+  </div>
+
+  <!-- Affichage des utilisateurs -->
+  <div *ngIf="selectedList === 'utilisateurs'">
+    <div class="header-container">
+      <h1 class="page-header">Liste des utilisateurs</h1>
+      <div
+        class="custom-button plus-button"
+        (click)="showDialog()"
+        title="Show more"
+      >
+        +
+      </div>
+    </div>
+
+    <!-- Conteneur de recherche et rôle -->
+    <div class="search-and-role-container">
+      <div class="search-bar">
+        <input
+          type="text"
+          placeholder="Recherche..."
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="searchTeachers()"
+        />
+      </div>
+
+      <div class="role" *ngIf="isYearSelected()">
+        <select id="role" [(ngModel)]="selectedRole" (change)="filterByRole()">
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Conteneur des utilisateurs -->
+    <section [ngSwitch]="view" class="card-content">
+      <div *ngSwitchCase="'card'" class="user-grid">
+        <app-user-card
+          [user]="user"
+          [selectedYear]="getSelectedYear()"
+          [isYearSelected]="isYearSelected()"
+          (deleteUser)="delete($event)"
+          *ngFor="let user of listUsersWithRolesOfSelectedYear"
+        >
+        </app-user-card>
+        <div
+          class="no-user-message"
+          *ngIf="listUsersWithRolesOfSelectedYear.length === 0"
+        >
+          <p>Aucun utilisateur trouvé</p>
+        </div>
+      </div>
+      <div *ngSwitchDefault>
+        <p>Aucun utilisateur trouvé</p>
+      </div>
+    </section>
+  </div>
+</div>
+

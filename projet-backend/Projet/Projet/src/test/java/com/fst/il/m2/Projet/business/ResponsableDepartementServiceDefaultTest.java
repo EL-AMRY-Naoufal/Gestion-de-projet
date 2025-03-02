@@ -1,279 +1,157 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
-import com.fst.il.m2.Projet.models.User;
-import com.fst.il.m2.Projet.repositories.UserRepository;
+import com.fst.il.m2.Projet.models.*;
+import com.fst.il.m2.Projet.repositories.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ResponsableDepartementServiceDefaultTest {
 
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private UserRoleRepository userRoleRepository;
+    @Mock
+    private ResponsableFormationRepository responsableFormationRepository;
+    @Mock
+    private ResponsableDepartementRepository responsableDepartementRepository;
 
     @Mock
-    private UserRepository userRepository;  // Mocked UserRepository
-
+    private EnseignantRepository enseignantRepository;
     @Mock
-    private PasswordSetServiceDefault passwordSetServiceDefault;  // Mocked PasswordSetServiceDefault
-
+    private EnseignantService enseignantService;
     @InjectMocks
-    private ResponsableDepartementServiceDefault responsableDepartementService;  // Service to test
+    private ResponsableDepartementServiceDefault responsableDepartementService;
 
-    private User mockResponsable;
-    private User mockUser;
+    private User user;
+    private User responsable;
+    Annee annee;
 
     @BeforeEach
     void setUp() {
-        // Initialize mocks
-        MockitoAnnotations.openMocks(this);
+        user = new User();
+        user.setId(1L);
+        user.setUsername("testuser");
+        user.setPassword("password");
 
-        // Create mock Responsable (CHEF_DE_DEPARTEMENT)
-        mockResponsable = new User("responsable", "password123", "responsable@example.com", Role.CHEF_DE_DEPARTEMENT);
-        mockResponsable.setId(1L); // Set an ID for the mock
+        annee = new Annee();
+        annee.setId(1L);
+        annee.setDebut(2024);
 
-        // Create mock User
-        mockUser = new User("newUser", "password123", "naoufalhary@gmail.com", Role.ENSEIGNANT);
-        mockUser.setId(2L); // Set an ID for the mock
-    }
-
-    @Test
-    void testCreateUser_Success() {
-        // Mock repository behavior for finding the responsable
-        when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
-        // Mock repository behavior for saving the user
-        when(userRepository.save(mockUser)).thenReturn(mockUser);
-
-        // Mock the behavior of PasswordSetServiceDefault
-        doNothing().when(passwordSetServiceDefault).createPasswordSetTokenForUser(any(User.class), any(String.class));
-        doNothing().when(passwordSetServiceDefault).sendPasswordSetEmail(any(User.class), any(String.class));
-
-        // Act: Create user using the service
-        User createdUser = responsableDepartementService.createUser(mockUser, mockResponsable.getId());
-
-        // Assert: The user should be created successfully
-        assertNotNull(createdUser);
-        assertEquals(mockUser.getUsername(), createdUser.getUsername());
-        assertEquals(mockUser.getEmail(), createdUser.getEmail());
-        assertEquals(mockUser.getRoles(), createdUser.getRoles());
-    }
-
-    @Test
-    void testCreateUser_Fail_NotResponsable() {
-        // Create a mock user with a non-Responsable role
-        User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
-        mockNonResponsable.setId(3L); // Set an ID for the mock
-
-        // Mock repository behavior for finding the non-Responsable
-        when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
-
-        // Act and Assert: Attempting to create a user should throw an exception
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            responsableDepartementService.createUser(mockUser, mockNonResponsable.getId());
-        });
-
-        assertEquals("Only Responsable de Département can create users", thrown.getMessage());
+        responsable = new User();
+        responsable.setId(2L);
+        responsable.addRole(annee,Role.CHEF_DE_DEPARTEMENT);
+        responsable.setUsername("responsable");
     }
 
 
     @Test
-    void testGetUsersByUsername_Success() {
-        // Arrange
-        User mockUser = new User("johndoe", "password123", "johndoe@example.com", Role.ENSEIGNANT);
-        when(userRepository.findUserByUsername("johndoe")).thenReturn(Optional.of(mockUser));
+    void testCreateUser_ResponsableNotFound() {
+        Long responsableId = 99L;
+        Long currentYear = 2024L;
+        boolean associateEnseignantWithUser = false;
 
-        // Act
-        Optional<User> result = responsableDepartementService.getUsersByUsername("johndoe");
+        when(userRepository.findById(responsableId)).thenReturn(Optional.empty());
 
-        // Assert
-        assertTrue(result.isPresent());
-        assertEquals("johndoe", result.get().getUsername());
-        assertEquals(Role.ENSEIGNANT, result.get().getRoles().get(0));
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                responsableDepartementService.createUser(user, responsableId, associateEnseignantWithUser, currentYear)
+        );
 
-        // Verify
-        verify(userRepository, times(1)).findUserByUsername("johndoe");
+        assertEquals("Responsable not found", exception.getMessage());
     }
 
     @Test
-    void testGetUsersByUsername_NotFound() {
-        // Arrange
-        when(userRepository.findUserByUsername("unknown")).thenReturn(Optional.empty());
+    void testCreateUser_UnauthorizedResponsable() {
+        Long responsableId = 2L;
+        Long currentYear = 2024L;
+        boolean associateEnseignantWithUser = false;
 
-        // Act
-        Optional<User> result = responsableDepartementService.getUsersByUsername("unknown");
+        when(userRepository.findById(responsableId)).thenReturn(Optional.of(responsable));
 
-        // Assert
-        assertFalse(result.isPresent());
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                responsableDepartementService.createUser(user, responsableId, associateEnseignantWithUser, currentYear)
+        );
 
-        // Verify
-        verify(userRepository, times(1)).findUserByUsername("unknown");
+        assertEquals("Only Responsable de Département can create users", exception.getMessage());
+    }
+    @Test
+    void testGetUserById_NotFound() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        Exception exception = assertThrows(RuntimeException.class, () -> responsableDepartementService.getUserById(1L));
+        assertEquals("User not found", exception.getMessage());
     }
 
     @Test
-    void testGetUsersByRole_Success() {
-        // Arrange
-        User user1 = new User("johndoe", "password123", "johndoe@example.com", Role.ENSEIGNANT);
-        User user2 = new User("janedoe", "password456", "janedoe@example.com", Role.ENSEIGNANT);
-        List<User> mockUsers = List.of(user1, user2);
-
-        when(userRepository.findUserByRoles(Role.ENSEIGNANT)).thenReturn(mockUsers);
-
-        // Act
-        List<User> result = responsableDepartementService.getUsersByRole(Role.ENSEIGNANT);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("johndoe", result.get(0).getUsername());
-        assertEquals("janedoe", result.get(1).getUsername());
-
-        // Verify
-        verify(userRepository, times(1)).findUserByRoles(Role.ENSEIGNANT);
-    }
-
-    @Test
-    void testGetUsersByRole_Empty() {
-        // Arrange
-        when(userRepository.findUserByRoles(Role.CHEF_DE_DEPARTEMENT)).thenReturn(List.of());
-
-        // Act
-        List<User> result = responsableDepartementService.getUsersByRole(Role.CHEF_DE_DEPARTEMENT);
-
-        // Assert
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-
-        // Verify
-        verify(userRepository, times(1)).findUserByRoles(Role.CHEF_DE_DEPARTEMENT);
-    }
-
-
-
-
-    @Test
-    void testGetUserById_Success() {
-        // Mock repository behavior for finding a user
-        when(userRepository.findById(mockUser.getId())).thenReturn(Optional.of(mockUser));
-
-        // Act: Retrieve user by ID
-        User foundUser = responsableDepartementService.getUserById(mockUser.getId());
-
-        // Assert: The user should be returned successfully
-        assertNotNull(foundUser);
-        assertEquals(mockUser.getId(), foundUser.getId());
-        assertEquals(mockUser.getUsername(), foundUser.getUsername());
-    }
-
-    @Test
-    void testGetUserById_Fail_UserNotFound() {
-        // Mock repository behavior for finding a user
-        when(userRepository.findById(mockUser.getId())).thenReturn(Optional.empty());
-
-        // Act and Assert: Attempting to get a non-existing user should throw an exception
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            responsableDepartementService.getUserById(mockUser.getId());
-        });
-
-        assertEquals("User not found", thrown.getMessage());
-    }
-
-    @Test
-    void testUpdateUser_Success() {
-        // Mock repository behavior for finding the responsable
-        when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
-        // Mock repository behavior for finding the user to update
-        when(userRepository.findById(mockUser.getId())).thenReturn(Optional.of(mockUser));
-        // Mock repository behavior for saving the updated user
-        when(userRepository.save(mockUser)).thenReturn(mockUser);
-
-        // Act: Update user using the service
-        User updatedUser = responsableDepartementService.updateUser(mockUser.getId(), mockUser, mockResponsable.getId());
-
-        // Assert: The user should be updated successfully
-        assertNotNull(updatedUser);
-        assertEquals(mockUser.getUsername(), updatedUser.getUsername());
-        assertEquals(mockUser.getEmail(), updatedUser.getEmail());
-    }
-
-    @Test
-    void testUpdateUser_Fail_NotResponsable() {
-        // Create a mock user with a non-Responsable role
-        User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
-        mockNonResponsable.setId(3L); // Set an ID for the mock
-
-        // Mock repository behavior for finding the non-Responsable
-        when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
-
-        // Act and Assert: Attempting to update a user should throw an exception
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            responsableDepartementService.updateUser(mockUser.getId(), mockUser, mockNonResponsable.getId());
-        });
-
-        assertEquals("Only Responsable de Département can update users", thrown.getMessage());
+    void testGetAllUsers() {
+        when(userRepository.findAll()).thenReturn(Arrays.asList(user, responsable));
+        List<User> users = responsableDepartementService.getAllUsers();
+        assertEquals(2, users.size());
     }
 
     @Test
     void testDeleteUser_Success() {
-        // Mock repository behavior for finding the responsable
-        when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
-        // Mock repository behavior for deleting the user
-        doNothing().when(userRepository).deleteById(mockUser.getId());
+        when(userRepository.findById(2L)).thenReturn(Optional.of(responsable));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        // Act: Delete user using the service
-        responsableDepartementService.deleteUser(mockUser.getId(), mockResponsable.getId());
-
-        // Assert: No exception should be thrown, and delete was invoked
-        verify(userRepository, times(1)).deleteById(mockUser.getId());
+        responsableDepartementService.deleteUser(1L, 2L);
+        verify(userRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void testDeleteUser_Fail_NotResponsable() {
-        // Create a mock user with a non-Responsable role
-        User mockNonResponsable = new User("nonResponsable", "password123", "nonResponsable@example.com", Role.ENSEIGNANT);
-        mockNonResponsable.setId(3L); // Set an ID for the mock
-
-        // Mock repository behavior for finding the non-Responsable
-        when(userRepository.findById(mockNonResponsable.getId())).thenReturn(Optional.of(mockNonResponsable));
-
-        // Act and Assert: Attempting to delete a user should throw an exception
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            responsableDepartementService.deleteUser(mockUser.getId(), mockNonResponsable.getId());
-        });
-
-        assertEquals("Only Responsable de Département can delete users", thrown.getMessage());
+    void testDeleteUser_NotAllowedForNonResponsable() {
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        Exception exception = assertThrows(RuntimeException.class, () -> responsableDepartementService.deleteUser(1L, 2L));
+        assertEquals("Only Responsable de Département can delete users", exception.getMessage());
     }
-<<<<<<< HEAD
-=======
 
     @Test
-    void testDeleteUser_SelfDelete() {
-        // Mock User with Responsable role (the same user attempting to delete themselves)
-        User mockResponsable = new User("responsable", "password123", "responsable@example.com", Role.CHEF_DE_DEPARTEMENT);
-        mockResponsable.setId(2L); // Set ID for mock user
+    void testGetUserById_UserExists() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        // Mock repository behavior for finding the Responsable
-        when(userRepository.findById(mockResponsable.getId())).thenReturn(Optional.of(mockResponsable));
+        User foundUser = responsableDepartementService.getUserById(1L);
 
-        // Act and Assert: Attempting to delete oneself should throw an exception
-        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
-            responsableDepartementService.deleteUser(mockResponsable.getId(), mockResponsable.getId());
-        });
-
-        // Verify exception message
-        assertEquals("A user cannot delete themselves", thrown.getMessage());
-
-        // Verify that deleteById is not called
-        verify(userRepository, never()).deleteById(mockResponsable.getId());
+        assertNotNull(foundUser, "User should not be null");
+        assertEquals(1L, foundUser.getId(), "User ID should match");
+        assertEquals("testuser", foundUser.getUsername(), "User username should match");
     }
 
->>>>>>> fda1fbcb351240e569827b037f5251699391b9b7
+    @Test
+    void testGetUserById_UserNotFound() {
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            responsableDepartementService.getUserById(1L);
+        });
+
+        assertEquals("User not found", exception.getMessage(), "Exception message should match");
+    }
+
+    @Test
+    void testGetUsersByRoleAndYear_UsersFound() {
+         List<UserRole> userRoles;
+         userRoles = responsable.getRoles();
+
+        when(userRoleRepository.findByRoleAndYearId(Role.CHEF_DE_DEPARTEMENT, 2024L))
+                .thenReturn(userRoles);
+
+        List<UserRole> foundUserRoles = responsableDepartementService.getUsersByRoleAndYear(Role.CHEF_DE_DEPARTEMENT, 2024L);
+
+        assertNotNull(foundUserRoles, "UserRoles list should not be null");
+        assertEquals(1, foundUserRoles.size(), "The size of the list should be 2");
+        assertEquals(Role.CHEF_DE_DEPARTEMENT, foundUserRoles.get(0).getRole(), "The role should be CHEF_DE_DEPARTEMENT");
+    }
 }

@@ -1,60 +1,85 @@
-import { User } from './../componenets/shared/types/user.type';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
+import { isPlatformBrowser } from '@angular/common';
+import { YearService } from './year-service';
+import { ApiService } from './api-service';
 
+type UserRole = {
+  role: string;
+  year: number;
+};
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
+  private readonly isBrowser!: boolean;
 
-  private readonly _backendURL: any;
+  // Is a internal state of the authentification (true if connected else false)
+  private isLoggedState: boolean = true;
 
-    // private property to store default person
-  public _connectUser: number = 1;
+  // Observable for another component who depends of the auth status
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  public userRoles = [];
-  private authToken: string | null = null;
-  constructor(private http: HttpClient, private router: Router) {
-    this._backendURL = {};
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private _yearService: YearService,
+    private _apiService: ApiService
+  ) {
 
+    console.log("test render");
+    this.isBrowser = isPlatformBrowser(this.platformId);
 
-     // build backend base url
-     let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
-     if (environment.backend.port) {
-       baseUrl += `:${environment.backend.port}`;
-     }
-
-     // build all backend urls
-     // @ts-ignore
-     Object.keys(environment.backend.endpoints).forEach(
-       (k) =>
-         // @ts-ignore
-         (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
-     );
-
+    // Test if user is authenticated on app reload
+    /*this._apiService.me().subscribe(
+      {
+        complete: () => {
+          this.isAuthenticated = true;
+        },
+        error: () => {
+          this.isAuthenticated = false;
+        }
+      }
+    );*/
   }
 
-
   login(formData: any): Observable<any> {
-    return this.http.post(this._backendURL.authenticate, formData);
+    return this._apiService.login(formData);
   }
 
   handleLoginSuccess(response: any) {
-    console.log("id " ,response.user.id);
-    this.userRoles = response.user.roles;
-    this.authToken = response.token;
-
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('userRole', JSON.stringify(this.userRoles));
-      if(this.authToken) localStorage.setItem('token', this.authToken);
+    if (
+      !response.user ||
+      !response.currentYearId ||
+      isNaN(response.currentYearId)
+    ) {
+      console.error('Incorrect login response:', response);
+      this.router.navigate(['/login']);
+      return;
     }
 
-    console.log('user', this.userRoles)
-    this.router.navigate(['/dashboard']);
+    // Reformatage des rôles
+    const userRoles = response.user.roles.map((ur: any) => ({
+      role: ur.role,
+      year: ur.year,
+    }));
+    const currentYearId = response.currentYearId;
+
+    // L'enregistrement de l'id de l'utilisateur connecté dans un local storage
+    if (this.isBrowser) {
+      localStorage.setItem('userId', response.user.id);
+
+      this._yearService.currentYearId = currentYearId;
+
+      localStorage.setItem('userRoles', JSON.stringify(userRoles));
+
+      this.isAuthenticatedSubject.next(true);
+    }
+
+    this.router.navigate(['/enseignants/affectations']);
   }
 
   handleLoginError(error: any) {
@@ -62,43 +87,59 @@ export class LoginService {
     alert('Login failed: Invalid email or password');
   }
 
-  /*
-  * Returns private property _connectUser
-  */
- get connectUser(): number{
-    return this._connectUser;
- }
+  goToResetPasswordPage(): void {
+    this.router.navigate(['/reset-password']);
+  }
 
+  /*
+   * Returns private property _connectUserID
+   */
+  connectUser(): number {
+    if (!this.isBrowser) return 0; // Server environment
+
+    return parseInt(localStorage.getItem('userId') || '0');
+  }
 
   isLoggedIn(): boolean {
-     if (typeof window === 'undefined') return false; // Server environment
+    if (!this.isBrowser) return false; // Server environment
 
-    return !!localStorage.getItem('userRole') && !!localStorage.getItem('token');
+    return this.isLoggedState;
   }
 
   logout() {
-     if (typeof window !== 'undefined') {
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('token');
-    }
-    this.userRoles = [];
-    this.router.navigate(['/login']);
+    this._apiService.logout().subscribe(() => {
+      if (this.isBrowser) {
+        localStorage.removeItem('userRoles');
+        localStorage.removeItem('currentYearId');
+        this.isAuthenticated = false;
+      }
+      this.router.navigate(['/login']);
+    });
   }
 
-  getUserRoles(): string[] {
-    if (typeof window !== 'undefined' && localStorage.getItem('userRole')) {
-      return JSON.parse(localStorage.getItem('userRole') || '[]');
+  /**
+   * @returns array of user roles for the current year
+   */
+  get userRoles(): string[] {
+    if (this.isBrowser) {
+      return (
+        JSON.parse(localStorage.getItem('userRoles') || '[]') as UserRole[]
+      )
+        .filter((ur: any) => ur.year === this.currentYearId)
+        .map((ur: any) => ur.role);
     }
     return [];
   }
 
-  getAuthToken(): string | null {
-    console.log("getAuthToken");
-    if (typeof window !== 'undefined' && localStorage.getItem('token')) {
-      return localStorage.getItem('token');
+  get currentYearId(): number | null {
+    if (this.isBrowser) {
+      return parseInt(localStorage.getItem('currentYearId') as string);
     }
     return null;
   }
 
-
+  set isAuthenticated(isAuthenticated: boolean) {
+    this.isLoggedState = isAuthenticated;
+    this.isAuthenticatedSubject.next(this.isLoggedState);
+  }
 }

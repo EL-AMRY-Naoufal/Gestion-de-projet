@@ -1,0 +1,178 @@
+.tree {
+  padding-left: 1rem;
+
+  li {
+    list-style: none;
+    margin-bottom: 0.5rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -1rem;
+      width: 1rem;
+      height: 1px;
+      background-color: #ddd;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -1rem;
+      width: 1px;
+      height: 100%;
+      background-color: #ddd;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+
+    details {
+      summary {
+
+        cursor: pointer;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+
+        &:hover {
+          background-color: #e9ecef;
+        }
+
+        button {
+          float: right;
+          margin-left: 1rem;
+          padding: 0.2rem 0.5rem;
+          font-size: 0.5cm;
+          border: none;
+          border-radius: 3px;
+          transition: background-color 0.3s;
+
+          &:hover {
+            opacity: 0.9;
+          }
+
+          &:first-child { /* Bouton "+" */
+            background-color: #28a745;
+
+            &:hover {
+
+              background-color: #218838;
+            }
+          }
+
+          &:last-child { /* Bouton "-" */
+            background-color: transparent;
+            color: red;
+
+            &:hover {
+              color: #ff0000;
+              background-color: white;
+            }
+          }
+        }
+      }
+
+      ul {
+        padding-left: 1rem;
+        margin: 0;
+        border-left: 2px dashed #ddd;
+
+        li {
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+
+.new-year{
+  background-color: #4CAF50;
+  border: none;
+  color: black;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+
+
+.button-container {
+  font-weight: bold;
+  text-align: right;
+}
+
+
+
+.affectation-info {
+  display: flex;
+  align-items: center;
+
+
+}
+
+.affectation-info p {
+  margin: 0;
+  padding: 0 10px;
+}
+
+.affectation-info a {
+  color: #007BFF;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.affectation-info a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Style général pour l'input des heures assignées */
+.heures-input {
+  width: 100px;  /* Largeur de l'input */
+  padding: 10px; /* Espacement interne */
+  border-radius: 8px; /* Coins arrondis */
+  border: 1px solid #ccc; /* Bordure douce */
+  font-size: 14px; /* Taille du texte */
+  background-color: #f9f9f9; /* Fond doux */
+  transition: all 0.3s ease; /* Transition pour un effet doux */
+}
+
+/* Changement de bordure au focus */
+.heures-input:focus {
+  outline: none; /* Retirer l'encadré bleu par défaut */
+  border-color: #007BFF; /* Changer la bordure en bleu */
+  background-color: #fff; /* Fond blanc au focus */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Ajouter une ombre subtile */
+}
+
+/* Style pour les icônes */
+.affectation-info i {
+  transition: transform 0.3s ease, color 0.3s ease; /* Transition douce */
+}
+
+/* Survol des icônes de mise à jour et de suppression */
+.affectation-info i:hover {
+  transform: scale(1.1); /* Agrandir l'icône légèrement */
+  color: #0056b3; /* Changer la couleur lors du survol */
+}
+
+/* Icône de mise à jour spécifique */
+.affectation-info i.fa-repeat:hover {
+  color: #28a745; /* Vert pour l'icône de mise à jour */
+}
+
+/* Icône de suppression spécifique */
+.affectation-info i.fa-trash-o:hover {
+  color: #dc3545; /* Rouge pour l'icône de suppression */
+}

@@ -1,0 +1,11 @@
+<div class="dialog">
+  <h3>Ajouter un nouveau département</h3>
+  <form (ngSubmit)="onAdd()">
+    <label for="nom">Nom:</label>
+    <input id="nom" [(ngModel)]="newDepartement.nom" name="nom" required>
+    <label for="responsableDeDepartement">Chef de département:</label>
+    <input id="responsableDeDepartement" [(ngModel)]="newDepartement.responsableDeDepartement" name="chef" required>
+    <button type="submit">Ajouter</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </form>
+</div>

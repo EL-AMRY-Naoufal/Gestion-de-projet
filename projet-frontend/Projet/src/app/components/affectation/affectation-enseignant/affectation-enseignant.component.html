@@ -1,0 +1,68 @@
+<div class="main-content">
+  <div *ngIf="affectations.length > 0; else noAffectations" class="container">
+
+
+    <h2 class="title" *ngIf="!dialog">Mes Affectations</h2>
+    <table class="custom-table">
+      <thead>
+      <tr>
+        <th>Module/Groupe</th>
+        <th>Heures Assignées</th>
+        <th>Date d'Affectation</th>
+        <th>Co-Enseignant</th>
+        <th>Commentaire</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let affectation of affectations">
+        <td>{{ affectation.nomModule }} / {{ affectation.nomGroupe }}</td>
+        <td>{{ affectation.heuresAssignees }}</td>
+        <td>{{ affectation.dateAffectation }}</td>
+        <td>{{ affectation.coAffecte }}</td>
+        <td>
+          <div class="commentaire-case">
+            <ng-container *ngIf="editingId !== affectation.id; else editMode">
+              <div class="commentaire-text">{{ affectation.commentaire }}</div>
+
+              <div
+                class="custom-icon modif-icon"
+                *ngIf="connect"
+                (click)="startEditing(affectation)"
+                title="modif commentaire"
+              >
+                ✏️
+              </div>
+            </ng-container>
+
+            <ng-template #editMode>
+              <mat-form-field class="commentaire-text-input"  hintLabel="Max 255 caractères">
+                <textarea matInput
+                        [(ngModel)]="editedComment"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="2"
+                        cdkAutosizeMaxRows="10"
+                        maxlength="255">
+                </textarea>
+                <mat-hint align="end">{{editedComment.length || 0}}/255</mat-hint>
+              </mat-form-field>
+              <div class="buttons-container">
+                <button mat-icon-button (click)="saveComment(affectation)">
+                  <mat-icon>check</mat-icon>
+                </button>
+                <button mat-icon-button (click)="cancelEditing()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #noAffectations>
+    <p class="no-affectations-message">Aucune affectation trouvée pour cet enseignant.</p>
+  </ng-template>
+
+
+</div>

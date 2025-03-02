@@ -9,11 +9,16 @@ export const environment = {
     host: 'localhost',
     port: '8080',
     endpoints: {
+      allAffectation: '/api/affectations',
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
       authenticate: '/api/users/authenticate',
-      role : '/api/responsableDepartement/role/',
+      categories: '/api/categories',
+      role: '/api/responsableDepartement/users/by-role-and-year',
+      allYears: '/api/annees',
+      logout: '/api/users/user/logout',
+      me: '/api/users/user/me'
     },
   },
 };

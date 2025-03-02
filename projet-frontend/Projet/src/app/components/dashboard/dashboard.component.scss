@@ -1,0 +1,70 @@
+/* Le conteneur pour les carrés centré sur la page */
+.menu-container {
+  padding: 50px 100px;
+}
+
+/* Style de chaque carré */
+.menu-item {
+  width: 100%; /* Largeur des carrés */
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px; /* Coins arrondis */
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Effet de survol */
+.menu-item:hover {
+  transform: scale(1.05); /* Agrandissement au survol */
+}
+
+/* Couleurs des carrés */
+.gray {
+  background-color: #ddd;
+}
+
+.yellow {
+  background-color: #fcd436;
+}
+
+.blue {
+  background-color: #3498db;
+}
+
+.vert{
+  background-color: #3d9e7e;
+
+}
+
+.red {
+  background-color: #c0392b;
+}
+
+/* Déconnexion avec une couleur rouge */
+.logout {
+  background-color: #e74c3c;
+}
+
+.logout:hover {
+  background-color: #c0392b;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-container {
+    grid-template-columns: repeat(auto-fill, 10rem);
+    padding: 20px 10px;
+  }
+
+  .menu-item {
+    width: 10rem;
+    height: 10rem;
+    font-size: 1rem;
+  }
+
+}

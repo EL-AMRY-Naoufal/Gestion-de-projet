@@ -1,0 +1,56 @@
+<!--<app-search-bar></app-search-bar>
+
+<button class="add-teacher-btn" (click)="openDialog()">
+  Ajouter un enseignant
+</button>
+
+
+<div class="user-cards-container">
+  <app-user-card
+      [user]="user"
+      *ngFor="let user of users">
+      [openDialog]="openDialog"
+  </app-user-card>
+
+  <div *ngIf="users.length === 0">Aucun enseignant n'est disponible</div>
+</div>-->
+
+<div class="header-container">
+  <h1 class="page-header">Liste des enseignants</h1>
+  <div
+    class="custom-button plus-button"
+    title="Show more"
+    (click)="openDialog()"
+  >
+    +
+  </div>
+</div>
+
+<div class="search-and-role-container">
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Recherche..."
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchEnseignants()"
+    />
+  </div>
+</div>
+
+<!-- Conteneur des profils -->
+<section [ngSwitch]="view" class="card-content">
+  <div *ngSwitchCase="'card'" class="user-grid">
+    <app-profil-card
+      [enseignant]="enseignant"
+      [openDialog]="openDialog.bind(this)"
+      *ngFor="let enseignant of enseignants"
+    >
+    </app-profil-card>
+    <div class="no-user-message" *ngIf="enseignants.length === 0">
+      <p>Aucun utilisateur trouvé</p>
+    </div>
+  </div>
+  <div *ngSwitchDefault>
+    <p>Aucun utilisateur trouvé</p>
+  </div>
+</section>

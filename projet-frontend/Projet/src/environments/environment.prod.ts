@@ -5,14 +5,21 @@ export const environment = {
     host: 'localhost',
     port: '8080',
     endpoints: {
+      allAffectation: '/api/affectations',
       allUsers: '/api/responsableDepartement',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
       authenticate: '/api/users/authenticate',
-      role : '/api/responsableDepartement/role',
-
+      categories: '/api/categories',
+      role: '/api/responsableDepartement/users/by-role-and-year',
+      allmodules: '/api/modules',
+      annees: '/api/annees',
+      departements: '/api/departements',
+      niveaux: '/api/niveaux',
+      semestres: '/api/semestres',
+      groupes: '/api/groupes',
+      logout: '/api/users/user/logout',
+      me: '/api/users/user/me'
     },
   },
 };
-
-

@@ -1,0 +1,125 @@
+/* Styles de base pour mat-toolbar */
+mat-toolbar {
+  background-color: #000; /* Fond noir */
+  color: #ffeb3b; /* Texte jaune */
+  padding: 16px;
+}
+
+/* Classe spacer pour l'espacement flexible */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Positionne les éléments aux extrémités */
+  align-items: center;
+  padding: 10px 30px; /* Espace autour de la barre */
+  background-color: #bbd7f1; /* Couleur de fond bleu clair */
+  color: #0a2b46; /* Couleur du texte bleu foncé */
+  font-family: Arial, sans-serif;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de relief */
+  box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+  position: sticky;
+  top: 0; /* Position verticale à 0 (haut de l'écran) */
+  z-index: 1000; /* Assure que la barre reste au-dessus des autres éléments */
+}
+
+/* Ajout d'espace en haut pour éviter de masquer le contenu */
+body {
+  margin: 0;
+  padding-top: 70px; /* Ajoute un espace correspondant à la hauteur de la navbar */
+}
+
+/* Logo */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo .logo {
+  height: 50px;
+  width: auto; /* Ajuste la taille proportionnellement */
+}
+
+/* Liens de la barre de navigation */
+.navbar-links {
+  display: flex;
+  gap: 20px; /* Espace entre les liens */
+}
+
+.navbar-link {
+  color: #0a2b46; /* Couleur du texte */
+  text-decoration: none; /* Supprime le soulignement par défaut */
+  font-size: 1.2rem; /* Taille de texte lisible */
+  font-weight: bold;
+  transition: color 0.3s ease; /* Animation pour un effet au survol */
+}
+
+.navbar-link:hover {
+  color: #248de2; /* Couleur du texte au survol */
+}
+
+/* Section centrale pour la navigation (nouveau) */
+.navbar-center {
+  flex: 2;
+  display: flex;
+  justify-content: center; /* Centre les éléments */
+  align-items: center;
+  gap: 30px; /* Espacement uniforme entre les liens */
+}
+
+.year select {
+  max-width: 6em;
+
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0a2b46; /* Bleu foncé */
+  background-color: #bbd7f1;
+  border: 2px solid #bbd7f1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.year select:hover {
+  background-color: #bbd7f1; /* Bleu clair */
+  border-color: #bbd7f1;
+  color: #248de2; /* Couleur du texte au survol */
+
+}
+
+/* Style de la liste déroulante */
+.year select option {
+  background-color: #ffffff; /* Fond blanc */
+  color: #0a2b46; /* Texte bleu foncé */
+  font-size: 1rem;
+  padding: 10px;
+}
+
+
+a {
+  cursor: pointer;
+}
+
+/* Responsive Design pour petits écrans */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 10px;
+    text-align: center; /* Centre les éléments */
+  }
+
+  .navbar-links,
+  .navbar-center {
+    flex-direction: column; /* Empile les éléments verticalement */
+    gap: 15px;
+  }
+
+  .navbar-logo {
+    margin-bottom: 10px; /* Ajoute un espace sous le logo */
+  }
+}

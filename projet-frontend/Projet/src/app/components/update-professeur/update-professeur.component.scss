@@ -1,0 +1,159 @@
+
+
+
+.form-field {
+  width: 100%; /* Assurez-vous que tous les champs ont la même largeur */
+  min-width: 300px; /* Largeur minimale pour éviter un saut trop grand */
+  transition: all 0.2s ease-in-out; /* Animation douce lors du changement */
+}
+
+
+
+.form h2 {
+  text-align: center; /* Centrer le titre horizontalement */
+  padding: 1px 0; /* Ajouter un peu d'espace autour du titre */
+  font-size: 24px; /* Ajuster la taille du texte */
+  color: #333; /* Ajuster la couleur du titre */
+  position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
+  margin-bottom: 5px;
+}
+
+.form h2::after {
+  content: ''; /* Créer un pseudo-élément */
+  position: absolute;
+  bottom: -5px; /* Placer la ligne juste en dessous du titre */
+  left: 50%; /* Centrer la ligne par rapport au titre */
+  width: 500px; /* Longueur de la ligne */
+  height: 2px; /* Épaisseur de la ligne */
+  background-color: #333; /* Couleur de la ligne */
+  transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
+}
+
+
+mat-dialog-content {
+  min-height: 250px; /* Largeur du formulaire */
+}
+
+/* Espacement général entre les champs */
+.form-container mat-form-field {
+  width: 100%;
+  margin-bottom: 25px !important;
+}
+
+.form-container mat-checkbox{
+  margin-bottom: 25px;
+
+
+}
+
+
+.form {
+  background-color: #ffffff; /* Couleur de fond bleu clair */
+  padding: 25px !important;
+
+}
+
+/* Espacement général entre les champs */
+.mat-dialog-content mat-form-field {
+  width: 100%;
+  margin-bottom: 25px !important;
+}
+
+
+.mat-dialog-content mat-checkbox{
+  margin-bottom: 2500px; /* Appliquer l'espacement sous le champ "Rôles" uniquement si la case à cocher est absente */
+}
+/* Styliser les erreurs de validation */
+mat-error {
+  font-size: 0.8rem;
+  color: #d32f2f;
+}
+
+/* Conteneur des actions du dialogue */
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+/* Style des boutons */
+button[mat-flat-button] {
+  font-size: 14px;
+  padding: 10px 20px; /* Taille des boutons */
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #d8e7f5;
+  border: none;
+  color: #333;
+
+}
+
+/* Boutons */
+button[mat-button] {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #d8e7f5;
+
+}
+
+button[mat-button]:hover {
+  opacity: 0.9;
+  background-color: #80bbf1;
+  color: #ffffff;
+
+}
+
+
+
+/* Conteneur pour aligner les champs côte à côte */
+.flex-container {
+  display: flex;
+  gap: 25px; /* Espacement entre les champs */
+}
+
+/* Chaque champ prend 50% de la largeur */
+.flex-container mat-form-field {
+  flex: 2;
+}
+
+
+
+/* Style des boutons dans le dialogue */
+.mat-dialog-actions button {
+  border-radius: 8px; /* Coins arrondis des boutons */
+  font-weight: bold;  /* Texte en gras */
+  padding: 10px 20px; /* Taille des boutons */
+}
+
+
+
+/* Style des entrées de texte */
+.mat-input-element {
+  border-radius: 8px; /* Coins arrondis des champs de texte */
+}
+
+
+/* Ajouter des bordures arrondies aux selecteurs */
+mat-select {
+  border-radius: 8px;
+}
+
+/* Style du fond du dialogue */
+.custom-dialog-container {
+  width: 90vw !important;
+  max-width: 1000px !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  background-color: #bbd7f1; /* Couleur de fond bleu clair */
+  border-radius: 16px !important; /* Bords arrondis */
+  padding: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+
+
+

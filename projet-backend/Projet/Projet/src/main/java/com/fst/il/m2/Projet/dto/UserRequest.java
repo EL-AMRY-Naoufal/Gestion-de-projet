@@ -1,51 +1,55 @@
 package com.fst.il.m2.Projet.dto;
 
 import com.fst.il.m2.Projet.models.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
+import java.util.List;
+
+@Builder
+@AllArgsConstructor
+@Data
 public class UserRequest {
-    private User user;
+    private UserWithPasswordDto user;
     private Long responsableId;
+    private boolean associateEnseignantWithUser; // New field
 
-    public UserRequest() {
-    }
-
-    private UserRequest(Builder builder) {
-        this.user = builder.user;
-        this.responsableId = builder.responsableId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Long getResponsableId() {
-        return responsableId;
-    }
-
-    public static class Builder {
-        private User user;
-        private Long responsableId;
-
-        public Builder setUser(User user) {
-            this.user = user;
-            return this;
-        }
-
-        public Builder setResponsableId(Long responsableId) {
-            this.responsableId = responsableId;
-            return this;
-        }
-
-        public UserRequest build() {
-            return new UserRequest(this);
-        }
-    }
+    private Long year; // New field
 
     @Override
     public String toString() {
         return "UserRequest{" +
                 "user=" + user +
                 ", responsableId=" + responsableId +
+                ", associateEnseignantWithUser=" + associateEnseignantWithUser +
                 '}';
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Data
+    public static class UserDto {
+        private String username;
+        private String name;
+        private String firstname;
+        private String email;
+        private List<UserRoleDto> roles;
+        private Long id;
+
+
+        public User toUser(){
+            User user = User.builder()
+                    .name(name)
+                    .firstname(firstname)
+                    .username(username)
+                    .email(email)
+                    .id(id)
+                    .build();
+
+            user.addUserRoles(roles.stream().map(UserRoleDto::toUserRole).toList());
+
+            return user;
+        }
     }
 }
