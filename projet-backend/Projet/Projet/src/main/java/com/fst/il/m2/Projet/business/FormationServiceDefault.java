@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.models.Departement;
 import com.fst.il.m2.Projet.models.Formation;
 import com.fst.il.m2.Projet.repositories.FormationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,10 @@ import java.util.List;
 @Service
 public class FormationServiceDefault implements FormationService {
     @Autowired
-    private FormationRepository formationRepository;
+    private final FormationRepository formationRepository;
+
+    @Autowired
+    NiveauService niveauService;
 
     @Autowired
     public FormationServiceDefault(FormationRepository formationRepository) {
@@ -43,6 +47,16 @@ public class FormationServiceDefault implements FormationService {
                     return formationRepository.save(existingFormation);
                 })
                 .orElseThrow(() -> new RuntimeException("Formation not found with id " + id));
+    }
+
+    @Override
+    public List<Formation> getFormationsByDepartement(Departement departement) {
+        return formationRepository.findDepartementFormations(departement);
+    }
+
+    @Override
+    public Boolean hasNiveaux(Long id) {
+        return !niveauService.getNiveauxByFormation(getFormationById(id)).isEmpty();
     }
 
     @Override

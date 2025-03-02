@@ -34,7 +34,7 @@ export class ApiService {
     }
 
     updateAffectation(idAffectation: number, idEnseignant: number, comment: string): Observable<any> {
-        return this._http.put<any>(`${this._backendURL.allAffectation}/${idEnseignant}/${idAffectation}/commentaire`, {
+        return this._http.put<any>(`${this._backendURL.affectations}/${idEnseignant}/${idAffectation}/commentaire`, {
             commentaire: comment
         });
     }

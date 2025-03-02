@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.ModuleService;
 import com.fst.il.m2.Projet.dto.ModuleDto;
+import com.fst.il.m2.Projet.mapper.ModuleMapper;
 import com.fst.il.m2.Projet.models.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,16 +25,17 @@ public class ModuleController {
     // Get all Modules
     @GetMapping
     public ResponseEntity<List<ModuleDto>> getAllModules() {
-        List<ModuleDto> modules = moduleService.getAllModules();
-        return new ResponseEntity<>(modules, HttpStatus.OK);
+        List<Module> modules = moduleService.getAllModules();
+        return new ResponseEntity<>(modules.stream().map(ModuleMapper::toDto).toList(), HttpStatus.OK);
     }
 
     // Get a Module by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Module> getModuleById(@PathVariable Long id) {
+    public ResponseEntity<ModuleDto> getModuleById(@PathVariable Long id) {
         try {
             Module module = moduleService.getModuleById(id);
-            return new ResponseEntity<>(module, HttpStatus.OK);
+            ModuleDto moduleDto = ModuleMapper.toDto(module);
+            return new ResponseEntity<>(moduleDto, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,19 +43,18 @@ public class ModuleController {
 
     // Add a new Module
     @PostMapping
-    public ResponseEntity<Module> addModule(@RequestBody Module module) {
-        Module savedModule = moduleService.addModule(module);
-        return new ResponseEntity<>(savedModule, HttpStatus.CREATED);
+    public ResponseEntity<ModuleDto> addModule(@RequestBody ModuleDto moduleDto) {
+        Module savedModule = moduleService.addModule(ModuleMapper.toEntity(moduleDto));
+        return new ResponseEntity<>(ModuleMapper.toDto(savedModule), HttpStatus.CREATED);
     }
 
     // Delete a Module by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteModule(@PathVariable Long id) {
-        try {
+        if(!moduleService.hasGroupes(id)) {
             moduleService.deleteModule(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

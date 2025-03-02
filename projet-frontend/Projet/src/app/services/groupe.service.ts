@@ -27,8 +27,24 @@ export class GroupeService {
             (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
         );
     }
-    
+
+    getAllGroupes(): Observable<Groupe[]> {
+        return this.http.get<Groupe[]>(`${this._backendURL.groupes}`);
+    }
+
     getGroupesByModule(moduleId: number): Observable<Groupe[]> {
         return this.http.get<Groupe[]>(`${this._backendURL.groupes}/module/${moduleId}`);
+    }
+
+    saveGroupe(groupe: Groupe): Observable<Groupe> {
+        return this.http.post<Groupe>(`${this._backendURL.groupes}`, groupe);
+    }
+
+  getGroupeById(id: number): Observable<Groupe> {
+    return this.http.get<Groupe>(`${this._backendURL.groupes}/${id}`);
+  }
+
+    deleteGroupe(groupe: Groupe): Observable<Groupe> {
+        return this.http.delete<Groupe>(`${this._backendURL.groupes}/${groupe.id}`);
     }
 }

@@ -14,6 +14,9 @@ public class GroupeServiceDefault implements GroupeService {
     @Autowired
     private GroupeRepository groupeRepository;
 
+    @Autowired
+    private AffectationService affectationService;
+
     @Override
     public Groupe saveGroupe(Groupe groupe) {
         return groupeRepository.save(groupe); // Save and return the saved group
@@ -27,6 +30,11 @@ public class GroupeServiceDefault implements GroupeService {
     @Override
     public List<Groupe> getGroupesByModule(Module module) {
         return groupeRepository.findGroupesByModule(module);
+    }
+
+    @Override
+    public Boolean hasAffectations(Long id) {
+        return !affectationService.getAffectationsByGroupe(getGroupeById(id)).isEmpty();
     }
 
     @Override

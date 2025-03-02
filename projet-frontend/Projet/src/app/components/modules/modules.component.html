@@ -1,5 +1,3 @@
-Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
@@ -9,68 +7,68 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
 </div>
 
 <ul class="tree">
-  <li *ngFor="let annee of data.annees; let i = index">
+  <li *ngFor="let annee of annees; trackById">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <button (click)="openAddDepartementDialog(i)">+</button>
-        <button (click)="removeAnnee(i)"><i class="fa fa-trash-o"></i></button>
+        <button (click)="openAddDepartementDialog(annee.id)">+</button>
+        <button (click)="removeAnnee(annee)"><i class="fa fa-trash-o"></i></button>
       </summary>
       <ul>
-        <li *ngFor="let departement of annee.departements; let j = index">
+        <li *ngFor="let departement of getDepartementsByAnneeIndex(annee.id); trackById">
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <button (click)="openAddFormationDialog(i, j)">+</button>
-              <button (click)="removeDepartement(i, j)"><i class="fa fa-trash-o"></i></button>
+              <button (click)="openAddFormationDialog(departement.id)">+</button>
+              <button (click)="removeDepartement(departement)"><i class="fa fa-trash-o"></i></button>
             </summary>
             <ul>
-              <li *ngFor="let formation of departement.formations; let k = index">
+              <li *ngFor="let formation of getFormationsByDepartement(departement.id); trackById">
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <button (click)="openAddNiveauDialog(i, j, k)">+</button>
-                    <button (click)="removeFormation(i, j, k)"><i class="fa fa-trash-o"></i></button>
+                    <button (click)="openAddNiveauDialog(formation.id)">+</button>
+                    <button (click)="removeFormation(formation)"><i class="fa fa-trash-o"></i></button>
                   </summary>
                   <ul>
-                    <li *ngFor="let niveau of formation.niveaux; let l = index">
+                    <li *ngFor="let niveau of getNiveauxByFormation(formation.id); trackById">
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
-                          <button (click)="removeNiveau(i, j, k, l)"><i class="fa fa-trash-o"></i></button>
+                          <button (click)="openAddSemestreDialog(niveau.id)">+</button>
+                          <button (click)="removeNiveau(niveau)"><i class="fa fa-trash-o"></i></button>
                         </summary>
                         <ul>
-                          <li *ngFor="let semestre of niveau.semestres; let n = index">
+                          <li *ngFor="let semestre of getSemestreByNiveau(niveau.id); trackById">
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
-                                <button (click)="removeSemestre(i, j, k, l, n)"><i class="fa fa-trash-o"></i></button>
+                                <button (click)="openAddModuleDialog(semestre.id)">+</button>
+                                <button (click)="removeSemestre(semestre)"><i class="fa fa-trash-o"></i></button>
                               </summary>
                               <ul>
-                                <li *ngFor="let module of semestre.modules; let o = index">
+                                <li *ngFor="let module of getModulesBySemestre(semestre.id); trackById">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
                                       Module: {{ module.nom || 'Nouveau Module' }}
-                                      <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
-                                      <button (click)="removeModule(i, j, k, l, n, o)"><i class="fa fa-trash-o"></i></button>
+                                      <button (click)="openAddGroupeDialog(module.id)">+</button>
+                                      <button (click)="removeModule(module)"><i class="fa fa-trash-o"></i></button>
                                     </summary>
                                     <ul>
-                                      <li *ngFor="let groupe of module.groupes; let p = index">
+                                      <li *ngFor="let groupe of getGroupesByModule(module.id); trackById">
                                         <details>
                                           <summary (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
-                                            <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)">+</button>
-                                            <button (click)="removeGroupe(i, j, k, l, n, o, p)"><i class="fa fa-trash-o"></i></button>
+                                            <button (click)="openAddAffectationDialog(groupe.id)">+</button>
+                                            <button (click)="removeGroupe(groupe)"><i class="fa fa-trash-o"></i></button>
                                           </summary>
 
-                                          <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
-                                            <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
+                                          <div *ngIf="affectations && affectations.length > 0">
+                                            <div *ngFor="let affectation of getAffectationsByGroupe(groupe.id); trackById" class="affectation-row">
                                               <div class="affectation-info">
                                                 <p><strong></strong>
-                                                  <a *ngIf="affectation.enseignant?.user" (click)="navigateToAffectations(affectation.enseignant?.user)">
-                                                    {{ affectation.nomEnseignant }}
+                                                  <a (click)="navigateToAffectations(affectation.enseignantId)">
+                                                    {{ getNomEnseignantById(affectation.enseignantId) }}
                                                   </a>
                                                 </p>
 
@@ -80,23 +78,20 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                                 <!-- Icone de mise à jour -->
                                                 <i class="fa-solid fa-repeat"
                                                    style="color: blue;margin-left: 0.2cm ;; margin-right: 0.4cm; cursor: pointer;"
-                                                   (click)="updateAffectation(i, j, k, l, n, o, p, q, affectation.heuresAssignees)">
+                                                   (click)="updateAffectation(affectation)">
                                                 </i>
 
                                                 <!-- Icone de suppression -->
                                                 <i class="fa fa-trash-o"
                                                    style="font-size:24px; color:red; cursor: pointer;"
-                                                   (click)="removeAffectation(i, j, k, l, n, o, p, q)">
+                                                   (click)="removeAffectation(affectation)">
                                                 </i>
                                               </div>
                                             </div>
                                           </div>
-
                                         </details>
                                       </li>
                                     </ul>
-
-
                                   </details>
                                 </li>
                               </ul>

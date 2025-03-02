@@ -20,18 +20,21 @@ mat-select {
 
 /* Style du fond du dialogue */
 .custom-dialog-container {
-  width: 90vw !important;
-  max-width: 1000px !important;
-  height: auto !important;
-  max-height: 90vh !important;
-  background-color: #bbd7f1; /* Couleur de fond bleu clair */
-  border-radius: 16px !important; /* Bords arrondis */
-  padding: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre douce */
+  width: 80vw !important; /* Utiliser presque toute la largeur de l'écran */
+  max-width: 800px !important; /* Augmenter la largeur maximale */
+  height: 90vh !important; /* Augmenter la hauteur pour mieux s’adapter au contenu */
+  max-height: 95vh !important; /* Empêcher un dépassement vertical */
+  overflow: auto; /* S’assurer que le contenu débordant peut défiler */
 }
 
-
-
+mat-table, table {
+  width: 100% !important; /* Utiliser toute la largeur disponible */
+  max-width: 100% !important;
+}
+.dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
 /* Boutons */
 button[mat-button] {
   font-size: 14px;

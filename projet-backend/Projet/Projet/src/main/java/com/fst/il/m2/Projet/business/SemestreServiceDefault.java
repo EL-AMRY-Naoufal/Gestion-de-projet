@@ -14,6 +14,9 @@ public class SemestreServiceDefault implements SemestreService {
     @Autowired
     private SemestreRepository semestreRepository;
 
+    @Autowired
+    private ModuleService moduleService;
+
     @Override
     public List<Semestre> getAllSemestres() {
         return semestreRepository.findAll();
@@ -27,6 +30,11 @@ public class SemestreServiceDefault implements SemestreService {
     @Override
     public List<Semestre> getSemestresByNiveau(Niveau niveau) {
         return semestreRepository.findSemestresByNiveau(niveau);
+    }
+
+    @Override
+    public Boolean hasModules(Long id) {
+        return moduleService.getModulesBySemestre(getSemestreById(id)).isEmpty();
     }
 
     @Override

@@ -20,7 +20,6 @@ public class Module {
 
    /* private int totalHeuresRequises;*/
 
-
     @ElementCollection
     private Map<TypeHeure, Integer> heuresParType;
 
