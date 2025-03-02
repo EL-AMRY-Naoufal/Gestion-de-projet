@@ -1,0 +1,12 @@
+@import "../common-dialog-styles.scss";
+
+.cancel {
+    margin-right: 0;
+    background: red;
+}
+
+.confirmDeletionDialog {
+    padding: 20px;
+    font: 400 2.25rem / 2.75rem Roboto, sans-serif;
+    display: grid;   
+}

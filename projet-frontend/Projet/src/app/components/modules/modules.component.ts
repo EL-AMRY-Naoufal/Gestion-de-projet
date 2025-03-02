@@ -368,7 +368,6 @@ export class ModulesComponent implements OnInit {
   openAddAffectationDialog(groupeId: number | undefined): void {
     const dialogRef = this.dialog.open(AddAffectationComponent, {
       data: {
-        // moduleId: groupe.moduleId,
         groupeId: groupeId
       }
     });
@@ -384,8 +383,6 @@ export class ModulesComponent implements OnInit {
 
         //save in db and update with id
         this.affectationService.saveAffectation(result).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
-
-
       }
     });
   }
