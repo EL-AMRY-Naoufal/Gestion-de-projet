@@ -37,6 +37,8 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     private GroupeRepository groupeRepository;
     @Autowired
     private UserRoleRepository userRoleRepository;
+    @Autowired
+    private EnseignantService enseignantService;
 
     @Override
     public User createUser(User user, Long responsableId, boolean associateEnseignantWithUser, Long currentYear) {
@@ -67,6 +69,16 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
                 ResponsableFormation responsableFormation = new ResponsableFormation();
                 responsableFormation.setUser(newUser);
                 responsableFormationRepository.save(responsableFormation);
+            }
+
+            if (associateEnseignantWithUser) {
+                // Create and associate User with Enseignant
+                newUser = userRepository.save(user);
+
+                Enseignant enseignant = this.enseignantService.getEnseignantsWithSameUserNameAndFirstName(newUser.getName(), newUser.getFirstname()).get(0);
+                enseignant.setUser(newUser);
+                enseignant.setHasAccount(true);
+                enseignantRepository.save(enseignant);
             }
         } else {
             // Special handling for ENSEIGNANT role
@@ -121,63 +133,57 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     @Override
     @Transactional
     public User updateUser(Long id, User user, Long responsableId, Long currentYear) {
-        // Check if the responsable has the required role
-        User responsable = userRepository.findById(responsableId)
-                .orElseThrow(() -> new RuntimeException("Responsable not found"));
-
-        /*if (!responsable.hasRoleForYear(currentYear, Role.CHEF_DE_DEPARTEMENT)) {
-            throw new RuntimeException("Only Responsable de Département can update users");
-        }*/
-
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(NotFoundException::new);
 
-        if(existingUser.hasRoleForYear(currentYear, Role.ENSEIGNANT )
+        // Vérification et suppression de l'enseignant si nécessaire
+        if (existingUser.hasRoleForYear(currentYear, Role.ENSEIGNANT)
                 && !user.hasRoleForYear(currentYear, Role.ENSEIGNANT)) {
             this.enseignantRepository.deleteByUser(existingUser);
-
         }
 
-        // Update user information
+        // Mise à jour des informations de l'utilisateur
         existingUser.setUsername(user.getUsername());
         existingUser.setName(user.getName());
         existingUser.setFirstname(user.getFirstname());
-//        existingUser.setPassword(user.getPassword());
         existingUser.setEmail(user.getEmail());
 
-
+        // Récupération des rôles actuels pour l'année en cours
         List<UserRole> existingRoles = userRoleRepository.findByUserIdAndYearId(id, currentYear);
         Map<Role, UserRole> existingRolesMap = existingRoles.stream()
                 .collect(Collectors.toMap(UserRole::getRole, Function.identity()));
 
-        List<UserRole> newRoles = user.getRoles().stream().map(role -> {
-            if (existingRolesMap.containsKey(role.getRole())) {
-                // Update existing role
-                UserRole existingRole = existingRolesMap.get(role.getRole());
-                existingRole.setUser(existingUser);
-                return existingRole;
-            } else {
-                // Create new role
-                role.setUser(existingUser);
-                return role;
-            }
-        }).collect(Collectors.toList());
-
-        // Suppression des anciens rôles qui ne sont plus présents
-        List<UserRole> rolesToDelete = existingRoles.stream()
-                .filter(existingRole -> user.getRoles().stream()
-                        .noneMatch(newRole -> newRole.getRole() == existingRole.getRole()))
+        // Nouveaux rôles à ajouter
+        List<UserRole> newRoles = user.getRoles().stream()
+                .filter(ur -> ur.getYear().getId().equals(currentYear)) // Filtrer sur l'année en cours
+                .filter(ur -> !existingRolesMap.containsKey(ur.getRole())) // Vérifier si le rôle est déjà présent
+                .peek(ur -> ur.setUser(existingUser)) // Associer l'utilisateur existant
                 .collect(Collectors.toList());
 
-        // Supprimer les rôles inutilisés dans UserRole
-        userRoleRepository.deleteAll(rolesToDelete);
+        // Rôles à supprimer (qui ne sont plus présents dans la nouvelle liste)
+        List<UserRole> rolesToDelete = existingRoles.stream()
+                .filter(existingRole -> user.getRoles().stream()
+                        .noneMatch(newRole -> newRole.getRole().equals(existingRole.getRole())))
+                .collect(Collectors.toList());
 
-        // Sauvegarde ou mise à jour des rôles dans UserRole
-        userRoleRepository.saveAll(newRoles);
+        // Suppression des rôles obsolètes
+        if (!rolesToDelete.isEmpty()) {
+            userRoleRepository.deleteAll(rolesToDelete);
+            userRoleRepository.flush(); // Forcer la suppression avant d'ajouter les nouveaux rôles
+        }
 
-        existingUser.setRoles(newRoles);
+        // Ajout des nouveaux rôles
+        if (!newRoles.isEmpty()) {
+            userRoleRepository.saveAll(newRoles);
+        }
+
+        // Mise à jour des roles de l'utilisateur
+        existingUser.getRoles().addAll(newRoles);
+        existingUser.getRoles().removeAll(rolesToDelete);
+
         return userRepository.save(existingUser);
     }
+
 
     @Override
     @Transactional
@@ -217,4 +223,4 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
         return userRoleRepository.findByRoleAndYearId(role, year);
     }
 
-    }
+}

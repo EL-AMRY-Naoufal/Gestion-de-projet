@@ -115,10 +115,7 @@ public class UserServiceDefault implements UserService {
     @Override
     public List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname) {
         Specification<User> spec = this.userSpecification.byNameandFirstnameAndNotInEnseignant(name, firstname);
-        //users.addAll(this.userRepository.findAll(spec));
-        //return users;
         return this.userRepository.findAll(spec);
-        //return this.userRepository.findUsersByNameAndFirstname(name, firstname);
     }
 
     @Override

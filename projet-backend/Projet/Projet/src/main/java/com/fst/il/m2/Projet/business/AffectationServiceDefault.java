@@ -43,12 +43,16 @@ public class AffectationServiceDefault implements AffectationService{
     @Override
     public  Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
+        /*if(heuresAssignees <= 0){
+            throw new RuntimeException("Heures assignées must be greater than 0");
+        }*/
+
         Enseignant enseignant = enseignantRepository.findById(userId)
                 .orElseThrow(NotFoundException::new);
 
         // Récupérer le groupe
         Groupe groupe = groupeRepository.findById(groupeId)
-                .orElseThrow(() -> new RuntimeException("Groupe not found with id: " + groupeId));
+                .orElseThrow(NotFoundException::new);
 
         // Vérifier si l'enseignant est déjà affecté à ce groupe
         if (affectationRepository.existsByEnseignantAndGroupe(enseignant, groupe)) {
@@ -67,17 +71,12 @@ public class AffectationServiceDefault implements AffectationService{
         affectation.setDateAffectation(LocalDate.now());
         affectation.setCommentaire("");
 
-
-
-
         // Sauvegarder l'affectation
         affectationRepository.save(affectation);
 
         // Mettre à jour les heures assignées de l'enseignant
         enseignant.setHeuresAssignees(enseignant.getHeuresAssignees() + heuresAssignees);
         enseignantRepository.save(enseignant);
-
-
 
         return affectation;
     }
@@ -86,7 +85,7 @@ public class AffectationServiceDefault implements AffectationService{
     //mise a jour des heures enseignées d'une affectation
     public void updateAffectationHours(Long idAffectation, int heuresAssignees) {
         Affectation affectation = affectationRepository.findById(idAffectation)
-                .orElseThrow(() -> new RuntimeException("Affectation not found with id: " + idAffectation));
+                .orElseThrow(NotFoundException::new);
 
 
         // Mis à jour des heures assignées de l'enseignant
@@ -117,7 +116,7 @@ public class AffectationServiceDefault implements AffectationService{
     @Override
     public void deleteAffectation(Long id){
         Affectation affectation = affectationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Affectation not found with id: " + id));
+                .orElseThrow(NotFoundException::new);
 
 
         Enseignant enseignant = affectation.getEnseignant();

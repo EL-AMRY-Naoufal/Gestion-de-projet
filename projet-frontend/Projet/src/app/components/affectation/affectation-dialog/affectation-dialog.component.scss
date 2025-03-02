@@ -1,0 +1,80 @@
+/* Style des boutons dans le dialogue */
+.mat-dialog-actions button {
+  border-radius: 8px; /* Coins arrondis des boutons */
+  font-weight: bold;  /* Texte en gras */
+  padding: 10px 20px; /* Taille des boutons */
+}
+
+
+
+/* Style des entrées de texte */
+.mat-input-element {
+  border-radius: 8px; /* Coins arrondis des champs de texte */
+}
+
+
+/* Ajouter des bordures arrondies aux selecteurs */
+mat-select {
+  border-radius: 8px;
+}
+
+/* Style du fond du dialogue */
+.custom-dialog-container {
+  width: 90vw !important;
+  max-width: 1000px !important;
+  height: auto !important;
+  max-height: 90vh !important;
+  background-color: #bbd7f1; /* Couleur de fond bleu clair */
+  border-radius: 16px !important; /* Bords arrondis */
+  padding: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+
+
+
+/* Boutons */
+button[mat-button] {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #d8e7f5;
+
+}
+
+button[mat-button]:hover {
+  opacity: 0.9;
+  background-color: #80bbf1;
+  color: #ffffff;
+
+}
+
+
+
+.global-header{
+  background-color: #ffffff; /* Couleur de fond bleu clair */
+
+}
+
+
+.global-header h2 {
+  text-align: center; /* Centrer le titre horizontalement */
+  padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
+  font-size: 24px; /* Ajuster la taille du texte */
+  font-weight: bold; /* Mettre en gras le titre */
+  color: #333; /* Ajuster la couleur du titre */
+  position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
+  margin-bottom: 50px;
+}
+
+.global-header h2::after {
+  content: ''; /* Créer un pseudo-élément */
+  position: absolute;
+  bottom: -5px; /* Placer la ligne juste en dessous du titre */
+  left: 50%; /* Centrer la ligne par rapport au titre */
+  width: 500px; /* Longueur de la ligne */
+  height: 2px; /* Épaisseur de la ligne */
+  background-color: #333; /* Couleur de la ligne */
+  transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
+}

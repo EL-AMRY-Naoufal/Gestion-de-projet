@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {EnseignantService} from '../../../services/enseignant.service';
+import { Component, input, Input, OnInit } from '@angular/core';
+import { EnseignantService } from '../../../services/enseignant.service';
 import {NgForOf, NgIf} from "@angular/common";
 import {LoginService} from "../../../services/login.service";
+import { User } from '../../shared/types/user.type';
 import {ActivatedRoute} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -40,6 +41,10 @@ export class AffectationListComponent implements OnInit {
   coAffectations: { [key: number]: CoAffectation[] } = {};
   selectedModuleId: number | null = null;
 
+  @Input() dialog: boolean = false;  // Input to receive enseignantId from the parent (dialog)
+  connect : boolean = false; // Si on utilise l'utilisateur connecter
+
+  affectations: AffectationType[] = [];
 
   enseignantId!: string;
   username: string = '';
@@ -178,4 +183,20 @@ export class AffectationListComponent implements OnInit {
   cancelEditing() {
     this.editingId = null;
   }
+
+
+  @Input()
+  set user(user: User) {
+    console.log("Nouvel user reçu :", user);
+
+    if (user?.id !== undefined) {
+      this.enseignantId = user.id.toString();
+    } else {
+      console.warn("L'utilisateur n'a pas d'ID !");
+      this.enseignantId = ''; // Ou une valeur par défaut
+    }
+  }
+
+
+
 }

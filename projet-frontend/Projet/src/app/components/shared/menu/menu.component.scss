@@ -60,7 +60,6 @@ body {
 
 .navbar-link:hover {
   color: #248de2; /* Couleur du texte au survol */
-  text-decoration: underline; /* Ajoute un soulignement au survol */
 }
 
 /* Section centrale pour la navigation (nouveau) */
@@ -72,31 +71,35 @@ body {
   gap: 30px; /* Espacement uniforme entre les liens */
 }
 
-.year {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .year select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
+  max-width: 6em;
+
+  padding: 10px 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0a2b46; /* Bleu foncé */
+  background-color: #bbd7f1;
+  border: 2px solid #bbd7f1;
   border-radius: 5px;
-  font-size: 14px;
-  background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .year select:hover {
-  background-color: #eef7ff;
+  background-color: #bbd7f1; /* Bleu clair */
+  border-color: #bbd7f1;
+  color: #248de2; /* Couleur du texte au survol */
+
 }
 
-.year select:focus {
-  outline: none;
-  background-color: #e0f7fa;
-  color: #00796b;
+/* Style de la liste déroulante */
+.year select option {
+  background-color: #ffffff; /* Fond blanc */
+  color: #0a2b46; /* Texte bleu foncé */
+  font-size: 1rem;
+  padding: 10px;
 }
+
 
 a {
   cursor: pointer;

@@ -50,10 +50,11 @@ export class ListUsersComponent implements OnInit {
   // private property to store view value
   private _view: string;
 
+  selectedList: string = 'enseignants';
   searchQuery: string = '';
   filteredUsers: User[] = [];
   searchPerformed: boolean = false;
-  selectedRole: string = '';
+  selectedRole: string = 'TOUS';
   _user!: User;
   enseignantDto: EnseignantDto = {
     name: '',
@@ -65,6 +66,7 @@ export class ListUsersComponent implements OnInit {
     heuresAssignees: 0,
   };
   roles: string[] = [
+    'TOUS',
     'CHEF_DE_DEPARTEMENT',
     'RESPONSABLE_DE_FORMATION',
     'SECRETARIAT_PEDAGOGIQUE',
@@ -167,7 +169,7 @@ export class ListUsersComponent implements OnInit {
     }*/
   }
 
-  getListUsersWithRolesOfSelectedYear(): User[] {
+  get listUsersWithRolesOfSelectedYear(): User[] {
     return this.listUsers.map((user) => {
       return {
         ...user,
@@ -202,15 +204,17 @@ export class ListUsersComponent implements OnInit {
   /**
    * Function to display modal
    */
+  hasProfile: Boolean = false;
   showDialog(): void {
     // set dialog status
     this._dialogStatus = 'active';
 
     // open modal
     this._listUsersDialog = this._dialog.open(UserDialogComponent, {
-      width: '500px',
       disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
     });
+
 
     // subscribe to afterClosed observable to set dialog status and do process
     this._listUsersDialog
@@ -219,6 +223,7 @@ export class ListUsersComponent implements OnInit {
         filter((user: User | undefined) => !!user),
         map((user: User | undefined) => {
           // delete obsolete attributes in original object which are not required in the API
+          this.hasProfile = user?.hasProfile || false;
           delete user?.id;
           this.enseignantDto.categorieEnseignant =
             user?.categorieEnseignant as CategorieEnseignant;
@@ -243,8 +248,10 @@ export class ListUsersComponent implements OnInit {
               'ENSEIGNANT',
               this._yearService.currentYearId
             )
+            && !this.hasProfile
           ) {
             this.enseignantDto.user = user;
+            this.enseignantDto.hasAccount =true;
             this._addTeacher(this.enseignantDto);
           }
         },
@@ -331,11 +338,18 @@ export class ListUsersComponent implements OnInit {
 
   filterByRole() {
     if (this.selectedRole && this.selectedYear) {
-      this._usersService
+      if(this.selectedRole === 'TOUS'){
+        this._usersService.getUsers()
+        .subscribe((data) => {
+          this._listUsers = data
+        });
+      }else{
+        this._usersService
         .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
         .subscribe((data) => {
           this._listUsers = data;
         });
+      }
     } else {
       this._listUsers = [];
     }

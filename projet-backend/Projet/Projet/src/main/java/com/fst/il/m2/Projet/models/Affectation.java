@@ -8,10 +8,11 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 @Entity
 @Data
+
 @Table(name = "Affectations")
 public class Affectation {
 

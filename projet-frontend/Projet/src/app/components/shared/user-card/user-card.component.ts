@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button'; // Pour les boutons
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
 import { User } from '../types/user.type';
+import { AffectationDialogComponent } from '../../affectation/affectation-dialog/affectation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-card',
@@ -31,7 +33,7 @@ export class UserCardComponent {
   /**
    * Component constructor
    */
-  constructor(private loginService: LoginService) {
+  constructor(private loginService: LoginService, private _dialog: MatDialog,) {
     this._user = {} as User;
     this._delete$ = new EventEmitter<User>();
     this.userRoles = this.loginService.userRoles;
@@ -62,18 +64,26 @@ export class UserCardComponent {
   }
 
   /**
-   * OnInit implementation
-   */
-  ngOnInit(): void {
-    console.log([
-      this.isYearSelected, this.user, this.selectedYear
-    ])
-  }
-
-  /**
    * Function to emit event to delete current user
    */
   delete(user: User): void {
     this._delete$.emit(user);
   }
+
+
+  showAffectations( user: User) {
+    console.log("affectation");
+
+    // open modal
+      this._dialog.open(AffectationDialogComponent, {
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      data: { user: user } // Passer l'enseignant en tant que donnée
+    });
+  }
+
+  hasRoleEnseignant(): boolean {
+    return this.user.roles.some(roleDto => roleDto.role === 'ENSEIGNANT');
+  }
+
 }

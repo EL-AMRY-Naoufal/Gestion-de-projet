@@ -59,5 +59,15 @@
     >
       🗑️
     </div>
+
+    <div
+    class="custom-icon delete-icon"
+    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT') && hasRoleEnseignant()"
+    (click)="showAffectations(user)"
+    title="affiche affectation"
+        >
+      🔍
+      </div>
+
   </mat-card-actions>
 </mat-card>

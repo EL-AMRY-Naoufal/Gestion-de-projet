@@ -6,6 +6,7 @@ import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
 import com.fst.il.m2.Projet.models.ResponsableDepartement;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
