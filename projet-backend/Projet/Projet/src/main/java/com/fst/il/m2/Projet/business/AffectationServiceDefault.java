@@ -102,6 +102,11 @@ public class AffectationServiceDefault implements AffectationService{
         affectationRepository.save(affectation);
     }
 
+    @Override
+    public List<Affectation> getAffectationsByGroupe(Groupe groupe) {
+        return affectationRepository.findGroupeAffectations(groupe);
+    }
+
 
     @Override
     public Affectation getAffectationById(Long id) {

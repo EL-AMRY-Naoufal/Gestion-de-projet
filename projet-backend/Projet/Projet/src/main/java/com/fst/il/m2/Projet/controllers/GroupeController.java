@@ -68,11 +68,10 @@ public class GroupeController {
     // Delete a Groupe by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGroupe(@PathVariable Long id) {
-        try {
+        if(!groupeService.hasAffectations(id)) {
             groupeService.deleteGroupe(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

@@ -39,4 +39,8 @@ export class GroupeService {
     saveGroupe(groupe: Groupe): Observable<Groupe> {
         return this.http.post<Groupe>(`${this._backendURL.groupes}`, groupe);
     }
+    
+    deleteGroupe(groupe: Groupe): Observable<Groupe> {
+        return this.http.delete<Groupe>(`${this._backendURL.groupes}/${groupe.id}`);
+    }
 }

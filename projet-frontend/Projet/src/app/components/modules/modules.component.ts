@@ -514,13 +514,24 @@ export class ModulesComponent implements OnInit {
     else {
       alert("Impossible de supprimer ce module : il contient encore des groupes");
     }
-
-
   }
 
   removeGroupe(groupe: Groupe) {
-    let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe === groupe);
-    this.groupes.splice(groupeIndex, 1);
+    let affectationsChildren: Affectation | undefined = this.affectations.find((currentAffectation) => currentAffectation.groupeId === groupe.id);
+    if(affectationsChildren == undefined) {
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe === groupe);
+          this.groupes.splice(groupeIndex, 1);
+          this.groupeService.deleteGroupe(groupe).subscribe();
+        }
+      })
+    }
+    else {
+      alert("Impossible de supprimer ce module : il contient encore des groupes");
+    }
+
   }
 
   removeAffectation(affectation: Affectation) {

@@ -12,4 +12,5 @@ public interface GroupeService {
     List<Groupe> getAllGroupes(); // Method to get all groups
     void deleteGroupe(Long id); // Method to delete a group by its ID
     List<Groupe> getGroupesByModule(Module module);
+    Boolean hasAffectations(Long id);
 }
