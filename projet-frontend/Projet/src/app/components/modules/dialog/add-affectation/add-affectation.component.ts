@@ -34,7 +34,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatOptionModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatDialogModule, // ✅ Ajout du module MatDialog
+    MatDialogModule,
   ],
 
   templateUrl: './add-affectation.component.html',

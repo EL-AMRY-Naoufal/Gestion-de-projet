@@ -247,7 +247,10 @@ export class ModulesComponent implements OnInit {
   }
 
   openAddModuleDialog(anneeIndex: number, departementIndex: number, formationIndex: number, niveauIndex: number, semestreIndex: number): void {
-    const dialogRef = this.dialog.open(AddModulesDialogComponent);
+    const dialogRef = this.dialog.open(AddModulesDialogComponent,{
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {

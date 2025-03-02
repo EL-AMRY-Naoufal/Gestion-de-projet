@@ -1,16 +1,38 @@
-<div class="dialog">
-  <h3>Ajouter un nouveau groupe</h3>
-  <form (ngSubmit)="onAdd()">
-    <label for="nom">Nom:</label>
-    <input id="nom" [(ngModel)]="newGroupe.nom" name="nom" required>
+<div class="global-header">
+  <h2 mat-dialog-title >Ajouter une nouvelle année</h2>
+  <mat-dialog-content>
 
-    <label for="type">Type:</label>
-    <select id="type" [(ngModel)]="newGroupe.type" name="type" required>
-      <option value="TP">TP</option>
-      <option value="TD">TD</option>
-      <option value="CM">CM</option>
-    </select>
-    <button type="submit">Ajouter</button>
-    <button type="button" (click)="onCancel()">Annuler</button>
+    <form>
+      <div class="flex-container">
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput id="nom" [(ngModel)]="newGroupe.nom" name="nom" required>
+        </mat-form-field>
+
+      </div>
+
+      <div class="flex-container">
+
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+
+          <mat-label>Type</mat-label>
+          <mat-select id="type" [(ngModel)]="newGroupe.type" name="type" required>
+            <mat-option value="TP">TP</mat-option>
+            <mat-option value="TD">TD</mat-option>
+            <mat-option value="CM">CM</mat-option>
+          </mat-select>
+
+        </mat-form-field>
+      </div>
+
+
   </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button type="button" (click)="onCancel()">Annuler</button>
+    <button mat-button  type="button" (click)="onAdd()" class="btn-submit">Sauvegarder</button>
+  </mat-dialog-actions>
 </div>
+
+

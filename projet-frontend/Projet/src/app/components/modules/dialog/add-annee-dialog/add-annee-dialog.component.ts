@@ -16,7 +16,6 @@ import { MatOptionModule } from '@angular/material/core';
   styleUrls: ['./add-annee-dialog.component.scss'],
   imports: [
     FormsModule,
-    FormsModule,
     NgForOf,
     NgIf,
     CommonModule,
@@ -28,7 +27,7 @@ import { MatOptionModule } from '@angular/material/core';
     MatOptionModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatDialogModule, // ✅ Ajout du module MatDialog
+    MatDialogModule,
   ],
   standalone: true,
   encapsulation: ViewEncapsulation.None,
