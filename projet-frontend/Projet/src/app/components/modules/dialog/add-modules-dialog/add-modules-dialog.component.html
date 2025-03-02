@@ -1,33 +1,47 @@
-<div class="dialog">
-  <h3>Ajouter un nouveau Module</h3>
-  <form (ngSubmit)="onAdd()" class="form-container">
-    <div class="form-group">
-      <label for="nom">Nom:</label>
-      <input id="nom" [(ngModel)]="newModule.nom" name="nom" required class="input-field">
-    </div>
+<div class="global-header">
+  <h2 mat-dialog-title>Ajouter un nouveau Module</h2>
 
-    <div class="form-group">
-      <h4>Types d'heures :</h4>
-      <div *ngFor="let type of heuresList; let i = index" class="type-container">
-        <fieldset class="type-fieldset">
-          <legend>{{ type.type }} :</legend>
-
-          <div class="input-group">
-            <label [for]="'heures-' + i">Heures:</label>
-            <input [id]="'heures-' + i" type="number" [(ngModel)]="type.heures" [name]="'heures-' + i" required class="input-field">
-          </div>
-
-          <div class="input-group">
-            <label [for]="'groupes-' + i">Nombre de Groupes:</label>
-            <input [id]="'groupes-' + i" type="number" [(ngModel)]="type.groupes" [name]="'groupes-' + i" required class="input-field">
-          </div>
-        </fieldset>
+  <mat-dialog-content>
+    <form>
+      <!-- Nom du module -->
+      <div class="flex-container">
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput id="nom" [(ngModel)]="newModule.nom" name="nom" required class="input-field">
+        </mat-form-field>
       </div>
-    </div>
 
-    <div class="button-group">
-      <button type="submit" class="btn-submit">Ajouter</button>
-      <button type="button" (click)="onCancel()" class="btn-cancel">Annuler</button>
-    </div>
-  </form>
+      <!-- Types d'heures -->
+      <div class="form-group">
+        <h3 mat-dialog-title>Types d'heures :</h3>
+
+        <div *ngFor="let type of heuresList; let i = index" class="type-container">
+          <fieldset class="type-fieldset">
+            <legend>{{ type.type }} :</legend>
+
+            <div class="flex-container">
+              <!-- Champ Heures -->
+              <mat-form-field appearance="fill" class="full-width mgb20">
+                <mat-label>Heures</mat-label>
+                <input matInput type="number" [(ngModel)]="type.heures" [name]="'heures-' + i" required>
+              </mat-form-field>
+
+              <!-- Champ Nombre de Groupes -->
+              <mat-form-field appearance="fill" class="full-width mgb20">
+                <mat-label>Nombre de Groupes</mat-label>
+                <input matInput type="number" [(ngModel)]="type.groupes" [name]="'groupes-' + i" required>
+              </mat-form-field>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button type="button" (click)="onCancel()">Annuler</button>
+    <button mat-button color="primary" type="button" (click)="onAdd()">Sauvegarder</button>
+  </mat-dialog-actions>
 </div>
