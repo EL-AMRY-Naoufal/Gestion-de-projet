@@ -20,6 +20,8 @@ import {GroupeService} from '../../services/groupe.service';
 import {Annee, Departement, Formation, Niveau, Semestre, Groupe, Module} from '../shared/types/modules.types';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
+import { User } from '../shared/types/user.type';
+import { AffectationDialogComponent } from '../affectation/affectation-dialog/affectation-dialog.component';
 
 @Component({
   selector: 'app-modules',
@@ -46,7 +48,8 @@ export class ModulesComponent implements OnInit {
     private semestreService: SemestreService,
     private groupeService: GroupeService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private _dialog: MatDialog
   ) {
   }
 
@@ -130,10 +133,20 @@ export class ModulesComponent implements OnInit {
     })
   }
 
-  navigateToAffectations(id: number ) {
-    this.router.navigate(['/enseignants/affectations/' + id]);
+  navigateToAffectations(user: User |undefined)  {
+     console.log("affectation");
 
+     if (!user) {
+      console.warn('Aucun utilisateur défini');
+      return; // Ou redirige vers une autre page / afficher un message d'erreur
+    }
 
+    // open modal
+      this._dialog.open(AffectationDialogComponent, {
+      disableClose: true,
+      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      data: { user: user } // Passer l'enseignant en tant que donnée
+    });
   }
 
 
