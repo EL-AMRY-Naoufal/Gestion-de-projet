@@ -6,6 +6,7 @@ export const environment = {
     port: '8080',
     endpoints: {
       allUsers: '/api/responsableDepartement',
+      justRole: '/api/responsableDepartement/users/by-just-role',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
       authenticate: '/api/users/authenticate',

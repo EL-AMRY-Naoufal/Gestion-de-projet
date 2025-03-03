@@ -57,7 +57,7 @@
                                     <ul>
                                       <li *ngFor="let groupe of getGroupesByModule(module.id); trackById">
                                         <details>
-                                          <summary (click)="showType('GROUPE', groupe)">
+                                          <summary   [ngClass]="getGroupeClass(groupe)" (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
                                             <button (click)="openAddAffectationDialog(groupe.id)">+</button>
                                             <button (click)="removeGroupe(groupe)"><i class="fa fa-trash-o"></i></button>

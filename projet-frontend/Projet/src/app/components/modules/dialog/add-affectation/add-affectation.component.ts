@@ -3,8 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 import {NgForOf, NgIf} from '@angular/common';
-import {UserService} from "../../../../services/user.service";
-import {ModuleService} from "../../../../services/module.service";
+
 import {EnseignantService} from "../../../../services/enseignant.service";
 import {LoginService} from "../../../../services/login.service";
 import {Affectation, Module} from "../../../shared/types/modules.types";
@@ -28,7 +27,6 @@ export class AddAffectationComponent implements OnInit {
   modules!: Module[];
   groupes!: any[];
   enseignantId!: number;
-  // moduleId!: string;
   groupeId!: number;
   heuresAssignees!: number;
 
@@ -42,74 +40,45 @@ export class AddAffectationComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddAffectationComponent>,
-    private affectationService: UserService,
-    private moduleService: ModuleService,
     private enseignantService: EnseignantService,
     private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.commentaire ="";
     this.dateAffectation = new Date().toLocaleDateString();
-    Date
     console.log(this.dateAffectation);
   }
 
   ngOnInit(): void {
     this.myId = this.loginService.connectUser() + '';
 
-    // // Remplir les modules si nécessaire (si pas déjà préchargés)
-    // this.moduleService.getModules().subscribe(
-    //   (response: any[]) => {
-    //     this.modules = response;
-    //     this.onModuleChange();
-    //   },
-    //   (error: any) => {
-    //     console.log('error', error);
-    //   }
-    // );
-
     // Remplir les enseignants
     this.enseignantService.getEnseignants().subscribe(
       (response: any[]) => {
         this.enseignants = response;
          console.log('enseignants', this.enseignants);
-      }//,
-      // (error: any) => {
-      //   console.log('error', error);
-      // }
+      }
     );
 
     // Préremplir le module et le groupe
     if (this.data) {
-      // this.moduleId = this.data.moduleId;
       this.groupeId = this.data.groupeId;
     }
   }
 
-  onModuleChange(): void {
-    console.log("on module change");
-    // const selectedModule = this.modules.find(module => module.id === Number(this.moduleId));
-    // this.groupes = selectedModule ? selectedModule.groupes : [];
-  }
 
   onSubmit(): void {
     if (this.enseignantId && this.groupeId && this.heuresAssignees) {
 
       //console select enseignant
       console.log('enseignantId', this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId)));
-
-      const selectedEnseignant = this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
-      const nomEnseignant = selectedEnseignant ? selectedEnseignant.firstname : 'nouveaux enseignant';
-
+      this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
       this.newAffectation = {
         heuresAssignees: this.heuresAssignees,
         enseignantId: this.enseignantId,
         groupeId: this.groupeId,
         dateAffectation: this.dateAffectation,
         commentaire: this.commentaire
-        // nomEnseignant: nomEnseignant,
-
-
       };
     } else {
       this.errorMessage = 'Veuillez remplir tous les champs.';

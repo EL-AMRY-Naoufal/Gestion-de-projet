@@ -198,6 +198,12 @@ export class UserService {
     return this._http.get<any[]>(url);
   }
 
+  searchUsersByRole(role: string): Observable<User[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.justRole}?role=${role}`;
+
+    return this._http.get<User[]>(url);
+  }
+
   getRoleByUserIdAndYear(userId: number, year: number) {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/user/${userId}/year/${year}`;
 
