@@ -10,6 +10,8 @@ import { ProfilCardComponent } from '../shared/profil-card/profil-card.component
 import { UserCardComponent } from '../shared/user-card/user-card.component';
 import { EnseignantDto } from '../shared/types/enseignant.type';
 import { FormsModule } from '@angular/forms';
+import { YearService } from '../../services/year-service';
+import { Year } from '../shared/types/year.type';
 
 @Component({
   selector: 'app-enseignants',
@@ -23,12 +25,14 @@ export class EnseignantsComponent implements OnInit {
   enseignants: EnseignantDto[] = [];
   private _view: string;
   searchQuery: string = '';
+  selectedYear!: Year | null;
 
   constructor(
     private userService: UserService,
     private _usersService: UserService,
     private enseignantService: EnseignantService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _yearService: YearService
   ) {
     this.openDialog = this.openDialog.bind(this);
     this._view = 'card';
@@ -37,6 +41,9 @@ export class EnseignantsComponent implements OnInit {
   ngOnInit(): void {
     this.enseignantService.getEnseignants().subscribe((data) => {
       this.enseignants = data;
+    });
+    this._yearService.selectedYear$.subscribe((year) => {
+      this.selectedYear = year;
     });
   }
 
@@ -124,5 +131,12 @@ export class EnseignantsComponent implements OnInit {
       }
       return false;
     });
+  }
+
+  getSelectedYear() {
+    if (this.selectedYear != null) {
+      return this.selectedYear.debut;
+    }
+    return 0;
   }
 }

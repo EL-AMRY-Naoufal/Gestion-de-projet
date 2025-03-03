@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +21,6 @@ public class EnseignantDto {
     private CategorieEnseignant categorieEnseignant;
     private int nbHeureCategorie;
     private int maxHeuresService;
-    private int heuresAssignees;
     private User user;
+    private Map<Long, Double> heuresAssignees;
 }

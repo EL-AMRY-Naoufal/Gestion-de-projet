@@ -2,10 +2,7 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString(exclude = {"affectations", "heuresParAnnee", "user"})
 public class Enseignant {
 
     @Id
@@ -36,7 +34,8 @@ public class Enseignant {
 
     private int maxHeuresService;
 
-    private int heuresAssignees;
+    @OneToMany(mappedBy = "enseignant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HeuresAssignees> heuresParAnnee;
 
     // Relations
     @OneToMany(mappedBy = "enseignant")
@@ -47,6 +46,14 @@ public class Enseignant {
     private User user;
 
     private boolean hasAccount;
+
+    public double getHeuresAssignees(Annee annee) {
+        return heuresParAnnee.stream()
+                .filter(h -> h.getAnnee().equals(annee))
+                .mapToDouble(HeuresAssignees::getHeures)
+                .findFirst()
+                .orElse(0.0);
+    }
 
 
     public int getNbHeureCategorie(CategorieEnseignant categorie) {
@@ -76,13 +83,6 @@ public class Enseignant {
         this.maxHeuresService = maxHeuresService;
     }
 
-    public int getHeuresAssignees() {
-        return heuresAssignees;
-    }
-
-    public void setHeuresAssignees(int heuresAssignees) {
-        this.heuresAssignees = heuresAssignees;
-    }
 
     public List<Affectation> getAffectations() {
 
@@ -112,9 +112,6 @@ public class Enseignant {
                 "id=" + id +
                 ", categorieEnseignant=" + categorieEnseignant +
                 ", maxHeuresService=" + maxHeuresService +
-                ", heuresAssignees=" + heuresAssignees +
-                ", affectations=" + affectations +
-                ", user=" + user +
                 '}';
     }
 }

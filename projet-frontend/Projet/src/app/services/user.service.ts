@@ -160,10 +160,10 @@ export class UserService {
 
 
 
-  updateAffectation(affectationId: number, nombreHeure: number): Observable<any> {
+  updateAffectation(affectationId: number, nombreHeure: number, anneeId: number): Observable<any> {
     return this._http
       .put(
-        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}/${nombreHeure}/${anneeId}`,
         null,
         { responseType: 'text' }
       )
@@ -182,9 +182,9 @@ export class UserService {
       );
   }
 
-  deleteAffectation(affectationId: number): Observable<string> {
+  deleteAffectation(affectationId: number, anneeId: number): Observable<string> {
     return this._http
-      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}`, )
+      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}/${anneeId}`, )
       .pipe(map((response) => response));
   }
 
