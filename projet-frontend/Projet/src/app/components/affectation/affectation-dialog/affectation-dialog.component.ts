@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AffectationListComponent } from "../affectation-enseignant/affectation-enseignant.component";
 import { MatDialogActions } from "@angular/material/dialog";
 import { User } from '../../shared/types/user.type';
+import { EnseignantDto } from '../../shared/types/enseignant.type';
 
 @Component({
   selector: 'app-affectation-dialog',
@@ -14,13 +15,14 @@ import { User } from '../../shared/types/user.type';
 })
 export class AffectationDialogComponent {
 
-  user: User;
+  enseignant: EnseignantDto;
 
   constructor(
     private dialogRef: MatDialogRef<AffectationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.user = data.user;
+    this.enseignant = data.enseignant;
+    console.log("wshsssss",this.enseignant);
   }
 
   cancel() {

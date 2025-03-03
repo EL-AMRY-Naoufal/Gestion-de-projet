@@ -187,19 +187,23 @@ export class AffectationListComponent implements OnInit {
   }
 
 
-  
-  @Input()
-  set user(user: User) {
-    console.log("nouvel user recu ", user)
 
-    if(user?.id !== undefined){
-      this.enseignantId = user.id.toString();
+  @Input()
+  set enseignant(enseignant: EnseignantDto) {
+    console.log("nouvel user recu ", enseignant)
+
+    if(enseignant?.id !== undefined){
+      this.enseignantId = enseignant.id.toString();
 
     }else{
       console.warn("l'utilateur n'a pas d'ID");
       this.enseignantId = '';
     }
+
+    this.loadData();
   }
+
+
 
 
 }

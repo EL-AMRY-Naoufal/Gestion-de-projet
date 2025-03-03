@@ -34,7 +34,7 @@ export class ProfilCardComponent {
     // private property to store user value
     private _enseignant: EnseignantDto;
     userRoles: string[] = [];
-    @Input() openDialog!: (teacher?: EnseignantDto)=> void; // c'est quoi sa ???? 
+    @Input() openDialog!: (teacher?: EnseignantDto)=> void; // c'est quoi sa ????
     @Input() isYearSelected!: boolean;
     @Input() selectedYearId: number | null = null;
 
@@ -82,7 +82,7 @@ export class ProfilCardComponent {
        this._dialog.open(AffectationDialogComponent, {
         disableClose: true,
         panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
-        data: { user: enseignant.user } // Passer l'enseignant en tant que donnée
+        data: { enseignant: enseignant } // Passer l'enseignant en tant que donnée
       });
     }
 
