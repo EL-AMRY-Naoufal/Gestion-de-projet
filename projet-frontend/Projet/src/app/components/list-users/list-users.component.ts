@@ -252,7 +252,16 @@ export class ListUsersComponent implements OnInit {
           ) {
             this.enseignantDto.user = user;
             this.enseignantDto.hasAccount =true;
-            this._addTeacher(this.enseignantDto);
+            const heuresAssigneesMap: Record<number, number> = {};
+              this.enseignantDto.heuresAssignees.forEach(item => {
+                heuresAssigneesMap[item.annee] = item.heures;
+              });
+
+              const enseignantDtoToSend = {
+                ...this.enseignantDto,
+                heuresAssignees: heuresAssigneesMap,
+              } as any;
+            this._addTeacher(enseignantDtoToSend);
           }
         },
         error: () => (this._dialogStatus = 'inactive'),
