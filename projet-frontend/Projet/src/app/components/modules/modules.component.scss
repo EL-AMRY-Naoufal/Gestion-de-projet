@@ -137,6 +137,22 @@
   text-decoration: underline;
 }
 
+/* Modules avec peu d'heures */
+.low-hours {
+  color: #ffa100;
+
+}
+
+/* Modules avec trop d'heures */
+.over-hours {
+  color: #ff0017;
+}
+
+/* Modules équilibrés */
+.normal-hours {
+  color: #00a536;
+}
+
 /* Style général pour l'input des heures assignées */
 .heures-input {
   width: 100px;  /* Largeur de l'input */

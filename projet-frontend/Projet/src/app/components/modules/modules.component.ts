@@ -576,4 +576,18 @@ export class ModulesComponent implements OnInit {
       maxWidth: '100vw'
     });
   }
+
+  getGroupeClass(groupe: any): string {
+    if (!groupe || groupe.heuresAffectees === 0) return '';
+
+    const ratio = groupe.heuresAffectees / groupe.totalHeuresDuGroupe;
+
+    if (ratio < 1) {
+      return 'low-hours';  // Peu d'heures affectées
+    } else if (ratio > 1) {
+      return 'over-hours'; // Trop d'heures affectées
+    }
+    return 'normal-hours'; // Équilibré
+  }
+
 }
