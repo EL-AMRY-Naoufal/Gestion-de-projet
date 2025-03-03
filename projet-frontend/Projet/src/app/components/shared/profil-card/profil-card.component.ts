@@ -34,7 +34,7 @@ export class ProfilCardComponent {
     // private property to store user value
     private _enseignant: EnseignantDto;
     userRoles: string[] = [];
-    @Input() openDialog!: (teacher?: EnseignantDto)=> void;
+    @Input() openDialog!: (teacher?: EnseignantDto)=> void; // c'est quoi sa ???? 
     @Input() isYearSelected!: boolean;
     @Input() selectedYearId: number | null = null;
 
@@ -66,14 +66,14 @@ export class ProfilCardComponent {
       this._enseignant = enseignant;
     }
 
-    
+
 
     /**
      * OnInit implementation
      */
     ngOnInit(): void {}
 
-    
+
 
     showAffectations( enseignant: EnseignantDto) {
       console.log("affectation");
@@ -89,7 +89,7 @@ export class ProfilCardComponent {
     getCardClass(enseignant: EnseignantDto, selectedYearId: number | null): string {
       const heuresAssignees = this.getHeuresPourAnnee(enseignant, selectedYearId);
       const maxHeuresService = enseignant.maxHeuresService;
-    
+
       if (heuresAssignees === 0) {
         return 'orange-card';
       } else if (heuresAssignees === maxHeuresService) {
@@ -101,20 +101,20 @@ export class ProfilCardComponent {
         return 'light-green-card';
       }
     }
-    
-    
+
+
     getHeuresPourAnnee(enseignant: EnseignantDto, annee: number | null): number {
       if (!enseignant || !enseignant.heuresAssignees) {
         return 0;
       }
-      const heures = (enseignant.heuresAssignees as unknown as Record<number, number>)[annee || 0]; 
-    
+      const heures = (enseignant.heuresAssignees as unknown as Record<number, number>)[annee || 0];
+
       if (!heures) {
         return 0;
       }
       return heures;
     }
-    
-    
+
+
 
 }

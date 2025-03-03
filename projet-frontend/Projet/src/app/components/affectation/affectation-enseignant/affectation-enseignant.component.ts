@@ -48,6 +48,7 @@ export class AffectationListComponent implements OnInit {
 
   editingId: number | null = null;
   editedComment: string = '';
+  connect : boolean = false; // Si on utilise l'utilisateur connecter
 
 
   constructor(private enseignantService: EnseignantService,
@@ -62,11 +63,14 @@ export class AffectationListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.enseignantId) {
-      this.loadData();
-    } else {
-      this.fetchEnseignantIdFromUser();
+    if(this.dialog == false){
+      if (this.enseignantId) {
+        this.loadData();
+      } else {
+        this.fetchEnseignantIdFromUser();
+      }
     }
+
   }
 
   private loadData(): void {
@@ -90,6 +94,8 @@ export class AffectationListComponent implements OnInit {
       }, (error) => {
         console.error('Erreur lors de la récupération de l enseignant', error);
       });
+
+      this.connect = true;
   }
 
   private loadAffectations(): void {
@@ -178,6 +184,21 @@ export class AffectationListComponent implements OnInit {
 
   cancelEditing() {
     this.editingId = null;
+  }
+
+
+  
+  @Input()
+  set user(user: User) {
+    console.log("nouvel user recu ", user)
+
+    if(user?.id !== undefined){
+      this.enseignantId = user.id.toString();
+
+    }else{
+      console.warn("l'utilateur n'a pas d'ID");
+      this.enseignantId = '';
+    }
   }
 
 
