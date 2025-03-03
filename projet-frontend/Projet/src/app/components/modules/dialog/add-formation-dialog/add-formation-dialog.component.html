@@ -3,8 +3,12 @@
   <form (ngSubmit)="onAdd()">
     <label for="nom">Nom:</label>
     <input id="nom" [(ngModel)]="newFormation.nom" name="nom" required>
-    <label for="responsableFormation">Responsable de formation:</label>
-    <input id="responsableFormation" [(ngModel)]="newFormation.responsableFormationId" name="responsableFormationId" required>
+    <label for="responsableDeFormation">Responsable de formation:</label>
+    <select id="responsableDeFormation" [(ngModel)]="newFormation.responsableFormationId" name="chef" required>
+      <option *ngFor="let responsable of users" [value]="responsable.id">
+        {{ responsable.firstname }}  {{ responsable.name }}
+      </option>
+    </select>
     <button type="submit">Ajouter</button>
     <button type="button" (click)="onCancel()">Annuler</button>
   </form>
