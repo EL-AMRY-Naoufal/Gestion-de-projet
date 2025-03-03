@@ -10,9 +10,11 @@ import com.fst.il.m2.Projet.repositories.GroupeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AffectationServiceTest {
 
     @Mock
@@ -69,7 +72,7 @@ class AffectationServiceTest {
             when((enseignantMock.getHeuresAssignees())).thenReturn(20);
             when((groupeMock.getHeuresAffectees())).thenReturn(20);
 
-            Affectation result = affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+            Affectation result = affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
 
             verify(groupeRepository, times(1)).save(groupeMock);
             verify(groupeMock, times(1)).setHeuresAffectees(Mockito.intThat(i -> i == 40));
@@ -88,7 +91,7 @@ class AffectationServiceTest {
 
                 when(enseignantRepository.findById(1L)).thenReturn(java.util.Optional.empty());
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
@@ -103,7 +106,7 @@ class AffectationServiceTest {
                 when(enseignantRepository.findById(1L)).thenReturn(java.util.Optional.of(enseignantMock));
                 when(groupeRepository.findById(1L)).thenReturn(java.util.Optional.empty());
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
@@ -117,18 +120,18 @@ class AffectationServiceTest {
                 when(groupeRepository.findById(1L)).thenReturn(java.util.Optional.of(groupeMock));
                 when(affectationRepository.existsByEnseignantAndGroupe(enseignantMock, groupeMock)).thenReturn(true);
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
 
-    /*@ParameterizedTest
+    @ParameterizedTest
     @ValueSource(ints = {0, -1})
     void testAffecterModuleToEnseignant_NegativeOrZeroHoursGave(int heuresAssignees) {
         assertThrows(RuntimeException.class, () -> {
-            affectationService.affecterModuleToEnseignant(1L, 1L, heuresAssignees);
+            affectationService.affecterGroupeToEnseignant(1L, 1L, heuresAssignees);
         });
-    }*/
+    }
 
     @Test
     void testUpdateAffectationHours_Right() {
@@ -153,17 +156,16 @@ class AffectationServiceTest {
         verify(affectationRepository, never()).save(affectation);
     }
 
-    /*@Test
-    void testUpdateAffectationHours_NegativeOrZeroHoursGave() {
-        when(affectationRepository.findById(1L)).thenReturn(java.util.Optional.of(affectation));
-
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1})
+    void testUpdateAffectationHours_NegativeOrZeroHoursGave(int hours) {
         assertThrows(RuntimeException.class, () -> {
-            affectationService.updateAffectationHours(1L, 0);
+            affectationService.updateAffectationHours(1L, hours);
         });
 
-        verify(affectationRepository, times(1)).findById(1L);
+        verify(affectationRepository, never()).findById(any());
         verify(affectationRepository, never()).save(affectation);
-    }*/
+    }
 
     @Test
     void testDeleteAffectation_Right() {

@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.Semestre;
 import com.fst.il.m2.Projet.repositories.ModuleRepository;
@@ -25,7 +26,7 @@ public class ModuleServiceDefault implements ModuleService {
     // Get a module by ID
     @Override
     public Module getModuleById(Long id) {
-        return moduleRepository.findById(id).orElseThrow();
+        return moduleRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     // Add a new module

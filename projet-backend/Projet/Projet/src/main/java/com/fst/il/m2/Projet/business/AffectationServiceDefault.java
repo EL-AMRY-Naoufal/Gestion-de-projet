@@ -43,9 +43,9 @@ public class AffectationServiceDefault implements AffectationService{
     @Override
     public  Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, int heuresAssignees) {
 
-        /*if(heuresAssignees <= 0){
+        if(heuresAssignees <= 0){
             throw new RuntimeException("Heures assignées must be greater than 0");
-        }*/
+        }
 
         Enseignant enseignant = enseignantRepository.findById(userId)
                 .orElseThrow(NotFoundException::new);
@@ -84,6 +84,10 @@ public class AffectationServiceDefault implements AffectationService{
 
     //mise a jour des heures enseignées d'une affectation
     public void updateAffectationHours(Long idAffectation, int heuresAssignees) {
+        if(heuresAssignees <= 0){
+            throw new RuntimeException("Heures assignées must be greater than 0");
+        }
+
         Affectation affectation = affectationRepository.findById(idAffectation)
                 .orElseThrow(NotFoundException::new);
 
