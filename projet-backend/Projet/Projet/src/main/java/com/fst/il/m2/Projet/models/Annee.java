@@ -30,4 +30,6 @@ public class Annee {
     @OneToMany(mappedBy = "annee")
     private List<Departement> departements;
 
+    @OneToMany(mappedBy = "annee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HeuresAssignees> heuresAssignees;
 }

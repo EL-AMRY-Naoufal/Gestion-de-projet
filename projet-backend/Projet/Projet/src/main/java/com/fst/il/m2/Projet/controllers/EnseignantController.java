@@ -57,7 +57,7 @@ public class EnseignantController {
             return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
                     enseignant.getUser(),
                     enseignant.getMaxHeuresService(),
-                    enseignant.getHeuresAssignees(),
+                    0,
                     enseignant.getCategorieEnseignant(),
                     enseignant.getNbHeureCategorie(),
                     1L)
@@ -68,7 +68,7 @@ public class EnseignantController {
                     enseignant.getName(),
                     enseignant.getFirstname(),
                     enseignant.getMaxHeuresService(),
-                    enseignant.getHeuresAssignees(),
+                    0,
                     enseignant.getCategorieEnseignant(),
                     enseignant.getNbHeureCategorie()
             ));
@@ -97,7 +97,7 @@ public class EnseignantController {
                         this.enseignantService.createEnseignant(
                                 enseignant.getUser(),
                                 enseignant.getMaxHeuresService(),
-                                enseignant.getHeuresAssignees(),
+                                0,
                                 enseignant.getCategorieEnseignant(),
                                 enseignant.getNbHeureCategorie(),
                                 1L

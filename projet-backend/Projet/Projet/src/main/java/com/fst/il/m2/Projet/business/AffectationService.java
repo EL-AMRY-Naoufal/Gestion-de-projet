@@ -15,9 +15,9 @@ public interface AffectationService {
 
     Affectation getAffectationById(Long id);
 
-    Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, int heuresAssignees);
+    Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, double heuresAssignees);
 
-    void updateAffectationHours(Long idAffectation, int heuresAssignees);
+    void updateAffectationHours(Long idAffectation, double heuresAssignees);
 
     List<Affectation> getAffectationsByGroupe(Groupe groupe);
 

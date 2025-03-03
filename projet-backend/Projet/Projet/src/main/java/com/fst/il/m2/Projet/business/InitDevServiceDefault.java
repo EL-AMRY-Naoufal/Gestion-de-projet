@@ -151,13 +151,32 @@ public class InitDevServiceDefault implements InitDevService {
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
         heuresRequises.put(CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 100);
-        Enseignant enseignant1 = new Enseignant(1L, users.get(4).getName(), users.get(4).getFirstname()
-                , heuresRequises, 100, 70, null, users.get(4),true) ;
-        Enseignant enseignant2 = new Enseignant(2L,users.get(5).getName(), users.get(5).getFirstname()
-                ,  heuresRequises, 100, 30, null, users.get(5), true);
-        Enseignant enseignant3 = new Enseignant(3L, users.get(6).getName(), users.get(6).getFirstname()
-                ,  heuresRequises, 100, 50, null, users.get(6), true);
 
+        // Création des enseignants SANS leurs heures assignées
+        Enseignant enseignant1 = new Enseignant(1L, users.get(4).getName(), users.get(4).getFirstname(),
+                heuresRequises, 100, null, null, users.get(4), true);
+
+        Enseignant enseignant2 = new Enseignant(2L, users.get(5).getName(), users.get(5).getFirstname(),
+                heuresRequises, 100, null, null, users.get(5), true);
+
+        Enseignant enseignant3 = new Enseignant(3L, users.get(6).getName(), users.get(6).getFirstname(),
+                heuresRequises, 100, null, null, users.get(6), true);
+
+// Création des heures assignées en les associant aux enseignants
+        List<HeuresAssignees> heuresAnnee1 = List.of(
+                HeuresAssignees.builder().annee(annee).heures(70).enseignant(enseignant1).build()
+        );
+        List<HeuresAssignees> heuresAnnee2 = List.of(
+                HeuresAssignees.builder().annee(annee).heures(30).enseignant(enseignant2).build()
+        );
+        List<HeuresAssignees> heuresAnnee3 = List.of(
+                HeuresAssignees.builder().annee(annee).heures(50).enseignant(enseignant3).build()
+        );
+
+// Mise à jour des enseignants avec leurs heures assignées
+        enseignant1.setHeuresParAnnee(heuresAnnee1);
+        enseignant2.setHeuresParAnnee(heuresAnnee2);
+        enseignant3.setHeuresParAnnee(heuresAnnee3);
 
         enseignantRepository.save(enseignant1);
         enseignantRepository.save(enseignant2);

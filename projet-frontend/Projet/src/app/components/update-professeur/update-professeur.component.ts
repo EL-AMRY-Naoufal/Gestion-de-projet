@@ -96,27 +96,27 @@ export class UpdateProfesseurComponent {
     });
   }
 
-  private updateNbHeureCategorie(): void {
+  private updateMaxHeuresService(): void {
     const categorie = this.form.get('categorieEnseignant')?.value;
 
-    let nbHeureCategorie = 0;
+    let maxHeuresService = 0;
 
     // Définir le nombre d'heures selon la catégorie
     switch (categorie) {
       case 'ENSEIGNANT_CHERCHEUR':
-        nbHeureCategorie = 192;
+        maxHeuresService = 192;
         break;
       case 'PRAG':
-        nbHeureCategorie = 384;
+        maxHeuresService = 384;
         break;
       case 'ATER':
-        nbHeureCategorie = 192;
+        maxHeuresService = 192;
         break;
       case 'DCCE':
-        nbHeureCategorie = 64;
+        maxHeuresService = 64;
         break;
       case 'VACATAIRE':
-        nbHeureCategorie = 32;
+        maxHeuresService = 32;
         break;
       default:
         console.warn(`Catégorie non reconnue : ${categorie}`);
@@ -124,7 +124,7 @@ export class UpdateProfesseurComponent {
     }
 
     // Mettre à jour le champ 'nbHeureCategorie' avec la valeur correspondante
-    this.form.get('nbHeureCategorie')?.setValue(nbHeureCategorie, { emitEvent: false });
+    this.form.get('maxHeuresService')?.setValue(maxHeuresService, { emitEvent: false });
   }
 
   toggleValidators(hasAccount: boolean) {
@@ -174,7 +174,7 @@ export class UpdateProfesseurComponent {
     this.isEditandUserNull && this.enseignantService.getUserWithSameEnseignantNameAndFirstName(this.data).subscribe(data => {
       this.utilisateurs = data;
     });
-    this.form.get('categorieEnseignant')?.valueChanges.subscribe(_categorieEnseignant => this.updateNbHeureCategorie())
+    this.form.get('categorieEnseignant')?.valueChanges.subscribe(_categorieEnseignant => this.updateMaxHeuresService())
 
         // Si en mode édition, on force la désactivation de la checkbox
     if (this.isEdit) {

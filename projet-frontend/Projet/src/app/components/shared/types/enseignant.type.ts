@@ -10,7 +10,7 @@ export interface EnseignantDto {
     categorieEnseignant: CategorieEnseignant;
     nbHeureCategorie: number;
     maxHeuresService: number;
-    heuresAssignees: number;
+    heuresAssignees: HeuresAssignees[];
 }
 
 
@@ -22,4 +22,8 @@ export enum CategorieEnseignant {
     VACATAIRE = 'Vacataire',
 
 
+}
+export interface HeuresAssignees {
+    annee: number;
+    heures: number;
 }
