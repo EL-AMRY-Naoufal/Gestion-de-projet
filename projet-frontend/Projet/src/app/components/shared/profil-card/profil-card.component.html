@@ -1,5 +1,4 @@
-<mat-card class="mat-whiteframe-2dp"
-[ngClass]="getCardClass(enseignant, selectedYearId)">
+<mat-card class="mat-whiteframe-2dp">
   <mat-card-title-group>
     <!-- Titre avec le nom d'utilisateur -->
     <mat-card-title>
@@ -28,7 +27,8 @@
       </div>
 
       <div>Heure Service: {{ enseignant.maxHeuresService }}h</div>
-      <div>
+    
+      <div [ngClass]="getCardClass(enseignant, selectedYearId)">
         Heure Affecté: 
         <span >
           {{ getHeuresPourAnnee(enseignant, selectedYearId) }}h
