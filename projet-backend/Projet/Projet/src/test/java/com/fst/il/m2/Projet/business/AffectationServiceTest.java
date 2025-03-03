@@ -1,10 +1,13 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.enumurators.TypeHeure;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.Groupe;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
+import com.fst.il.m2.Projet.repositories.AnneeRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
 import com.fst.il.m2.Projet.repositories.GroupeRepository;
 import org.junit.jupiter.api.Assertions;
@@ -35,6 +38,9 @@ class AffectationServiceTest {
     private GroupeRepository groupeRepository;
 
     @Mock
+    private AnneeRepository anneeRepository;
+
+    @Mock
     private Enseignant enseignantMock;
 
     @Mock
@@ -44,6 +50,8 @@ class AffectationServiceTest {
     private AffectationServiceDefault affectationService;
 
     private static Affectation affectation;
+
+    private static final Annee annee = Annee.builder().id(1L).build();
 
     private static final LocalDate FIXED_DATE = LocalDate.of(2024, 3, 15);
 
@@ -71,6 +79,7 @@ class AffectationServiceTest {
             when(affectationRepository.save(any(Affectation.class))).thenReturn(affectation);
             //when((enseignantMock.getHeuresAssignees())).thenReturn(20);
             when((groupeMock.getHeuresAffectees())).thenReturn(20);
+            when(groupeMock.getType()).thenReturn(TypeHeure.CM);
 
             Affectation result = affectationService.affecterGroupeToEnseignant(1L, 1L, 20,1L);
 
@@ -136,6 +145,7 @@ class AffectationServiceTest {
     @Test
     void testUpdateAffectationHours_Right() {
         when(affectationRepository.findById(1L)).thenReturn(java.util.Optional.of(affectation));
+        when(groupeMock.getType()).thenReturn(TypeHeure.CM);
 
         affectationService.updateAffectationHours(1L, 30, 1L);
 
@@ -172,6 +182,7 @@ class AffectationServiceTest {
         when(affectationRepository.findById(1L)).thenReturn(java.util.Optional.of(affectation));
         //when(enseignantMock.getHeuresAssignees()).thenReturn(20);
         when(groupeMock.getHeuresAffectees()).thenReturn(20);
+        when(groupeMock.getType()).thenReturn(TypeHeure.CM);
 
         affectationService.deleteAffectation(1L,1L);
 

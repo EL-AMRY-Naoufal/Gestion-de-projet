@@ -98,6 +98,7 @@ public class AffectationServiceDefault implements AffectationService{
 
     //mise a jour des heures enseignées d'une affectation
     public void updateAffectationHours(Long idAffectation, double heuresAssignees,Long anneId) {
+
         if(heuresAssignees <= 0){
             throw new RuntimeException("Heures assignées must be greater than 0");
         }
