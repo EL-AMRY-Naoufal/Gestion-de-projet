@@ -10,9 +10,11 @@ import com.fst.il.m2.Projet.repositories.GroupeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class AffectationServiceTest {
 
     @Mock
@@ -122,13 +125,13 @@ class AffectationServiceTest {
         });
     }
 
-    /*@ParameterizedTest
+    @ParameterizedTest
     @ValueSource(ints = {0, -1})
     void testAffecterModuleToEnseignant_NegativeOrZeroHoursGave(int heuresAssignees) {
         assertThrows(RuntimeException.class, () -> {
             affectationService.affecterModuleToEnseignant(1L, 1L, heuresAssignees);
         });
-    }*/
+    }
 
     @Test
     void testUpdateAffectationHours_Right() {
@@ -153,17 +156,16 @@ class AffectationServiceTest {
         verify(affectationRepository, never()).save(affectation);
     }
 
-    /*@Test
-    void testUpdateAffectationHours_NegativeOrZeroHoursGave() {
-        when(affectationRepository.findById(1L)).thenReturn(java.util.Optional.of(affectation));
-
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1})
+    void testUpdateAffectationHours_NegativeOrZeroHoursGave(int hours) {
         assertThrows(RuntimeException.class, () -> {
-            affectationService.updateAffectationHours(1L, 0);
+            affectationService.updateAffectationHours(1L, hours);
         });
 
-        verify(affectationRepository, times(1)).findById(1L);
+        verify(affectationRepository, never()).findById(any());
         verify(affectationRepository, never()).save(affectation);
-    }*/
+    }
 
     @Test
     void testDeleteAffectation_Right() {

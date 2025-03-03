@@ -2,6 +2,7 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.dto.GroupeDto;
 import com.fst.il.m2.Projet.dto.ModuleDto;
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fst.il.m2.Projet.repositories.ModuleRepository;
@@ -38,7 +39,7 @@ public class ModuleServiceDefault implements ModuleService{
     // Get a module by ID
     @Override
     public Module getModuleById(Long id) {
-        return moduleRepository.findById(id).orElseThrow();
+        return moduleRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     // Add a new module
