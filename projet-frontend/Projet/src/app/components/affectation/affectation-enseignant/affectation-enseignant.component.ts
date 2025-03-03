@@ -190,6 +190,7 @@ export class AffectationListComponent implements OnInit {
 
   @Input()
   set enseignant(enseignant: EnseignantDto) {
+    this.dialog = true;
     console.log("nouvel user recu ", enseignant)
 
     if(enseignant?.id !== undefined){

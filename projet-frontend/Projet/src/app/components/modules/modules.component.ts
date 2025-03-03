@@ -558,24 +558,33 @@ export class ModulesComponent implements OnInit {
       console.error("Affectation ID is undefined");
     }
   }
-  navigateToAffectations(user: number ) {
-    console.log("affectation");
-
-    if (!user) {
-      console.warn('Aucun utilisateur défini');
+  navigateToAffectations(id: number) {
+    if (!id) {
+      console.warn('Aucun id défini');
       return;
     }
+    // Utilisation de la méthode getEnseignant et souscription à l'Observable pour récupérer les données
+    this.enseignantService.getEnseignant(id).subscribe(
+      (enseignant) => {
+        console.log("Affectation de l'enseignant : ", enseignant);
 
-    // open modal
-    this._dialog.open(AffectationDialogComponent, {
-      disableClose: true,
-      panelClass: 'custom-dialog-container',
-      data: { enseignantId: user },
-      width: '90vw',
-      height: '70vh',
-      maxWidth: '100vw'
-    });
+        // Ouvrir le modal avec les données récupérées
+        this._dialog.open(AffectationDialogComponent, {
+          disableClose: true,
+          panelClass: 'custom-dialog-container',
+          data: { enseignant: enseignant },  // Passer l'enseignant récupéré
+          width: '90vw',
+          height: '70vh',
+          maxWidth: '100vw'
+        });
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération de l\'enseignant', error);
+        // Vous pouvez aussi afficher un message d'erreur à l'utilisateur ici si nécessaire
+      }
+    );
   }
+
 
   getGroupeClass(groupe: any): string {
     if (!groupe || groupe.heuresAffectees === 0) return '';

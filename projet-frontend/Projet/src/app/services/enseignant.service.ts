@@ -84,6 +84,7 @@ export class EnseignantService {
       `${this._backendURL.allEnseignants}/${id}`
     );
   }
+  
   getEnseignantByUserId(id: number): Observable<EnseignantDto> {
     return this.http.get<EnseignantDto>(
       `${this._backendURL.allEnseignants}/userId/${id}`
