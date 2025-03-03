@@ -1,68 +1,114 @@
-Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Modules -> Groupe
+Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+<!--
 <div class="button-container">
   Nouvelle année
-  <button class="new-year" (click)="openAddAnneeDialog()">+</button>
+  <div class="custom-icon plus-button" (click)="openAddAnneeDialog()" title="Show more">Nouvelle année ➕</div>
+</div> -->
+
+<div class="header-container2">
+  <!-- <h1 class="page-header2">Liste des années</h1> -->
+  <div
+    class="custom-button2 plus-button2"
+    (click)="openAddAnneeDialog()"
+    title="Show more"
+  >
+    +
 </div>
 
+<div class="list-container">
 <ul class="tree">
   <li *ngFor="let annee of data.annees; let i = index">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
-        <button (click)="openAddDepartementDialog(i)">+</button>
-        <button (click)="removeAnnee(i)"><i class="fa fa-trash-o"></i></button>
+        <!-- <button (click)="openAddDepartementDialog(i)">+</button> -->
+        <div class="action-icons">
+        <div class="custom-icon plus-button" (click)="openAddDepartementDialog(i)" title="Show more">➕</div>
+        <div class="custom-icon delete-icon" (click)="removeAnnee(i)" title="Delete user">🗑️</div>
+        </div>
       </summary>
       <ul>
         <li *ngFor="let departement of annee.departements; let j = index">
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
-              <button (click)="openAddFormationDialog(i, j)">+</button>
-              <button (click)="removeDepartement(i, j)"><i class="fa fa-trash-o"></i></button>
+              <!-- <button (click)="openAddFormationDialog(i, j)">+</button> -->
+              <!-- <button (click)="removeDepartement(i, j)">🗑️</button> -->
+              <div class="action-icons">
+
+              <div class="custom-icon plus-button" (click)="openAddFormationDialog(i, j)" title="Show more">➕</div>
+              <div class="custom-icon delete-icon" (click)="removeDepartement(i, j)" title="Delete user">🗑️</div>
+              </div>
             </summary>
             <ul>
               <li *ngFor="let formation of departement.formations; let k = index">
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
-                    <button (click)="openAddNiveauDialog(i, j, k)">+</button>
-                    <button (click)="removeFormation(i, j, k)"><i class="fa fa-trash-o"></i></button>
+                    <!-- <button (click)="openAddNiveauDialog(i, j, k)">+</button> -->
+                    <!-- <button (click)="removeFormation(i, j, k)">🗑️</button> -->
+                    <div class="action-icons">
+
+                    <div class="custom-icon plus-button" (click)="openAddNiveauDialog(i, j, k)" title="Show more">➕</div>
+                    <div class="custom-icon delete-icon" (click)="removeFormation(i, j, k)" title="Delete user">🗑️</div>
+                    </div>
                   </summary>
                   <ul>
                     <li *ngFor="let niveau of formation.niveaux; let l = index">
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
-                          <button (click)="openAddSemestreDialog(i, j, k, l)">+</button>
-                          <button (click)="removeNiveau(i, j, k, l)"><i class="fa fa-trash-o"></i></button>
+                          <div class="action-icons">
+
+                          <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">➕</button> -->
+                          <div class="custom-icon plus-button" (click)="openAddSemestreDialog(i, j, k, l)" title="Show more">➕</div>
+                          <!-- <button (click)="removeNiveau(i, j, k, l)">🗑️</button> -->
+                          <div class="custom-icon delete-icon" (click)="removeNiveau(i, j, k, l)" title="Delete user">🗑️</div>
+
+                          </div>
                         </summary>
                         <ul>
                           <li *ngFor="let semestre of niveau.semestres; let n = index">
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
-                                <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button>
-                                <button (click)="removeSemestre(i, j, k, l, n)"><i class="fa fa-trash-o"></i></button>
+                                <!-- <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button> -->
+                                <!-- <button (click)="removeSemestre(i, j, k, l, n)">🗑️</button> -->
+                                <div class="action-icons">
+
+                                <div class="custom-icon plus-button" (click)="openAddModuleDialog(i, j, k, l, n)" title="Show more">➕</div>
+                                <div class="custom-icon delete-icon" (click)="removeSemestre(i, j, k, l, n)" title="Delete user">🗑️</div>
+                                </div>
                               </summary>
                               <ul>
                                 <li *ngFor="let module of semestre.modules; let o = index">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
                                       Module: {{ module.nom || 'Nouveau Module' }}
-                                      <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button>
-                                      <button (click)="removeModule(i, j, k, l, n, o)"><i class="fa fa-trash-o"></i></button>
+                                      <!-- <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button> -->
+                                      <!-- <button (click)="removeModule(i, j, k, l, n, o)">🗑️</button> -->
+                                      <div class="action-icons">
+
+                                      <div class="custom-icon plus-button" (click)="openAddGroupeDialog(i, j, k, l, n, o)" title="Show more">➕</div>
+                                      <div class="custom-icon delete-icon" (click)="removeModule(i, j, k, l, n, o)" title="Delete user">🗑️</div>
+                                      </div>
                                     </summary>
                                     <ul>
                                       <li *ngFor="let groupe of module.groupes; let p = index">
                                         <details>
                                           <summary (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
-                                            <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)">+</button>
-                                            <button (click)="removeGroupe(i, j, k, l, n, o, p)"><i class="fa fa-trash-o"></i></button>
+                                            <!-- <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)"></button> -->
+                                            <!-- <button (click)="removeGroupe(i, j, k, l, n, o, p)">🗑️</button> -->
+                                            <div class="action-icons">
+
+                                            <div class="custom-icon plus-button" (click)="openAddAffectationDialog(i, j, k, l, n, o, p)" title="Show more">➕</div>
+                                            <div class="custom-icon delete-icon" (click)="removeGroupe(i, j, k, l, n, o, p)" title="Delete user">🗑️</div>
+                                            </div>
+
                                           </summary>
 
                                           <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
@@ -84,10 +130,10 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
                                                 </i>
 
                                                 <!-- Icone de suppression -->
-                                                <i class="fa fa-trash-o"
-                                                   style="font-size:24px; color:red; cursor: pointer;"
-                                                   (click)="removeAffectation(i, j, k, l, n, o, p, q)">
-                                                </i>
+                                                <div class="custom-icon delete-icon"
+                                                   (click)="removeAffectation(i, j, k, l, n, o, p, q)">🗑️
+                                                </div>
+
                                               </div>
                                             </div>
                                           </div>
@@ -115,3 +161,5 @@ Annee -> Departement -> Formation -> Niveau -> Orientation -> Semestre -> Module
     </details>
   </li>
 </ul>
+</div>
+
