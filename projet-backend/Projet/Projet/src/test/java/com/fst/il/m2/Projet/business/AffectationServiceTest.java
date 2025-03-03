@@ -72,7 +72,7 @@ class AffectationServiceTest {
             when((enseignantMock.getHeuresAssignees())).thenReturn(20);
             when((groupeMock.getHeuresAffectees())).thenReturn(20);
 
-            Affectation result = affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+            Affectation result = affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
 
             verify(groupeRepository, times(1)).save(groupeMock);
             verify(groupeMock, times(1)).setHeuresAffectees(Mockito.intThat(i -> i == 40));
@@ -91,7 +91,7 @@ class AffectationServiceTest {
 
                 when(enseignantRepository.findById(1L)).thenReturn(java.util.Optional.empty());
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
@@ -106,7 +106,7 @@ class AffectationServiceTest {
                 when(enseignantRepository.findById(1L)).thenReturn(java.util.Optional.of(enseignantMock));
                 when(groupeRepository.findById(1L)).thenReturn(java.util.Optional.empty());
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
@@ -120,7 +120,7 @@ class AffectationServiceTest {
                 when(groupeRepository.findById(1L)).thenReturn(java.util.Optional.of(groupeMock));
                 when(affectationRepository.existsByEnseignantAndGroupe(enseignantMock, groupeMock)).thenReturn(true);
 
-                affectationService.affecterModuleToEnseignant(1L, 1L, 20);
+                affectationService.affecterGroupeToEnseignant(1L, 1L, 20);
             }
         });
     }
@@ -129,7 +129,7 @@ class AffectationServiceTest {
     @ValueSource(ints = {0, -1})
     void testAffecterModuleToEnseignant_NegativeOrZeroHoursGave(int heuresAssignees) {
         assertThrows(RuntimeException.class, () -> {
-            affectationService.affecterModuleToEnseignant(1L, 1L, heuresAssignees);
+            affectationService.affecterGroupeToEnseignant(1L, 1L, heuresAssignees);
         });
     }
 

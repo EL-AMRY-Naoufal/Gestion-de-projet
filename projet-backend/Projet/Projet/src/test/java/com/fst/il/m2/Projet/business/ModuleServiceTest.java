@@ -1,7 +1,5 @@
 package com.fst.il.m2.Projet.business;
 
-import com.fst.il.m2.Projet.dto.GroupeDto;
-import com.fst.il.m2.Projet.dto.ModuleDto;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Module;
 import com.fst.il.m2.Projet.models.Groupe;
@@ -64,7 +62,7 @@ class ModuleServiceTest {
     void testGetAllModules() {
         when(moduleRepository.findAll()).thenReturn(Arrays.asList(module1, module2));
 
-        List<ModuleDto> result = moduleService.getAllModules();
+        List<Module> result = moduleService.getAllModules();
 
         assertEquals(2, result.size());
         assertEquals("Module 1", result.get(0).getNom());
