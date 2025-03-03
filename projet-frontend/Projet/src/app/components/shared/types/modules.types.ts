@@ -1,4 +1,5 @@
 import {EnseignantDto} from "./enseignant.type";
+import { User } from "./user.type";
 
 export enum TypeHeure {
   CM = "CM",
@@ -8,12 +9,23 @@ export enum TypeHeure {
   TPL = "TPL",
 }
 
+export type CoAffectation = {
+  id: number;
+  enseignantName: string;
+  enseignantFirstName: string;
+  groupeName: string;
+  heuresAssignees: number;
+  dateAffectation: string;
+}
+
 export type Affectation = {
   id?: number;
-  enseignant?: EnseignantDto;
-  nomEnseignant?: string;
   heuresAssignees: number;
-  dateAffectation?: string;
+  enseignantId: number;
+  groupeId: number;
+  moduleId?: number;
+  commentaire: string;
+  dateAffectation: string;
 };
 
 export interface Groupe {
@@ -22,45 +34,48 @@ export interface Groupe {
   type: TypeHeure;
   heuresAffectees: number;
   totalHeuresDuGroupe: number;
-  affectations: Affectation[];
+  moduleId: number;
 }
 
 export interface Module {
   id?: number;
   nom: string;
-  groupes: Groupe[];
   heuresParType: Map<string, number>;
-  nombreGroupes: number;
+  semestreId: number;
 }
 
 export interface Semestre {
   id?: number;
   nom?: string;
-  modules: Module[];
+  niveauId: number;
 }
 
 export interface Niveau {
   id?: number;
   nom?: string;
-  semestres: Semestre[];
+  formationId: number;
 }
 
 export interface Formation {
   id?: number;
   nom: string;
-  responsableFormation: string;
-  niveaux: Niveau[];
+  responsableFormationId: number;
+  departementId: number;
 }
 
 export interface Departement {
   id?: number;
   nom: string;
-  formations: Formation[];
-  responsableDeDepartement: string;
+  responsableDepartementId: number;
+  anneeId: number;
 }
 
 export interface Annee {
   id?: number;
   debut: number;
-  departements: Departement[];
+}
+
+export interface ResponsableDepartement {
+  id?: number;
+  user?: User;
 }

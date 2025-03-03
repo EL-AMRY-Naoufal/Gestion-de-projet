@@ -33,7 +33,7 @@ import { MatOptionModule } from '@angular/material/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class AddAnneeDialogComponent {
-  newAnnee: Annee = { debut: new Date().getFullYear(), departements: [] };
+  newAnnee: Annee = { debut: new Date().getFullYear() };
 
   constructor(public dialogRef: MatDialogRef<AddAnneeDialogComponent>) {}
 

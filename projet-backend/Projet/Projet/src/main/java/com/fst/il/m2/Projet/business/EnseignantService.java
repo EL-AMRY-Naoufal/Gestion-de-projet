@@ -1,17 +1,14 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.AffectationDto;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
-import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
-import com.fst.il.m2.Projet.models.Affectation;
-import com.fst.il.m2.Projet.models.Annee;
-import com.fst.il.m2.Projet.models.Enseignant;
-import com.fst.il.m2.Projet.models.User;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
+import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.AffectationRepository;
 import com.fst.il.m2.Projet.repositories.EnseignantRepository;
-import com.fst.il.m2.Projet.models.UserRole;
 import com.fst.il.m2.Projet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.fst.il.m2.Projet.repositories.UserRepository;
@@ -22,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +32,7 @@ public class EnseignantService {
     private final EnseignantSpecification enseignantSpecifications;
     private final AnneeRepository anneeRepository;
     private final UserRoleRepository userRoleRepository;
+
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository,
                              AffectationRepository affectationRepository,
@@ -60,24 +55,15 @@ public class EnseignantService {
         // Get the enseignant id from the user id
 
 
-        Enseignant enseignant = enseignantRepository.findByUserId(userId)
-                .orElseThrow(NotFoundException::new);
-
+        Enseignant enseignant = enseignantRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Enseignant not found with user id: " + userId));
         return enseignant.getAffectations();
     }
 
-    public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
+    public List<AffectationDto> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
-        return affectations.stream()
-                .map(affectation -> new AffectationDTO(
-                        affectation.getId(),
-                        affectation.getHeuresAssignees(),
-                        affectation.getDateAffectation(),
-                        affectation.getGroupe() != null && affectation.getGroupe().getModule() != null ? affectation.getGroupe().getModule().getNom() : null,
-                        affectation.getCommentaire(),
-                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null
-                ))
-                .collect(Collectors.toList());
+
+        return affectations.stream().map(AffectationMapper::toDto).toList();
     }
 
 
@@ -98,7 +84,7 @@ public class EnseignantService {
         return this.enseignantRepository.findAll();
     }
 
-    public Enseignant createEnseignant(User u, int nmaxHeuresService, int heuresAssignees,
+    public Enseignant createEnseignant(User u, int nmaxHeuresService, double heuresAssignees,
                                        CategorieEnseignant categorieEnseignant, int nbHeureCategorie, Long currentYear) {
 
         // Find the user by ID
@@ -123,14 +109,19 @@ public class EnseignantService {
                 .firstname(user.getFirstname())
                 .hasAccount(true)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(0)
                 .build();
+        HeuresAssignees heuresParDefaut = new HeuresAssignees();
+        heuresParDefaut.setAnnee(anneeRepository.getCurrentYear().get());
+        heuresParDefaut.setHeures(0);
+        heuresParDefaut.setEnseignant(enseignant);
+
+        enseignant.setHeuresParAnnee(new ArrayList<>(List.of(heuresParDefaut)));
 
         // Save and return the Enseignant entity
         return enseignantRepository.save(enseignant);
     }
 
-    public Enseignant createEnseignantWithoutAccount(String name, String firstname, int nmaxHeuresService, int heuresAssignees,
+    public Enseignant createEnseignantWithoutAccount(String name, String firstname, int nmaxHeuresService, double heuresAssignees,
                                                      CategorieEnseignant categorieEnseignant, int nbHeureCategorie) {
 
         Map<CategorieEnseignant, Integer> categorieHeuresMap = new HashMap<>();
@@ -139,11 +130,17 @@ public class EnseignantService {
         Enseignant enseignant = Enseignant.builder()
                 .hasAccount(false)
                 .maxHeuresService(nmaxHeuresService)
-                .heuresAssignees(0)
                 .firstname(StringUtils.capitalize(firstname))
                 .name(StringUtils.capitalize(name))
                 .categorieEnseignant(categorieHeuresMap)
                 .build();
+
+        HeuresAssignees heuresParDefaut = new HeuresAssignees();
+        heuresParDefaut.setAnnee(anneeRepository.getCurrentYear().get());
+        heuresParDefaut.setHeures(0);
+        heuresParDefaut.setEnseignant(enseignant);
+
+        enseignant.setHeuresParAnnee(new ArrayList<>(List.of(heuresParDefaut)));
 
         return enseignantRepository.save(enseignant);
     }

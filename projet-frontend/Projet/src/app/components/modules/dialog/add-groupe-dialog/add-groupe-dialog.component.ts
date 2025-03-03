@@ -34,7 +34,8 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class AddGroupeDialogComponent {
 
-      newGroupe = { nom: '', heures: 0, type: '' };
+      // @ts-ignore
+  newGroupe : Groupe = { nom: '', type: "", heuresAffectees: 0, totalHeuresDuGroupe: 0, moduleId: -1};
 
     constructor(public dialogRef: MatDialogRef<AddGroupeDialogComponent>) {}
 

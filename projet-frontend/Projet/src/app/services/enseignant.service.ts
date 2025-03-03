@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { AffectationType } from '../components/shared/types/affectation.type';
 import { environment } from '../../environments/environment.prod';
 import { EnseignantDto } from '../components/shared/types/enseignant.type';
 import { User } from '../components/shared/types/user.type';
+import {Affectation, CoAffectation} from "../components/shared/types/modules.types";
 
 @Injectable({
   providedIn: 'root',
@@ -31,9 +31,7 @@ export class EnseignantService {
   }
 
   getAffectationsByEnseignantId(id: string): Observable<any> {
-    return this.http.get<AffectationType>(
-      `${this._backendURL.allAffectation}/${id}`
-    );
+    return this.http.get<Affectation>(`${this._backendURL.allAffectation}/${id}`);
   }
 
   getUserByName(name: string): Observable<any[]> {
@@ -86,6 +84,7 @@ export class EnseignantService {
       `${this._backendURL.allEnseignants}/${id}`
     );
   }
+  
   getEnseignantByUserId(id: number): Observable<EnseignantDto> {
     return this.http.get<EnseignantDto>(
       `${this._backendURL.allEnseignants}/userId/${id}`

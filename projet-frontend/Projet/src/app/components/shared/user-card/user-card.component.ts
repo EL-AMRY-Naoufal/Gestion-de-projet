@@ -71,16 +71,16 @@ export class UserCardComponent {
   }
 
 
-  showAffectations( user: User) {
-    console.log("affectation");
+  // showAffectations( user: User) {
+  //   console.log("affectation");
 
-    // open modal
-      this._dialog.open(AffectationDialogComponent, {
-      disableClose: true,
-      panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
-      data: { user: user } // Passer l'enseignant en tant que donnée
-    });
-  }
+  //   // open modal
+  //     this._dialog.open(AffectationDialogComponent, {
+  //     disableClose: true,
+  //     panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+  //     data: { user: user } // Passer l'enseignant en tant que donnée
+  //   });
+  // }
 
   hasRoleEnseignant(): boolean {
     return this.user.roles.some(roleDto => roleDto.role === 'ENSEIGNANT');

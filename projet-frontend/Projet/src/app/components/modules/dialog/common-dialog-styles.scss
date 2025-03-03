@@ -159,6 +159,18 @@ button[mat-button]:hover {
     opacity: 1;
     transform: scale(1);
   }
+
+}
+.dialog form select {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.dialog form button:last-child {
+  margin-right: 0;
+  background: red;
 }
 
 

@@ -18,31 +18,6 @@
           </mat-form-field>
         </div>
 
-        <div class="flex-container">
-          <!-- Sélection du module -->
-          <mat-form-field appearance="fill" class="full-width mgb20 form-field">
-            <mat-label>Module</mat-label>
-            <mat-select id="module" [(ngModel)]="moduleId" name="module" (change)="onModuleChange()" required>
-              <mat-option *ngFor="let module of modules" [value]="module.id">
-                {{ module.nom }}
-              </mat-option>
-            </mat-select>
-            <!-- <mat-error *ngIf="form.get('moduleId')?.invalid">Le module est <strong>obligatoire</strong>.</mat-error> -->
-          </mat-form-field>
-        </div>
-
-        <div class="flex-container">
-          <!-- Sélection du groupe -->
-          <mat-form-field appearance="fill" class="full-width mgb20 form-field">
-            <mat-label>Groupe</mat-label>
-            <mat-select  id="groupe" [(ngModel)]="groupeId" name="groupe" required>
-              <mat-option *ngFor="let groupe of groupes" [value]="groupe.id">
-                {{ groupe.nom }}
-              </mat-option>
-            </mat-select>
-            <!-- <mat-error *ngIf="form.get('groupeId')?.invalid">Le groupe est <strong>obligatoire</strong>.</mat-error> -->
-          </mat-form-field>
-        </div>
 
         <div class="flex-container">
           <!-- Nombre d'heures assignées -->

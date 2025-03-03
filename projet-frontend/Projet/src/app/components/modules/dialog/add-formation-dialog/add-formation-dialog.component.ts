@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { UserService } from '../../../../services/user.service';
+import { User } from '../../../shared/types/user.type';
 
 @Component({
   selector: 'app-add-formation-dialog',
@@ -35,14 +37,28 @@ import { CommonModule, NgForOf, NgIf } from '@angular/common';
 })
 export class AddFormationDialogComponent {
 
-  newFormation : Formation = { nom: '', responsableFormation: '',  niveaux: [] };
+  newFormation : Formation = { nom: '', responsableFormationId: -1, departementId: -1 };
+  public users: User[] = [];
 
-  constructor(public dialogRef: MatDialogRef<AddFormationDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<AddFormationDialogComponent>
+  ,private userService: UserService) {
+    this.loadResponsables();
+  }
+
 
   onAdd(): void {
     this.dialogRef.close(this.newFormation);
   }
 
+  loadResponsables(): void {
+    this.userService.searchUsersByRole('RESPONSABLE_DE_FORMATION').subscribe(
+      (data: User[]) => {
+        console.log(data);
+        this.users = data;
+      },
+      (error) => console.error('Erreur lors du chargement des responsables', error)
+    );
+  }
   onCancel(): void {
     this.dialogRef.close();
   }

@@ -6,11 +6,11 @@ import {CommonModule, NgForOf, NgIf} from '@angular/common';
 import {catchError} from 'rxjs/operators';
 import {UserService} from "../../../../services/user.service";
 import {ModuleService} from "../../../../services/module.service";
-import {EnseignantService} from "../../../../services/enseignant.service";
-import {LoginService} from "../../../../services/login.service";
 import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
 import {group} from "@angular/animations";
+import {EnseignantService} from "../../../../services/enseignant.service";
+import {LoginService} from "../../../../services/login.service";
 import {Affectation, Module} from "../../../shared/types/modules.types";
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -47,10 +47,12 @@ export class AddAffectationComponent implements OnInit {
   enseignants!: any[];
   modules!: Module[];
   groupes!: any[];
-  enseignantId!: string;
-  moduleId!: string;
-  groupeId!: string;
-  heuresAssignees!: string;
+  enseignantId!: number;
+  groupeId!: number;
+  heuresAssignees!: number;
+
+  commentaire: string;
+  dateAffectation: string;
 
   newAffectation!: Affectation;
 
@@ -59,50 +61,32 @@ export class AddAffectationComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddAffectationComponent>,
-    private affectationService: UserService,
-    private moduleService: ModuleService,
     private enseignantService: EnseignantService,
     private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    this.commentaire ="";
+    this.dateAffectation = new Date().toLocaleDateString();
+    console.log(this.dateAffectation);
   }
 
   ngOnInit(): void {
     this.myId = this.loginService.connectUser() + '';
-
-    // Remplir les modules si nécessaire (si pas déjà préchargés)
-    this.moduleService.getModules().subscribe(
-      (response: any[]) => {
-        this.modules = response;
-        this.onModuleChange();
-      },
-      (error: any) => {
-        console.log('error', error);
-      }
-    );
 
     // Remplir les enseignants
     this.enseignantService.getEnseignants().subscribe(
       (response: any[]) => {
         this.enseignants = response;
          console.log('enseignants', this.enseignants);
-      },
-      (error: any) => {
-        console.log('error', error);
       }
     );
 
     // Préremplir le module et le groupe
     if (this.data) {
-      this.moduleId = this.data.moduleId;
       this.groupeId = this.data.groupeId;
     }
   }
 
-  onModuleChange(): void {
-    const selectedModule = this.modules.find(module => module.id === Number(this.moduleId));
-    this.groupes = selectedModule ? selectedModule.groupes : [];
-  }
 
   onSubmit(): void {
     console.log("cc"+this.enseignantId+this.groupeId+this.heuresAssignees)
@@ -110,36 +94,20 @@ export class AddAffectationComponent implements OnInit {
 
       //console select enseignant
       console.log('enseignantId', this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId)));
-
-      const selectedEnseignant = this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
-      const nomEnseignant = selectedEnseignant ? selectedEnseignant.firstname : 'nouveaux enseignant';
-
+      this.enseignants.find(enseignant => enseignant.id === Number(this.enseignantId));
       this.newAffectation = {
-        nomEnseignant: nomEnseignant,
-        heuresAssignees: Number(this.heuresAssignees)
+        heuresAssignees: this.heuresAssignees,
+        enseignantId: this.enseignantId,
+        groupeId: this.groupeId,
+        dateAffectation: this.dateAffectation,
+        commentaire: this.commentaire
       };
-      this.affectationService
-        .createAffectation(this.enseignantId, this.groupeId, this.heuresAssignees)
-        .subscribe({
-          next: (response) => {
-            alert('Affectation créée avec succès.');
-            this.errorMessage = '';
-            console.log('response : ', this.newAffectation);
-
-            this.dialogRef.close(this.newAffectation);
-
-
-          },
-          error: (error: any) => {
-            alert('Erreur lors de la création de l\'affectation :');
-            this.successMessage = '';
-            console.error('Erreur lors de la création de l\'affectation :', error);
-          }
-        });
     } else {
       this.errorMessage = 'Veuillez remplir tous les champs.';
       this.successMessage = '';
     }
+    //on close le dialog
+    this.dialogRef.close(this.newAffectation);
   }
 
   onCancel(): void {

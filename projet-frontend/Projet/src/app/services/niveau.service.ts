@@ -27,8 +27,20 @@ export class NiveauService {
             (this._backendURL[k] = `${baseUrl}${environment.backend.endpoints[k]}`)
         );
     }
-    
+
+    getAllNiveaux(): Observable<Niveau[]> {
+        return this.http.get<Niveau[]>(`${this._backendURL.niveaux}`);
+    }
+
     getNiveauxByFormation(formationId: number): Observable<Niveau[]> {
         return this.http.get<Niveau[]>(`${this._backendURL.niveaux}/formation/${formationId}`);
+    }
+
+    saveNiveau(niveau: Niveau): Observable<Niveau> {
+        return this.http.post<Niveau>(`${this._backendURL.niveaux}`, niveau);
+    }
+
+    deleteNiveau(niveau: Niveau): Observable<Niveau> {
+        return this.http.delete<Niveau>(`${this._backendURL.niveaux}/${niveau.id}`);
     }
 }

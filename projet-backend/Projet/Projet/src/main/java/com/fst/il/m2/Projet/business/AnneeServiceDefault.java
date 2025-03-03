@@ -15,6 +15,9 @@ public class AnneeServiceDefault implements  AnneeService{
     @Autowired
     private AnneeRepository anneeRepository;
 
+    @Autowired
+    private DepartementService departementService;
+
     @PostConstruct
     public void postContruct(){
         anneeRepository.save(Annee.builder().debut(2024).id(1L).build());
@@ -33,7 +36,7 @@ public class AnneeServiceDefault implements  AnneeService{
 
     @Override
     public Annee getAnneeById(Long id) {
-        return anneeRepository.findById(id) .orElseThrow(() -> new RuntimeException("Anne not found"));
+        return anneeRepository.findById(id) .orElseThrow(() -> new RuntimeException("Annee not found"));
     }
 
     @Override
@@ -46,5 +49,8 @@ public class AnneeServiceDefault implements  AnneeService{
         return anneeRepository.getCurrentYear().orElseThrow(NotFoundException::new).getId();
     }
 
-
+    @Override
+    public Boolean hasDepartements(Long id) {
+        return !departementService.getDepartementsByAnnee(getAnneeById(id)).isEmpty();
+    }
 }

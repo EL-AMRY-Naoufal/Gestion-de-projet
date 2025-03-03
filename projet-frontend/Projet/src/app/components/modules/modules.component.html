@@ -20,18 +20,18 @@ Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
 
 <div class="list-container">
 <ul class="tree">
-  <li *ngFor="let annee of data.annees; let i = index">
+  <li *ngFor="let annee of annees; trackById">
     <details>
       <summary (click)="showType('ANNEE', annee)">
         Année: {{ annee.debut || 'Nouvelle Année' }}
         <!-- <button (click)="openAddDepartementDialog(i)">+</button> -->
         <div class="action-icons">
-        <div class="custom-icon plus-button" (click)="openAddDepartementDialog(i)" title="Show more">➕</div>
-        <div class="custom-icon delete-icon" (click)="removeAnnee(i)" title="Delete user">🗑️</div>
+        <div class="custom-icon plus-button" (click)="openAddDepartementDialog(annee.id)" title="Show more">➕</div>
+        <div class="custom-icon delete-icon" (click)="removeAnnee(annee)" title="Delete user">🗑️</div>
         </div>
       </summary>
       <ul>
-        <li *ngFor="let departement of annee.departements; let j = index">
+        <li *ngFor="let departement of getDepartementsByAnneeIndex(annee.id); trackById">
           <details>
             <summary (click)="showType('DEPARTEMENT', departement)">
               Département: {{ departement.nom || 'Nouveau Département' }}
@@ -39,12 +39,12 @@ Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
               <!-- <button (click)="removeDepartement(i, j)">🗑️</button> -->
               <div class="action-icons">
 
-              <div class="custom-icon plus-button" (click)="openAddFormationDialog(i, j)" title="Show more">➕</div>
-              <div class="custom-icon delete-icon" (click)="removeDepartement(i, j)" title="Delete user">🗑️</div>
+              <div class="custom-icon plus-button" (click)="openAddFormationDialog(departement.id)" title="Show more">➕</div>
+              <div class="custom-icon delete-icon" (click)="removeDepartement(departement)" title="Delete user">🗑️</div>
               </div>
             </summary>
             <ul>
-              <li *ngFor="let formation of departement.formations; let k = index">
+              <li *ngFor="let formation of getFormationsByDepartement(departement.id); trackById">
                 <details>
                   <summary (click)="showType('FORMATION', formation)">
                     Formation: {{ formation.nom || 'Nouvelle Formation' }}
@@ -52,26 +52,26 @@ Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
                     <!-- <button (click)="removeFormation(i, j, k)">🗑️</button> -->
                     <div class="action-icons">
 
-                    <div class="custom-icon plus-button" (click)="openAddNiveauDialog(i, j, k)" title="Show more">➕</div>
-                    <div class="custom-icon delete-icon" (click)="removeFormation(i, j, k)" title="Delete user">🗑️</div>
+                    <div class="custom-icon plus-button" (click)="openAddNiveauDialog(formation.id)" title="Show more">➕</div>
+                    <div class="custom-icon delete-icon" (click)="removeFormation(formation)" title="Delete user">🗑️</div>
                     </div>
                   </summary>
                   <ul>
-                    <li *ngFor="let niveau of formation.niveaux; let l = index">
+                    <li *ngFor="let niveau of getNiveauxByFormation(formation.id); trackById">
                       <details>
                         <summary (click)="showType('NIVEAU', niveau)">
                           Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
                           <div class="action-icons">
 
                           <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">➕</button> -->
-                          <div class="custom-icon plus-button" (click)="openAddSemestreDialog(i, j, k, l)" title="Show more">➕</div>
+                          <div class="custom-icon plus-button" (click)="openAddSemestreDialog(niveau.id)" title="Show more">➕</div>
                           <!-- <button (click)="removeNiveau(i, j, k, l)">🗑️</button> -->
-                          <div class="custom-icon delete-icon" (click)="removeNiveau(i, j, k, l)" title="Delete user">🗑️</div>
+                          <div class="custom-icon delete-icon" (click)="removeNiveau(niveau)" title="Delete user">🗑️</div>
 
                           </div>
                         </summary>
                         <ul>
-                          <li *ngFor="let semestre of niveau.semestres; let n = index">
+                          <li *ngFor="let semestre of getSemestreByNiveau(niveau.id); trackById">
                             <details>
                               <summary (click)="showType('SEMESTRE', semestre)">
                                 Semestre: {{ semestre.nom || 'Nouveau Semestre' }}
@@ -79,12 +79,12 @@ Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
                                 <!-- <button (click)="removeSemestre(i, j, k, l, n)">🗑️</button> -->
                                 <div class="action-icons">
 
-                                <div class="custom-icon plus-button" (click)="openAddModuleDialog(i, j, k, l, n)" title="Show more">➕</div>
-                                <div class="custom-icon delete-icon" (click)="removeSemestre(i, j, k, l, n)" title="Delete user">🗑️</div>
+                                <div class="custom-icon plus-button" (click)="openAddModuleDialog(semestre.id)" title="Show more">➕</div>
+                                <div class="custom-icon delete-icon" (click)="removeSemestre(semestre)" title="Delete user">🗑️</div>
                                 </div>
                               </summary>
                               <ul>
-                                <li *ngFor="let module of semestre.modules; let o = index">
+                                <li *ngFor="let module of getModulesBySemestre(semestre.id); trackById">
                                   <details>
                                     <summary (click)="showType('MODULE', module)">
                                       Module: {{ module.nom || 'Nouveau Module' }}
@@ -92,57 +92,59 @@ Annee -> Departement -> Formation -> Niveau -> Semestre -> Modules -> Groupe
                                       <!-- <button (click)="removeModule(i, j, k, l, n, o)">🗑️</button> -->
                                       <div class="action-icons">
 
-                                      <div class="custom-icon plus-button" (click)="openAddGroupeDialog(i, j, k, l, n, o)" title="Show more">➕</div>
-                                      <div class="custom-icon delete-icon" (click)="removeModule(i, j, k, l, n, o)" title="Delete user">🗑️</div>
+                                      <div class="custom-icon plus-button" (click)="openAddGroupeDialog(module.id)" title="Show more">➕</div>
+                                      <div class="custom-icon delete-icon" (click)="removeModule(module)" title="Delete user">🗑️</div>
                                       </div>
                                     </summary>
                                     <ul>
-                                      <li *ngFor="let groupe of module.groupes; let p = index">
+                                      <li *ngFor="let groupe of getGroupesByModule(module.id); trackById">
                                         <details>
-                                          <summary (click)="showType('GROUPE', groupe)">
+                                          <summary   [ngClass]="getGroupeClass(groupe)" (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
                                             <!-- <button (click)="openAddAffectationDialog(i, j, k, l, n, o, p)"></button> -->
                                             <!-- <button (click)="removeGroupe(i, j, k, l, n, o, p)">🗑️</button> -->
                                             <div class="action-icons">
 
-                                            <div class="custom-icon plus-button" (click)="openAddAffectationDialog(i, j, k, l, n, o, p)" title="Show more">➕</div>
-                                            <div class="custom-icon delete-icon" (click)="removeGroupe(i, j, k, l, n, o, p)" title="Delete user">🗑️</div>
+                                            <div class="custom-icon plus-button" (click)="openAddAffectationDialog(groupe.id, annee.id ?? 1)" title="Show more">➕</div>
+                                            <div class="custom-icon delete-icon" (click)="removeGroupe(groupe)" title="Delete user">🗑️</div>
                                             </div>
 
                                           </summary>
 
-                                          <div *ngIf="groupe.affectations && groupe.affectations.length > 0">
-                                            <div *ngFor="let affectation of groupe.affectations; let q = index" class="affectation-row">
+                                          <div *ngIf="affectations && affectations.length > 0">
+                                            <div *ngFor="let affectation of getAffectationsByGroupe(groupe.id); trackById" class="affectation-row">
                                               <div class="affectation-info">
                                                 <p><strong></strong>
-                                                  <a *ngIf="affectation.enseignant?.user" (click)="navigateToAffectations(affectation.enseignant?.user)">
-                                                    {{ affectation.nomEnseignant }}
+                                                  <a (click)="navigateToAffectations(affectation.enseignantId)">
+                                                    {{ getNomEnseignantById(affectation.enseignantId) }}
                                                   </a>
+
+                                                  <!-- <a *ngIf="affectation.enseignant?.user" (click)="navigateToAffectations(affectation.enseignant?.user)">
+                                                    {{ getNomEnseignantById(affectation.enseignantId) }}
+                                                  </a> -->
+
                                                 </p>
 
                                                 <!-- Input des heures assignées -->
-                                                <input type="number" [(ngModel)]="affectation.heuresAssignees" min="0" class="heures-input">
+                                                <input type="number" [(ngModel)]="affectation.heuresAssignees" min="1" class="heures-input">
 
                                                 <!-- Icone de mise à jour -->
                                                 <i class="fa-solid fa-repeat"
                                                    style="color: blue;margin-left: 0.2cm ;; margin-right: 0.4cm; cursor: pointer;"
-                                                   (click)="updateAffectation(i, j, k, l, n, o, p, q, affectation.heuresAssignees)">
+                                                   (click)="updateAffectation(affectation, annee.id ?? 1)">
                                                 </i>
 
                                                 <!-- Icone de suppression -->
                                                 <div class="custom-icon delete-icon"
-                                                   (click)="removeAffectation(i, j, k, l, n, o, p, q)">🗑️
+                                                   (click)="removeAffectation(affectation, annee.id ?? 1)">🗑️
                                                 </div>
 
                                               </div>
                                             </div>
                                           </div>
-
                                         </details>
                                       </li>
                                     </ul>
-
-
                                   </details>
                                 </li>
                               </ul>

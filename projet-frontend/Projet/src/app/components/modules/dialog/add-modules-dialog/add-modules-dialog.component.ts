@@ -35,7 +35,8 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class AddModulesDialogComponent {
 
-  newModule: Module = { nom: '', groupes: [], heuresParType: new Map<string, number>() , nombreGroupes: 0 };
+  //Utilisation d'un objet non typé à cause de la création des groupes (absents du type "Module")
+  newModule: any = { nom: '', heuresParType: new Map<string, number>(), groupes: []};
   types = Object.values(TypeHeure);
 
   heuresList = this.types.map(type => ({ type, heures: 0, groupes: 0 }));
@@ -54,7 +55,7 @@ export class AddModulesDialogComponent {
           type: entry.type,
           heuresAffectees: 0,
           totalHeuresDuGroupe: entry.heures,
-          affectations: []
+          moduleId: -1
         };
         console.log(newGroupe);
         this.newModule.groupes.push(newGroupe);

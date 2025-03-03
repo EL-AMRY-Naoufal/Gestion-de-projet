@@ -1,19 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Router } from "express";
 import { environment } from "../../environments/environment.prod";
-import { Observable } from "rxjs/internal/Observable";
-import { Module } from "../components/shared/types/modules.types";
+import { Observable } from "rxjs";
+import { Formation } from "../components/shared/types/modules.types";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
-export class LoginService {
-    private readonly _backendURL: any;
 
-    public userRoles = [];
-    private authToken: string | null = null;
-    constructor(private http: HttpClient, private router: Router) {
+export class FormationService {
+    private readonly _backendURL: any;
+    constructor(private http: HttpClient) {
         this._backendURL = {};
 
         // build backend base url
@@ -31,7 +28,15 @@ export class LoginService {
         );
     }
 
-    getAllModules(): Observable<any> {
-        return this.http.get<Module[]>(`${this._backendURL.modules}`);
+    getAllFormations(): Observable<Formation[]> {
+        return this.http.get<Formation[]>(`${this._backendURL.formations}`);
     }
+
+    saveFormation(formation : Formation): Observable<Formation> {
+        return this.http.post<Formation>(`${this._backendURL.formations}`, formation);
+    }
+
+    deleteFormation(formation: Formation): Observable<Formation> {
+        return this.http.delete<Formation>(`${this._backendURL.formations}/${formation.id}`);
+      }
 }

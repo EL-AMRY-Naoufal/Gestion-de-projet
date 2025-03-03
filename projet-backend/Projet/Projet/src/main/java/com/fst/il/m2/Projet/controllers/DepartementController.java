@@ -1,13 +1,15 @@
 package com.fst.il.m2.Projet.controllers;
 
+import com.fst.il.m2.Projet.business.AnneeService;
 import com.fst.il.m2.Projet.business.DepartementService;
-import com.fst.il.m2.Projet.models.Annee;
+import com.fst.il.m2.Projet.business.ResponsableDepartementService;
+import com.fst.il.m2.Projet.dto.DepartementDto;
+import com.fst.il.m2.Projet.mapper.DepartementMapper;
 import com.fst.il.m2.Projet.models.Departement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,23 +19,41 @@ import java.util.List;
 public class DepartementController {
 
     private final DepartementService departementService;
+    private final ResponsableDepartementService responsableDepartementService;
+    private final AnneeService anneeService;
 
-    @GetMapping("/year/{anneeId}")
-    public List<Departement> getDepartementsByYear(@PathVariable String anneeId) {
-        List<Departement> departements = departementService.getDepartementsByAnnee(Annee.builder().id(Long.valueOf(anneeId)).build());
-
-        //emptying "niveaux" and "modules" so the json is not too big
-        departements.forEach((d) -> {
-            d.getFormations().forEach((f) -> {f.setNiveaux(null);});
-        });
-
-        return departements;
+    @PostMapping
+    public ResponseEntity<DepartementDto> saveDepartement(@RequestBody DepartementDto departementDto) {
+        DepartementMapper departementMapper = new DepartementMapper(responsableDepartementService);
+        System.out.println("departement received : " + departementDto);
+        Departement departementToSave = departementMapper.toEntity(departementDto);
+        System.out.println(departementDto.getResponsableDepartementId());
+        DepartementDto savedDepartementDto = departementMapper.toDto(departementService.saveDepartement(departementToSave));
+        return new ResponseEntity<>(savedDepartementDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
+    public List<DepartementDto> getDepartements() {
+        List<Departement> departements = departementService.getAllDepartements();
+        return departements.stream().map(new DepartementMapper(responsableDepartementService)::toDto).toList();
+    }
+    @GetMapping("/year/{anneeId}")
+    public List<DepartementDto> getDepartementsByYear(@PathVariable Long anneeId) {
+        List<Departement> departements = departementService.getDepartementsByAnnee(anneeService.getAnneeById(anneeId));
+        return departements.stream().map(new DepartementMapper(responsableDepartementService)::toDto).toList();
+    }
+
+    @GetMapping("/id/{id}")
     public Departement getDepartementById(@PathVariable Long id) {
         return departementService.getDepartementById(id);
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDepartement(@PathVariable Long id) {
+        if(!departementService.hasFormations(id)) {
+            departementService.deleteDepartement(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
 }

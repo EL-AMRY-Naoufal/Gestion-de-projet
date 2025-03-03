@@ -27,7 +27,14 @@
       </div>
 
       <div>Heure Service: {{ enseignant.maxHeuresService }}h</div>
-      <div>Heure Affecté: {{ enseignant.heuresAssignees }}h</div>
+    
+      <div [ngClass]="getCardClass(enseignant, selectedYearId)">
+        Heure Affecté: 
+        <span >
+          {{ getHeuresPourAnnee(enseignant, selectedYearId) }}h
+        </span>
+      </div>
+      
       <div>Heure Décharge: {{ enseignant.nbHeureCategorie }}h</div>
     </mat-card-content>
 
@@ -42,16 +49,6 @@
     title="Edit user"
   >
     ✏️
-  </div>
-
-  <!-- Bouton pour supprimer l'utilisateur avec une icône -->
-  <div
-    class="custom-icon delete-icon"
-    *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
-    (click)="delete(enseignant)"
-    title="Delete user"
-  >
-    🗑️
   </div>
 
 

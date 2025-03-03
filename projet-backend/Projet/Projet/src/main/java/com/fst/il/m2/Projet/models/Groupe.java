@@ -2,18 +2,16 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.TypeHeure;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
+@Builder
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Groupe")
 public class Groupe {
     @Id
@@ -42,27 +40,10 @@ public class Groupe {
     @JoinColumn(name = "module_id")
     private Module module;
 
-
-
-    public Groupe() {
-    }
-
-    public Groupe(Long id, String nom, Date date, TypeHeure type, Module module,int totalHeuresDuGroupe, List<Affectation> affectations) {
-        this.id = id;
-        this.nom = nom;
-        this.date = date;
-        this.type = type;
-        this.module = module;
-        this.affectations = affectations;
-        this.totalHeuresDuGroupe = totalHeuresDuGroupe;
-        this.heuresAffectees = 0;
-    }
-
     public void setAffectations(List<Affectation> affectations) {
         this.affectations = affectations;
         for (Affectation a : affectations) {
             this.heuresAffectees += a.getHeuresAssignees();
         }
     }
-
 }
