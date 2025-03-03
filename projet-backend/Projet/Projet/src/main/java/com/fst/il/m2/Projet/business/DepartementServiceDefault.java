@@ -13,6 +13,9 @@ public class DepartementServiceDefault implements DepartementService {
     @Autowired
     DepartementRepository departementRepository;
 
+    @Autowired
+    FormationService formationService;
+
     @Override
     public Departement saveDepartement(Departement departement) {
         return departementRepository.save(departement);
@@ -36,5 +39,10 @@ public class DepartementServiceDefault implements DepartementService {
     @Override
     public List<Departement> getDepartementsByAnnee(Annee annee) {
         return departementRepository.findYearDepartements(annee);
+    }
+
+    @Override
+    public Boolean hasFormations(Long id) {
+        return !formationService.getFormationsByDepartement(getDepartementById(id)).isEmpty();
     }
 }

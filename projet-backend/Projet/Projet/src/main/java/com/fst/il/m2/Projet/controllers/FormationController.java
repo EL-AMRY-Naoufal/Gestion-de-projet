@@ -1,6 +1,9 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.FormationService;
+import com.fst.il.m2.Projet.business.ResponsableFormationService;
+import com.fst.il.m2.Projet.dto.FormationDto;
+import com.fst.il.m2.Projet.mapper.FormationMapper;
 import com.fst.il.m2.Projet.models.Formation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,24 +17,28 @@ import java.util.List;
 public class FormationController {
 
     private final FormationService formationService;
+    private final FormationMapper formationMapper;
 
     @Autowired
-    public FormationController(FormationService formationService) {
+    public FormationController(FormationService formationService, ResponsableFormationService responsableFormationService) {
         this.formationService = formationService;
+        this.formationMapper = new FormationMapper(responsableFormationService);
     }
 
     // Create a new Formation
     @PostMapping
-    public ResponseEntity<Formation> createFormation(@RequestBody Formation formation) {
-        Formation savedFormation = formationService.saveFormation(formation);
-        return new ResponseEntity<>(savedFormation, HttpStatus.CREATED);
+    public ResponseEntity<FormationDto> createFormation(@RequestBody FormationDto formationDto) {
+        Formation savedFormation = formationService.saveFormation(this.formationMapper.toEntity(formationDto));
+        return new ResponseEntity<>(this.formationMapper.toDto(savedFormation), HttpStatus.CREATED);
     }
 
     // Get all Formations
     @GetMapping
-    public ResponseEntity<List<Formation>> getAllFormations() {
+    public ResponseEntity<List<FormationDto>> getAllFormations() {
         List<Formation> formations = formationService.getAllFormations();
-        return new ResponseEntity<>(formations, HttpStatus.OK);
+        List<FormationDto> formationDtos = formations.stream().map(this.formationMapper::toDto).toList();
+
+        return new ResponseEntity<>(formationDtos, HttpStatus.OK);
     }
 
     // Get Formation by ID
@@ -59,11 +66,10 @@ public class FormationController {
     // Delete Formation
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFormation(@PathVariable Long id) {
-        try {
+        if(!formationService.hasNiveaux(id)) {
             formationService.deleteFormation(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 }

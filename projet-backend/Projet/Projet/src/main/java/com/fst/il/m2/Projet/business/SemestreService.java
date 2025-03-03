@@ -11,4 +11,5 @@ public interface SemestreService {
     Semestre addSemestre(Semestre semestre);
     void deleteSemestre(Long id);
     List<Semestre> getSemestresByNiveau(Niveau niveau);
+    Boolean hasModules(Long id);
 }

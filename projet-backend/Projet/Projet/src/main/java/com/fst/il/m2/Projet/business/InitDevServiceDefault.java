@@ -99,185 +99,172 @@ public class InitDevServiceDefault implements InitDevService {
         ResponsableFormation responsableFormation1 = new ResponsableFormation(1L, users.get(6));
         ResponsableFormation responsableFormation2 = new ResponsableFormation(2L, users.get(7));
 
+        responsableFormationRepository.save(responsableFormation1);
+        responsableFormationRepository.save(responsableFormation2);
+
+        ///*******RESPONSABLE DEPARTEMENT
+        ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
+
+        responsableDepartementRepository.save(responsableDepartement);
+
+        ///*******DEPARTEMENTS
+        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).responsableDepartement(responsableDepartement).build();
+
+        departementRepository.save(departement);
+
         ///********FORMATIONS
-        Formation formation1 = new Formation(1L, "Licence", 200, responsableFormation1,null);
-        Formation formation2 = new Formation(2L, "Master", 200, responsableFormation2,null);
+        Formation formation1 = Formation.builder().id(1L).nom("Licence").totalHeures(200).responsableFormation(responsableFormation1).departement(departement).build();
+        Formation formation2 = Formation.builder().id(2L).nom("Master").totalHeures(200).responsableFormation(responsableFormation2).departement(departement).build();
         ArrayList<Formation> formations = new ArrayList<>();
         formations.add(formation1);
         formations.add(formation2);
+
+        formationRepository.save(formation1);
+        formationRepository.save(formation2);
+
+        //update Formation
+        departement.setFormations(formations);
+        departementRepository.save(departement);
 
         ///********NIVEAU
         //        Niveau M2 = Niveau.builder().nom("M2").formation(formation1).build(); //add orientation
         Niveau M1 = new Niveau(1L, "M1", formation2, null);
         Niveau M2IL = new Niveau(1L, "M2 IL", formation2, null);
 
+        niveauRepository.save(M1);
+        niveauRepository.save(M2IL);
+
         ///********SEMESTRE
         Semestre S1 = Semestre.builder().nom("S1").niveau(M2IL).build(); //add modules
         Semestre S2 = Semestre.builder().nom("S2").niveau(M2IL).build(); //add modules
+        List<Semestre> semestres =new ArrayList<>();
+        semestres.add(S1);
+        semestres.add(S2);
 
-        ///*******RESPONSABLE DEPARTEMENT
-        ResponsableDepartement responsableDepartement = ResponsableDepartement.builder().user(users.get(0)).build();
+        semestreRepository.save(S1);
+        semestreRepository.save(S2);
 
-        ///*******DEPARTEMENTS
-        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).formations(formations).responsableDepartement(responsableDepartement).build();
+        //update Niveau
+        M1.setSemestres(semestres);
+        niveauRepository.save(M1);
 
         ///********ENSEIGNANTS
         Map<CategorieEnseignant, Integer> heuresRequises = new HashMap<>();
         heuresRequises.put(CategorieEnseignant.ENSEIGNANT_CHERCHEUR, 100);
         Enseignant enseignant1 = new Enseignant(1L, users.get(4).getName(), users.get(4).getFirstname()
-        , heuresRequises, 100, 70, null, users.get(4),true) ;
+                , heuresRequises, 100, 70, null, users.get(4),true) ;
         Enseignant enseignant2 = new Enseignant(2L,users.get(5).getName(), users.get(5).getFirstname()
                 ,  heuresRequises, 100, 30, null, users.get(5), true);
         Enseignant enseignant3 = new Enseignant(3L, users.get(6).getName(), users.get(6).getFirstname()
                 ,  heuresRequises, 100, 50, null, users.get(6), true);
 
+
+        enseignantRepository.save(enseignant1);
+        enseignantRepository.save(enseignant2);
+
         ///********TYPES D'HEURES
         Map<TypeHeure, Integer> heuresParTypesM1 = new HashMap<>(Map.of());
-        heuresParTypesM1.put(TypeHeure.CM, 30);
-        heuresParTypesM1.put(TypeHeure.TD, 20);
-        heuresParTypesM1.put(TypeHeure.TP, 10);
+        heuresParTypesM1.put(TypeHeure.CM, 60);
+        heuresParTypesM1.put(TypeHeure.TD, 80);
+        heuresParTypesM1.put(TypeHeure.TP, 50);
         Map<TypeHeure, Integer> heuresParTypesM2 = new HashMap<>(Map.of());
-        heuresParTypesM2.put(TypeHeure.CM, 40);
-        heuresParTypesM2.put(TypeHeure.TD, 30);
-        heuresParTypesM2.put(TypeHeure.TP, 20);
+        heuresParTypesM2.put(TypeHeure.CM, 50);
+        heuresParTypesM2.put(TypeHeure.TD, 70);
+        heuresParTypesM2.put(TypeHeure.TP, 40);
 
         ///********MODULES
         List<com.fst.il.m2.Projet.models.Module> modules1 = List.of(
                 Module.builder().nom("Service Web")./*totalHeuresRequises(60).*/heuresParType(heuresParTypesM1).semestre(S1).build(),
                 Module.builder().nom("Concept Web")./*totalHeuresRequises(50).*/heuresParType(heuresParTypesM1).semestre(S1).build()
 
-                );
+        );
         List<com.fst.il.m2.Projet.models.Module> modules2 = List.of(
-                Module.builder().nom("Verification")./*totalHeuresRequises(40).heuresParType(heuresParTypesM2).semestre(S2).*/build(),
-                Module.builder().nom("Modélisation")./*totalHeuresRequises(30).heuresParType(heuresParTypesM2).*/semestre(S2).build()
-                );
+                Module.builder().nom("Verification")./*totalHeuresRequises(40).*/heuresParType(heuresParTypesM2).semestre(S2).build(),
+                Module.builder().nom("Modélisation")./*totalHeuresRequises(30).*/heuresParType(heuresParTypesM2).semestre(S2).build()
+        );
 
-        ///********GROUPES
-        //        Groupe groupe1 = Groupe.builder().nom("groupe 1").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
-//        Groupe groupe2 = Groupe.builder().nom("groupe 2").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.TD).build();
-//        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).build();
-
-        Groupe groupe1 = new Groupe(1L, "CM Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
-        Groupe groupe2 = new Groupe(2L, "TD Groupe 2", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.TD, null,80, null);
-        Groupe groupe3 = new Groupe(3L, "CM Groupe 1", new Date(2024, Calendar.DECEMBER, 1), TypeHeure.CM, null,80, null);
-        ArrayList<Groupe> groupes1 = new ArrayList<>();
-        groupes1.add(groupe1);
-        groupes1.add(groupe2);
-        ArrayList<Groupe> groupes2 = new ArrayList<>();
-        groupes2.add(groupe3);
-
-        ///********AFFECTATIONS
-        LocalDate date = LocalDate.of(2025, 1, 1);
-
-        List<Affectation> affectations1 = new ArrayList<>();
-        affectations1.add(new Affectation(1L, 40, date, enseignant1, groupe1)); //add groupes
-        affectations1.add(new Affectation(2L, 20, date, enseignant2, groupe1));
-
-        List<Affectation> affectations2 = new ArrayList<>();
-        affectations2.add(new Affectation(3L, 30, date, enseignant1, groupe2));
-        affectations2.add(new Affectation(4L, 10, date, enseignant2, groupe2));
-
-        List<Affectation> affectations3 = new ArrayList<>();
-        affectations3.add(new Affectation(5L, 60, date, enseignant1, groupe3));
-        affectations3.add(new Affectation(6L, 20, date, enseignant2, groupe3));
-
-        //update groupes
-        groupe1.setModule(modules1.get(0));
-        groupe2.setModule(modules1.get(0));
-        groupe3.setModule(modules2.get(0));
-
-        long time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-
-        //WAIT FOR USERS TO BE SAVED
-        while(userRepository.findById(8L).isEmpty())
-            if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
-                break;
-
-        //NOW USERS SHOULD BE SAVED
-
-        //save RDF
-        responsableFormationRepository.save(responsableFormation1);
-        responsableFormationRepository.save(responsableFormation2);
-
-        //save formations
-        formationRepository.save(formation1);
-        formationRepository.save(formation2);
-
-        //save niveau
-        niveauRepository.save(M1);
-        niveauRepository.save(M2IL);
-
-        //save semestres
-        semestreRepository.save(S1);
-        semestreRepository.save(S2);
-
-        //save RDD
-        responsableDepartementRepository.save(responsableDepartement);
-
-        //save Departement
-        departementRepository.save(departement);
-
-        //save enseignants
-        enseignantRepository.save(enseignant1);
-        enseignantRepository.save(enseignant2);
-        enseignantRepository.save(enseignant3);
-
-        //save modules
         modules1.forEach(m -> moduleRepository.save(m));
         modules2.forEach(m -> moduleRepository.save(m));
 
+        //update Semestres
+        S1.setModules(modules1);
+        S2.setModules(modules2);
+        semestreRepository.save(S1);
+        semestreRepository.save(S2);
+
+        ///********GROUPES
+        Groupe groupe1 = Groupe.builder()
+                .nom("CM Groupe 1")
+                .date(new Date(2024, Calendar.DECEMBER, 1))
+                .type(TypeHeure.CM)
+                .module(modules1.get(0))
+                .totalHeuresDuGroupe(heuresParTypesM1.get(TypeHeure.CM))
+                .build();
+
+        Groupe groupe2 = Groupe.builder()
+                .nom("TD Groupe 1")
+                .date(new Date(2024, Calendar.DECEMBER, 1))
+                .type(TypeHeure.TD)
+                .module(modules1.get(0))
+                .totalHeuresDuGroupe(heuresParTypesM1.get(TypeHeure.TD))
+                .build();
+//        Groupe groupe3 = Groupe.builder().nom("groupe 3").date(new Date(2024, Calendar.DECEMBER,1)).type(TypeHeure.CM).module(modules2.get(0)).build();
+
+        ArrayList<Groupe> groupes1 = new ArrayList<>();
+        groupes1.add(groupe1);
+        groupes1.add(groupe2);
+
+        ArrayList<Groupe> groupes2 = new ArrayList<>();
+//        groupes2.add(groupe3);
 
         //save groupes
         groupeRepository.save(groupe1);
         groupeRepository.save(groupe2);
-        groupeRepository.save(groupe3);
+//        groupeRepository.save(groupe3);
 
-        //save Affectations
+        //update modules
+        modules1.get(0).setGroupes(groupes1);
+        modules2.get(0).setGroupes(groupes2);
+        moduleRepository.save(modules1.get(0));
+        moduleRepository.save(modules2.get(0));
+
+        ///********AFFECTATIONS
+        LocalDate date = LocalDate.of(2024, 1, 1);
+
+        List<Affectation> affectations1 = new ArrayList<>();
+        affectations1.add(Affectation.builder().heuresAssignees(40).dateAffectation(date).enseignant(enseignant1).groupe(groupe1).build()); //add groupes
+        affectations1.add(Affectation.builder().heuresAssignees(20).dateAffectation(date).enseignant(enseignant2).groupe(groupe1).build()); //add groupes
+
+        List<Affectation> affectations2 = new ArrayList<>();
+        affectations2.add(Affectation.builder().heuresAssignees(30).dateAffectation(date).enseignant(enseignant1).groupe(groupe2).build()); //add groupes
+        affectations2.add(Affectation.builder().heuresAssignees(10).dateAffectation(date).enseignant(enseignant2).groupe(groupe2).build()); //add groupes
+
         affectations1.forEach((a) -> affectationRepository.save(a));
         affectations2.forEach((a) -> affectationRepository.save(a));
-        affectations3.forEach((a) -> affectationRepository.save(a));
 
-        //update Semestres
-        S1.setModules(modules1);
-        semestreRepository.save(S1);
-        S2.setModules(modules2);
-        semestreRepository.save(S2);
+        //update groupes
+        groupe1.setModule(modules1.get(0));
+        groupe2.setModule(modules1.get(0));
 
-        //update Enseignants
+        groupeRepository.save(groupe1);
+        groupeRepository.save(groupe2);
+
+        //update enseignants
         ArrayList<Affectation> affectationsEnseignant1 = new ArrayList<>();
         affectationsEnseignant1.add(affectations1.get(0));
         affectationsEnseignant1.add(affectations2.get(0));
-        affectationsEnseignant1.add(affectations3.get(0));
         enseignant1.setAffectations(affectationsEnseignant1);
 
         ArrayList<Affectation> affectationsEnseignant2 = new ArrayList<>();
         affectationsEnseignant2.add(affectations1.get(1));
         affectationsEnseignant2.add(affectations2.get(1));
-        affectationsEnseignant2.add(affectations3.get(1));
         enseignant2.setAffectations(affectationsEnseignant2);
-
-        //WAIT FOR GROUPES TO BE SAVED
-        time = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        while(groupeRepository.findById(3L).isEmpty())
-            if (time > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + 10)
-                break;
-
-        //NOW USERS SHOULD BE SAVED
 
         //update Groupe
         groupe1.setAffectations(affectations1);
         groupe2.setAffectations(affectations2);
-        groupe3.setAffectations(affectations3);
 
         groupeRepository.save(groupe1);
         groupeRepository.save(groupe2);
-        groupeRepository.save(groupe3);
-
-        //update modules
-        modules1.get(0).setGroupes(groupes1);
-        modules2.get(0).setGroupes(groupes2);
-
-        moduleRepository.save(modules1.get(0));
-        moduleRepository.save(modules2.get(0));
     }
 }

@@ -1,12 +1,12 @@
 .container {
-  padding: 20px;
+  padding: 0px;
   background-color: white;
 }
 
 /* Conteneur principal */
 .main-content {
-  padding: 20px;
-  margin-top: 60px;
+  padding: 0px;
+  margin-top: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,7 +92,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-wrap: break-word; 
+  overflow-wrap: break-word;
 }
 
 .commentaire-text-input {

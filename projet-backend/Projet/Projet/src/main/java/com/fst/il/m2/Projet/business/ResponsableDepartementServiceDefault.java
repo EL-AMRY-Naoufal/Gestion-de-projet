@@ -2,8 +2,6 @@ package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
-import com.fst.il.m2.Projet.models.Module;
-import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.models.*;
 import com.fst.il.m2.Projet.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +108,11 @@ public class ResponsableDepartementServiceDefault implements ResponsableDepartem
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public ResponsableDepartement getResponsableDepartementById(Long id) {
+        return responsableDepartementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Responsable de Departement not found"));
     }
 
     @Override

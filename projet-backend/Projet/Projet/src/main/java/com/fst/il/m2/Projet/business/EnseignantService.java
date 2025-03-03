@@ -1,10 +1,11 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.dto.AffectationDto;
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
-import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
@@ -38,6 +39,7 @@ public class EnseignantService {
     private final EnseignantSpecification enseignantSpecifications;
     private final AnneeRepository anneeRepository;
     private final UserRoleRepository userRoleRepository;
+
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository,
                              AffectationRepository affectationRepository,
@@ -60,24 +62,15 @@ public class EnseignantService {
         // Get the enseignant id from the user id
 
 
-        Enseignant enseignant = enseignantRepository.findByUserId(userId)
-                .orElseThrow(NotFoundException::new);
-
+        Enseignant enseignant = enseignantRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Enseignant not found with user id: " + userId));
         return enseignant.getAffectations();
     }
 
-    public List<AffectationDTO> getAffectationsByEnseignantIdFormated(Long id) {
+    public List<AffectationDto> getAffectationsByEnseignantIdFormated(Long id) {
         List<Affectation> affectations = getAffectationsByEnseignantById(id);
-        return affectations.stream()
-                .map(affectation -> new AffectationDTO(
-                        affectation.getId(),
-                        affectation.getHeuresAssignees(),
-                        affectation.getDateAffectation(),
-                        affectation.getGroupe() != null && affectation.getGroupe().getModule() != null ? affectation.getGroupe().getModule().getNom() : null,
-                        affectation.getCommentaire(),
-                        affectation.getGroupe() != null ? affectation.getGroupe().getNom() : null
-                ))
-                .collect(Collectors.toList());
+
+        return affectations.stream().map(AffectationMapper::toDto).toList();
     }
 
 

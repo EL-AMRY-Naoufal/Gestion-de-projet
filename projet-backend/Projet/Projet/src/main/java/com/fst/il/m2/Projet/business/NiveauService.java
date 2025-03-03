@@ -11,4 +11,5 @@ public interface NiveauService {
     List<Niveau> getAllNiveaux();
     void deleteNiveau(Long id);
     List<Niveau> getNiveauxByFormation(Formation formation);
+    Boolean hasSemestres(Long id);
 }
