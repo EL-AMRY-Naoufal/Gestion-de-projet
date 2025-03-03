@@ -370,7 +370,7 @@ export class ModulesComponent implements OnInit {
   }
 
 
-  openAddAffectationDialog(groupeId: number | undefined): void {
+  openAddAffectationDialog(groupeId: number | undefined, anneeId: number): void {
     const dialogRef = this.dialog.open(AddAffectationComponent, {
       data: {
         groupeId: groupeId
@@ -387,7 +387,7 @@ export class ModulesComponent implements OnInit {
         result.groupeId = groupeId;
 
         //save in db and update with id
-        this.affectationService.saveAffectation(result).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
+        this.affectationService.saveAffectation(result,anneeId).subscribe((affectationResult: Affectation) => this.addAffectation(affectationResult));
       }
     });
   }
@@ -398,13 +398,13 @@ export class ModulesComponent implements OnInit {
     this.affectations.push(newAffectation);
   }
 
-  updateAffectation(affectation: Affectation) {
+  updateAffectation(affectation: Affectation, anneeId: number) {
     if (!affectation.id) {
       console.error("Affectation ID is undefined");
       return;
     }
 
-    this.userService.updateAffectation(affectation.id, affectation.heuresAssignees).subscribe({
+    this.userService.updateAffectation(affectation.id, affectation.heuresAssignees, anneeId).subscribe({
       next: () => {
         alert('Heures affectées mises à jour');
         this.getAllGroupes();
@@ -536,14 +536,14 @@ export class ModulesComponent implements OnInit {
 
   }
 
-  removeAffectation(affectation: Affectation) {
+  removeAffectation(affectation: Affectation, anneeId: number) {
     let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
     if (affectation.id != undefined) {
       const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
-          this.userService.deleteAffectation(affectation.id!).subscribe({
+          this.userService.deleteAffectation(affectation.id!, anneeId).subscribe({
             next: () => {
               console.log('Affectation deleted');
               this.affectations.splice(affectationIndex, 1);

@@ -36,12 +36,12 @@ public class AffectationServiceDefault implements AffectationService{
 
     @Override
     @Transactional
-    public Affectation saveAffectation(Affectation affectation) {
-        return affecterGroupeToEnseignant(affectation.getEnseignant().getId(), affectation.getGroupe().getId(), affectation.getHeuresAssignees());
+    public Affectation saveAffectation(Affectation affectation, Long anneId) {
+        return affecterGroupeToEnseignant(affectation.getEnseignant().getId(), affectation.getGroupe().getId(), affectation.getHeuresAssignees(), anneId);
     }
 
     @Override
-    public  Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, double heuresAssignees) {
+    public  Affectation affecterGroupeToEnseignant(Long userId, Long groupeId, double heuresAssignees, Long anneId) {
 
         if(heuresAssignees <= 0){
             throw new RuntimeException("Heures assignées must be greater than 0");
@@ -76,8 +76,7 @@ public class AffectationServiceDefault implements AffectationService{
 
         heuresAssignees = heuresAssignees * groupe.getType().getCoef();
 
-        Annee anneeActuelle = anneeRepository.getCurrentYear().get();
-
+        Annee anneeActuelle = this.anneeRepository.getReferenceById(anneId);
         HeuresAssignees heuresAnnee = enseignant.getHeuresParAnnee().stream()
                 .filter(h -> h.getAnnee() == anneeActuelle)
                 .findFirst()
@@ -98,7 +97,7 @@ public class AffectationServiceDefault implements AffectationService{
 
 
     //mise a jour des heures enseignées d'une affectation
-    public void updateAffectationHours(Long idAffectation, double heuresAssignees) {
+    public void updateAffectationHours(Long idAffectation, double heuresAssignees,Long anneId) {
         if(heuresAssignees <= 0){
             throw new RuntimeException("Heures assignées must be greater than 0");
         }
@@ -112,8 +111,7 @@ public class AffectationServiceDefault implements AffectationService{
         double nbHeureDeleted = affectation.getHeuresAssignees() * coef;
         double nbHeureAdded = heuresAssignees * coef;
 
-        Annee anneeActuelle = anneeRepository.getCurrentYear().get();
-
+        Annee anneeActuelle = this.anneeRepository.getReferenceById(anneId);
         HeuresAssignees heuresAnnee = enseignant.getHeuresParAnnee().stream()
                 .filter(h -> h.getAnnee() == anneeActuelle)
                 .findFirst()
@@ -150,7 +148,7 @@ public class AffectationServiceDefault implements AffectationService{
     }
 
     @Override
-    public void deleteAffectation(Long id){
+    public void deleteAffectation(Long id, Long anneId){
         Affectation affectation = affectationRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
 
@@ -159,7 +157,7 @@ public class AffectationServiceDefault implements AffectationService{
         double nbHeureDeleted = affectation.getHeuresAssignees() *
                 affectation.getGroupe().getType().getCoef();
 
-        Annee anneeActuelle = anneeRepository.getCurrentYear().get();
+        Annee anneeActuelle = this.anneeRepository.getReferenceById(anneId);
         HeuresAssignees heuresAnnee = enseignant.getHeuresParAnnee().stream()
                 .filter(h -> h.getAnnee() == anneeActuelle)
                 .findFirst()
