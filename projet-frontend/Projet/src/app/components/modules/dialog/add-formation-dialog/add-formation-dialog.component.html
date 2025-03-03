@@ -7,19 +7,25 @@
         <!-- Nom -->
         <mat-form-field appearance="fill" class="full-width mgb20 form-field">
 
-          <mat-label>Nom</mat-label>
+          <mat-label>Nom de la formation</mat-label>
           <input matInput id="nom" [(ngModel)]="newFormation.nom" name="nom" required/>
         </mat-form-field>
       </div>
 
-      <div class="flex-container">
+        <div class="flex-container">
+          <!-- Sélection de l'enseignant -->
+          <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+            <mat-label>Responsable de formation</mat-label>
+            <mat-select id="responsableDeFormation" [(ngModel)]="newFormation.responsableFormationId" name="chef" required>
+              <mat-option *ngFor="let responsable of users" [value]="responsable.id">
+                {{ responsable.firstname }}  {{ responsable.name }}
+              </mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="form.get('enseignantId')?.invalid">L'enseignant est <strong>obligatoire</strong>.</mat-error> -->
+          </mat-form-field>
+        </div>
 
-         <!-- Sélection du chef de formation -->
-        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
-          <mat-label>Chef de formation</mat-label>
-          <input  matInput id="responsableDeFormation" [(ngModel)]="newFormation.responsableFormationId" name="chef" required/>
-        </mat-form-field>
-      </div>
+
 
     </form>
 

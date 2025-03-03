@@ -18,12 +18,14 @@
           <mat-label>Nom responsable de departement</mat-label>
           <input matInput id="responsableDeDepartement" [(ngModel)]="newDepartement.responsableDeDepartement" name="chef" required/>
         </mat-form-field> -->
-        <mat-label for="responsableDepartement">Chef de département:</mat-label>
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+        <mat-label for="responsableDepartement">Chef de département</mat-label>
         <mat-select id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartementId" name="chef" required>
           <mat-option *ngFor="let responsable of users" [value]="responsable.id">
             {{ responsable.firstname }}  {{ responsable.name }}
           </mat-option>
         </mat-select>
+        </mat-form-field>
       </div>
     </form>
   </mat-dialog-content>
