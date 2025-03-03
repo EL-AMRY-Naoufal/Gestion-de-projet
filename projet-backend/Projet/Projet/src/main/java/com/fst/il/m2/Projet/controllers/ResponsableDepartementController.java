@@ -61,7 +61,7 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/users/by-role")
+    @GetMapping("/users/by-just-role")
     public List<User> getUsersByRole(@RequestParam Role role) {
         List<UserRole> userRoles = responsableDepartementService.getUsersByRole(role);
         return userRoles.stream()

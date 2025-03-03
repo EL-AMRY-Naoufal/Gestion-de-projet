@@ -67,8 +67,8 @@ public class InitDevServiceDefault implements InitDevService {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         List<User> users = List.of(
-                User.builder().username("cdd").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(new ArrayList<>()).build(),
-                User.builder().username("rdf").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("cdd").firstname("Chef").name("FST").password(passwordEncoder.encode("cdd")).email("cdd@cdd.fr").roles(new ArrayList<>()).build(),
+                User.builder().username("rdf").firstname("Responsable").name("IL").password(passwordEncoder.encode("rdf")).email("rdf@rdf.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("ens").password(passwordEncoder.encode("ens")).email("ens@ens.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("sec").password(passwordEncoder.encode("sec")).email("sec@sec.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("username1").firstname("Emmanuel").name("Jeandel").password(passwordEncoder.encode("password1")).email("email1@email.fr").roles(new ArrayList<>()).build(),
@@ -161,6 +161,7 @@ public class InitDevServiceDefault implements InitDevService {
 
         enseignantRepository.save(enseignant1);
         enseignantRepository.save(enseignant2);
+        enseignantRepository.save(enseignant3);
 
         ///********TYPES D'HEURES
         Map<TypeHeure, Integer> heuresParTypesM1 = new HashMap<>(Map.of());
