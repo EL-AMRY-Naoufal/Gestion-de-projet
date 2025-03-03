@@ -63,7 +63,7 @@ export class ListUsersComponent implements OnInit {
     categorieEnseignant: CategorieEnseignant.ATER,
     nbHeureCategorie: 0,
     maxHeuresService: 0,
-    heuresAssignees: 0,
+    heuresAssignees: []
   };
   roles: string[] = [
     'TOUS',

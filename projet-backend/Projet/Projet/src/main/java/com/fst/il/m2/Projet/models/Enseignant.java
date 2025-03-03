@@ -36,7 +36,8 @@ public class Enseignant {
 
     private int maxHeuresService;
 
-    private int heuresAssignees;
+    @OneToMany(mappedBy = "enseignant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HeuresAssignees> heuresParAnnee;
 
     // Relations
     @OneToMany(mappedBy = "enseignant")
@@ -47,6 +48,14 @@ public class Enseignant {
     private User user;
 
     private boolean hasAccount;
+
+    public double getHeuresAssignees(Annee annee) {
+        return heuresParAnnee.stream()
+                .filter(h -> h.getAnnee().equals(annee))
+                .mapToDouble(HeuresAssignees::getHeures)
+                .findFirst()
+                .orElse(0.0);
+    }
 
 
     public int getNbHeureCategorie(CategorieEnseignant categorie) {
@@ -76,13 +85,6 @@ public class Enseignant {
         this.maxHeuresService = maxHeuresService;
     }
 
-    public int getHeuresAssignees() {
-        return heuresAssignees;
-    }
-
-    public void setHeuresAssignees(int heuresAssignees) {
-        this.heuresAssignees = heuresAssignees;
-    }
 
     public List<Affectation> getAffectations() {
 
@@ -112,7 +114,6 @@ public class Enseignant {
                 "id=" + id +
                 ", categorieEnseignant=" + categorieEnseignant +
                 ", maxHeuresService=" + maxHeuresService +
-                ", heuresAssignees=" + heuresAssignees +
                 ", affectations=" + affectations +
                 ", user=" + user +
                 '}';
