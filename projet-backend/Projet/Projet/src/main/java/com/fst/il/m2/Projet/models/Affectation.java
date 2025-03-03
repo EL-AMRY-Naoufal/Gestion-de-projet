@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @Data
-
+@ToString(exclude = "enseignant")
 @Table(name = "Affectations")
 public class Affectation {
 

@@ -36,7 +36,7 @@ export class AffectationService {
     return this.http.get<CoAffectation[]>(`${this._backendURL.allCoAffectations}/module/${moduleId}`);
   }
 
-  saveAffectation(affectation : Affectation): Observable<Affectation> {
-    return this.http.post<Affectation>(`${this._backendURL.affectations}`, affectation);
+  saveAffectation(affectation : Affectation, anneeId: number): Observable<Affectation> {
+    return this.http.post<Affectation>(`${this._backendURL.affectations}/${anneeId}`, affectation);
   }
 }

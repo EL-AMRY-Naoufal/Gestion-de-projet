@@ -57,9 +57,9 @@
                                     <ul>
                                       <li *ngFor="let groupe of getGroupesByModule(module.id); trackById">
                                         <details>
-                                          <summary (click)="showType('GROUPE', groupe)">
+                                          <summary   [ngClass]="getGroupeClass(groupe)" (click)="showType('GROUPE', groupe)">
                                             {{ groupe.nom || 'Nouveau Groupe' }} ({{ groupe.heuresAffectees  }} / {{groupe.totalHeuresDuGroupe}} heures)
-                                            <button (click)="openAddAffectationDialog(groupe.id)">+</button>
+                                            <button (click)="openAddAffectationDialog(groupe.id, annee.id ?? 1)">+</button>
                                             <button (click)="removeGroupe(groupe)"><i class="fa fa-trash-o"></i></button>
                                           </summary>
 
@@ -73,18 +73,18 @@
                                                 </p>
 
                                                 <!-- Input des heures assignées -->
-                                                <input type="number" [(ngModel)]="affectation.heuresAssignees" min="0" class="heures-input">
+                                                <input type="number" [(ngModel)]="affectation.heuresAssignees" min="1" class="heures-input">
 
                                                 <!-- Icone de mise à jour -->
                                                 <i class="fa-solid fa-repeat"
                                                    style="color: blue;margin-left: 0.2cm ;; margin-right: 0.4cm; cursor: pointer;"
-                                                   (click)="updateAffectation(affectation)">
+                                                   (click)="updateAffectation(affectation, annee.id ?? 1)">
                                                 </i>
 
                                                 <!-- Icone de suppression -->
                                                 <i class="fa fa-trash-o"
                                                    style="font-size:24px; color:red; cursor: pointer;"
-                                                   (click)="removeAffectation(affectation)">
+                                                   (click)="removeAffectation(affectation, annee.id ?? 1)">
                                                 </i>
                                               </div>
                                             </div>

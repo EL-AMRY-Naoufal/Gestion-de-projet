@@ -2,10 +2,7 @@ package com.fst.il.m2.Projet.models;
 
 import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString(exclude = {"affectations", "heuresParAnnee", "user"})
 public class Enseignant {
 
     @Id
@@ -114,8 +112,6 @@ public class Enseignant {
                 "id=" + id +
                 ", categorieEnseignant=" + categorieEnseignant +
                 ", maxHeuresService=" + maxHeuresService +
-                ", affectations=" + affectations +
-                ", user=" + user +
                 '}';
     }
 }

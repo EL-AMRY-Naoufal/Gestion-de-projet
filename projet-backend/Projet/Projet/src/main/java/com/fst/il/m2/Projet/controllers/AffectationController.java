@@ -10,6 +10,7 @@ import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Annee;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,26 +60,27 @@ public class AffectationController {
 
 
 
-    @PostMapping
-    public ResponseEntity<AffectationDto> saveAffectation(@RequestBody AffectationDto affectationDto) {
-        Affectation savedAffectation = affectationService.saveAffectation(AffectationMapper.toEntity(affectationDto));
+    @PostMapping("{annee}")
+    public ResponseEntity<AffectationDto> saveAffectation(@RequestBody AffectationDto affectationDto, @PathVariable Long annee) {
+        Affectation savedAffectation = affectationService.saveAffectation(AffectationMapper.toEntity(affectationDto), annee);
         return new ResponseEntity<>(AffectationMapper.toDto(savedAffectation), HttpStatus.CREATED);
     }
 
     // Mettre à jour le nombre d'heures enseignées pour une affectation existante
-    @PutMapping("/{idAffectation}/{heure}")
+    @PutMapping("/{idAffectation}/{heure}/{annee}")
     public ResponseEntity<String> updateAffectation(
             @PathVariable Long idAffectation,
-            @PathVariable int heure
+            @PathVariable int heure,
+            @PathVariable Long annee
     ) {
-        affectationService.updateAffectationHours(idAffectation, heure);
+        affectationService.updateAffectationHours(idAffectation, heure, annee);
         return ResponseEntity.ok("Affectation mise à jour avec succès");
     }
 
     // Supprimer une affectation
-    @DeleteMapping("/{idAffectation}")
-    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
-        affectationService.deleteAffectation(idAffectation);
+    @DeleteMapping("/{idAffectation}/{annee}")
+    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation, @PathVariable Long annee) {
+        affectationService.deleteAffectation(idAffectation, annee);
         return ResponseEntity.noContent().build();
     }
 

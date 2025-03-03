@@ -3,8 +3,14 @@
   <form (ngSubmit)="onAdd()">
     <label for="nom">Nom:</label>
     <input id="nom" [(ngModel)]="newDepartement.nom" name="nom" required>
+
     <label for="responsableDepartement">Chef de département:</label>
-    <input id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartementId" name="chef" required>
+    <select id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartementId" name="chef" required>
+      <option *ngFor="let responsable of users" [value]="responsable.id">
+        {{ responsable.firstname }}  {{ responsable.name }}
+      </option>
+    </select>
+
     <button type="submit">Ajouter</button>
     <button type="button" (click)="onCancel()">Annuler</button>
   </form>
