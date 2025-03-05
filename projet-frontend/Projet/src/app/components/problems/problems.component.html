@@ -1,0 +1,6 @@
+<ul>
+  Liste des modules/groupes avec des heures affectées inférieure aux heures totales du groupe
+  <li *ngFor="let group of groupeWithLowHours">
+    {{ group.nom }} - {{ group.heuresAffectees }} / {{ group.totalHeuresDuGroupe }} heures
+  </li>
+</ul>
