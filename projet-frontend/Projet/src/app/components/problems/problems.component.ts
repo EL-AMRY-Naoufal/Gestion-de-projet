@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ModuleService} from "../../services/module.service";
 import {Groupe, Module} from "../shared/types/modules.types";
 import {GroupeService} from "../../services/groupe.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {EnseignantService} from "../../services/enseignant.service";
 import {User} from "../shared/types/user.type";
 import {EnseignantDto} from "../shared/types/enseignant.type";
@@ -13,7 +13,8 @@ import {YearService} from "../../services/year-service";
   selector: 'app-problems',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './problems.component.html',
   styleUrl: './problems.component.scss'
@@ -23,7 +24,9 @@ export class ProblemsComponent {
   groupeWithLowHours: Groupe[] = [];
   modules: Module[] = [];
   enseignantsWithLowHours: EnseignantDto[] = [];
+  enseignantsWithHighHours: EnseignantDto[] = [];
   anneeSelectionnee: number = -1;
+  problem = false;
 
   constructor(
     public groupeService: GroupeService,
@@ -35,7 +38,14 @@ export class ProblemsComponent {
     this.anneeSelectionnee = this.anneeService.getSelectedYearId() ?? -1
     this.loadGroupeWithsLowHours();
     this.loadEnseignantsWithLowHours();
+    this.testProbleme();
+
   }
+
+  testProbleme() {
+    this.problem = this.groupeWithLowHours.length > 0 || this.enseignantsWithLowHours.length > 0;
+  }
+
 
   loadGroupeWithsLowHours() {
     this.groupeService.getAllGroupes().subscribe((groupes: Groupe[]) => {
@@ -60,9 +70,13 @@ export class ProblemsComponent {
 
       //const assign = enseignants[0].heuresAssignees[this.anneeSelectionnee];
       //console.log("Année sélectionnée :",assign);
-      console.log("Enseignants :", enseignants);
+     // console.log("Enseignants :", enseignants);
       this.enseignantsWithLowHours = enseignants.filter(enseignant =>
-        this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) < enseignant.maxHeuresService
+        this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) + enseignant.nbHeureCategorie < enseignant.maxHeuresService
+      );
+
+      this.enseignantsWithHighHours = enseignants.filter(enseignant =>
+        this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) + enseignant.nbHeureCategorie > enseignant.maxHeuresService
       );
     });
   }

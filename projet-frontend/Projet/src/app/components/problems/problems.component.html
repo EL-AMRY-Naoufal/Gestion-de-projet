@@ -1,41 +1,75 @@
-<h5>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h5>
-<table border="1">
-  <thead>
-  <tr>
-    <th>Module</th>
-    <th>Groupe</th>
-    <th>Heures Affectées</th>
-    <th>Heures Totales</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let group of groupeWithLowHours">
-    <td>{{ group.moduleNom }}</td>
-    <td>{{ group.nom }}</td>
-    <td>{{ group.heuresAffectees }}</td>
-    <td>{{ group.totalHeuresDuGroupe }}</td>
-  </tr>
-  </tbody>
-</table>
+<div class="main-content" *ngIf="!problem; else noProblem">
+  <h2>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h2>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Groupe</th>
+        <th>Heures Affectées</th>
+        <th>Heures Totales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groupeWithLowHours">
+        <td>{{ group.moduleNom }}</td>
+        <td>{{ group.nom }}</td>
+        <td>{{ group.heuresAffectees }}</td>
+        <td>{{ group.totalHeuresDuGroupe }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-<h5>Liste des enseignants avec des heures de service inférieures aux heures maximales</h5>
-<table class="table table-striped">
-  <thead class="thead-dark">
-  <tr>
-    <th>Nom</th>
-    <th>Prénom</th>
-    <th>Catégorie</th>
-    <th>Heure assignée</th>
-    <th>Max Heures Service</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let enseignant of enseignantsWithLowHours">
-    <td>{{ enseignant.name }}</td>
-    <td>{{ enseignant.firstname }}</td>
-    <td>{{ enseignant.categorieEnseignant }}</td>
-    <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
-    <td>{{ enseignant.maxHeuresService }}</td>
-  </tr>
-  </tbody>
-</table>
+  <h2>Liste des enseignants avec des heures de service inférieures aux heures maximales</h2>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Catégorie</th>
+        <th>Heure assignée</th>
+        <th>Max Heures Service</th>
+        <th>Heures Décharge</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let enseignant of enseignantsWithLowHours">
+        <td>{{ enseignant.name }}</td>
+        <td>{{ enseignant.firstname }}</td>
+        <td>{{ enseignant.categorieEnseignant }}</td>
+        <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
+        <td>{{ enseignant.maxHeuresService }}</td>
+        <td>{{ enseignant.nbHeureCategorie }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Liste des enseignants avec des heures de service supérieures aux heures maximales</h2>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Catégorie</th>
+        <th>Heure assignée</th>
+        <th>Heures Service</th>
+        <th>Heures Décharge</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let enseignant of enseignantsWithHighHours">
+        <td>{{ enseignant.name }}</td>
+        <td>{{ enseignant.firstname }}</td>
+        <td>{{ enseignant.categorieEnseignant }}</td>
+        <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
+        <td>{{ enseignant.maxHeuresService }}</td>
+        <td>{{ enseignant.nbHeureCategorie }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Si `problem` est false, afficher un message -->
+<ng-template #noProblem>
+    <p class="no-affectations-message">Aucun problème détecté </p>
+    <p class="no-affectations-message">Toutes les heures sont correctement attribuées.</p>
+</ng-template>
