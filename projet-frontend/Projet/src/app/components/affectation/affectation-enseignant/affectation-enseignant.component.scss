@@ -24,6 +24,7 @@
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
 
 .custom-table thead tr {
@@ -110,3 +111,28 @@
 #add-affectation:hover {
   scale: 1.05;
 }
+
+
+
+.main-conten h2 {
+  text-align: center; /* Centrer le titre horizontalement */
+  padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
+  font-size: 24px; /* Ajuster la taille du texte */
+  font-weight: bold; /* Mettre en gras le titre */
+  color: #333; /* Ajuster la couleur du titre */
+  position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
+  margin-bottom: 50px;
+}
+
+.main-conten h2::after {
+  content: ''; /* Créer un pseudo-élément */
+  position: absolute;
+  bottom: -5px; /* Placer la ligne juste en dessous du titre */
+  left: 50%; /* Centrer la ligne par rapport au titre */
+  width: 500px; /* Longueur de la ligne */
+  height: 2px; /* Épaisseur de la ligne */
+  background-color: #333; /* Couleur de la ligne */
+  transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
+}
+
+
