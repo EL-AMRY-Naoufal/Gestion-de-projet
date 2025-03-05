@@ -114,7 +114,7 @@
 
 
 
-.main-conten h2 {
+.main-content h2 {
   text-align: center; /* Centrer le titre horizontalement */
   padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
   font-size: 24px; /* Ajuster la taille du texte */
@@ -124,7 +124,7 @@
   margin-bottom: 50px;
 }
 
-.main-conten h2::after {
+.main-content h2::after {
   content: ''; /* Créer un pseudo-élément */
   position: absolute;
   bottom: -5px; /* Placer la ligne juste en dessous du titre */
