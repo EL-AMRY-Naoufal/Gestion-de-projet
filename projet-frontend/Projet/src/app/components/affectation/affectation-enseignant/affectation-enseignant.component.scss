@@ -24,6 +24,7 @@
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
 
 .custom-table thead tr {
@@ -133,3 +134,5 @@
   background-color: #333; /* Couleur de la ligne */
   transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
 }
+
+
