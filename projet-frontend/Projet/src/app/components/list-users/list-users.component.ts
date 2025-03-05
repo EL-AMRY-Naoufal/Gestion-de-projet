@@ -311,9 +311,8 @@ export class ListUsersComponent implements OnInit {
   }
 
   searchTeachers(): void {
-    const normalizedQuery = this.normalizeString(this.searchQuery.trim());
-    if (normalizedQuery) {
-      this._usersService.searchUsers(normalizedQuery).subscribe({
+    if(this.selectedRole === 'TOUS'){
+      this._usersService.searchUsers(this.searchQuery.trim()).subscribe({
         next: (data: User[]) => {
           if (Array.isArray(data)) {
             this._listUsers = data;
@@ -331,11 +330,10 @@ export class ListUsersComponent implements OnInit {
           this._listUsers = [];
         },
       });
-      this.searchPerformed = true;
-    } else {
-      this.ngOnInit();
-      this.searchPerformed = false;
+    }else{
+      this.filterByRole();    
     }
+    
   }
   private normalizeString(str: string): string {
     return str
@@ -354,7 +352,7 @@ export class ListUsersComponent implements OnInit {
         });
       }else{
         this._usersService
-        .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id)
+        .searchUsersByRoleAndYear(this.selectedRole, this.selectedYear?.id, this.searchQuery)
         .subscribe((data) => {
           this._listUsers = data;
         });

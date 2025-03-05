@@ -45,10 +45,16 @@ public class EnseignantController {
         return ResponseEntity.ok(users);
     }
     @GetMapping()
-    public List<EnseignantDto> getEnseignants(){
-        return enseignantService.getEnseignants().stream().map(
-                EnseignantMapper::enseignantToEnseignantDto
-        ).collect(Collectors.toList());
+    public List<EnseignantDto> getEnseignants(@RequestParam(required = false) String q){
+        if(q != null){
+            return enseignantService.searchEnseignants(q).stream().map(
+                    EnseignantMapper::enseignantToEnseignantDto
+            ).collect(Collectors.toList());
+        }else{
+            return enseignantService.getEnseignants().stream().map(
+                    EnseignantMapper::enseignantToEnseignantDto
+            ).collect(Collectors.toList());
+        }
     }
 
     @PostMapping()

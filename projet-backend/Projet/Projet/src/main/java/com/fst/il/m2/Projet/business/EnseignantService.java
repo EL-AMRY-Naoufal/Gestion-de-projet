@@ -257,4 +257,8 @@ public class EnseignantService {
         return enseignantRepository.findByName(name);
     }
 
+    public List<Enseignant> searchEnseignants(String searchTerm) {
+        return enseignantRepository.searchEnseignant(searchTerm);
+    }
+
 }

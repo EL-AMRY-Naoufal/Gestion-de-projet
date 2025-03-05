@@ -1,7 +1,8 @@
 package com.fst.il.m2.Projet.business;
 
 import com.fst.il.m2.Projet.enumurators.Role;
-import com.fst.il.m2.Projet.models.*;
+import com.fst.il.m2.Projet.models.Annee;
+import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.repositories.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,8 @@ class ResponsableDepartementServiceDefaultTest {
         responsable.setId(2L);
         responsable.addRole(annee,Role.CHEF_DE_DEPARTEMENT);
         responsable.setUsername("responsable");
+        responsable.setFirstname("James");
+        responsable.setName("Bond");
     }
 
 
@@ -142,16 +145,13 @@ class ResponsableDepartementServiceDefaultTest {
 
     @Test
     void testGetUsersByRoleAndYear_UsersFound() {
-         List<UserRole> userRoles;
-         userRoles = responsable.getRoles();
+        when(userRepository.searchUsersByRoles("", Role.CHEF_DE_DEPARTEMENT, 1L))
+                .thenReturn(List.of(responsable));
 
-        when(userRoleRepository.findByRoleAndYearId(Role.CHEF_DE_DEPARTEMENT, 2024L))
-                .thenReturn(userRoles);
+        List<User> foundUsers = responsableDepartementService.getUsersByRoleAndYear("", Role.CHEF_DE_DEPARTEMENT, 1L);
 
-        List<UserRole> foundUserRoles = responsableDepartementService.getUsersByRoleAndYear(Role.CHEF_DE_DEPARTEMENT, 2024L);
-
-        assertNotNull(foundUserRoles, "UserRoles list should not be null");
-        assertEquals(1, foundUserRoles.size(), "The size of the list should be 2");
-        assertEquals(Role.CHEF_DE_DEPARTEMENT, foundUserRoles.get(0).getRole(), "The role should be CHEF_DE_DEPARTEMENT");
+        assertNotNull(foundUsers, "UserRoles list should not be null");
+        assertEquals(1, foundUsers.size(), "The size of the list should be 1");
+        assertEquals(Role.CHEF_DE_DEPARTEMENT, foundUsers.get(0).getRoles().get(0).getRole(), "The role should be CHEF_DE_DEPARTEMENT");
     }
 }

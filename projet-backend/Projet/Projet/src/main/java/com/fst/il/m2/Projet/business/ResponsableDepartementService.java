@@ -19,5 +19,5 @@ public interface ResponsableDepartementService {
     User updateUser(Long id, User user, Long responsableId, Long currentYear);
     void deleteUser(Long id, Long responsableId);
      List<UserRole> getUsersByRole(Role role);
-     List<UserRole> getUsersByRoleAndYear(Role role, Long year);
+     List<User> getUsersByRoleAndYear(String q, Role role, Long year);
 }
