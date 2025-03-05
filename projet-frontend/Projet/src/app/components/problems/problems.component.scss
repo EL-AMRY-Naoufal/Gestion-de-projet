@@ -1,0 +1,137 @@
+
+
+/* Conteneur principal */
+.main-content {
+  padding-left: 200px;
+  padding-right: 200px;
+
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 34px;
+  color: black;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+
+.custom-table thead tr {
+  background-color: #bbd7f1;
+  color: black;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid ;
+  padding: 10px;
+  text-align: center;
+}
+
+.custom-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+
+.no-affectations-message {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.commentaire-case {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+
+/* Icônes personnalisées */
+.custom-icon {
+  font-size: 20px; /* Taille de l'icône */
+  color: #0a2b46; /* Couleur par défaut */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Effet au survol */
+.custom-icon:hover {
+  transform: scale(1.2); /* Agrandissement */
+  color: #ff9800; /* Couleur de survol */
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: .4rem;
+}
+
+.commentaire-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-wrap: break-word;
+}
+
+.commentaire-text-input {
+  flex: 1;
+}
+
+#add-affectation {
+  background-color: #bbd7f1;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: all 0.4s ease-in-out;
+}
+
+#add-affectation:hover {
+  scale: 1.05;
+}
+
+
+
+.main-content h2 {
+  text-align: center; /* Centrer le titre horizontalement */
+  padding: 10px 0; /* Ajouter un peu d'espace autour du titre */
+  font-size: 24px; /* Ajuster la taille du texte */
+  font-weight: bold; /* Mettre en gras le titre */
+  color: #333; /* Ajuster la couleur du titre */
+  position: relative; /* Nécessaire pour placer le pseudo-élément correctement */
+  margin-bottom: 50px;
+}
+
+.main-content h2::after {
+  content: ''; /* Créer un pseudo-élément */
+  position: absolute;
+  bottom: -5px; /* Placer la ligne juste en dessous du titre */
+  left: 50%; /* Centrer la ligne par rapport au titre */
+  width: 500px; /* Longueur de la ligne */
+  height: 2px; /* Épaisseur de la ligne */
+  background-color: #333; /* Couleur de la ligne */
+  transform: translateX(-50%); /* Déplacer la ligne vers la gauche de 50% de sa propre largeur pour la centrer */
+}
+
+

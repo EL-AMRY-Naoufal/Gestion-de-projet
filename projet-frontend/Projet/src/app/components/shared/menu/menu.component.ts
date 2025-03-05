@@ -88,6 +88,10 @@ export class MenuComponent {
     this.router.navigate(['/modules']);
   }
 
+
+  navigateToProblems(){
+    this.router.navigate(['/problems']);
+  }
   logout() {
     this.loginService.logout();
     this.router.navigate(['']);

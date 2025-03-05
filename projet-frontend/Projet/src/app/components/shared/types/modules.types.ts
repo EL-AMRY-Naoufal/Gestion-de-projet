@@ -35,7 +35,9 @@ export interface Groupe {
   heuresAffectees: number;
   totalHeuresDuGroupe: number;
   moduleId: number;
+  moduleNom?: string;
 }
+
 
 export interface Module {
   id?: number;
