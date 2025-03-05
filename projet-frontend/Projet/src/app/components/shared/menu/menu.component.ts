@@ -58,12 +58,20 @@ export class MenuComponent {
       this.years = years;
       this.selectedYearId = this._yearService.currentYearId ?? null;
     });
+    this.loadYears();
 
     this._yearService.selectedYear$.subscribe((year) => {
       this.selectedYear = year;
       this.selectedYearId = year?.id ?? null;
     });
   }
+
+  private loadYears(): void {
+    this._yearService.getAllYears().subscribe((data) => {
+      this.years = data.sort((a, b) => a.debut - b.debut);
+    });
+  }
+
   navigateToTeachers() {
     this.router.navigate(['/enseignants']);
   }
