@@ -114,4 +114,15 @@ export class EnseignantService {
         })
       );
   }
+
+  searchEnseignant(query: string): Observable<any[]> {
+    console.log(`Recherche des enseignants par query: ${query}`); // Affiche la query recherchée
+    return this.http
+      .get<any[]>(`${this._backendURL.allEnseignants}?q=${query}`)
+      .pipe(
+        tap((data) => {
+          console.log('Résultats de la recherche par query:', data); // Affiche les résultats de la recherche
+        })
+      );
+  }
 }

@@ -15,4 +15,6 @@ public interface UserService {
 
     User getUserByUsername(String username);
     List<User> findUsersByEnseignantNameAndFirstName(String name, String firstname);
+
+    List<User> searchUsers(String q);
 }
