@@ -1,6 +1,41 @@
-<ul>
-  Liste des modules/groupes avec des heures affectées inférieure aux heures totales du groupe
-  <li *ngFor="let group of groupeWithLowHours">
-    {{ group.nom }} - {{ group.heuresAffectees }} / {{ group.totalHeuresDuGroupe }} heures
-  </li>
-</ul>
+<h5>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h5>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Module</th>
+    <th>Groupe</th>
+    <th>Heures Affectées</th>
+    <th>Heures Totales</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let group of groupeWithLowHours">
+    <td>{{ group.moduleNom }}</td>
+    <td>{{ group.nom }}</td>
+    <td>{{ group.heuresAffectees }}</td>
+    <td>{{ group.totalHeuresDuGroupe }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<h5>Liste des enseignants avec des heures de service inférieures aux heures maximales</h5>
+<table class="table table-striped">
+  <thead class="thead-dark">
+  <tr>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Catégorie</th>
+    <th>Heure assignée</th>
+    <th>Max Heures Service</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let enseignant of enseignantsWithLowHours">
+    <td>{{ enseignant.name }}</td>
+    <td>{{ enseignant.firstname }}</td>
+    <td>{{ enseignant.categorieEnseignant }}</td>
+    <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
+    <td>{{ enseignant.maxHeuresService }}</td>
+  </tr>
+  </tbody>
+</table>
