@@ -40,11 +40,15 @@ export class GroupeService {
         return this.http.post<Groupe>(`${this._backendURL.groupes}`, groupe);
     }
 
-  getGroupeById(id: number): Observable<Groupe> {
-    return this.http.get<Groupe>(`${this._backendURL.groupes}/${id}`);
-  }
+    getGroupeById(id: number): Observable<Groupe> {
+        return this.http.get<Groupe>(`${this._backendURL.groupes}/${id}`);
+    }
 
     deleteGroupe(groupe: Groupe): Observable<Groupe> {
         return this.http.delete<Groupe>(`${this._backendURL.groupes}/${groupe.id}`);
+    }
+
+    isGroupe(obj: any): obj is Groupe {
+    return obj && typeof obj.moduleId === 'number';
     }
 }

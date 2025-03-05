@@ -53,6 +53,8 @@ export class ModulesComponent implements OnInit {
   groupes: Groupe[] = [];
   affectations: Affectation[] = [];
 
+  copiedContent: any = [];
+
 
   constructor(
     public dialog: MatDialog,
@@ -629,4 +631,29 @@ export class ModulesComponent implements OnInit {
     return 'normal-hours'; // Équilibré
   }
 
+  copyModuleChildren(moduleId: number |undefined): void {
+    if(moduleId != undefined) {
+      this.groupeService.getGroupesByModule(moduleId).subscribe(result => {
+        this.copiedContent = result; console.log(this.copiedContent);
+      });
+    }
+  }
+
+  pasteModuleChildren(moduleId: number | undefined): void {
+    //on vérifie que l'id du module existe et que la copie a été faite sur des groupes
+    if(moduleId != undefined && this.copiedContentIsGroupeArray()) {
+      let groupes : Groupe[] = this.copiedContent;
+      //pour chaque groupe copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      groupes.forEach((groupe) => {
+        groupe.id = undefined;
+        groupe.moduleId = moduleId;
+        this.groupeService.saveGroupe(groupe).subscribe((groupeSaved : Groupe) => this.addGroupe(groupeSaved));
+      })
+    }
+  }
+
+  copiedContentIsGroupeArray(): boolean {
+    return this.groupeService.isGroupe(this.copiedContent[0]);
+  }
 }

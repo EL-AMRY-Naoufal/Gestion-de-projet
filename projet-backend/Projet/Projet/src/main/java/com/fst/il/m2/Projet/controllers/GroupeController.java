@@ -47,21 +47,11 @@ public class GroupeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/module/{moduleId}")
-    public List<Groupe> getGroupesByModuleId(@PathVariable Long moduleId) {
+    public List<GroupeDto> getGroupesByModuleId(@PathVariable Long moduleId) {
         List<Groupe> groupes = groupeService.getGroupesByModule(Module.builder().id(moduleId).build());
-
-        //emptying "module" so the json is not too deep
-
-        groupes.forEach(g -> {
-            g.setModule(null);
-            g.getAffectations().forEach(a -> {
-                a.setGroupe(null);
-                a.getEnseignant().setAffectations(null);
-            });
-        });
-
-        return groupes;
+        return groupes.stream().map(GroupeMapper::toDto).toList();
     }
 
     // Delete a Groupe by ID
