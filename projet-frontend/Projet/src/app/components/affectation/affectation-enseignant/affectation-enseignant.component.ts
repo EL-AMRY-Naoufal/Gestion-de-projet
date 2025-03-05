@@ -64,6 +64,17 @@ export class AffectationListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.yearService.selectedYear$.subscribe((year) => {
+      console.log("selected year")
+      this.selectedYear = year;
+      if (this.enseignantId) {
+        this.loadAffectations();
+      }
+    });
+
+    console.log("selected year",this.selectedYear);
+
     if (this.dialog == false) {
       if (this.enseignantId) {
         this.loadData();
@@ -72,12 +83,6 @@ export class AffectationListComponent implements OnInit {
       }
     }
 
-    this.yearService.selectedYear$.subscribe((year) => {
-      this.selectedYear = year;
-      if (this.enseignantId) {
-        this.loadAffectations();
-      }
-    });
   }
 
   private loadData(): void {

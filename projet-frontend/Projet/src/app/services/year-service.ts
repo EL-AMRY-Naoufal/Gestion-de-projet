@@ -24,10 +24,16 @@ export class YearService {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
     if (this.isBrowser) {
-      this._currentYearId = parseInt(
-        localStorage.getItem('currentYearId') || ''
-      );
-      this.selectedYearSubject.next({ id: this._currentYearId, debut: 0 });
+      const storedYear = localStorage.getItem('currentYearId');
+
+      // Si aucune année n'est stockée, mettre 2024 par défaut
+      this._currentYearId = storedYear ? parseInt(storedYear) : 2024;
+
+      if (!storedYear) {
+        localStorage.setItem('currentYearId', this._currentYearId.toString());
+      }
+
+      this.selectedYearSubject.next({ id: this._currentYearId, debut: 2024 });
     }
   }
 
