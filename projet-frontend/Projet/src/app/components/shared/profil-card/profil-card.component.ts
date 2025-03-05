@@ -89,16 +89,18 @@ export class ProfilCardComponent {
     getCardClass(enseignant: EnseignantDto, selectedYearId: number | null): string {
       const heuresAssignees = this.getHeuresPourAnnee(enseignant, selectedYearId);
       const maxHeuresService = enseignant.maxHeuresService;
+      const decharge = enseignant.nbHeureCategorie;
 
-      if (heuresAssignees === 0) {
+      if (heuresAssignees + decharge === 0) {
         return 'orange-card';
-      } else if (heuresAssignees === maxHeuresService) {
+      } else if (heuresAssignees + decharge === maxHeuresService) {
         return 'green-card';
       } else {
-        const ratio = heuresAssignees / maxHeuresService;
+        const ratio = (heuresAssignees+decharge) / maxHeuresService;
         if (ratio < 0.5) return 'light-orange-card';
         if (ratio < 0.8) return 'yellow-card';
-        return 'light-green-card';
+        if (ratio == 1.0) return 'light-green-card';
+        return 'blue-card';
       }
     }
 
