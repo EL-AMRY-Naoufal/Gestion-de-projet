@@ -1,8 +1,6 @@
 <div class="main-content">
   <div *ngIf="affectations.length > 0; else noAffectations" class="container">
-
-
-    <h2 class="title" *ngIf="!dialog">Mes Affectations</h2>
+    <!-- <h2  >Les Affectations de  {{ username}}</h2> -->
     <table class="custom-table">
       <thead>
       <tr>
@@ -15,10 +13,17 @@
       </thead>
       <tbody>
       <tr *ngFor="let affectation of affectations">
-        <td>{{ affectation.nomModule }} / {{ affectation.nomGroupe }}</td>
+        <td>{{ nomModules[affectation.moduleId!] || 'Chargement...' }} / {{ nomGroupes[affectation.groupeId] || 'Chargement...' }}</td>
         <td>{{ affectation.heuresAssignees }}</td>
         <td>{{ affectation.dateAffectation }}</td>
-        <td>{{ affectation.coAffecte }}</td>
+        <td>
+          <div
+          class="custom-icon delete-icon"
+          (click)="loadCoAffectations(affectation.moduleId!); $event.preventDefault();"          title="affiche affectation"
+              >
+            🔍
+            </div>
+        </td>
         <td>
           <div class="commentaire-case">
             <ng-container *ngIf="editingId !== affectation.id; else editMode">
@@ -59,6 +64,28 @@
       </tr>
       </tbody>
     </table>
+    <div *ngIf="selectedModuleId !== null">
+      <h2> Co-Affectations pour le module {{ nomModules[selectedModuleId] }}</h2>
+      <table class="custom-table">
+        <thead>
+        <tr>
+          <th>Enseignant</th>
+          <th>Groupe</th>
+          <th>Heures Assignées</th>
+          <th>Date d'Affectation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let coAffectation of coAffectations[selectedModuleId]">
+          <td>{{ coAffectation.enseignantFirstName.charAt(0) + '. ' + coAffectation.enseignantName }}</td>
+          <td>{{ coAffectation.groupeName }}</td>
+          <td>{{ coAffectation.heuresAssignees }}</td>
+          <td>{{ coAffectation.dateAffectation }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
   <ng-template #noAffectations>
     <p class="no-affectations-message">Aucune affectation trouvée pour cet enseignant.</p>

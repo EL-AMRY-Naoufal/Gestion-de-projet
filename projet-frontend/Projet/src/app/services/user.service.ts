@@ -158,39 +158,12 @@ export class UserService {
     return this._http.get<any[]>(this._backendURL.allUsers);
   }
 
-  createAffectation(
-    EnseignantId: string,
-    idGroupe: string,
-    nombreHeure: string
-  ): Observable<any> {
-    return this._http
-      .post(
-        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${EnseignantId}/${idGroupe}/${nombreHeure}`,
-        null,
-        { responseType: 'text' }
-      )
-      .pipe(
-        map((response) => {
-          try {
-            return JSON.parse(response);
-          } catch (e) {
-            return response;
-          }
-        }),
-        catchError((error) => {
-          console.error("Erreur lors de la création de l'affectation :", error);
-          return throwError(() => new Error('Une erreur est survenue.'));
-        })
-      );
-  }
 
-  updateAffectation(
-    affectationId: number,
-    nombreHeure: number
-  ): Observable<any> {
+
+  updateAffectation(affectationId: number, nombreHeure: number, anneeId: number): Observable<any> {
     return this._http
       .put(
-        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}/${nombreHeure}`,
+        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}/${nombreHeure}/${anneeId}`,
         null,
         { responseType: 'text' }
       )
@@ -203,20 +176,15 @@ export class UserService {
           }
         }),
         catchError((error) => {
-          console.error(
-            "Erreur lors de la mise à jour de l'affectation :",
-            error
-          );
+          console.error("Erreur lors de la mise à jour de l'affectation :", error);
           return throwError(() => new Error('Une erreur est survenue.'));
         })
       );
   }
 
-  deleteAffectation(affectationId: number): Observable<string> {
+  deleteAffectation(affectationId: number, anneeId: number): Observable<string> {
     return this._http
-      .delete<string>(
-        `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allAffectation}/${affectationId}`
-      )
+      .delete<string>(`${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.affectations}/${affectationId}/${anneeId}`, )
       .pipe(map((response) => response));
   }
 
@@ -228,6 +196,12 @@ export class UserService {
     const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}?role=${role}&year=${year}`;
     console.log('role', url);
     return this._http.get<any[]>(url);
+  }
+
+  searchUsersByRole(role: string): Observable<User[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.justRole}?role=${role}`;
+
+    return this._http.get<User[]>(url);
   }
 
   getRoleByUserIdAndYear(userId: number, year: number) {

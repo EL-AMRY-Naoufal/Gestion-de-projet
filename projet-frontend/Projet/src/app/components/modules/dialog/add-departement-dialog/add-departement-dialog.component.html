@@ -1,11 +1,37 @@
-<div class="dialog">
-  <h3>Ajouter un nouveau département</h3>
-  <form (ngSubmit)="onAdd()">
-    <label for="nom">Nom:</label>
-    <input id="nom" [(ngModel)]="newDepartement.nom" name="nom" required>
-    <label for="responsableDeDepartement">Chef de département:</label>
-    <input id="responsableDeDepartement" [(ngModel)]="newDepartement.responsableDeDepartement" name="chef" required>
-    <button type="submit">Ajouter</button>
-    <button type="button" (click)="onCancel()">Annuler</button>
-  </form>
+<div class="global-header">
+  <h2 mat-dialog-title >Ajouter un nouveau département</h2>
+  <mat-dialog-content>
+    <form class="form-container">
+      <div class="flex-container">
+         <!-- Nom -->
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+          <mat-label>Nom du département</mat-label>
+          <input matInput id="nom" [(ngModel)]="newDepartement.nom" name="nom" required/>
+        </mat-form-field>
+
+
+      </div>
+
+      <div class="flex-container">
+         <!-- Sélection du chef de département -->
+         <!-- <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+          <mat-label>Nom responsable de departement</mat-label>
+          <input matInput id="responsableDeDepartement" [(ngModel)]="newDepartement.responsableDeDepartement" name="chef" required/>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+        <mat-label for="responsableDepartement">Chef de département</mat-label>
+        <mat-select id="responsableDepartement" [(ngModel)]="newDepartement.responsableDepartementId" name="chef" required>
+          <mat-option *ngFor="let responsable of users" [value]="responsable.id">
+            {{ responsable.firstname }}  {{ responsable.name }}
+          </mat-option>
+        </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button type="button" (click)="onCancel()">Annuler</button>
+    <button mat-button  type="button" (click)="onAdd()" class="btn-submit">Sauvegarder</button>
+  </mat-dialog-actions>
 </div>

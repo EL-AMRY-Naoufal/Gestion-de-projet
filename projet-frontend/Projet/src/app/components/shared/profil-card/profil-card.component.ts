@@ -6,9 +6,11 @@ import { MatIconModule } from '@angular/material/icon';  // Pour les icônes
 import { MatButtonModule } from '@angular/material/button';  // Pour les boutons
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../services/login.service';
-import { EnseignantDto } from '../types/enseignant.type';
+import { EnseignantDto, HeuresAssignees } from '../types/enseignant.type';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AffectationDialogComponent } from '../../affectation/affectation-dialog/affectation-dialog.component';
+import { Year } from '../types/year.type';
+import { concat } from 'rxjs';
 
 
 @Component({
@@ -31,10 +33,11 @@ export class ProfilCardComponent {
 
     // private property to store user value
     private _enseignant: EnseignantDto;
-    // private property to store delete$ value
-    private readonly _delete$: EventEmitter<EnseignantDto>;
     userRoles: string[] = [];
-    @Input() openDialog!: (teacher?: EnseignantDto)=> void;
+    @Input() openDialog!: (teacher?: EnseignantDto)=> void; // c'est quoi sa ????
+    @Input() isYearSelected!: boolean;
+    @Input() selectedYearId: number | null = null;
+
 
 
     /**
@@ -43,7 +46,6 @@ export class ProfilCardComponent {
     constructor(private loginService: LoginService,private _dialog: MatDialog,
     ) {
       this._enseignant = {} as EnseignantDto;
-      this._delete$ = new EventEmitter<EnseignantDto>();
       this.userRoles = this.loginService.userRoles;
 
     }
@@ -64,24 +66,14 @@ export class ProfilCardComponent {
       this._enseignant = enseignant;
     }
 
-    /**
-     * Returns private property _delete$
-     */
-    @Output('deleteProfil') get delete$(): EventEmitter<EnseignantDto> {
-      return this._delete$;
-    }
+
 
     /**
      * OnInit implementation
      */
     ngOnInit(): void {}
 
-    /**
-     * Function to emit event to delete current user
-     */
-    delete(enseignant: EnseignantDto): void {
-      this._delete$.emit(enseignant);
-    }
+
 
     showAffectations( enseignant: EnseignantDto) {
       console.log("affectation");
@@ -90,9 +82,41 @@ export class ProfilCardComponent {
        this._dialog.open(AffectationDialogComponent, {
         disableClose: true,
         panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
-        data: { user: enseignant.user } // Passer l'enseignant en tant que donnée
+        data: { enseignant: enseignant } // Passer l'enseignant en tant que donnée
       });
     }
+
+    getCardClass(enseignant: EnseignantDto, selectedYearId: number | null): string {
+      const heuresAssignees = this.getHeuresPourAnnee(enseignant, selectedYearId);
+      const maxHeuresService = enseignant.maxHeuresService;
+      const decharge = enseignant.nbHeureCategorie;
+
+      if (heuresAssignees + decharge === 0) {
+        return 'orange-card';
+      } else if (heuresAssignees + decharge === maxHeuresService) {
+        return 'green-card';
+      } else {
+        const ratio = (heuresAssignees+decharge) / maxHeuresService;
+        if (ratio < 0.5) return 'light-orange-card';
+        if (ratio < 0.8) return 'yellow-card';
+        if (ratio == 1.0) return 'light-green-card';
+        return 'blue-card';
+      }
+    }
+
+
+    getHeuresPourAnnee(enseignant: EnseignantDto, annee: number | null): number {
+      if (!enseignant || !enseignant.heuresAssignees) {
+        return 0;
+      }
+      const heures = (enseignant.heuresAssignees as unknown as Record<number, number>)[annee || 0];
+
+      if (!heures) {
+        return 0;
+      }
+      return heures;
+    }
+
 
 
 }

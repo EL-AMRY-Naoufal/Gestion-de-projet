@@ -42,6 +42,7 @@
   <div *ngSwitchCase="'card'" class="user-grid">
     <app-profil-card
       [enseignant]="enseignant"
+      [selectedYearId]="selectedYear?.id ?? null"
       [openDialog]="openDialog.bind(this)"
       *ngFor="let enseignant of enseignants"
     >

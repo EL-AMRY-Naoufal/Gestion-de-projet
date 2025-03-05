@@ -1,5 +1,6 @@
 package com.fst.il.m2.Projet.business;
 
+import com.fst.il.m2.Projet.exceptions.NotFoundException;
 import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
 import com.fst.il.m2.Projet.repositories.SemestreRepository;
@@ -13,6 +14,9 @@ public class SemestreServiceDefault implements SemestreService {
     @Autowired
     private SemestreRepository semestreRepository;
 
+    @Autowired
+    private ModuleService moduleService;
+
     @Override
     public List<Semestre> getAllSemestres() {
         return semestreRepository.findAll();
@@ -20,12 +24,17 @@ public class SemestreServiceDefault implements SemestreService {
 
     @Override
     public Semestre getSemestreById(Long id) {
-        return semestreRepository.findById(id).orElseThrow();
+        return semestreRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
     @Override
     public List<Semestre> getSemestresByNiveau(Niveau niveau) {
         return semestreRepository.findSemestresByNiveau(niveau);
+    }
+
+    @Override
+    public Boolean hasModules(Long id) {
+        return moduleService.getModulesBySemestre(getSemestreById(id)).isEmpty();
     }
 
     @Override

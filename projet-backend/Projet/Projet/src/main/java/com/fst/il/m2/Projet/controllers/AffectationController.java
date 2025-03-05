@@ -1,11 +1,18 @@
 package com.fst.il.m2.Projet.controllers;
 
-
 import com.fst.il.m2.Projet.business.AffectationService;
+import com.fst.il.m2.Projet.dto.AffectationDto;
+import com.fst.il.m2.Projet.dto.CoAffectationDTO;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.business.EnseignantService;
-import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
+import com.fst.il.m2.Projet.business.EnseignantService;
+import com.fst.il.m2.Projet.dto.CommentaireDto;
+import com.fst.il.m2.Projet.mapper.AffectationMapper;
 import com.fst.il.m2.Projet.models.Affectation;
+import com.fst.il.m2.Projet.models.Annee;
+import com.fst.il.m2.Projet.models.Enseignant;
+import com.fst.il.m2.Projet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +27,29 @@ import java.util.List;
 
 public class AffectationController {
 
-    @Autowired
-    private AffectationService affectationService;
-    @Autowired
-    private EnseignantService enseignantService;
+    private final AffectationService affectationService;
 
+    private final EnseignantService enseignantService;
+    private final UserRepository userRepository;
 
+    @Autowired
+    public AffectationController(AffectationService affectationService, EnseignantService enseignantService, UserRepository userRepository) {
+        this.affectationService = affectationService;
+        this.enseignantService = enseignantService;
+        this.userRepository = userRepository;
+    }
+
+    //get coaffectation by the module id
+    @GetMapping("/coAffectations/module/{moduleId}")
+    public ResponseEntity<List<CoAffectationDTO>> getCoAffectationsByModuleId(@PathVariable Long moduleId) {
+        List<CoAffectationDTO> affectations = affectationService.getCoAffectationsByModuleId(moduleId);
+        return new ResponseEntity<>(affectations, HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<AffectationDTO>> getAffectationsByEnseignantId(@PathVariable Long id) {
+    public ResponseEntity<List<AffectationDto>> getAffectationsByEnseignantId(@PathVariable Long id) {
 
-        List<AffectationDTO> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
+        List<AffectationDto> affectations = enseignantService.getAffectationsByEnseignantIdFormated(id);
 
         if (affectations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -39,38 +58,42 @@ public class AffectationController {
         return new ResponseEntity<>(affectations, HttpStatus.OK);
     }
 
-    // Affecter un enseignant à un module avec un nombre d'heures
-    @PostMapping("/{idEnseignant}/{idGroupe}/{heure}")
-    public ResponseEntity<Affectation> affecterEnseignant(
-            @PathVariable Long idEnseignant,
-            @PathVariable Long idGroupe,
-            @PathVariable int heure
-    ) {
-        Affectation affectation = affectationService.affecterModuleToEnseignant(idEnseignant, idGroupe, heure);
-        return ResponseEntity.ok(affectation);
+
+
+    @PostMapping("{annee}")
+    public ResponseEntity<AffectationDto> saveAffectation(@RequestBody AffectationDto affectationDto, @PathVariable Long annee) {
+        Affectation savedAffectation = affectationService.saveAffectation(AffectationMapper.toEntity(affectationDto), annee);
+        return new ResponseEntity<>(AffectationMapper.toDto(savedAffectation), HttpStatus.CREATED);
     }
 
     // Mettre à jour le nombre d'heures enseignées pour une affectation existante
-    @PutMapping("/{idAffectation}/{heure}")
+    @PutMapping("/{idAffectation}/{heure}/{annee}")
     public ResponseEntity<String> updateAffectation(
             @PathVariable Long idAffectation,
-            @PathVariable int heure
+            @PathVariable int heure,
+            @PathVariable Long annee
     ) {
-        affectationService.updateAffectationHours(idAffectation, heure);
+        affectationService.updateAffectationHours(idAffectation, heure, annee);
         return ResponseEntity.ok("Affectation mise à jour avec succès");
     }
 
     // Supprimer une affectation
-    @DeleteMapping("/{idAffectation}")
-    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation) {
-        affectationService.deleteAffectation(idAffectation);
+    @DeleteMapping("/{idAffectation}/{annee}")
+    public ResponseEntity<String> deleteAffectation(@PathVariable Long idAffectation, @PathVariable Long annee) {
+        affectationService.deleteAffectation(idAffectation, annee);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<AffectationDto>> getAllAffectations() {
+        List<Affectation> affectations = affectationService.getAllAffectations();
+        return new ResponseEntity<>(affectations.stream().map(AffectationMapper::toDto).toList(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/{idAffectation}/commentaire")
     public CommentaireDto updateCommentaireAffectation(@PathVariable Long idAffectation, @RequestBody CommentaireDto commentaireDto, @CurrentSecurityContext(expression = "authentication?.name") String username){
         enseignantService.updateCommentaireAffectation(idAffectation, username, commentaireDto.getCommentaire());
-        System.err.println(commentaireDto.getCommentaire());
         return CommentaireDto.builder().commentaire(commentaireDto.getCommentaire()).build();
     }
 

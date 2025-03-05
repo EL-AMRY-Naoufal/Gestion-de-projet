@@ -1,14 +1,9 @@
 <div class="global-header">
-
-  <h2 mat-dialog-title>Les Affectations de {{ user.firstname }} {{user.name}} </h2>
+   <h2 mat-dialog-title>Les Affectations de {{ enseignant.firstname }} {{enseignant.name}} </h2> 
   <section class="dialog-content">
-    <app-affectation-list [user]="user" [dialog]="true" (cancel)="cancel()"></app-affectation-list>
+    <app-affectation-list [enseignant]="enseignant" [dialog]="true" (cancel)="cancel()"></app-affectation-list>
   </section>
-
-
   <mat-dialog-actions align="end" class="dialog-actions">
     <button mat-button type="button" (click)="cancel()">Fermer</button>
   </mat-dialog-actions>
-
-
 </div>

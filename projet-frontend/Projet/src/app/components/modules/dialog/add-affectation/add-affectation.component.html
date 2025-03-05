@@ -1,49 +1,49 @@
-<div class="form-container">
-  <h2>Affecter un module à un enseignant</h2>
+<!-- <ng-template #formTemplate> -->
+  <div class="global-header">
+    <h2 mat-dialog-title >Créer une Affectation</h2>
 
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="enseignant">Enseignant :</label>
-      <select id="enseignant" [(ngModel)]="enseignantId" name="enseignant" required>
-        <option *ngFor="let enseignant of enseignants" [value]="enseignant.id">
-          {{ enseignant.firstname }} {{ enseignant.name }}
+    <mat-dialog-content>
+      <form class="form-container" >
 
-        </option>
-      </select>
-    </div>
+        <div class="flex-container">
+          <!-- Sélection de l'enseignant -->
+          <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+            <mat-label>Enseignant</mat-label>
+            <mat-select id="enseignant" [(ngModel)]="enseignantId" name="enseignant" required>
+              <mat-option *ngFor="let enseignant of enseignants" [value]="enseignant.id">
+                {{ enseignant.firstname }} {{ enseignant.name }}
+              </mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="form.get('enseignantId')?.invalid">L'enseignant est <strong>obligatoire</strong>.</mat-error> -->
+          </mat-form-field>
+        </div>
 
-    <div class="form-group">
-      <label for="module">Module :</label>
-      <select id="module" [(ngModel)]="moduleId" name="module" (change)="onModuleChange()" required>
-        <option *ngFor="let module of modules" [value]="module.id">
-          {{ module.nom }}
-        </option>
-      </select>
-    </div>
 
-    <div class="form-group">
-      <label for="groupe">Groupe :</label>
-      <select id="groupe" [(ngModel)]="groupeId" name="groupe" required>
-        <option *ngFor="let groupe of groupes" [value]="groupe.id">
-          {{ groupe.nom }}
-        </option>
-      </select>
-    </div>
+        <div class="flex-container">
+          <!-- Nombre d'heures assignées -->
+          <mat-form-field appearance="fill" class="full-width mgb20 form-field">
+            <mat-label>Nombre d'heures</mat-label>
+            <input matInput type="number"
+            id="heures"
+            [(ngModel)]="heuresAssignees"
+            name="heures"
+            min="1"
+            required/>
+            <!-- <mat-error *ngIf="form.get('heuresAssignees')?.hasError('required')">Le nombre d'heures est <strong>obligatoire</strong>.</mat-error>
+            <mat-error *ngIf="form.get('heuresAssignees')?.hasError('min')">Le nombre d'heures doit être supérieur à 0.</mat-error> -->
+          </mat-form-field>
+        </div>
+        <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
 
-    <div class="form-group">
-      <label for="heures">Heures assignées :</label>
-      <input
-        type="number"
-        id="heures"
-        [(ngModel)]="heuresAssignees"
-        name="heures"
-        min="1"
-        required
-      />
-    </div>
+      </form>
 
-    <button type="submit" class="btn-submit">Créer Affectation</button>
-  </form>
 
-  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-</div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="dialog-actions">
+      <button mat-button type="button" (click)="onCancel()">Annuler</button>
+      <button mat-button  type="button" (click)="onSubmit()" class="btn-submit">Sauvegarder</button>
+    </mat-dialog-actions>
+
+  </div>
+<!-- </ng-template> -->

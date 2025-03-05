@@ -4,6 +4,7 @@ import com.fst.il.m2.Projet.business.ResponsableDepartementService;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
+import com.fst.il.m2.Projet.models.ResponsableDepartement;
 import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
@@ -41,6 +42,12 @@ public class ResponsableDepartementController {
         User user = responsableDepartementService.getUserById(id);
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("{responsableId}")
+    public ResponseEntity<ResponsableDepartement> getResponsableDepartement(@PathVariable Long responsableId) {
+        ResponsableDepartement responsableDepartement = responsableDepartementService.getResponsableDepartementById(responsableId);
+        return ResponseEntity.ok(responsableDepartement);
+    }
     @GetMapping
     public ResponseEntity<List<UserRequest.UserDto>> getAllUsers() {
         List<UserRequest.UserDto> users = responsableDepartementService.getAllUsers().stream()
@@ -54,7 +61,7 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/users/by-role")
+    @GetMapping("/users/by-just-role")
     public List<User> getUsersByRole(@RequestParam Role role) {
         List<UserRole> userRoles = responsableDepartementService.getUsersByRole(role);
         return userRoles.stream()
@@ -76,6 +83,7 @@ public class ResponsableDepartementController {
         List<UserRole> userRolesByYear =   responsableDepartementService.getRolesByUserIdAndYear(userId, year);
         return ResponseEntity.ok(userRolesByYear);
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId(), userRequest.getYear());

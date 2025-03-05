@@ -158,7 +158,7 @@ export class UserFormComponent {
     }
 
     // Ajout de la logique pour surveiller les changements de 'nbHeureCategorie '
-    this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateNbHeureCategorie())
+    this._form.get('categorieEnseignant')?.valueChanges.subscribe(categorieEnseignant => this.updateMaxHeuresService())
 
     this.listenToNameAndFirstnameChanges();
   }
@@ -255,27 +255,27 @@ getEnseignantWithSameUserNameAndFirstName(){
   }
 
 
-private updateNbHeureCategorie(): void {
+private updateMaxHeuresService(): void {
   const categorie = this._form.get('categorieEnseignant')?.value;
 
-  let nbHeureCategorie = 192;
+  let maxHeuresService = 192;
 
   // Définir le nombre d'heures selon la catégorie
   switch (categorie) {
     case 'ENSEIGNANT_CHERCHEUR':
-      nbHeureCategorie = 192;
+      maxHeuresService = 192;
       break;
     case 'PRAG':
-      nbHeureCategorie = 384;
+      maxHeuresService = 384;
       break;
     case 'ATER':
-      nbHeureCategorie = 192;
+      maxHeuresService = 192;
       break;
     case 'DCCE':
-      nbHeureCategorie = 64;
+      maxHeuresService = 64;
       break;
     case 'VACATAIRE':
-      nbHeureCategorie = 32;
+      maxHeuresService = 32;
       break;
     default:
       console.warn(`Catégorie non reconnue : ${categorie}`);
@@ -283,7 +283,7 @@ private updateNbHeureCategorie(): void {
   }
 
   // Mettre à jour le champ 'nbHeureCategorie' avec la valeur correspondante
-  this._form.get('nbHeureCategorie')?.setValue(nbHeureCategorie, { emitEvent: false });
+  this._form.get('maxHeuresService')?.setValue(maxHeuresService, { emitEvent: false });
 }
 
 
@@ -377,8 +377,18 @@ submit(user: User): void {
         }
 
     this.enseignant.user = userToSend;
+
+    const heuresAssigneesMap: Record<number, number> = {};
+      this.enseignant.heuresAssignees.forEach(item => {
+        heuresAssigneesMap[item.annee] = item.heures;
+      });
+
+    const enseignantDtoToSend = {
+      ...this.enseignant,
+      heuresAssignees: heuresAssigneesMap,
+    } as any;
     // Appeler le service pour mettre à jour l'enseignant
-    this.enseignantService.updateEnseignant(this.enseignant).subscribe(
+    this.enseignantService.updateEnseignant(enseignantDtoToSend).subscribe(
       () => {
         console.log('Enseignant updated successfully');
       },
@@ -506,8 +516,8 @@ private _buildForm(): FormGroup {
     hasAccount: true,
     maxHeuresService: 192,
     categorieEnseignant: CategorieEnseignant.ATER,
-    heuresAssignees: 0,
-    nbHeureCategorie: 192
+    nbHeureCategorie: 0,
+    heuresAssignees: []
   };
 
   categoriesEnseignant = Object.values(CategorieEnseignant);

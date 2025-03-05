@@ -2,23 +2,18 @@ package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.EnseignantService;
 import com.fst.il.m2.Projet.business.UserService;
-import com.fst.il.m2.Projet.dto.AffectationDTO;
 import com.fst.il.m2.Projet.dto.CommentaireDto;
 import com.fst.il.m2.Projet.dto.EnseignantDto;
-import com.fst.il.m2.Projet.enumurators.CategorieEnseignant;
 import com.fst.il.m2.Projet.mapper.EnseignantMapper;
-import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -62,7 +57,7 @@ public class EnseignantController {
             return EnseignantMapper.enseignantToEnseignantDto(this.enseignantService.createEnseignant(
                     enseignant.getUser(),
                     enseignant.getMaxHeuresService(),
-                    enseignant.getHeuresAssignees(),
+                    0,
                     enseignant.getCategorieEnseignant(),
                     enseignant.getNbHeureCategorie(),
                     1L)
@@ -73,7 +68,7 @@ public class EnseignantController {
                     enseignant.getName(),
                     enseignant.getFirstname(),
                     enseignant.getMaxHeuresService(),
-                    enseignant.getHeuresAssignees(),
+                    0,
                     enseignant.getCategorieEnseignant(),
                     enseignant.getNbHeureCategorie()
             ));
@@ -102,7 +97,7 @@ public class EnseignantController {
                         this.enseignantService.createEnseignant(
                                 enseignant.getUser(),
                                 enseignant.getMaxHeuresService(),
-                                enseignant.getHeuresAssignees(),
+                                0,
                                 enseignant.getCategorieEnseignant(),
                                 enseignant.getNbHeureCategorie(),
                                 1L

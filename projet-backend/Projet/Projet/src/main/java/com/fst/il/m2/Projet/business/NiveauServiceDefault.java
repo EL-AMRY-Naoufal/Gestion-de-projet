@@ -14,6 +14,9 @@ public class NiveauServiceDefault implements NiveauService {
     @Autowired
     private NiveauRepository niveauRepository;
 
+    @Autowired
+    private SemestreService semestreService;
+
     @Override
     public Niveau saveNiveau(Niveau niveau) {
         return niveauRepository.save(niveau);
@@ -32,6 +35,11 @@ public class NiveauServiceDefault implements NiveauService {
     @Override
     public List<Niveau> getNiveauxByFormation(Formation formation) {
         return niveauRepository.findNiveauxByFormation(formation);
+    }
+
+    @Override
+    public Boolean hasSemestres(Long id) {
+        return !semestreService.getSemestresByNiveau(getNiveauById(id)).isEmpty();
     }
 
     @Override

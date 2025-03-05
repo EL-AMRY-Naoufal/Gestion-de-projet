@@ -1,22 +1,42 @@
-import { Component } from '@angular/core';
-import { FormsModule } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
-import { NgForOf } from "@angular/common";
+import { Component, ViewEncapsulation } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { CommonModule, NgForOf, NgIf } from "@angular/common";
 import { TypeHeure, Module, Groupe } from '../../../shared/types/modules.types';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-modules-dialog',
   standalone: true,
   imports: [
-    FormsModule,
-    NgForOf
+  FormsModule,
+     NgForOf,
+     NgIf,
+     CommonModule,
+     FormsModule,
+     MatIconModule,
+     MatFormFieldModule,
+     MatInputModule,
+     MatSelectModule,
+     MatOptionModule,
+     MatCheckboxModule,
+     ReactiveFormsModule,
+     MatDialogModule,
   ],
   templateUrl: './add-modules-dialog.component.html',
-  styleUrl: './add-modules-dialog.component.scss'
+  styleUrl: './add-modules-dialog.component.scss',
+  encapsulation: ViewEncapsulation.None,
+
 })
 export class AddModulesDialogComponent {
 
-  newModule: Module = { nom: '', groupes: [], heuresParType: new Map<string, number>() , nombreGroupes: 0 };
+  //Utilisation d'un objet non typé à cause de la création des groupes (absents du type "Module")
+  newModule: any = { nom: '', heuresParType: new Map<string, number>(), groupes: []};
   types = Object.values(TypeHeure);
 
   heuresList = this.types.map(type => ({ type, heures: 0, groupes: 0 }));
@@ -35,7 +55,7 @@ export class AddModulesDialogComponent {
           type: entry.type,
           heuresAffectees: 0,
           totalHeuresDuGroupe: entry.heures,
-          affectations: []
+          moduleId: -1
         };
         console.log(newGroupe);
         this.newModule.groupes.push(newGroupe);
