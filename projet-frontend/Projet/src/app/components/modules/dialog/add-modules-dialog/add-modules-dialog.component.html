@@ -16,10 +16,12 @@
         <h3 mat-dialog-title>Types d'heures :</h3>
 
         <div *ngFor="let type of heuresList; let i = index" class="type-container">
-          <fieldset class="type-fieldset">
-            <legend>{{ type.type }} :</legend>
+
+
+
 
             <div class="flex-container">
+              <mat-label>{{ type.type }} :</mat-label>
               <!-- Champ Heures -->
               <mat-form-field appearance="fill" class="full-width mgb20">
                 <mat-label>Heures</mat-label>
@@ -33,7 +35,7 @@
               </mat-form-field>
             </div>
 
-          </fieldset>
+      
         </div>
       </div>
 
