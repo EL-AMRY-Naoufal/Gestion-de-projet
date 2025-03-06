@@ -8,8 +8,17 @@ FROM base AS dev
 # Commande pour exécuter l'application Spring Boot
 CMD sed -i 's/\r$//' ./mvnw && ./mvnw spring-boot:run
 
-FROM base AS prod
+FROM base AS build
 
-# TODO: Compiler le jar et le mettre dans l'image au lieu de re compiler à chaque fois
+# Copie des sources et compilation du JAR
 COPY . .
-CMD sed -i 's/\r$//' ./mvnw && ./mvnw spring-boot:run
+RUN sed -i 's/\r$//' ./mvnw && ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-focal AS prod
+
+WORKDIR /app
+# Copie uniquement le JAR compilé depuis l'étape de build
+COPY --from=build /app/target/*.jar app.jar
+
+# Lancement du JAR au démarrage du conteneur
+ENTRYPOINT ["java", "-jar", "app.jar"]
