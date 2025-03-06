@@ -1,4 +1,21 @@
-<div class="main-content" *ngIf="!problem; else noProblem">
+
+<div class="main-content">
+
+  <!-- Sélecteur pour choisir la liste à afficher -->
+  <div class="list-selector">
+    <div class="list-options">
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'enseignants'"
+        (click)="selectedList = 'enseignants'"
+      >
+        Liste des enseignants
+      </div>
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'modules'"
+        (click)="selectedList = 'modules'"
+      >
   <h2>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h2>
   <table class="custom-table">
     <thead>
@@ -20,8 +37,12 @@
       </tr>
     </tbody>
   </table>
+  </div>
+</div>
 
+  <div *ngIf="selectedList === 'enseignants'">
   <h2>Liste des enseignants avec des heures de service inférieures aux heures maximales</h2>
+  <div *ngIf="enseignantsWithLowHours.length > 0 ; else noProblemes">
   <table class="custom-table">
     <thead>
       <tr>
@@ -55,8 +76,11 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <h2>Liste des enseignants avec des heures de service supérieures aux heures maximales</h2>
+  <div *ngIf="enseignantsWithHighHours.length > 0 ; else noProblemes">
+
   <table class="custom-table">
     <thead>
       <tr>
@@ -90,10 +114,11 @@
       </tr>
     </tbody>
   </table>
+  </div>
+  </div>
 </div>
 
 <!-- Si `problem` est false, afficher un message -->
-<ng-template #noProblem>
+<ng-template #noProblemes>
     <p class="no-affectations-message">Aucun problème détecté </p>
-    <p class="no-affectations-message">Toutes les heures sont correctement attribuées.</p>
 </ng-template>
