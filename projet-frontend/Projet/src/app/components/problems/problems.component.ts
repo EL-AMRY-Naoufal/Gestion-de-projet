@@ -76,11 +76,21 @@ export class ProblemsComponent {
      // console.log("Enseignants :", enseignants);
       this.enseignantsWithLowHours = enseignants.filter(enseignant =>
         this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) + enseignant.nbHeureCategorie < enseignant.maxHeuresService
+      ).sort((b, a) =>
+        (a.maxHeuresService - this.getHeuresPourAnnee(a, this.anneeSelectionnee) - a.nbHeureCategorie) -
+        (b.maxHeuresService - this.getHeuresPourAnnee(b, this.anneeSelectionnee) - b.nbHeureCategorie)
       );
 
-      this.enseignantsWithHighHours = enseignants.filter(enseignant =>
+      this.enseignantsWithHighHours = enseignants
+      .filter(enseignant =>
         this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) + enseignant.nbHeureCategorie > enseignant.maxHeuresService
+      )
+      .sort((a, b) =>
+        (a.maxHeuresService - this.getHeuresPourAnnee(a, this.anneeSelectionnee) - a.nbHeureCategorie) -
+        (b.maxHeuresService - this.getHeuresPourAnnee(b, this.anneeSelectionnee) - b.nbHeureCategorie)
       );
+
+
     });
   }
 
