@@ -7,6 +7,7 @@
         <th>Groupe</th>
         <th>Heures Affectées</th>
         <th>Heures Totales</th>
+        <th>Différence</th>
       </tr>
     </thead>
     <tbody>
@@ -15,6 +16,7 @@
         <td>{{ group.nom }}</td>
         <td>{{ group.heuresAffectees }}</td>
         <td>{{ group.totalHeuresDuGroupe }}</td>
+        <td>{{ group.totalHeuresDuGroupe - group.heuresAffectees }}</td>
       </tr>
     </tbody>
   </table>
@@ -30,6 +32,7 @@
         <th>Heure assignée</th>
         <th>Max Heures Service</th>
         <th>Heures Décharge</th>
+        <th>Différence</th>
       </tr>
     </thead>
     <tbody>
@@ -47,6 +50,7 @@
         <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
         <td>{{ enseignant.maxHeuresService }}</td>
         <td>{{ enseignant.nbHeureCategorie }}</td>
+        <td>{{ enseignant.maxHeuresService - this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee)  - enseignant.nbHeureCategorie}}</td>
 
       </tr>
     </tbody>
@@ -63,6 +67,7 @@
         <th>Heure assignée</th>
         <th>Heures Service</th>
         <th>Heures Décharge</th>
+        <th>Différence</th>
       </tr>
     </thead>
     <tbody>
@@ -80,6 +85,8 @@
         <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
         <td>{{ enseignant.maxHeuresService }}</td>
         <td>{{ enseignant.nbHeureCategorie }}</td>
+        <td>{{ -(enseignant.maxHeuresService - this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee)  - enseignant.nbHeureCategorie)}}</td>
+
       </tr>
     </tbody>
   </table>
