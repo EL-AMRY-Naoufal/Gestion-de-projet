@@ -2,7 +2,9 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../environments/environment.prod";
 import {Observable} from "rxjs";
-import { Module } from "../components/shared/types/modules.types";
+import { Groupe, Module } from "../components/shared/types/modules.types";
+import { GroupeService } from "./groupe.service";
+import { ModulesComponent } from "../components/modules/modules.component";
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +44,13 @@ export class ModuleService {
 
   deleteModule(module: Module): Observable<Module> {
     return this.http.delete<Module>(`${this._backendURL.modules}/${module.id}`);
-}
+  }
+
+  getModulesBySemestre(semestreId: number): Observable<Module[]> {
+    return this.http.get<Module[]>(`${this._backendURL.modules}/semestre/${semestreId}`);
+  }
+
+  isModule(obj: any): obj is Module {
+    return obj && typeof obj.semestreId === 'number';
+  }
 }

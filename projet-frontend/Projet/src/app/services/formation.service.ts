@@ -38,5 +38,9 @@ export class FormationService {
 
     deleteFormation(formation: Formation): Observable<Formation> {
         return this.http.delete<Formation>(`${this._backendURL.formations}/${formation.id}`);
-      }
+    }
+
+    isFormation(obj: any): obj is Formation {
+        return obj && typeof obj.departementId === 'number';
+    }
 }

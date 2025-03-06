@@ -43,4 +43,8 @@ export class NiveauService {
     deleteNiveau(niveau: Niveau): Observable<Niveau> {
         return this.http.delete<Niveau>(`${this._backendURL.niveaux}/${niveau.id}`);
     }
+
+    isNiveau(obj: any): obj is Niveau {
+        return obj && typeof obj.formationId === 'number';
+    }
 }
