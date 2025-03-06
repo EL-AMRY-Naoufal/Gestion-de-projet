@@ -135,34 +135,44 @@ export class AffectationListComponent implements OnInit {
       );
   }*/
   private loadAffectations(): void {
-    this.enseignantService
-      .getAffectationsByEnseignantId(this.enseignantId)
+    this.enseignantService.getAffectationsByEnseignantId(this.enseignantId)
       .subscribe(
         (data) => {
-          // Filter affectations based on selectedYear.debut
           this.affectations = data.filter((affectation: Affectation) => {
-            const affectationYear = new Date(
-              affectation.dateAffectation
-            ).getFullYear();
+            const affectationYear = new Date(affectation.dateAffectation).getFullYear();
             return affectationYear === this.selectedYear?.debut;
           });
+
           console.log('Filtered Affectations:', this.affectations);
 
-          // Load module and group names after filtering affectations
-          this.affectations.forEach((affectation) => {
-            this.loadModuleName(affectation.moduleId || -1);
+          // Charger les noms des modules et groupes
+          let modulesLoaded = 0;
+          this.affectations.forEach((affectation, index) => {
+            this.loadModuleName(affectation.moduleId || -1, () => {
+              modulesLoaded++;
+              // Lorsque tous les modules sont chargés, trier les affectations
+              if (modulesLoaded === this.affectations.length) {
+                this.sortAffectationsByModule();
+              }
+            });
             this.loadGroupName(affectation.groupeId);
           });
         },
         (error) => {
-          console.error(
-            'Erreur lors de la récupération des affectations',
-            error
-          );
+          console.error('Erreur lors de la récupération des affectations', error);
         }
       );
   }
-
+  private sortAffectationsByModule(): void {
+    this.affectations.sort((a, b) => {
+      // @ts-ignore
+      const nomA = this.nomModules[a.moduleId] || '';
+      // @ts-ignore
+      const nomB = this.nomModules[b.moduleId] || '';
+      return nomA.localeCompare(nomB);
+    });
+    console.log('Affectations triées par module:', this.affectations);
+  }
   loadCoAffectations(moduleId: number): void {
     if (!this.coAffectations[moduleId]) {
       this.affectationsService.getCoAffectationsByModule(moduleId).subscribe(
@@ -192,12 +202,14 @@ export class AffectationListComponent implements OnInit {
     }
   }
 
-  private loadModuleName(moduleId: number): void {
+  private loadModuleName(moduleId: number, callback?: () => void): void {
     if (!this.nomModules[moduleId]) {
-      // Éviter de charger plusieurs fois le même module
       this.moduleService.getModuleById(moduleId).subscribe((module) => {
         this.nomModules[moduleId] = module.nom;
+        if (callback) callback();
       });
+    } else if (callback) {
+      callback();
     }
   }
 
