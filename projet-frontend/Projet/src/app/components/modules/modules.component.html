@@ -76,9 +76,10 @@
                                   <!-- <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button> -->
                                   <!-- <button (click)="removeSemestre(i, j, k, l, n)">🗑️</button> -->
                                   <div class="action-icons">
-
-                                  <div class="custom-icon plus-button" (click)="openAddModuleDialog(semestre.id)" title="Show more">➕</div>
-                                  <div class="custom-icon delete-icon" (click)="removeSemestre(semestre)" title="Delete user">🗑️</div>
+                                    <div class="custom-icon" (click)="pasteSemestreChildren(semestre.id)" title="Show more" *ngIf="copiedContentIsModuleArray()">📄</div>
+                                    <div class="custom-icon" (click)="copySemestreChildren(semestre.id)" title="Show more" *ngIf="getModulesBySemestre(semestre.id).length > 0">📑</div>
+                                    <div class="custom-icon plus-button" (click)="openAddModuleDialog(semestre.id)" title="Show more">➕</div>
+                                    <div class="custom-icon delete-icon" (click)="removeSemestre(semestre)" title="Delete user">🗑️</div>
                                   </div>
                                 </summary>
                                 <ul>
@@ -89,8 +90,8 @@
                                         <!-- <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button> -->
                                         <!-- <button (click)="removeModule(i, j, k, l, n, o)">🗑️</button> -->
                                         <div class="action-icons">
-                                          <div class="custom-icon " (click)="pasteModuleChildren(module.id)" title="Show more" *ngIf="copiedContentIsGroupeArray()">📄</div>
-                                          <div class="custom-icon " (click)="copyModuleChildren(module.id)" title="Show more" *ngIf="getGroupesByModule(module.id).length > 0">📑</div>
+                                          <div class="custom-icon" (click)="pasteModuleChildren([],module.id)" title="Show more" *ngIf="copiedContentIsGroupeArray()">📄</div>
+                                          <div class="custom-icon" (click)="copyModuleChildren(module.id)" title="Show more" *ngIf="getGroupesByModule(module.id).length > 0">📑</div>
                                           <div class="custom-icon plus-button" (click)="openAddGroupeDialog(module.id)" title="Show more">➕</div>
                                           <div class="custom-icon delete-icon" (click)="removeModule(module)" title="Delete user">🗑️</div>
                                         </div>
