@@ -18,6 +18,7 @@ import { ModuleService } from '../../../services/module.service';
 import { AffectationService } from '../../../services/affectation.service';
 import { Year } from '../../shared/types/year.type';
 import { YearService } from '../../../services/year-service';
+import { AnneeService } from '../../../services/annee.service';
 
 @Component({
   selector: 'app-affectation-list',
@@ -60,20 +61,18 @@ export class AffectationListComponent implements OnInit {
     private groupeService: GroupeService,
     private moduleService: ModuleService,
     private _api: ApiService,
-    private yearService: YearService
+    private yearService: YearService,
+    private anneeService: AnneeService
   ) {}
 
   ngOnInit(): void {
-
     this.yearService.selectedYear$.subscribe((year) => {
-      console.log("selected year")
       this.selectedYear = year;
+      console.log("selected year", this.selectedYear);
       if (this.enseignantId) {
         this.loadAffectations();
       }
     });
-
-    console.log("selected year",this.selectedYear);
 
     if (this.dialog == false) {
       if (this.enseignantId) {
