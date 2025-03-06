@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planner-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: planner
+  template:
+    metadata:
+      labels:
+        app: planner
+    spec:
+      containers:
+        - name: planner
+          image: theofaedo/eduplanner_repository:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
