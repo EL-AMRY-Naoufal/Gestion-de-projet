@@ -47,4 +47,8 @@ export class SemestreService {
     deleteSemestre(semestre: Semestre): Observable<Semestre> {
         return this.http.delete<Semestre>(`${this._backendURL.semestres}/${semestre.id}`);
     }
+
+    isSemestre(obj: any): obj is Semestre {
+        return obj && typeof obj.niveauId === 'number';
+    }
 }
