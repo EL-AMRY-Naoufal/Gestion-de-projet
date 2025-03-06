@@ -28,7 +28,8 @@ export class ProblemsComponent {
   enseignantsWithLowHours: EnseignantDto[] = [];
   enseignantsWithHighHours: EnseignantDto[] = [];
   anneeSelectionnee: number = -1;
-  problem = false;
+  selectedList: string = 'enseignants';
+
 
   constructor(
     public groupeService: GroupeService,
@@ -41,12 +42,8 @@ export class ProblemsComponent {
     this.anneeSelectionnee = this.anneeService.getSelectedYearId() ?? -1
     this.loadGroupeWithsLowHours();
     this.loadEnseignantsWithLowHours();
-    this.testProbleme();
 
-  }
 
-  testProbleme() {
-    this.problem = this.groupeWithLowHours.length > 0 || this.enseignantsWithLowHours.length > 0;
   }
 
 
