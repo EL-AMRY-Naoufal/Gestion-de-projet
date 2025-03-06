@@ -29,4 +29,9 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, Long>, J
     //List<Enseignant> findEnseignantByFirstnameOrLastname(String name, String firstname);
     Optional <Enseignant> findByName(String name);
     Optional<Enseignant> findByFirstname(String firstname);
+
+    @Query("SELECT u FROM Enseignant u WHERE  " +
+            "LOWER(u.firstname) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
+            "OR LOWER(u.name) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
+    List<Enseignant> searchEnseignant(@Param("searchTerm") String searchTerm);
 }

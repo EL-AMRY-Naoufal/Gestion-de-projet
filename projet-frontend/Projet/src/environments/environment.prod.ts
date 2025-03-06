@@ -11,7 +11,7 @@ export const environment = {
       allEnseignants: '/api/enseignants',
       authenticate: '/api/users/authenticate',
       categories: '/api/categories',
-      role : '/api/responsableDepartement/role',
+      role : '/api/responsableDepartement/users/by-role-and-year',
       modules : '/api/modules',
       annees : '/api/annees',
       departements : '/api/departements',
@@ -24,7 +24,8 @@ export const environment = {
       allAffectation: '/api/affectations',
       allCoAffectations: '/api/affectations/coAffectations',
       logout: '/api/users/user/logout',
-      me: '/api/users/user/me'
+      me: '/api/users/user/me',
+      rolesAndYears: '/api/users/user/roles-and-years',
     },
   },
 };

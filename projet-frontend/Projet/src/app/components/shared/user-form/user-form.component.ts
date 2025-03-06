@@ -377,8 +377,18 @@ submit(user: User): void {
         }
 
     this.enseignant.user = userToSend;
+
+    const heuresAssigneesMap: Record<number, number> = {};
+      this.enseignant.heuresAssignees.forEach(item => {
+        heuresAssigneesMap[item.annee] = item.heures;
+      });
+
+    const enseignantDtoToSend = {
+      ...this.enseignant,
+      heuresAssignees: heuresAssigneesMap,
+    } as any;
     // Appeler le service pour mettre à jour l'enseignant
-    this.enseignantService.updateEnseignant(this.enseignant).subscribe(
+    this.enseignantService.updateEnseignant(enseignantDtoToSend).subscribe(
       () => {
         console.log('Enseignant updated successfully');
       },

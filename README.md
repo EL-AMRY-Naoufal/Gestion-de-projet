@@ -1,4 +1,26 @@
-# Gestion de projet
+# Gestion de projet : EduPlanner
+
+## Présentation
+
+EduPlanner est une application destinée à la gestion des affectations horraires d'enseignants. Elle propose divers fonctionnalités dans ce but.
+
+### Fonctionnalités 
+
+- S'authentifier / Se déconnecter;
+- Gérer les comptes (Consulter, Créer, Modifier les comptes et les enseignants);
+- Gérer les modules (Consulter, Créer, Modifier l'arborescence);
+- Gérer les affectation des enseignants (Consulter, Créer, Modifier les affectations des enseignants aux modules).
+
+## Technologoies utilisées
+
+- Angular (frontend)
+- Java Spring Boot (backend)
+- Postgres (base de données)
+- Docker (Conteneurisation)
+
+## Déploiement en production
+
+À venir
 
 ## Installation de l'environnement de dev
 
@@ -6,10 +28,7 @@
 
 On utilisera docker pour assurer la compatibilité entre tous les environnements de développement.
 
-Il est recommandé d'installer [Docker Desktop](https://docs.docker.com/desktop/) pour plus de facilités.
-
 - [Docker v27+](https://docs.docker.com/get-started/get-docker/) 
-- [Docker-Compose v2.29+](https://docs.docker.com/compose/install/)
 
 ### Configuration de la base de données
 
@@ -27,10 +46,10 @@ L'application est divisée en 3 conteneurs :
 Ces conteneurs sont gérés par docker-compose via le fichier *docker-compose.yaml* qui contient donc la configuration pour chaque conteneur. Rendez-vous donc dans le répertoire racine du projet.
 
 
-Si vous souhaitez lancer tout le projet, utilisez simplement la commande suivante :
+Si vous souhaitez lancer tout le projet, utilisez simplement la commande suivante (--watch pour l'actualisation en direct du frontend) :
 
 ```bash
-docker compose up
+docker compose up --watch
 ```
 
 Si vous ne souhaitez lancer que le back-end (base de données incluse), exécutez la commande :
@@ -38,7 +57,7 @@ Si vous ne souhaitez lancer que le back-end (base de données incluse), exécute
 Cette commande lance la compilation du backend et exécute la base de données.
 
 ```bash
-docker compose up db backend
+docker compose up backend
 ```
 
 Et si vous ne souhaitez lancer que le front-end exécuter la commande :
@@ -46,7 +65,7 @@ Et si vous ne souhaitez lancer que le front-end exécuter la commande :
 Cette commande exécute *npm install* puis *ng serve*.
 
 ```bash
-docker compose up frontend
+docker compose up frontend --watch
 ```
 
 Pour démonter tous les conteneurs utilisez la commande :
@@ -55,12 +74,17 @@ Pour démonter tous les conteneurs utilisez la commande :
 docker compose down
 ```
 
-Si vous avez un problème d'actualisation des données, vous pouvez tenter la commande c-dessous pour rebuild tous les containers.
+Si vous avez un problème d'actualisation des données (ce qui peut arriver dans certains cas comme l'ajout de dépendances, etc...), vous pouvez tenter la commande ci-dessous pour rebuild tous les containers.
 
 ```bash
 docker compose build
 ```
 
+Ou si vous voulez être sûr que les conteneurs soient rebuild à chaque fois (un peu long à relancer à chaque fois)
+
+```bash
+docker compose up --build
+```
 
 Il est recommandé d'utiliser les éditeurs et IDE qui permettent de gérer facilement la contenerisation. Voici quelques articles d'aide à propos de Visual Studio Code et IntelliJ :
 
@@ -69,7 +93,7 @@ Il est recommandé d'utiliser les éditeurs et IDE qui permettent de gérer faci
 
 #### Testing
 
-Comming soon
+Pour le testing vous pouvez simplement les lancer en local sur votre machine (pas de CI pour l'instant) via votre IDE par exemple.
 
 ### Backend (API)
 

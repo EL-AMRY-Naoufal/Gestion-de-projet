@@ -1,6 +1,8 @@
 package com.fst.il.m2.Projet.controllers;
 
 import com.fst.il.m2.Projet.business.ResponsableDepartementService;
+import com.fst.il.m2.Projet.business.UserService;
+import com.fst.il.m2.Projet.business.UserServiceDefault;
 import com.fst.il.m2.Projet.dto.UserRequest;
 import com.fst.il.m2.Projet.enumurators.Role;
 import com.fst.il.m2.Projet.mapper.UserMapper;
@@ -23,6 +25,9 @@ public class ResponsableDepartementController {
 
     @Autowired
     private ResponsableDepartementService responsableDepartementService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     public ResponseEntity<UserRequest.UserDto> createUser(@RequestBody UserRequest userRequest) {
@@ -49,17 +54,23 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(responsableDepartement);
     }
     @GetMapping
-    public ResponseEntity<List<UserRequest.UserDto>> getAllUsers() {
+    public ResponseEntity<List<UserRequest.UserDto>> getAllUsers(@RequestParam(required = false) String q) {
+        if(q != null){
+            List<UserRequest.UserDto> users = userService.searchUsers(q).stream()
+                    .map(UserMapper::userToUserDto)
+                    .toList();
+            return ResponseEntity.ok(users);
+        }
         List<UserRequest.UserDto> users = responsableDepartementService.getAllUsers().stream()
                 .map(UserMapper::userToUserDto)
                 .toList();
         return ResponseEntity.ok(users);
     }
-    @GetMapping("/{username}")
+    /*@GetMapping("/{username}")
     public ResponseEntity<List<User>> getAllUserByUsername(@PathVariable String username) {
         List<User> users = responsableDepartementService.getUsersByUsername(username);
         return ResponseEntity.ok(users);
-    }
+    }*/
 
     @GetMapping("/users/by-just-role")
     public List<User> getUsersByRole(@RequestParam Role role) {
@@ -70,12 +81,9 @@ public class ResponsableDepartementController {
     }
 
     @GetMapping("/users/by-role-and-year")
-    public List<User> getUsersByRoleAndYear(@RequestParam Role role, @RequestParam Long year) {
-        List<UserRole> userRoles = responsableDepartementService.getUsersByRoleAndYear(role, year);
-        System.out.println(userRoles.stream().map(UserRole::getId).toList());
-        System.out.println(userRoles.stream().map(UserRole::getYear).toList());
-        System.out.println(userRoles.stream().map(UserRole::getRole).toList());
-        return userRoles.stream().map(UserRole::getUser).toList();
+    public List<User> getUsersByRoleAndYear(@RequestParam Role role, @RequestParam Long year, @RequestParam(required = false) String q) {
+        String query = q == null ? "" : q;
+        return responsableDepartementService.getUsersByRoleAndYear(query, role, year);
     }
 
     @GetMapping("/user/{userId}/year/{year}")
@@ -95,9 +103,4 @@ public class ResponsableDepartementController {
         responsableDepartementService.deleteUser(id, userRequest.getResponsableId());
         return ResponseEntity.noContent().build();
     }
-
-
-
-
-
 }

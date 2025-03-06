@@ -105,16 +105,26 @@ mat-select {
   border-radius: 8px;
 }
 
-/* Conteneur pour aligner les champs côte à côte */
 .flex-container {
   display: flex;
-  gap: 15px;
+  gap: 15px; /* Espacement entre les éléments */
+  align-items: center; /* Alignement vertical */
 }
 
-/* Chaque champ prend 50% de la largeur */
-.flex-container mat-form-field {
-  flex: 2;
+/* Style spécifique pour le label */
+.flex-container mat-label {
+  flex: 0.5; /* Prend moins d’espace */
+  font-size: 1em; /* Réduit légèrement la taille du texte */
+  text-align: right; /* Aligner le texte à droite */
+  min-width: 50px; /* Pour éviter que ça devienne trop petit */
 }
+
+/* Chaque champ de formulaire prend plus de place */
+.flex-container mat-form-field {
+  flex: 1.5; /* Les champs prennent plus d’espace */
+  min-width: 100px;
+}
+
 
 @media (max-width: 768px) {
   .mat-form-field.full-width {

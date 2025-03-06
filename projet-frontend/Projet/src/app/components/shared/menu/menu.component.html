@@ -1,13 +1,19 @@
 <nav class="navbar">
   <!-- Logo à gauche -->
   <div class="navbar-logo">
-    <a  class="navbar-link">
+    <a class="navbar-link">
       <img src="/assets/images/logo.png" alt="Logo" class="logo" />
     </a>
   </div>
 
   <!-- Liens au milieu -->
   <div class="navbar-center">
+    <a
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="navigateToProblems()"
+      class="navbar-link"
+    >Problèmes</a
+    >
     <a
       *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
       class="menu-item vert"
@@ -31,13 +37,14 @@
       class="navbar-link"
       >Affectations</a
     >
+
     <div class="year">
       <select
         id="year"
         [(ngModel)]="selectedYearId"
         (change)="onYearSelected()"
       >
-        <option value="null" disabled selected>Choisissez une année</option>
+        <option value="null" disabled selected>Sélectionner une année</option>
         <option *ngFor="let year of years" [value]="year.id">
           {{ year.debut }}
         </option>
