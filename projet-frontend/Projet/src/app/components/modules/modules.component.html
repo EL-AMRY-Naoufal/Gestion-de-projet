@@ -36,9 +36,10 @@
                 <!-- <button (click)="openAddFormationDialog(i, j)">+</button> -->
                 <!-- <button (click)="removeDepartement(i, j)">🗑️</button> -->
                 <div class="action-icons">
-
-                <div class="custom-icon plus-button" (click)="openAddFormationDialog(departement.id)" title="Show more">➕</div>
-                <div class="custom-icon delete-icon" (click)="removeDepartement(departement)" title="Delete user">🗑️</div>
+                  <div class="custom-icon" (click)="pasteDepartementChildren([], departement.id)" title="Show more" *ngIf="copiedContentIsFormationArray()">📄</div>
+                  <div class="custom-icon" (click)="copyDepartementChildren(departement.id)" title="Show more" *ngIf="getFormationsByDepartement(departement.id).length > 0">📑</div>
+                  <div class="custom-icon plus-button" (click)="openAddFormationDialog(departement.id)" title="Show more">➕</div>
+                  <div class="custom-icon delete-icon" (click)="removeDepartement(departement)" title="Delete user">🗑️</div>
                 </div>
               </summary>
               <ul>

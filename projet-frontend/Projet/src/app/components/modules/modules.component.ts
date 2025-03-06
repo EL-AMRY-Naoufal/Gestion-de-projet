@@ -794,4 +794,45 @@ export class ModulesComponent implements OnInit {
   copiedContentIsNiveauArray(): boolean {
     return this.niveauService.isNiveau(this.copiedContent[0]);
   }
+
+  copyDepartementChildren(departementId: number | undefined): void {
+    if(departementId != undefined) {
+      this.copiedContent = this.getFormationsByDepartement(departementId);
+    }
+  }
+
+  pasteDepartementChildren(source: Formation[], targetId: number | undefined): void {
+    let formations : Formation[] = [];
+    if(source.length > 0) {
+      formations = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des niveaux
+      if(this.copiedContentIsFormationArray()) {
+        formations = this.copiedContent;
+      }
+    }
+    
+    //on vérifie que l'id de la formation existe
+    if(targetId != undefined) {
+      //pour chaque niveau copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      formations.forEach((formation) => {
+        const copiedFormation = {
+          ...formation,
+          departementId: targetId,
+          id: undefined
+        } as Formation
+        this.formationService.saveFormation(copiedFormation).subscribe((formationSaved : Formation) => {
+          this.addFormation(formationSaved);
+          //pour chaque niveau, on doit aussi copier/coller les modules
+          this.pasteFormationChildren(this.getNiveauxByFormation(formation.id), formationSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsFormationArray(): boolean {
+    return this.formationService.isFormation(this.copiedContent[0]);
+  }
 }
