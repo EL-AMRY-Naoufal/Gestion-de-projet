@@ -49,9 +49,10 @@
                       <!-- <button (click)="openAddNiveauDialog(i, j, k)">+</button> -->
                       <!-- <button (click)="removeFormation(i, j, k)">🗑️</button> -->
                       <div class="action-icons">
-
-                      <div class="custom-icon plus-button" (click)="openAddNiveauDialog(formation.id)" title="Show more">➕</div>
-                      <div class="custom-icon delete-icon" (click)="removeFormation(formation)" title="Delete user">🗑️</div>
+                        <div class="custom-icon" (click)="pasteFormationChildren([], formation.id)" title="Show more" *ngIf="copiedContentIsNiveauArray()">📄</div>
+                        <div class="custom-icon" (click)="copyFormationChildren(formation.id)" title="Show more" *ngIf="getNiveauxByFormation(formation.id).length > 0">📑</div>
+                        <div class="custom-icon plus-button" (click)="openAddNiveauDialog(formation.id)" title="Show more">➕</div>
+                        <div class="custom-icon delete-icon" (click)="removeFormation(formation)" title="Delete user">🗑️</div>
                       </div>
                     </summary>
                     <ul>

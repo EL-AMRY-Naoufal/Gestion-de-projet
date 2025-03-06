@@ -752,4 +752,46 @@ export class ModulesComponent implements OnInit {
   copiedContentIsSemestreArray(): boolean {
     return this.semestreService.isSemestre(this.copiedContent[0]);
   }
+
+
+  copyFormationChildren(formationId: number | undefined): void {
+    if(formationId != undefined) {
+      this.copiedContent = this.getNiveauxByFormation(formationId);
+    }
+  }
+
+  pasteFormationChildren(source: Niveau[], targetId: number | undefined): void {
+    let niveaux : Niveau[] = [];
+    if(source.length > 0) {
+      niveaux = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des niveaux
+      if(this.copiedContentIsNiveauArray()) {
+        niveaux = this.copiedContent;
+      }
+    }
+    
+    //on vérifie que l'id de la formation existe
+    if(targetId != undefined) {
+      //pour chaque niveau copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      niveaux.forEach((niveau) => {
+        const copiedNiveau = {
+          ...niveau,
+          formationId: targetId,
+          id: undefined
+        } as Niveau
+        this.niveauService.saveNiveau(copiedNiveau).subscribe((niveauSaved : Niveau) => {
+          this.addNiveau(niveauSaved);
+          //pour chaque niveau, on doit aussi copier/coller les modules
+          this.pasteNiveauChildren(this.getSemestreByNiveau(niveau.id), niveauSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsNiveauArray(): boolean {
+    return this.niveauService.isNiveau(this.copiedContent[0]);
+  }
 }
