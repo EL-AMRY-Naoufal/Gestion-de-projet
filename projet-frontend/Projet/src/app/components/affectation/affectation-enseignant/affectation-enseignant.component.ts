@@ -228,7 +228,8 @@ export class AffectationListComponent implements OnInit {
 
   startEditing(affectation: any) {
     this.editingId = affectation.id;
-    this.editedComment = affectation.commentaire;
+    console.log(affectation.commentaire);
+    this.editedComment = affectation.commentaire ?? '';
   }
 
   saveComment(affectation: any) {
