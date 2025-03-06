@@ -451,7 +451,11 @@ export class ModulesComponent implements OnInit {
   removeAnnee(annee: Annee) {
     let departementsChildren: Departement | undefined = this.departements.find((currentDepartement) => currentDepartement.anneeId === annee.id);
     if(departementsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let anneeIndex = this.annees.findIndex((currentAnnee) => currentAnnee === annee);
@@ -468,7 +472,11 @@ export class ModulesComponent implements OnInit {
   removeDepartement(departement: Departement) {
     let formationsChildren: Formation | undefined = this.formations.find((currentFormation) => currentFormation.departementId === departement.id);
     if(formationsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let departementIndex = this.departements.findIndex((currentDepartement) => currentDepartement === departement);
@@ -485,7 +493,11 @@ export class ModulesComponent implements OnInit {
   removeFormation(formation: Formation) {
     let niveauxChildren: Niveau | undefined = this.niveaux.find((currentNiveau) => currentNiveau.formationId === formation.id);
      if(niveauxChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let formationIndex = this.formations.findIndex((currentFormation) => currentFormation === formation);
@@ -502,7 +514,11 @@ export class ModulesComponent implements OnInit {
   removeNiveau(niveau: Niveau) {
     let semestresChildren: Semestre | undefined = this.semestres.find((currentSemestre) => currentSemestre.niveauId === niveau.id);
     if(semestresChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let niveauIndex = this.niveaux.findIndex((currentNiveau) => currentNiveau === niveau);
@@ -519,7 +535,11 @@ export class ModulesComponent implements OnInit {
   removeSemestre(semestre : Semestre) {
     let modulesChildren: Module | undefined = this.modules.find((currentModule) => currentModule.semestreId === semestre.id);
     if(modulesChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let semestreIndex = this.semestres.findIndex((currentSemestre) => currentSemestre === semestre);
@@ -536,7 +556,11 @@ export class ModulesComponent implements OnInit {
   removeModule(module: Module) {
     let groupesChildren: Groupe | undefined = this.groupes.find((currentGroupe) => currentGroupe.moduleId === module.id);
     if(groupesChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let moduleIndex = this.modules.findIndex((currentModule) => currentModule === module);
@@ -553,7 +577,11 @@ export class ModulesComponent implements OnInit {
   removeGroupe(groupe: Groupe) {
     let affectationsChildren: Affectation | undefined = this.affectations.find((currentAffectation) => currentAffectation.groupeId === groupe.id);
     if(affectationsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe === groupe);
@@ -572,7 +600,11 @@ export class ModulesComponent implements OnInit {
     let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
     if (affectation.id != undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           this.userService.deleteAffectation(affectation.id!, anneeId).subscribe({
@@ -650,7 +682,7 @@ export class ModulesComponent implements OnInit {
         groupes = this.copiedContent;
       }
     }
-    
+
     if(targetId != undefined) {
       //pour chaque groupe copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
       //on supprime aussi l'id pour ne pas remplacer les éléments copiés
@@ -688,7 +720,7 @@ export class ModulesComponent implements OnInit {
         modules = this.copiedContent;
       }
     }
-    
+
     //on vérifie que l'id du semestre existe
     if(targetId != undefined) {
       //pour chaque module copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
@@ -729,7 +761,7 @@ export class ModulesComponent implements OnInit {
         semestres = this.copiedContent;
       }
     }
-    
+
     //on vérifie que l'id du niveau existe
     if(targetId != undefined) {
       //pour chaque semestre copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
@@ -771,7 +803,7 @@ export class ModulesComponent implements OnInit {
         niveaux = this.copiedContent;
       }
     }
-    
+
     //on vérifie que l'id de la formation existe
     if(targetId != undefined) {
       //pour chaque niveau copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
@@ -812,7 +844,7 @@ export class ModulesComponent implements OnInit {
         formations = this.copiedContent;
       }
     }
-    
+
     //on vérifie que l'id du département existe
     if(targetId != undefined) {
       //pour chaque formation copiée on modifie l'id du parent, on le sauvegarde et on l'ajoute
@@ -853,7 +885,7 @@ export class ModulesComponent implements OnInit {
         departements = this.copiedContent;
       }
     }
-    
+
     //on vérifie que l'id de l'année existe
     if(targetId != undefined) {
       //pour chaque département copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
