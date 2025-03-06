@@ -639,21 +639,117 @@ export class ModulesComponent implements OnInit {
     }
   }
 
-  pasteModuleChildren(moduleId: number | undefined): void {
-    //on vérifie que l'id du module existe et que la copie a été faite sur des groupes
-    if(moduleId != undefined && this.copiedContentIsGroupeArray()) {
-      let groupes : Groupe[] = this.copiedContent;
+  pasteModuleChildren(source: Groupe[], targetId: number | undefined): void {
+    let groupes : Groupe[] = [];
+    if(source.length > 0) {
+      groupes = source;
+    }
+    else {
+      //on vérifie que l'id du module existe et que la copie a été faite sur des groupes
+      if(this.copiedContentIsGroupeArray()) {
+        groupes = this.copiedContent;
+      }
+    }
+    
+    if(targetId != undefined) {
       //pour chaque groupe copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
       //on supprime aussi l'id pour ne pas remplacer les éléments copiés
       groupes.forEach((groupe) => {
-        groupe.id = undefined;
-        groupe.moduleId = moduleId;
-        this.groupeService.saveGroupe(groupe).subscribe((groupeSaved : Groupe) => this.addGroupe(groupeSaved));
+        const copiedGroupe = {
+          ...groupe,
+          moduleId: targetId,
+          heuresAffectees: 0,
+          id: undefined
+        } as Groupe
+        this.groupeService.saveGroupe(copiedGroupe).subscribe((groupeSaved : Groupe) => this.addGroupe(groupeSaved));
       })
     }
   }
 
   copiedContentIsGroupeArray(): boolean {
     return this.groupeService.isGroupe(this.copiedContent[0]);
+  }
+
+
+  copySemestreChildren(semestreId: number | undefined): void {
+    if(semestreId != undefined) {
+      this.copiedContent = this.getModulesBySemestre(semestreId);
+    }
+  }
+
+  pasteSemestreChildren(source: Module[], targetId: number | undefined): void {
+    let modules : Module[] = [];
+    if(source.length > 0) {
+      modules = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des modules
+      if(this.copiedContentIsModuleArray()) {
+        modules = this.copiedContent;
+      }
+    }
+    
+    //on vérifie que l'id du semestre existe
+    if(targetId != undefined) {
+      //pour chaque module copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      modules.forEach((module) => {
+        const copiedModule = {
+          ...module,
+          semestreId: targetId,
+          id: undefined
+        } as Module
+        this.moduleService.saveModule(copiedModule).subscribe((moduleSaved : Module) => {
+          this.addModule(moduleSaved);
+          //pour chaque module, on doit aussi copier/coller les groupes
+          this.pasteModuleChildren(this.getGroupesByModule(module.id), moduleSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsModuleArray(): boolean {
+    return this.moduleService.isModule(this.copiedContent[0]);
+  }
+
+  copyNiveauChildren(niveauId: number | undefined): void {
+    if(niveauId != undefined) {
+      this.copiedContent = this.getSemestreByNiveau(niveauId);
+    }
+  }
+
+  pasteNiveauChildren(source: Semestre[], targetId: number | undefined): void {
+    let semestres : Semestre[] = [];
+    if(source.length > 0) {
+      semestres = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des semestres
+      if(this.copiedContentIsSemestreArray()) {
+        semestres = this.copiedContent;
+      }
+    }
+    
+    //on vérifie que l'id du niveau existe
+    if(targetId != undefined) {
+      //pour chaque semestre copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      semestres.forEach((semestre) => {
+        const copiedSemestre = {
+          ...semestre,
+          niveauId: targetId,
+          id: undefined
+        } as Semestre
+        this.semestreService.saveSemestre(copiedSemestre).subscribe((semestreSaved : Semestre) => {
+          this.addSemestre(semestreSaved);
+          //pour chaque semestre, on doit aussi copier/coller les modules
+          this.pasteSemestreChildren(this.getModulesBySemestre(semestre.id), semestreSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsSemestreArray(): boolean {
+    return this.semestreService.isSemestre(this.copiedContent[0]);
   }
 }

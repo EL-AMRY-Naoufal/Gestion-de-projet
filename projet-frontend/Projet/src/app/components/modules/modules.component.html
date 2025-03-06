@@ -60,12 +60,12 @@
                           <summary (click)="showType('NIVEAU', niveau)">
                             Niveau: {{ niveau.nom || 'Nouveau Niveau' }}
                             <div class="action-icons">
-
                             <!-- <button (click)="openAddSemestreDialog(i, j, k, l)">➕</button> -->
-                            <div class="custom-icon plus-button" (click)="openAddSemestreDialog(niveau.id)" title="Show more">➕</div>
                             <!-- <button (click)="removeNiveau(i, j, k, l)">🗑️</button> -->
-                            <div class="custom-icon delete-icon" (click)="removeNiveau(niveau)" title="Delete user">🗑️</div>
-
+                              <div class="custom-icon" (click)="pasteNiveauChildren([], niveau.id)" title="Show more" *ngIf="copiedContentIsSemestreArray()">📄</div>
+                              <div class="custom-icon" (click)="copyNiveauChildren(niveau.id)" title="Show more" *ngIf="getSemestreByNiveau(niveau.id).length > 0">📑</div>
+                              <div class="custom-icon plus-button" (click)="openAddSemestreDialog(niveau.id)" title="Show more">➕</div>
+                              <div class="custom-icon delete-icon" (click)="removeNiveau(niveau)" title="Delete user">🗑️</div>
                             </div>
                           </summary>
                           <ul>
@@ -76,7 +76,7 @@
                                   <!-- <button (click)="openAddModuleDialog(i, j, k, l, n)">+</button> -->
                                   <!-- <button (click)="removeSemestre(i, j, k, l, n)">🗑️</button> -->
                                   <div class="action-icons">
-                                    <div class="custom-icon" (click)="pasteSemestreChildren(semestre.id)" title="Show more" *ngIf="copiedContentIsModuleArray()">📄</div>
+                                    <div class="custom-icon" (click)="pasteSemestreChildren([], semestre.id)" title="Show more" *ngIf="copiedContentIsModuleArray()">📄</div>
                                     <div class="custom-icon" (click)="copySemestreChildren(semestre.id)" title="Show more" *ngIf="getModulesBySemestre(semestre.id).length > 0">📑</div>
                                     <div class="custom-icon plus-button" (click)="openAddModuleDialog(semestre.id)" title="Show more">➕</div>
                                     <div class="custom-icon delete-icon" (click)="removeSemestre(semestre)" title="Delete user">🗑️</div>
@@ -90,7 +90,7 @@
                                         <!-- <button (click)="openAddGroupeDialog(i, j, k, l, n, o)">+</button> -->
                                         <!-- <button (click)="removeModule(i, j, k, l, n, o)">🗑️</button> -->
                                         <div class="action-icons">
-                                          <div class="custom-icon" (click)="pasteModuleChildren([],module.id)" title="Show more" *ngIf="copiedContentIsGroupeArray()">📄</div>
+                                          <div class="custom-icon" (click)="pasteModuleChildren([], module.id)" title="Show more" *ngIf="copiedContentIsGroupeArray()">📄</div>
                                           <div class="custom-icon" (click)="copyModuleChildren(module.id)" title="Show more" *ngIf="getGroupesByModule(module.id).length > 0">📑</div>
                                           <div class="custom-icon plus-button" (click)="openAddGroupeDialog(module.id)" title="Show more">➕</div>
                                           <div class="custom-icon delete-icon" (click)="removeModule(module)" title="Delete user">🗑️</div>
