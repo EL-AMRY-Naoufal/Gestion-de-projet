@@ -24,8 +24,10 @@
           Année: {{ annee.debut || 'Nouvelle Année' }}
           <!-- <button (click)="openAddDepartementDialog(i)">+</button> -->
           <div class="action-icons">
-          <div class="custom-icon plus-button" (click)="openAddDepartementDialog(annee.id)" title="Show more">➕</div>
-          <div class="custom-icon delete-icon" (click)="removeAnnee(annee)" title="Delete user">🗑️</div>
+            <div class="custom-icon" (click)="pasteAnneeChildren([], annee.id)" title="Show more" *ngIf="copiedContentIsDepartementArray()">📄</div>
+            <div class="custom-icon" (click)="copyAnneeChildren(annee.id)" title="Show more" *ngIf="getDepartementsByAnneeIndex(annee.id).length > 0">📑</div>
+            <div class="custom-icon plus-button" (click)="openAddDepartementDialog(annee.id)" title="Show more">➕</div>
+            <div class="custom-icon delete-icon" (click)="removeAnnee(annee)" title="Delete user">🗑️</div>
           </div>
         </summary>
         <ul>

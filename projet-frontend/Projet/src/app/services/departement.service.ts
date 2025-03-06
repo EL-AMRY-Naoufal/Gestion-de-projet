@@ -45,4 +45,8 @@ export class DepartementService {
   deleteDepartement(departement: Departement): Observable<Departement> {
     return this.http.delete<Departement>(`${this._backendURL.departements}/${departement.id}`);
   }
+
+  isDepartement(obj: any): obj is Departement {
+    return obj && typeof obj.anneeId === 'number';
+  }
 }

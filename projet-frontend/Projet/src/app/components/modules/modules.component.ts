@@ -784,7 +784,7 @@ export class ModulesComponent implements OnInit {
         } as Niveau
         this.niveauService.saveNiveau(copiedNiveau).subscribe((niveauSaved : Niveau) => {
           this.addNiveau(niveauSaved);
-          //pour chaque niveau, on doit aussi copier/coller les modules
+          //pour chaque niveau, on doit aussi copier/coller les semestres
           this.pasteNiveauChildren(this.getSemestreByNiveau(niveau.id), niveauSaved.id);
         });
       })
@@ -807,15 +807,15 @@ export class ModulesComponent implements OnInit {
       formations = source;
     }
     else {
-      //on vérifie que la copie a été faite sur des niveaux
+      //on vérifie que la copie a été faite sur des formations
       if(this.copiedContentIsFormationArray()) {
         formations = this.copiedContent;
       }
     }
     
-    //on vérifie que l'id de la formation existe
+    //on vérifie que l'id du département existe
     if(targetId != undefined) {
-      //pour chaque niveau copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //pour chaque formation copiée on modifie l'id du parent, on le sauvegarde et on l'ajoute
       //on supprime aussi l'id pour ne pas remplacer les éléments copiés
       formations.forEach((formation) => {
         const copiedFormation = {
@@ -825,7 +825,7 @@ export class ModulesComponent implements OnInit {
         } as Formation
         this.formationService.saveFormation(copiedFormation).subscribe((formationSaved : Formation) => {
           this.addFormation(formationSaved);
-          //pour chaque niveau, on doit aussi copier/coller les modules
+          //pour chaque formation, on doit aussi copier/coller les niveaux
           this.pasteFormationChildren(this.getNiveauxByFormation(formation.id), formationSaved.id);
         });
       })
@@ -834,5 +834,46 @@ export class ModulesComponent implements OnInit {
 
   copiedContentIsFormationArray(): boolean {
     return this.formationService.isFormation(this.copiedContent[0]);
+  }
+
+  copyAnneeChildren(anneeId: number | undefined): void {
+    if(anneeId != undefined) {
+      this.copiedContent = this.getDepartementsByAnneeIndex(anneeId);
+    }
+  }
+
+  pasteAnneeChildren(source: Departement[], targetId: number | undefined): void {
+    let departements : Departement[] = [];
+    if(source.length > 0) {
+      departements = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des départements
+      if(this.copiedContentIsDepartementArray()) {
+        departements = this.copiedContent;
+      }
+    }
+    
+    //on vérifie que l'id de l'année existe
+    if(targetId != undefined) {
+      //pour chaque département copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      departements.forEach((departement) => {
+        const copiedDepartement = {
+          ...departement,
+          anneeId: targetId,
+          id: undefined
+        } as Departement
+        this.departementService.saveDepartement(copiedDepartement).subscribe((departementSaved : Departement) => {
+          this.addDepartement(departementSaved);
+          //pour chaque département, on doit aussi copier/coller les formations
+          this.pasteDepartementChildren(this.getFormationsByDepartement(departement.id), departementSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsDepartementArray(): boolean {
+    return this.departementService.isDepartement(this.copiedContent[0]);
   }
 }
