@@ -16,7 +16,18 @@
         [class.selected]="selectedList === 'modules'"
         (click)="selectedList = 'modules'"
       >
+        Liste des modules
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div class="main-content" >
+  <div *ngIf="selectedList === 'modules'">
   <h2>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h2>
+  <div *ngIf="groupeWithLowHours.length >0 ; else noProblemes">
   <table class="custom-table">
     <thead>
       <tr>
