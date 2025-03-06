@@ -23,6 +23,7 @@
   <table class="custom-table">
     <thead>
       <tr>
+        <th></th>
         <th>Nom</th>
         <th>Prénom</th>
         <th>Catégorie</th>
@@ -33,12 +34,20 @@
     </thead>
     <tbody>
       <tr *ngFor="let enseignant of enseignantsWithLowHours">
+        <td><div
+          class="custom-icon delete-icon"
+          (click)="showAffectations(enseignant)"
+          title="affiche affectation"
+              >
+            🔍
+            </div></td>
         <td>{{ enseignant.name }}</td>
         <td>{{ enseignant.firstname }}</td>
         <td>{{ enseignant.categorieEnseignant }}</td>
         <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
         <td>{{ enseignant.maxHeuresService }}</td>
         <td>{{ enseignant.nbHeureCategorie }}</td>
+
       </tr>
     </tbody>
   </table>
@@ -47,6 +56,7 @@
   <table class="custom-table">
     <thead>
       <tr>
+        <th></th>
         <th>Nom</th>
         <th>Prénom</th>
         <th>Catégorie</th>
@@ -57,6 +67,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let enseignant of enseignantsWithHighHours">
+        <td><div
+          class="custom-icon delete-icon"
+          (click)="showAffectations(enseignant)"
+          title="affiche affectation"
+              >
+            🔍
+            </div></td>
         <td>{{ enseignant.name }}</td>
         <td>{{ enseignant.firstname }}</td>
         <td>{{ enseignant.categorieEnseignant }}</td>

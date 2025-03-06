@@ -8,6 +8,8 @@ import {User} from "../shared/types/user.type";
 import {EnseignantDto} from "../shared/types/enseignant.type";
 import {AnneeService} from "../../services/annee.service";
 import {YearService} from "../../services/year-service";
+import { AffectationDialogComponent } from '../affectation/affectation-dialog/affectation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-problems',
@@ -32,7 +34,8 @@ export class ProblemsComponent {
     public groupeService: GroupeService,
     public moduleService: ModuleService,
     public enseignantService: EnseignantService,
-    public anneeService: YearService
+    public anneeService: YearService,
+    private _dialog: MatDialog,
   ) {
 
     this.anneeSelectionnee = this.anneeService.getSelectedYearId() ?? -1
@@ -94,4 +97,15 @@ export class ProblemsComponent {
     console.log("Heures pour ",heures + " pour l'enseignant " + enseignant.firstname + " " + enseignant.name);
     return heures;
   }
+
+      showAffectations( enseignant: EnseignantDto) {
+        console.log("affectation");
+
+        // open modal
+         this._dialog.open(AffectationDialogComponent, {
+          disableClose: true,
+          panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+          data: { enseignant: enseignant } // Passer l'enseignant en tant que donnée
+        });
+      }
 }
