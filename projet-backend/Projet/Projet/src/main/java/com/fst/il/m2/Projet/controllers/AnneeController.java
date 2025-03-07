@@ -43,9 +43,12 @@ public class AnneeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Annee> getAnneeById(@PathVariable Long id) {
+    public ResponseEntity<AnneeDto> getAnneeById(@PathVariable Long id) {
         Annee annee = anneeService.getAnneeById(id);
-        return new ResponseEntity<>(annee, HttpStatus.OK);
+        return new ResponseEntity<>(AnneeDto.builder()
+                .debut(annee.getDebut())
+                .id(annee.getId())
+                .build(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

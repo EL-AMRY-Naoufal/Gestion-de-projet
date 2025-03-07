@@ -4,6 +4,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ApiService } from './api-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Year } from '../components/shared/types/year.type';
+import { AnneeService } from './annee.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class YearService {
   // on application init, we need to set the current year from local storage
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private _api: ApiService
+    private _api: ApiService,
+    private _annee: AnneeService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
@@ -53,8 +55,10 @@ export class YearService {
     if (this.isBrowser) {
       localStorage.setItem('currentYearId', yearId.toString());
     }
-    this.selectedYearSubject.next({ id: yearId, debut: 0 });
-    this._currentYearId = yearId;
+    this._annee.getAnneeById(yearId).subscribe((year) => {
+      this._currentYearId = year.id;
+      this.selectedYearSubject.next(year);
+    });
   }
 
   setSelectedYear(year: Year | null): void {
