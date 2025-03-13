@@ -10,6 +10,9 @@ import com.fst.il.m2.Projet.exceptions.UnauthorizedException;
 import com.fst.il.m2.Projet.mapper.UserMapper;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.security.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import java.util.List;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "User Controller", description = "Gestion des utilisateurs")
 public class UserController {
 
     private final UserService userService;
@@ -38,6 +42,9 @@ public class UserController {
         this.anneeService = anneeService;
     }
 
+    @Operation(summary = "Authentifier un utilisateur", description = "Cette méthode permet d'authentifier un utilisateur.")
+    @ApiResponse(responseCode = "200", description = "Authentification réussie")
+    @ApiResponse(responseCode = "401", description = "Échec de l'authentification")
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponse> authenticate(HttpServletResponse response, @RequestBody UserAuthentification user) {
         System.out.println(user);
@@ -68,11 +75,15 @@ public class UserController {
                 , HttpStatus.OK);
     }
 
+    @Operation(summary = "Modifier le mot de passe d'un utilisateur", description = "Cette méthode permet de modifier le mot de passe d'un utilisateur.")
+    @ApiResponse(responseCode = "200", description = "Mot de passe modifié avec succès")
     @PutMapping("/{id}/password")
     public void modifyPassword(@PathVariable Long id, @Valid @RequestBody String password) {
         this.userService.modifyPassword(id, password);
     }
 
+    @Operation(summary = "Récupérer l'ID d'un utilisateur par email", description = "Cette méthode permet de récupérer l'ID d'un utilisateur par son email.")
+    @ApiResponse(responseCode = "200", description = "ID de l'utilisateur récupéré avec succès")
     @GetMapping("/user/{email}")
     public Long getUserIdByEmail(@PathVariable String email) {
         User user = this.userService.getUserByEmail(email);
@@ -84,15 +95,15 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Récupérer tous les utilisateurs qui ne sont pas enseignants", description = "Cette méthode permet de récupérer la liste de tous les utilisateurs qui ne sont pas enseignants.")
+    @ApiResponse(responseCode = "200", description = "Liste des utilisateurs récupérée")
     @GetMapping()
     public List<User> getAllUsersNotTeachers() {
         return this.userService.getAllUsersNotTeachers();
     }
 
-    /**
-     * Logout the user by deleting the token cookie
-     * @param response : the response object
-     */
+    @Operation(summary = "Déconnecter un utilisateur", description = "Cette méthode permet de déconnecter un utilisateur en supprimant le cookie de jeton.")
+    @ApiResponse(responseCode = "200", description = "Utilisateur déconnecté avec succès")
     @PostMapping("/user/logout")
     public void logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", null);
@@ -101,6 +112,8 @@ public class UserController {
         response.addCookie(cookie);
     }
 
+    @Operation(summary = "Récupérer l'utilisateur actuel", description = "Cette méthode permet de récupérer l'utilisateur actuellement connecté.")
+    @ApiResponse(responseCode = "200", description = "Utilisateur actuel récupéré avec succès")
     @GetMapping("/user/me")
     public UserRequest.UserDto getCurrentUser(@CurrentSecurityContext(expression = "authentication?.name") String username) {
         return UserMapper.userToUserDto(userService.getUserByUsername(username));
