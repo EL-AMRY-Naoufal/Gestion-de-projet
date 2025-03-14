@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "../../environments/environment.prod";
+import { environment } from "../../environments/environment";
 import { Observable } from "rxjs";
 import { Formation } from "../components/shared/types/modules.types";
 
@@ -38,5 +38,9 @@ export class FormationService {
 
     deleteFormation(formation: Formation): Observable<Formation> {
         return this.http.delete<Formation>(`${this._backendURL.formations}/${formation.id}`);
-      }
+    }
+
+    isFormation(obj: any): obj is Formation {
+        return obj && typeof obj.departementId === 'number';
+    }
 }

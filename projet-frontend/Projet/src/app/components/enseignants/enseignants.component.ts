@@ -80,39 +80,11 @@ export class EnseignantsComponent implements OnInit {
     if (this.searchQuery.trim() === '') {
       this.getEnseignants();
     } else {
-      // Normalisation de la query
-      const lowercaseQuery = this.searchQuery.toLowerCase();
-      const uppercaseQuery = this.searchQuery.toUpperCase();
-      const capitalizedQuery =
-        this.searchQuery.charAt(0).toUpperCase() +
-        this.searchQuery.slice(1).toLowerCase();
-
-      // Tableau pour stocker les résultats combinés
-      let allResults: EnseignantDto[] = [];
-
-      // Création d'un tableau de requêtes
-      const queries = [
-        this.searchQuery,
-        lowercaseQuery,
-        uppercaseQuery,
-        capitalizedQuery,
-      ];
-
-      queries.forEach((query) => {
-        // Recherche par prénom (firstname)
-        this.enseignantService
-          .getEnseignantsByFirstname(query)
-          .subscribe((data) => {
-            allResults = this.mergeUniqueResults(allResults, data);
-            this.enseignants = allResults;
-          });
-
-        // Recherche par nom (name)
-        this.enseignantService.getEnseignantsByName(query).subscribe((data) => {
-          allResults = this.mergeUniqueResults(allResults, data);
-          this.enseignants = allResults;
-        });
-      });
+      this.enseignantService.searchEnseignant(this.searchQuery).subscribe(
+        (enseignants) => {
+          this.enseignants = enseignants;
+        }
+      );
     }
   }
 

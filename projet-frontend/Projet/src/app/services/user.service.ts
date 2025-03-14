@@ -1,7 +1,7 @@
 import { LoginService } from './login.service';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { defaultIfEmpty, filter, map, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../components/shared/types/user.type';
@@ -188,12 +188,12 @@ export class UserService {
       .pipe(map((response) => response));
   }
 
-  searchUsers(username: string): Observable<any[]> {
-    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}/${username}`;
+  searchUsers(query: string): Observable<any[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.allUsers}?q=${query}`;
     return this._http.get<any[]>(url);
   }
-  searchUsersByRoleAndYear(role: string, year: number): Observable<any[]> {
-    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}?role=${role}&year=${year}`;
+  searchUsersByRoleAndYear(role: string, year: number, query: string): Observable<any[]> {
+    const url = `${environment.backend.protocol}://${environment.backend.host}:${environment.backend.port}${environment.backend.endpoints.role}?role=${role}&year=${year}&q=${query}`;
     console.log('role', url);
     return this._http.get<any[]>(url);
   }

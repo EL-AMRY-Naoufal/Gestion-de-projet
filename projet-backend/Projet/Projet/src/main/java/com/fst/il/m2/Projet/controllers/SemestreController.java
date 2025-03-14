@@ -5,6 +5,9 @@ import com.fst.il.m2.Projet.dto.SemestreDto;
 import com.fst.il.m2.Projet.mapper.SemestreMapper;
 import com.fst.il.m2.Projet.models.Niveau;
 import com.fst.il.m2.Projet.models.Semestre;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/semestres")
+@Tag(name = "Semestre Controller", description = "Gestion des semestres")
 public class SemestreController {
 
     private final SemestreService semestreService;
@@ -23,14 +27,17 @@ public class SemestreController {
         this.semestreService = semestreService;
     }
 
-    // Get all Semestres
+    @Operation(summary = "Récupérer tous les semestres", description = "Cette méthode permet de récupérer la liste de tous les semestres.")
+    @ApiResponse(responseCode = "200", description = "Liste des semestres récupérée")
     @GetMapping
     public ResponseEntity<List<SemestreDto>> getAllSemestres() {
         List<Semestre> semestres = semestreService.getAllSemestres();
         return new ResponseEntity<>(semestres.stream().map(SemestreMapper::toDto).toList(), HttpStatus.OK);
     }
 
-    // Get a Semestre by ID
+    @Operation(summary = "Récupérer un semestre par ID", description = "Cette méthode permet de récupérer un semestre par son ID.")
+    @ApiResponse(responseCode = "200", description = "Semestre récupéré avec succès")
+    @ApiResponse(responseCode = "404", description = "Semestre non trouvé")
     @GetMapping("/id/{id}")
     public ResponseEntity<Semestre> getSemestreById(@PathVariable Long id) {
         try {
@@ -41,6 +48,8 @@ public class SemestreController {
         }
     }
 
+    @Operation(summary = "Récupérer les semestres par ID de niveau", description = "Cette méthode permet de récupérer les semestres par l'ID du niveau.")
+    @ApiResponse(responseCode = "200", description = "Semestres récupérés avec succès")
     @GetMapping("/niveau/{niveauId}")
     public List<Semestre> getSemestresByNiveau(@PathVariable Long niveauId) {
         List<Semestre> semestres = semestreService.getSemestresByNiveau(Niveau.builder().id(niveauId).build());
@@ -58,14 +67,17 @@ public class SemestreController {
         return semestres;
     }
 
-    // Add a new Semestre
+    @Operation(summary = "Ajouter un nouveau semestre", description = "Cette méthode permet d'ajouter un nouveau semestre.")
+    @ApiResponse(responseCode = "201", description = "Semestre ajouté avec succès")
     @PostMapping
     public ResponseEntity<SemestreDto> saveSemestre(@RequestBody SemestreDto semestreDto) {
         Semestre savedSemestre = semestreService.addSemestre(SemestreMapper.toEntity(semestreDto));
         return new ResponseEntity<>(SemestreMapper.toDto(savedSemestre), HttpStatus.CREATED);
     }
 
-    // Delete a Semestre by ID
+    @Operation(summary = "Supprimer un semestre par ID", description = "Cette méthode permet de supprimer un semestre par son ID.")
+    @ApiResponse(responseCode = "204", description = "Semestre supprimé avec succès")
+    @ApiResponse(responseCode = "406", description = "Semestre ne peut pas être supprimé")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSemestre(@PathVariable Long id) {
         if(!semestreService.hasModules(id)) {

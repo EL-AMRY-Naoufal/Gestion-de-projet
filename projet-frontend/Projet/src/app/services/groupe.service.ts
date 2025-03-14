@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.prod";
+import { environment } from "../../environments/environment";
 import { Groupe } from "../components/shared/types/modules.types";
 
 @Injectable({
@@ -40,11 +40,15 @@ export class GroupeService {
         return this.http.post<Groupe>(`${this._backendURL.groupes}`, groupe);
     }
 
-  getGroupeById(id: number): Observable<Groupe> {
-    return this.http.get<Groupe>(`${this._backendURL.groupes}/${id}`);
-  }
+    getGroupeById(id: number): Observable<Groupe> {
+        return this.http.get<Groupe>(`${this._backendURL.groupes}/${id}`);
+    }
 
     deleteGroupe(groupe: Groupe): Observable<Groupe> {
         return this.http.delete<Groupe>(`${this._backendURL.groupes}/${groupe.id}`);
+    }
+
+    isGroupe(obj: any): obj is Groupe {
+    return obj && typeof obj.moduleId === 'number';
     }
 }

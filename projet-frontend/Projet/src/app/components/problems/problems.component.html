@@ -1,0 +1,135 @@
+
+<div class="main-content">
+
+  <!-- Sélecteur pour choisir la liste à afficher -->
+  <div class="list-selector">
+    <div class="list-options">
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'enseignants'"
+        (click)="selectedList = 'enseignants'"
+      >
+        Liste des enseignants
+      </div>
+      <div
+        class="list-option"
+        [class.selected]="selectedList === 'modules'"
+        (click)="selectedList = 'modules'"
+      >
+        Liste des modules
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div class="main-content" >
+  <div *ngIf="selectedList === 'modules'">
+  <h2>Liste des modules/groupes avec des heures affectées inférieures aux heures totales</h2>
+  <div *ngIf="groupeWithLowHours.length >0 ; else noProblemes">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Module</th>
+        <th>Groupe</th>
+        <th>Heures Affectées</th>
+        <th>Heures Totales</th>
+        <th>Différence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groupeWithLowHours">
+        <td>{{ group.moduleNom }}</td>
+        <td>{{ group.nom }}</td>
+        <td>{{ group.heuresAffectees }}</td>
+        <td>{{ group.totalHeuresDuGroupe }}</td>
+        <td>{{ group.totalHeuresDuGroupe - group.heuresAffectees }}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+  <div *ngIf="selectedList === 'enseignants'">
+  <h2>Liste des enseignants avec des heures de service inférieures aux heures maximales</h2>
+  <div *ngIf="enseignantsWithLowHours.length > 0 ; else noProblemes">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Catégorie</th>
+        <th>Heure assignée</th>
+        <th>Max Heures Service</th>
+        <th>Heures Décharge</th>
+        <th>Différence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let enseignant of enseignantsWithLowHours">
+        <td><div
+          class="custom-icon delete-icon"
+          (click)="showAffectations(enseignant)"
+          title="affiche affectation"
+              >
+            🔍
+            </div></td>
+        <td>{{ enseignant.name }}</td>
+        <td>{{ enseignant.firstname }}</td>
+        <td>{{ enseignant.categorieEnseignant }}</td>
+        <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
+        <td>{{ enseignant.maxHeuresService }}</td>
+        <td>{{ enseignant.nbHeureCategorie }}</td>
+        <td>{{ enseignant.maxHeuresService - this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee)  - enseignant.nbHeureCategorie}}</td>
+
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>Liste des enseignants avec des heures de service supérieures aux heures maximales</h2>
+  <div *ngIf="enseignantsWithHighHours.length > 0 ; else noProblemes">
+
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Catégorie</th>
+        <th>Heure assignée</th>
+        <th>Heures Service</th>
+        <th>Heures Décharge</th>
+        <th>Différence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let enseignant of enseignantsWithHighHours">
+        <td><div
+          class="custom-icon delete-icon"
+          (click)="showAffectations(enseignant)"
+          title="affiche affectation"
+              >
+            🔍
+            </div></td>
+        <td>{{ enseignant.name }}</td>
+        <td>{{ enseignant.firstname }}</td>
+        <td>{{ enseignant.categorieEnseignant }}</td>
+        <td>{{ this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee) }}</td>
+        <td>{{ enseignant.maxHeuresService }}</td>
+        <td>{{ enseignant.nbHeureCategorie }}</td>
+        <td>{{ -(enseignant.maxHeuresService - this.getHeuresPourAnnee(enseignant, this.anneeSelectionnee)  - enseignant.nbHeureCategorie)}}</td>
+
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+</div>
+
+<!-- Si `problem` est false, afficher un message -->
+<ng-template #noProblemes>
+    <p class="no-affectations-message">Aucun problème détecté </p>
+</ng-template>

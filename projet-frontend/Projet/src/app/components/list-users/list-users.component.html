@@ -45,7 +45,7 @@
           type="text"
           placeholder="Recherche..."
           [(ngModel)]="searchQuery"
-          (keyup.enter)="searchTeachers()"
+          (input)="searchTeachers()"
         />
       </div>
 

@@ -10,6 +10,12 @@
   <div class="navbar-center">
     <a
       *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
+      (click)="navigateToProblems()"
+      class="navbar-link"
+    >Problèmes</a
+    >
+    <a
+      *ngIf="userRoles.includes('CHEF_DE_DEPARTEMENT')"
       class="menu-item vert"
       (click)="navigateToUsers()"
       class="navbar-link"

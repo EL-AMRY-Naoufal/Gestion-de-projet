@@ -1,7 +1,9 @@
 services:
   # Service pour le backend Spring Boot
   backend:
-    build: ./projet-backend/Projet/Projet  # Chemin vers le Dockerfile du backend
+    build: 
+      context: ./projet-backend/Projet/Projet  # Chemin vers le Dockerfile du backend
+      target: dev
     container_name: backend
     ports:
       - "8080:8080"

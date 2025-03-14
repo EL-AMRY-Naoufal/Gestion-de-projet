@@ -138,4 +138,8 @@ public class UserServiceDefault implements UserService {
     public User getUserByUsername(String username) {
         return this.userRepository.findOneUserByUsername(username).orElseThrow(NotFoundException::new);
     }
+
+    public List<User> searchUsers(String q) {
+        return this.userRepository.searchUsers(q);
+    }
 }

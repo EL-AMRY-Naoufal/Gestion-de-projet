@@ -1,5 +1,24 @@
-<div class="dialog, confirmDeletionDialog">
+ <!-- <div class="dialog, confirmDeletionDialog">
     <h3>Voulez-vous vraiment supprimer cet élément?</h3>
-    <button type="button" class="cancel" (click)="onCancel()">Annuler</button>
-    <button type="button" class="confirm" (click)="onSubmit()">Confirmer</button>
+   <button mat-button type="button" class="cancel" (click)="onCancel()">Annuler</button>
+    <button mat-button type="button" class="confirm" (click)="onSubmit()">Confirmer</button>
+</div>
+ -->
+
+
+<div class="global-header">
+  <h2 mat-dialog-title >Confirmation</h2>
+  <mat-dialog-content>
+  <form >
+    <div class="flex-container">
+      <h4>Voulez-vous vraiment supprimer cet élément?</h4>
+
+    </div>
+  </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button type="button" class="cancel" (click)="onCancel()">Annuler</button>
+    <button mat-button type="button" class="confirm" (click)="onSubmit()">Confirmer</button>
+  </mat-dialog-actions>
 </div>

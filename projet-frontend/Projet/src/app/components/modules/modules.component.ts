@@ -53,6 +53,8 @@ export class ModulesComponent implements OnInit {
   groupes: Groupe[] = [];
   affectations: Affectation[] = [];
 
+  copiedContent: any = [];
+
 
   constructor(
     public dialog: MatDialog,
@@ -449,7 +451,11 @@ export class ModulesComponent implements OnInit {
   removeAnnee(annee: Annee) {
     let departementsChildren: Departement | undefined = this.departements.find((currentDepartement) => currentDepartement.anneeId === annee.id);
     if(departementsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let anneeIndex = this.annees.findIndex((currentAnnee) => currentAnnee === annee);
@@ -466,7 +472,11 @@ export class ModulesComponent implements OnInit {
   removeDepartement(departement: Departement) {
     let formationsChildren: Formation | undefined = this.formations.find((currentFormation) => currentFormation.departementId === departement.id);
     if(formationsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let departementIndex = this.departements.findIndex((currentDepartement) => currentDepartement === departement);
@@ -483,7 +493,11 @@ export class ModulesComponent implements OnInit {
   removeFormation(formation: Formation) {
     let niveauxChildren: Niveau | undefined = this.niveaux.find((currentNiveau) => currentNiveau.formationId === formation.id);
      if(niveauxChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let formationIndex = this.formations.findIndex((currentFormation) => currentFormation === formation);
@@ -500,7 +514,11 @@ export class ModulesComponent implements OnInit {
   removeNiveau(niveau: Niveau) {
     let semestresChildren: Semestre | undefined = this.semestres.find((currentSemestre) => currentSemestre.niveauId === niveau.id);
     if(semestresChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let niveauIndex = this.niveaux.findIndex((currentNiveau) => currentNiveau === niveau);
@@ -517,7 +535,11 @@ export class ModulesComponent implements OnInit {
   removeSemestre(semestre : Semestre) {
     let modulesChildren: Module | undefined = this.modules.find((currentModule) => currentModule.semestreId === semestre.id);
     if(modulesChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let semestreIndex = this.semestres.findIndex((currentSemestre) => currentSemestre === semestre);
@@ -534,7 +556,11 @@ export class ModulesComponent implements OnInit {
   removeModule(module: Module) {
     let groupesChildren: Groupe | undefined = this.groupes.find((currentGroupe) => currentGroupe.moduleId === module.id);
     if(groupesChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let moduleIndex = this.modules.findIndex((currentModule) => currentModule === module);
@@ -551,7 +577,11 @@ export class ModulesComponent implements OnInit {
   removeGroupe(groupe: Groupe) {
     let affectationsChildren: Affectation | undefined = this.affectations.find((currentAffectation) => currentAffectation.groupeId === groupe.id);
     if(affectationsChildren == undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           let groupeIndex = this.groupes.findIndex((currentGroupe) => currentGroupe === groupe);
@@ -570,7 +600,11 @@ export class ModulesComponent implements OnInit {
     let affectationIndex = this.affectations.findIndex((currentAffectation) => currentAffectation === affectation);
 
     if (affectation.id != undefined) {
-      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent);
+      const dialogRef = this.dialog.open(ConfirmDeletionDialogComponent,{
+        disableClose: true,
+        panelClass: 'custom-dialog-container', // Ajouter une classe personnalisée
+      }
+      );
       dialogRef.afterClosed().subscribe(result => {
         if(result) {
           this.userService.deleteAffectation(affectation.id!, anneeId).subscribe({
@@ -629,4 +663,249 @@ export class ModulesComponent implements OnInit {
     return 'normal-hours'; // Équilibré
   }
 
+  copyModuleChildren(moduleId: number |undefined): void {
+    if(moduleId != undefined) {
+      this.groupeService.getGroupesByModule(moduleId).subscribe(result => {
+        this.copiedContent = result; console.log(this.copiedContent);
+      });
+    }
+  }
+
+  pasteModuleChildren(source: Groupe[], targetId: number | undefined): void {
+    let groupes : Groupe[] = [];
+    if(source.length > 0) {
+      groupes = source;
+    }
+    else {
+      //on vérifie que l'id du module existe et que la copie a été faite sur des groupes
+      if(this.copiedContentIsGroupeArray()) {
+        groupes = this.copiedContent;
+      }
+    }
+
+    if(targetId != undefined) {
+      //pour chaque groupe copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      groupes.forEach((groupe) => {
+        const copiedGroupe = {
+          ...groupe,
+          moduleId: targetId,
+          heuresAffectees: 0,
+          id: undefined
+        } as Groupe
+        this.groupeService.saveGroupe(copiedGroupe).subscribe((groupeSaved : Groupe) => this.addGroupe(groupeSaved));
+      })
+    }
+  }
+
+  copiedContentIsGroupeArray(): boolean {
+    return this.groupeService.isGroupe(this.copiedContent[0]);
+  }
+
+
+  copySemestreChildren(semestreId: number | undefined): void {
+    if(semestreId != undefined) {
+      this.copiedContent = this.getModulesBySemestre(semestreId);
+    }
+  }
+
+  pasteSemestreChildren(source: Module[], targetId: number | undefined): void {
+    let modules : Module[] = [];
+    if(source.length > 0) {
+      modules = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des modules
+      if(this.copiedContentIsModuleArray()) {
+        modules = this.copiedContent;
+      }
+    }
+
+    //on vérifie que l'id du semestre existe
+    if(targetId != undefined) {
+      //pour chaque module copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      modules.forEach((module) => {
+        const copiedModule = {
+          ...module,
+          semestreId: targetId,
+          id: undefined
+        } as Module
+        this.moduleService.saveModule(copiedModule).subscribe((moduleSaved : Module) => {
+          this.addModule(moduleSaved);
+          //pour chaque module, on doit aussi copier/coller les groupes
+          this.pasteModuleChildren(this.getGroupesByModule(module.id), moduleSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsModuleArray(): boolean {
+    return this.moduleService.isModule(this.copiedContent[0]);
+  }
+
+  copyNiveauChildren(niveauId: number | undefined): void {
+    if(niveauId != undefined) {
+      this.copiedContent = this.getSemestreByNiveau(niveauId);
+    }
+  }
+
+  pasteNiveauChildren(source: Semestre[], targetId: number | undefined): void {
+    let semestres : Semestre[] = [];
+    if(source.length > 0) {
+      semestres = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des semestres
+      if(this.copiedContentIsSemestreArray()) {
+        semestres = this.copiedContent;
+      }
+    }
+
+    //on vérifie que l'id du niveau existe
+    if(targetId != undefined) {
+      //pour chaque semestre copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      semestres.forEach((semestre) => {
+        const copiedSemestre = {
+          ...semestre,
+          niveauId: targetId,
+          id: undefined
+        } as Semestre
+        this.semestreService.saveSemestre(copiedSemestre).subscribe((semestreSaved : Semestre) => {
+          this.addSemestre(semestreSaved);
+          //pour chaque semestre, on doit aussi copier/coller les modules
+          this.pasteSemestreChildren(this.getModulesBySemestre(semestre.id), semestreSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsSemestreArray(): boolean {
+    return this.semestreService.isSemestre(this.copiedContent[0]);
+  }
+
+
+  copyFormationChildren(formationId: number | undefined): void {
+    if(formationId != undefined) {
+      this.copiedContent = this.getNiveauxByFormation(formationId);
+    }
+  }
+
+  pasteFormationChildren(source: Niveau[], targetId: number | undefined): void {
+    let niveaux : Niveau[] = [];
+    if(source.length > 0) {
+      niveaux = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des niveaux
+      if(this.copiedContentIsNiveauArray()) {
+        niveaux = this.copiedContent;
+      }
+    }
+
+    //on vérifie que l'id de la formation existe
+    if(targetId != undefined) {
+      //pour chaque niveau copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      niveaux.forEach((niveau) => {
+        const copiedNiveau = {
+          ...niveau,
+          formationId: targetId,
+          id: undefined
+        } as Niveau
+        this.niveauService.saveNiveau(copiedNiveau).subscribe((niveauSaved : Niveau) => {
+          this.addNiveau(niveauSaved);
+          //pour chaque niveau, on doit aussi copier/coller les semestres
+          this.pasteNiveauChildren(this.getSemestreByNiveau(niveau.id), niveauSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsNiveauArray(): boolean {
+    return this.niveauService.isNiveau(this.copiedContent[0]);
+  }
+
+  copyDepartementChildren(departementId: number | undefined): void {
+    if(departementId != undefined) {
+      this.copiedContent = this.getFormationsByDepartement(departementId);
+    }
+  }
+
+  pasteDepartementChildren(source: Formation[], targetId: number | undefined): void {
+    let formations : Formation[] = [];
+    if(source.length > 0) {
+      formations = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des formations
+      if(this.copiedContentIsFormationArray()) {
+        formations = this.copiedContent;
+      }
+    }
+
+    //on vérifie que l'id du département existe
+    if(targetId != undefined) {
+      //pour chaque formation copiée on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      formations.forEach((formation) => {
+        const copiedFormation = {
+          ...formation,
+          departementId: targetId,
+          id: undefined
+        } as Formation
+        this.formationService.saveFormation(copiedFormation).subscribe((formationSaved : Formation) => {
+          this.addFormation(formationSaved);
+          //pour chaque formation, on doit aussi copier/coller les niveaux
+          this.pasteFormationChildren(this.getNiveauxByFormation(formation.id), formationSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsFormationArray(): boolean {
+    return this.formationService.isFormation(this.copiedContent[0]);
+  }
+
+  copyAnneeChildren(anneeId: number | undefined): void {
+    if(anneeId != undefined) {
+      this.copiedContent = this.getDepartementsByAnneeIndex(anneeId);
+    }
+  }
+
+  pasteAnneeChildren(source: Departement[], targetId: number | undefined): void {
+    let departements : Departement[] = [];
+    if(source.length > 0) {
+      departements = source;
+    }
+    else {
+      //on vérifie que la copie a été faite sur des départements
+      if(this.copiedContentIsDepartementArray()) {
+        departements = this.copiedContent;
+      }
+    }
+
+    //on vérifie que l'id de l'année existe
+    if(targetId != undefined) {
+      //pour chaque département copié on modifie l'id du parent, on le sauvegarde et on l'ajoute
+      //on supprime aussi l'id pour ne pas remplacer les éléments copiés
+      departements.forEach((departement) => {
+        const copiedDepartement = {
+          ...departement,
+          anneeId: targetId,
+          id: undefined
+        } as Departement
+        this.departementService.saveDepartement(copiedDepartement).subscribe((departementSaved : Departement) => {
+          this.addDepartement(departementSaved);
+          //pour chaque département, on doit aussi copier/coller les formations
+          this.pasteDepartementChildren(this.getFormationsByDepartement(departement.id), departementSaved.id);
+        });
+      })
+    }
+  }
+
+  copiedContentIsDepartementArray(): boolean {
+    return this.departementService.isDepartement(this.copiedContent[0]);
+  }
 }

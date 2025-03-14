@@ -4,6 +4,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ApiService } from './api-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Year } from '../components/shared/types/year.type';
+import { AnneeService } from './annee.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,15 +20,22 @@ export class YearService {
   // on application init, we need to set the current year from local storage
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private _api: ApiService
+    private _api: ApiService,
+    private _annee: AnneeService
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
     if (this.isBrowser) {
-      this._currentYearId = parseInt(
-        localStorage.getItem('currentYearId') || ''
-      );
-      this.selectedYearSubject.next({ id: this._currentYearId, debut: 0 });
+      const storedYear = localStorage.getItem('currentYearId');
+
+      // Si aucune année n'est stockée, mettre 2024 par défaut
+      this._currentYearId = storedYear ? parseInt(storedYear) : 2024;
+
+      if (!storedYear) {
+        localStorage.setItem('currentYearId', this._currentYearId.toString());
+      }
+
+      this.selectedYearSubject.next({ id: this._currentYearId, debut: 2024 });
     }
   }
 
@@ -47,8 +55,10 @@ export class YearService {
     if (this.isBrowser) {
       localStorage.setItem('currentYearId', yearId.toString());
     }
-    this.selectedYearSubject.next({ id: yearId, debut: 0 });
-    this._currentYearId = yearId;
+    this._annee.getAnneeById(yearId).subscribe((year) => {
+      this._currentYearId = year.id;
+      this.selectedYearSubject.next(year);
+    });
   }
 
   setSelectedYear(year: Year | null): void {

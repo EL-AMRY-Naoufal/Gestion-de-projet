@@ -3,15 +3,16 @@ export const environment = {
   backend: {
     protocol: 'http',
     host: 'localhost',
-    port: '8080',
+    port: false,
     endpoints: {
+      allYears: '/api/annees',
       allUsers: '/api/responsableDepartement',
       justRole: '/api/responsableDepartement/users/by-just-role',
       oneUser: '/api/responsableDepartement/:id',
       allEnseignants: '/api/enseignants',
       authenticate: '/api/users/authenticate',
       categories: '/api/categories',
-      role : '/api/responsableDepartement/role',
+      role : '/api/responsableDepartement/users/by-role-and-year',
       modules : '/api/modules',
       annees : '/api/annees',
       departements : '/api/departements',
@@ -24,7 +25,8 @@ export const environment = {
       allAffectation: '/api/affectations',
       allCoAffectations: '/api/affectations/coAffectations',
       logout: '/api/users/user/logout',
-      me: '/api/users/user/me'
+      me: '/api/users/user/me',
+      rolesAndYears: '/api/users/user/roles-and-years',
     },
   },
 };

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.prod";
+import { environment } from "../../environments/environment";
 import { Niveau, Semestre } from "../components/shared/types/modules.types";
 
 @Injectable({
@@ -46,5 +46,9 @@ export class SemestreService {
 
     deleteSemestre(semestre: Semestre): Observable<Semestre> {
         return this.http.delete<Semestre>(`${this._backendURL.semestres}/${semestre.id}`);
+    }
+
+    isSemestre(obj: any): obj is Semestre {
+        return obj && typeof obj.niveauId === 'number';
     }
 }

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { environment } from "../../environments/environment.prod";
+import { environment } from "../../environments/environment";
 import { Departement, ResponsableDepartement } from "../components/shared/types/modules.types";
 @Injectable({
   providedIn: 'root'
@@ -44,5 +44,9 @@ export class DepartementService {
 
   deleteDepartement(departement: Departement): Observable<Departement> {
     return this.http.delete<Departement>(`${this._backendURL.departements}/${departement.id}`);
+  }
+
+  isDepartement(obj: any): obj is Departement {
+    return obj && typeof obj.anneeId === 'number';
   }
 }

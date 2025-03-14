@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { EnseignantDto } from '../components/shared/types/enseignant.type';
 import { User } from '../components/shared/types/user.type';
 import {Affectation, CoAffectation} from "../components/shared/types/modules.types";
@@ -111,6 +111,17 @@ export class EnseignantService {
       .pipe(
         tap((data) => {
           console.log('Résultats de la recherche par nom:', data); // Affiche les résultats de la recherche
+        })
+      );
+  }
+
+  searchEnseignant(query: string): Observable<any[]> {
+    console.log(`Recherche des enseignants par query: ${query}`); // Affiche la query recherchée
+    return this.http
+      .get<any[]>(`${this._backendURL.allEnseignants}?q=${query}`)
+      .pipe(
+        tap((data) => {
+          console.log('Résultats de la recherche par query:', data); // Affiche les résultats de la recherche
         })
       );
   }
