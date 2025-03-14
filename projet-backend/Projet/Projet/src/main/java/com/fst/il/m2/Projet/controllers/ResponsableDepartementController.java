@@ -11,6 +11,9 @@ import com.fst.il.m2.Projet.models.Affectation;
 import com.fst.il.m2.Projet.models.Enseignant;
 import com.fst.il.m2.Projet.models.User;
 import com.fst.il.m2.Projet.models.UserRole;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/responsableDepartement")
+@Tag(name = "Responsable Departement Controller", description = "Gestion des responsables de département")
+
 public class ResponsableDepartementController {
 
     @Autowired
@@ -29,6 +34,9 @@ public class ResponsableDepartementController {
     @Autowired
     private UserService userService;
 
+
+    @Operation(summary = "Créer un utilisateur", description = "Cette méthode permet de créer un nouvel utilisateur.")
+    @ApiResponse(responseCode = "200", description = "Utilisateur créé avec succès")
     @PostMapping
     public ResponseEntity<UserRequest.UserDto> createUser(@RequestBody UserRequest userRequest) {
         UserRequest.UserDto createdUser = UserMapper.userToUserDto(
@@ -42,12 +50,16 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(createdUser);
     }
 
+    @Operation(summary = "Récupérer un utilisateur par ID", description = "Cette méthode permet de récupérer un utilisateur par son ID.")
+    @ApiResponse(responseCode = "200", description = "Utilisateur récupéré avec succès")
     @GetMapping("/id/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = responsableDepartementService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
+    @Operation(summary = "Récupérer un responsable de département par ID", description = "Cette méthode permet de récupérer un responsable de département par son ID.")
+    @ApiResponse(responseCode = "200", description = "Responsable de département récupéré avec succès")
     @GetMapping("{responsableId}")
     public ResponseEntity<ResponsableDepartement> getResponsableDepartement(@PathVariable Long responsableId) {
         ResponsableDepartement responsableDepartement = responsableDepartementService.getResponsableDepartementById(responsableId);
@@ -72,6 +84,8 @@ public class ResponsableDepartementController {
         return ResponseEntity.ok(users);
     }*/
 
+    @Operation(summary = "Récupérer les utilisateurs par rôle", description = "Cette méthode permet de récupérer les utilisateurs par rôle.")
+    @ApiResponse(responseCode = "200", description = "Utilisateurs récupérés avec succès")
     @GetMapping("/users/by-just-role")
     public List<User> getUsersByRole(@RequestParam Role role) {
         List<UserRole> userRoles = responsableDepartementService.getUsersByRole(role);
@@ -80,24 +94,31 @@ public class ResponsableDepartementController {
                 .collect(Collectors.toList());
     }
 
+    @Operation(summary = "Récupérer les utilisateurs par rôle et année", description = "Cette méthode permet de récupérer les utilisateurs par rôle et année.")
+    @ApiResponse(responseCode = "200", description = "Utilisateurs récupérés avec succès")
     @GetMapping("/users/by-role-and-year")
     public List<User> getUsersByRoleAndYear(@RequestParam Role role, @RequestParam Long year, @RequestParam(required = false) String q) {
         String query = q == null ? "" : q;
         return responsableDepartementService.getUsersByRoleAndYear(query, role, year);
     }
-
+    @Operation(summary = "Récupérer les rôles d'un utilisateur par ID et année", description = "Cette méthode permet de récupérer les rôles d'un utilisateur par son ID et année.")
+    @ApiResponse(responseCode = "200", description = "Rôles récupérés avec succès")
     @GetMapping("/user/{userId}/year/{year}")
     public  ResponseEntity<List<UserRole>> getUserRoles(@PathVariable Long userId, @PathVariable Long year) {
         List<UserRole> userRolesByYear =   responsableDepartementService.getRolesByUserIdAndYear(userId, year);
         return ResponseEntity.ok(userRolesByYear);
     }
 
+    @Operation(summary = "Mettre à jour un utilisateur", description = "Cette méthode permet de mettre à jour un utilisateur par son ID.")
+    @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour avec succès")
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         User updatedUser = responsableDepartementService.updateUser(id, userRequest.getUser().toUser(), userRequest.getResponsableId(), userRequest.getYear());
         return ResponseEntity.ok(updatedUser);
     }
 
+    @Operation(summary = "Supprimer un utilisateur", description = "Cette méthode permet de supprimer un utilisateur par son ID.")
+    @ApiResponse(responseCode = "204", description = "Utilisateur supprimé avec succès")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
         responsableDepartementService.deleteUser(id, userRequest.getResponsableId());
