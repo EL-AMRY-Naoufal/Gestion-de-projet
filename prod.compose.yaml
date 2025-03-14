@@ -1,0 +1,71 @@
+services:
+  # Service pour le backend Spring Boot
+  backend:
+    build: 
+      context: ./projet-backend/Projet/Projet
+      target: prod
+    container_name: backend
+    # Exposer uniquement sur le réseau interne, plus besoin d'exposer le port au monde extérieur
+    expose:
+      - "8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SERVER_PORT: ${SERVER_PORT}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO:  update
+    networks:
+      - app-network
+  
+  frontend:
+    build: 
+      context: ./projet-frontend/Projet
+      target: production
+    container_name: frontend
+    # Exposer uniquement sur le réseau interne
+    expose:
+      - "4200"
+    networks:
+      - app-network
+    
+  # Service Nginx pour servir l'application et gérer SSL
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"   # HTTP
+      - "443:443" # HTTPS
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    
+  db:
+    image: postgres:16.4-bullseye
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: data
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

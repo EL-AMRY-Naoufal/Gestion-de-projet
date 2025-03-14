@@ -49,6 +49,12 @@ public class InitDevServiceDefault implements InitDevService {
             Comptes de tests
          */
 
+        // Si l'utilisateur cdd existe déjà alors on ne créé pass le jeu de données car il est probable que le jeu de données a déjà été créé
+        if(userRepository.findUserByEmail("cdd@cdd.fr").isPresent()){
+            return;
+        }
+
+
         // UserRoles
         Map<String, Role> userRoles = Map.of(
                 "cdd", Role.CHEF_DE_DEPARTEMENT,
@@ -76,11 +82,15 @@ public class InitDevServiceDefault implements InitDevService {
                 User.builder().username("sokolov3u").firstname("Sokolov").name("Dmitry").password(passwordEncoder.encode("sokolov")).email("dmitry.sokolov@univ-lorraine.fr").roles(new ArrayList<>()).build(),
                 User.builder().username("duflotkremer2u").firstname("Marie").name("Duflot Kremer").password(passwordEncoder.encode("duflotkremer")).email("marie.duflot-kremer@univ-lorraine.fr").roles(new ArrayList<>()).build()
                 );
-        Annee annee = Annee.builder().id(1L).debut(2024).build();
-        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee));
+
+        // Années
+        Annee annee2023 = Annee.builder().id(1L).debut(2023).build();
+        Annee annee2024 = Annee.builder().id(2L).debut(2024).build();
+        anneeRepository.findById(1L).orElseGet(() -> anneeRepository.save(annee2023));
+        anneeRepository.findById(2L).orElseGet(() -> anneeRepository.save(annee2024));
 
         for(User u : users){
-            u.addRole(annee, userRoles.get(u.getUsername()));
+            u.addRole(annee2024, userRoles.get(u.getUsername()));
             userRepository.findUserByEmail(u.getEmail()).orElseGet(() -> userRepository.save(u));
         }
 
@@ -108,7 +118,7 @@ public class InitDevServiceDefault implements InitDevService {
         responsableDepartementRepository.save(responsableDepartement);
 
         ///*******DEPARTEMENTS
-        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee).responsableDepartement(responsableDepartement).build();
+        Departement departement = Departement.builder().nom("INFORMATIQUE").annee(annee2024).responsableDepartement(responsableDepartement).build();
 
         departementRepository.save(departement);
 
@@ -164,13 +174,13 @@ public class InitDevServiceDefault implements InitDevService {
 
 // Création des heures assignées en les associant aux enseignants
         List<HeuresAssignees> heuresAnnee1 = List.of(
-                HeuresAssignees.builder().annee(annee).heures(70).enseignant(enseignant1).build()
+                HeuresAssignees.builder().annee(annee2024).heures(70).enseignant(enseignant1).build()
         );
         List<HeuresAssignees> heuresAnnee2 = List.of(
-                HeuresAssignees.builder().annee(annee).heures(30).enseignant(enseignant2).build()
+                HeuresAssignees.builder().annee(annee2024).heures(30).enseignant(enseignant2).build()
         );
         List<HeuresAssignees> heuresAnnee3 = List.of(
-                HeuresAssignees.builder().annee(annee).heures(50).enseignant(enseignant3).build()
+                HeuresAssignees.builder().annee(annee2024).heures(50).enseignant(enseignant3).build()
         );
 
 // Mise à jour des enseignants avec leurs heures assignées

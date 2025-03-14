@@ -28,7 +28,7 @@ FROM base AS production
 COPY . .
 
 # Installer les dépendances de production uniquement et construire l'application Angular en mode production
-RUN npm ci --verbose && npm run build -- --configuration production
+RUN npm ci --verbose && npm run build -- --configuration prod
 
 # Nettoyer les dépendances de développement pour alléger l'image
 RUN npm ci --omit=dev --verbose

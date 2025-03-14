@@ -1,7 +1,7 @@
 import { LoginService } from './login.service';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 import { defaultIfEmpty, filter, map, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../components/shared/types/user.type';

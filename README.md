@@ -4,6 +4,24 @@
 
 EduPlanner est une application destinée à la gestion des affectations horraires d'enseignants. Elle propose divers fonctionnalités dans ce but.
 
+### Sommaire
+
+1. **Gestion de projet : EduPlanner**  
+   1.1. Présentation  
+   1.2. Fonctionnalités  
+
+2. **Technologies utilisées**  
+
+3. **Installation de l'environnement de développement**  
+   3.1. Prérequis  
+   3.2. Configuration de la base de données  
+   3.3. Utiliser les conteneurs Docker  
+   3.4. Testing  
+   3.5. Backend (API)  
+   3.6. Frontend (APP)  
+
+4. **Déploiement en production**
+
 ### Fonctionnalités 
 
 - S'authentifier / Se déconnecter;
@@ -17,10 +35,6 @@ EduPlanner est une application destinée à la gestion des affectations horraire
 - Java Spring Boot (backend)
 - Postgres (base de données)
 - Docker (Conteneurisation)
-
-## Déploiement en production
-
-À venir
 
 ## Installation de l'environnement de dev
 
@@ -99,6 +113,23 @@ Pour le testing vous pouvez simplement les lancer en local sur votre machine (pa
 
 Tout le contenu du serveur backend est contenu dans le repertoire */projet-backend*.
 
+Une fois l'application lancée en développement, l'api est accéssible via l'url : [http://localhost:8080/](http://localhost:8080/).
+
+Si vous voulez accéder à la documentation de l'api, il faudra lancer l'application, s'authentifier pour ensuite accéder à l'url suivante : [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
 ### Frontend (APP)
 
 Tout le contenu du serveur backend est contenu dans le repertoire */projet-frontend*.
+
+Une fois l'application lancée en développement, l'app est accéssible via l'url : [http://localhost:4200/](http://localhost:4200/).
+
+## Déploiement en production
+
+Pour lancer l'application en production nous utilisons, tout comme pour le dev, docker compose. Le fichier permettant de lancer l'application est *./prod.compose.yaml*. Celui-ci va lancer les mêmes containers que pour le developpement mais va changer les options de build des images pour qu'elles soient adaptées à la production (plus besoin des volumes, compilation complète et variables d'environnement adaptées) et également, ajouter un reverse proxy Nginx pour pouvoir gérer le routage de l'application. Le produit n'était pas encore déployé sur une machine, nous n'avons configuré Nginx que pour un environnement en local. 
+
+Si vous souhaitez le déployer il faudra configurer Nginx (repertoire *./nginx/*) mais également modifier l'info de l'hôte de l'api présente dans le fichier *./projet-frontend/Projet/src/app/environments/environment.prod.ts* pour y mettre le liens voulu. Une fois le système configuré, vous pouvez lancer l'application en production via la commande suivante :
+
+```sh
+docker compose -f prod.compose.yaml up [--build]
+```
+
+L'option *--build* permet de rebuild les images avant de relancer les containers, ce qui est utile si vous avez éffectué des changements dans le code pour assurer que les modification seront prisent en compte.

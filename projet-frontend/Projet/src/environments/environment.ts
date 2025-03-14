@@ -20,7 +20,18 @@ export const environment = {
       justRole: '/api/responsableDepartement/users/by-just-role',
       allYears: '/api/annees',
       logout: '/api/users/user/logout',
-      me: '/api/users/user/me'
+      me: '/api/users/user/me',
+      modules: '/api/modules',
+      annees: '/api/annees',       // Notez la différence de nom avec allYears en dev
+      departements: '/api/departements',
+      niveaux: '/api/niveaux',
+      semestres: '/api/semestres',
+      groupes: '/api/groupes',
+      responsableDepartement: '/api/responsableDepartement',
+      formations: '/api/formations',
+      allAffectation: '/api/affectations',  // Doublon avec affectations
+      rolesAndYears: '/api/users/user/roles-and-years',
+
     },
   },
 };

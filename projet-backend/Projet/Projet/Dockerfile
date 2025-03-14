@@ -10,9 +10,13 @@ CMD sed -i 's/\r$//' ./mvnw && ./mvnw spring-boot:run
 
 FROM base AS build
 
+WORKDIR /app
+
 # Copie des sources et compilation du JAR
 COPY . .
-RUN sed -i 's/\r$//' ./mvnw && ./mvnw clean package -DskipTests
+RUN chmod +x ./mvnw && \
+    sed -i 's/\r$//' ./mvnw && \
+    ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-focal AS prod
 
@@ -21,4 +25,4 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Lancement du JAR au démarrage du conteneur
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
