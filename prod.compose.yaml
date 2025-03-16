@@ -17,7 +17,7 @@ services:
       SERVER_PORT: ${SERVER_PORT}
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO:  update
+      SPRING_JPA_HIBERNATE_DDL_AUTO:  update # Dois peut-être être changé en "create" pour la première exécution (dans l'idéal on devrait utiliser un fichier SQL pour créer les tables et mettre ce paramètre à "validate")
     networks:
       - app-network
   

@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from "../../environments/environment.prod";
-import {Affectation, CoAffectation} from "../components/shared/types/modules.types";
+import { environment } from "../../environments/environment";
+import { Affectation, CoAffectation } from "../components/shared/types/modules.types";
 import { Observable } from "rxjs";
 
 @Injectable({

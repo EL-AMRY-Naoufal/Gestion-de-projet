@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {MenuComponent} from '../shared/menu/menu.component';
 import {DepartementService} from '../../services/departement.service';
 import {NgForOf} from "@angular/common";
 import {AnneeService} from '../../services/annee.service';
@@ -25,9 +24,7 @@ import { EnseignantService } from '../../services/enseignant.service';
 import { AffectationService } from '../../services/affectation.service';
 import { EnseignantDto } from '../shared/types/enseignant.type';
 import {Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs";
 import { ConfirmDeletionDialogComponent } from './dialog/confirm-deletion-dialog/confirm-deletion-dialog.component';
-import {User} from "../shared/types/user.type";
 import {AffectationDialogComponent} from "../affectation/affectation-dialog/affectation-dialog.component";
 
 
